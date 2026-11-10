@@ -1,0 +1,23 @@
+name: sanitizacion
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Compuerta de datos sensibles
+        run: python tools/verificar_limpio.py
+      - name: Compilar todo el Python
+        run: python -m compileall -q .
+      - name: Tests del backend de despacho
+        working-directory: 04-despacho-tiempo-real
+        env:
+          PYTHONPATH: backend
+        run: python -m unittest discover -s tests -t . -v
