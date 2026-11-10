@@ -1,0 +1,20 @@
+# Secretos y configuración local
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Datos y registros generados en ejecución (solo la carpeta de la raíz, no backend/despacho/datos)
+/datos/
+*.sqlite
+*.sqlite3
+*.log
+
+# Editores y sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

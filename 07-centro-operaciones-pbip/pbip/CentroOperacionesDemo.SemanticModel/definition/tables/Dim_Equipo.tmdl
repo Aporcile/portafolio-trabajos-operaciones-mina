@@ -1,0 +1,120 @@
+table Dim_Equipo
+	lineageTag: 4229406e-6f4d-4801-a289-7d27c5d23e01
+
+	measure 'Flota CAEX Total' =
+			CALCULATE(
+			    DISTINCTCOUNT(Fact_HorasEquipo[Equipo]),
+			    Fact_HorasEquipo[Tipo Equipo] = "Truck"
+			)
+		formatString: 0
+		lineageTag: 01635952-707c-4f26-ba51-bb1b7f71cf49
+
+	measure 'Flota Palas Total' = ```
+			
+			CALCULATE(
+			    DISTINCTCOUNT(Dim_Equipo[Equipo]),
+			    Dim_Equipo[TipoEquipo] = "Shovel",
+			    Dim_Equipo[Activo_KPI] = 1
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 6d5a6ce8-bd46-4568-a681-afc09e1e1fc5
+
+	measure 'Flota Perforadoras Total' = ```
+			
+			CALCULATE(
+			    DISTINCTCOUNT(Dim_Equipo[Equipo]),
+			    Dim_Equipo[TipoEquipo] = "Drill",
+			    Dim_Equipo[Activo_KPI] = 1
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 09a0c4fc-5d73-49f5-b8b8-ec857e061234
+
+	measure 'Flota Cargadores Total' = ```
+			
+			CALCULATE(
+			    DISTINCTCOUNT(Dim_Equipo[Equipo]),
+			    Dim_Equipo[TipoEquipo] = "Loader",
+			    Dim_Equipo[Activo_KPI] = 1
+			)
+			
+			```
+		formatString: 0
+		lineageTag: b6619b1e-d552-4d88-82a1-1139f0fc674f
+
+	measure 'Flota CAEX Muro Total' =
+			CALCULATE(
+			    DISTINCTCOUNT(Dim_Equipo[Equipo]),
+			    Dim_Equipo[TipoEquipo] = "Truck",
+			    SEARCH("_M", Dim_Equipo[Equipo], 1, 0) > 0
+			)
+		formatString: 0
+		lineageTag: 88f611f1-7995-40ce-9682-21b4ad47f42c
+
+	measure 'Flota Cargador Muro Total' = CALCULATE(DISTINCTCOUNT(Dim_Equipo[Equipo]), Dim_Equipo[TipoEquipo] = "Loader", SEARCH("_M", Dim_Equipo[Equipo], 1, 0) > 0)
+		formatString: 0
+		lineageTag: 52d5ab41-0f1d-42ad-9fbf-ae4f587ac717
+
+	measure 'Flota Pala Muro Total' = CALCULATE(DISTINCTCOUNT(Dim_Equipo[Equipo]), Dim_Equipo[TipoEquipo] = "Shovel", SEARCH("_M", Dim_Equipo[Equipo], 1, 0) > 0)
+		formatString: 0
+		lineageTag: e1d112fb-7508-4cb1-8dda-fa15f3d69628
+
+	column Equipo
+		dataType: string
+		lineageTag: 7d88a6ae-3483-4161-8537-f2d22c884051
+		summarizeBy: none
+		sourceColumn: Equipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column TipoEquipo
+		dataType: string
+		lineageTag: 7986aa65-6526-43de-b3ea-396e1ed078ac
+		summarizeBy: none
+		sourceColumn: TipoEquipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Flota
+		dataType: string
+		lineageTag: a81fce6b-e547-4f23-850d-ed0bbb99a16f
+		summarizeBy: none
+		sourceColumn: Flota
+
+		annotation SummarizationSetBy = Automatic
+
+	column Activo_KPI
+		dataType: int64
+		formatString: 0
+		lineageTag: 8d11225d-9668-4970-a395-a09ab5b46263
+		summarizeBy: sum
+		sourceColumn: Activo_KPI
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Es Carguio' =
+			
+			IF(Dim_Equipo[TipoEquipo] IN {"Shovel", "Loader"}, 1, 0)
+		formatString: 0
+		lineageTag: b274b1a7-ece6-4fde-8fbc-0c12d3a36eae
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Equipo = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "dim_equipo.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Equipo", type text}, {"TipoEquipo", type text}, {"Flota", type text}, {"Activo_KPI", Int64.Type}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

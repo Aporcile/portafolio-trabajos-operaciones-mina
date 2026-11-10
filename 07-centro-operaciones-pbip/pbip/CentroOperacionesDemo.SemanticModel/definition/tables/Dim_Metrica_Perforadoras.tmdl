@@ -1,0 +1,59 @@
+table Dim_Metrica_Perforadoras
+	lineageTag: b5e866da-1341-40ee-81e4-b09a9461b5dc
+
+	measure 'Valor Perforadoras' =
+			VAR M = SELECTEDVALUE(Dim_Metrica_Perforadoras[Metrica])
+			VAR T = SELECTEDVALUE(Dim_Metrica_Perforadoras[Tipo])
+			RETURN
+			SWITCH(T,
+			    "Real", SWITCH(M, "DF", [Disponibilidad Perforadoras], "UEBD", [UEBD Perforadoras], "Rendimiento m/h", [Rendimiento Perforadoras]),
+			    "Plan", SWITCH(M, "DF", [Disponibilidad Perforadoras Plan], "UEBD", [UEBD Perforadoras Plan], "Rendimiento m/h", [Rendimiento Perforadoras Plan])
+			)
+		lineageTag: 98d7d97c-b359-4358-9584-4037f1803456
+
+		formatStringDefinition = SWITCH(SELECTEDVALUE(Dim_Metrica_Perforadoras[Metrica]), "Rendimiento m/h", IF(SELECTEDVALUE(Dim_Metrica_Perforadoras[Tipo]) = "Plan", "#,0", "#,0.0"), "0.0\ %;-0.0\ %;0.0\ %")
+
+	measure 'Color Valor Perforadoras' =
+			VAR M = SELECTEDVALUE(Dim_Metrica_Perforadoras[Metrica])
+			VAR T = SELECTEDVALUE(Dim_Metrica_Perforadoras[Tipo])
+			VAR RealVal = SWITCH(M, "DF", [Disponibilidad Perforadoras], "UEBD", [UEBD Perforadoras], "Rendimiento m/h", [Rendimiento Perforadoras])
+			VAR PlanVal = SWITCH(M, "DF", [Disponibilidad Perforadoras Plan], "UEBD", [UEBD Perforadoras Plan], "Rendimiento m/h", [Rendimiento Perforadoras Plan])
+			RETURN
+			IF(T = "Plan", "#8FA3B8", IF(RealVal >= PlanVal, "#00C853", "#FF5C5C"))
+		lineageTag: d57de643-4228-417f-80e3-9c810cb6946e
+
+	column Metrica
+		lineageTag: 9d71d3ca-de1d-485e-bbef-a81873062312
+		isNameInferred
+		sourceColumn: [Metrica]
+		sortByColumn: Orden_Metrica
+
+	column Orden_Metrica
+		isHidden
+		lineageTag: e05a8c19-674d-49af-a7b1-8138ee99688b
+		isNameInferred
+		sourceColumn: [Orden_Metrica]
+
+	column Tipo
+		lineageTag: 2635f549-1371-4040-b32b-127924ce5469
+		isNameInferred
+		sourceColumn: [Tipo]
+		sortByColumn: Orden_Tipo
+
+	column Orden_Tipo
+		isHidden
+		lineageTag: 138ddf45-353b-4f95-9ffb-b70b8d87416a
+		isNameInferred
+		sourceColumn: [Orden_Tipo]
+
+	partition Dim_Metrica_Perforadoras = calculated
+		source =
+				VAR Fila1 = ROW("Metrica", "DF", "Orden_Metrica", 1, "Tipo", "Real", "Orden_Tipo", 1)
+				VAR Fila2 = ROW("Metrica", "DF", "Orden_Metrica", 1, "Tipo", "Plan", "Orden_Tipo", 2)
+				VAR Fila3 = ROW("Metrica", "UEBD", "Orden_Metrica", 2, "Tipo", "Real", "Orden_Tipo", 1)
+				VAR Fila4 = ROW("Metrica", "UEBD", "Orden_Metrica", 2, "Tipo", "Plan", "Orden_Tipo", 2)
+				VAR Fila5 = ROW("Metrica", "Rendimiento m/h", "Orden_Metrica", 3, "Tipo", "Real", "Orden_Tipo", 1)
+				VAR Fila6 = ROW("Metrica", "Rendimiento m/h", "Orden_Metrica", 3, "Tipo", "Plan", "Orden_Tipo", 2)
+				RETURN UNION(Fila1, Fila2, Fila3, Fila4, Fila5, Fila6)
+
+

@@ -1,0 +1,32 @@
+# Datos, binarios y artefactos que nunca deben subirse
+*.pbix
+*.pbit
+*.abf
+*.xlsx
+*.xlsm
+*.docx
+*.pptx
+*.pdf
+*.zip
+*.msapp
+*.pyc
+__pycache__/
+.venv/
+.env
+.env.*
+!env.ejemplo
+*.pfx
+*.pem
+*.key
+
+# Power BI Desktop: cachés y ajustes locales
+.pbi/
+localSettings.json
+cache.abf
+
+# Salidas generadas localmente
+salida/
+out/
+*.log
+.vscode/
+.claude/

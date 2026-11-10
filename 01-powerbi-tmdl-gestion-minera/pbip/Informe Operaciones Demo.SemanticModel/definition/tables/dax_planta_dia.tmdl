@@ -1,0 +1,166 @@
+table dax_planta_dia
+	lineageTag: a6b41b0d-119a-4fc4-b77a-d2d45e21fb2a
+
+	/// Marca de tiempo de la última muestra válida de alimentación al SAG.
+	measure 'Rd Planta Último TS' =
+			CALCULATE (
+			    MAX ( hist_kpi[timestamp] ),
+			    hist_kpi[nombre_tag] = "SAG.ALIM.TPH",
+			    NOT ISBLANK ( hist_kpi[numeric_value] )
+			)
+		formatString: dd-mm-yyyy hh:nn
+		displayFolder: Ventana de planta\Base
+		lineageTag: 80d499fc-4eb1-4c5a-a0c0-e3b241a29f19
+
+	/// Hora local en que se reinicia el acumulador diario (parámetro calculado; 6 si no se detecta).
+	measure 'Rd Planta Hora Reset' = COALESCE ( MAX ( 'Rd Planta Parámetros'[Hora Reset] ), 6 )
+		formatString: 0.0
+		displayFolder: Ventana de planta\Base
+		lineageTag: fc48104b-3a79-45b9-82a2-c2a9716238cc
+
+	/// Día de planta (inicio a la hora de reinicio del acumulador diario) elegido o en curso.
+	measure 'Rd Planta Día' =
+			VAR _sel = [Rd Fecha Elegida]
+			VAR _ult = [Rd Planta Último TS]
+			VAR _x = _ult - [Rd Planta Hora Reset] / 24
+			VAR _hoy = IF ( NOT ISBLANK ( _ult ), DATE ( YEAR ( _x ), MONTH ( _x ), DAY ( _x ) ) )
+			RETURN IF ( ISBLANK ( _sel ), _hoy, DATE ( YEAR ( _sel ), MONTH ( _sel ), DAY ( _sel ) ) )
+		formatString: dd-mm-yyyy
+		displayFolder: Ventana de planta\Base
+		lineageTag: 0d83116a-0c93-4e3b-85fc-9319b70afdae
+
+	/// Inicio de la ventana del día de planta, detectado por la caída del acumulador diario del SAG.
+	measure 'Rd Planta Inicio' =
+			VAR _d = [Rd Planta Día]
+			VAR _s =
+			    CALCULATETABLE (
+			        ADDCOLUMNS ( VALUES ( hist_kpi[timestamp] ), "@v", CALCULATE ( MAX ( hist_kpi[numeric_value] ) ) ),
+			        hist_kpi[nombre_tag] = "SAG.ALIM.ACUM_DIA",
+			        hist_kpi[timestamp] >= _d + 4.4 / 24,
+			        hist_kpi[timestamp] <= _d + 9.1 / 24
+			    )
+			VAR _caida =
+			    MINX (
+			        FILTER (
+			            _s,
+			            VAR _t = hist_kpi[timestamp]
+			            VAR _p = MAXX ( FILTER ( _s, hist_kpi[timestamp] > _t - 0.03 && hist_kpi[timestamp] < _t - 0.01 ), [@v] )
+			            RETURN NOT ISBLANK ( [@v] ) && _p > 500 && [@v] < 0.5 * _p
+			        ),
+			        hist_kpi[timestamp]
+			    )
+			RETURN
+			    IF ( NOT ISBLANK ( _d ), IF ( ISBLANK ( _caida ), _d + [Rd Planta Hora Reset] / 24, _caida - 1 / 48 ) )
+		formatString: dd-mm-yyyy hh:nn
+		displayFolder: Ventana de planta\Base
+		lineageTag: bfdfb40e-2f47-4a65-a6c2-e8789c4b12b1
+
+	/// Fin de la ventana del día de planta.
+	measure 'Rd Planta Fin' =
+			VAR _d = [Rd Planta Día]
+			VAR _s =
+			    CALCULATETABLE (
+			        ADDCOLUMNS ( VALUES ( hist_kpi[timestamp] ), "@v", CALCULATE ( MAX ( hist_kpi[numeric_value] ) ) ),
+			        hist_kpi[nombre_tag] = "SAG.ALIM.ACUM_DIA",
+			        hist_kpi[timestamp] >= _d + 4.4 / 24,
+			        hist_kpi[timestamp] <= _d + 1 + 9.1 / 24
+			    )
+			VAR _caidas =
+			    FILTER (
+			        _s,
+			        VAR _t = hist_kpi[timestamp]
+			        VAR _w = IF ( _t < _d + 1, _d + 4.4 / 24, _d + 1 + 4.4 / 24 )
+			        VAR _p = MAXX ( FILTER ( _s, hist_kpi[timestamp] > _t - 0.03 && hist_kpi[timestamp] < _t - 0.01 && hist_kpi[timestamp] >= _w ), [@v] )
+			        RETURN ( _t <= _d + 9.1 / 24 || _t >= _d + 1 + 4.4 / 24 ) && NOT ISBLANK ( [@v] ) && _p > 500 && [@v] < 0.5 * _p
+			    )
+			VAR _c0 = MINX ( FILTER ( _caidas, hist_kpi[timestamp] < _d + 1 ), hist_kpi[timestamp] )
+			VAR _c1 = MINX ( FILTER ( _caidas, hist_kpi[timestamp] > _d + 1 ), hist_kpi[timestamp] )
+			VAR _i = IF ( NOT ISBLANK ( _d ), IF ( ISBLANK ( _c0 ), _d + [Rd Planta Hora Reset] / 24, _c0 - 1 / 48 ) )
+			RETURN IF ( NOT ISBLANK ( _i ), MIN ( IF ( ISBLANK ( _c0 ) || ISBLANK ( _c1 ), _i + 1, _c1 - 1 / 48 ), [Rd Planta Último TS] ) )
+		formatString: dd-mm-yyyy hh:nn
+		displayFolder: Ventana de planta\Base
+		lineageTag: aaf04546-4f9b-4506-9a36-5bd5176f025a
+
+	/// Horas de la ventana del día de planta (máximo 24).
+	measure 'Rd Planta Horas' =
+			VAR _i = [Rd Planta Inicio]
+			VAR _f = [Rd Planta Fin]
+			RETURN IF ( NOT ISBLANK ( _i ) && NOT ISBLANK ( _f ), MIN ( MAX ( ( _f - _i ) * 24, 0 ), 24 ) )
+		formatString: 0.0
+		displayFolder: Ventana de planta\Base
+		lineageTag: 33b1db53-3f60-494b-a0f0-8b86620e6b1e
+
+	/// Verdadero si el cierre diario oficial de planta ya está publicado para el día.
+	measure 'Rd Planta Cierre Oficial' =
+			VAR _d = [Rd Planta Día]
+			VAR _f = CALCULATE ( MAX ( planta_cierre[Valor] ), planta_cierre[Punto] = "PLANTA.CIERRE.OFICIAL", planta_cierre[Fecha] = _d )
+			RETURN NOT ISBLANK ( _f ) && _f > 0
+		displayFolder: Ventana de planta\Base
+		lineageTag: 26012617-23b4-496f-80ee-e3099e52db7a
+
+	/// Toneladas del acumulador diario del SAG en la última muestra de la ventana, desde el historiador.
+	measure 'Rd Planta Hist Procesado' =
+			VAR _ini = [Rd Planta Inicio]
+			VAR _fin = [Rd Planta Fin]
+			VAR _v_t = CALCULATE ( MAX ( hist_kpi[timestamp] ), hist_kpi[nombre_tag] = "SAG.ALIM.ACUM_DIA", hist_kpi[timestamp] > _ini + 0.0001, hist_kpi[timestamp] <= _fin + 0.0001, NOT ISBLANK ( hist_kpi[numeric_value] ) )
+			VAR _v = IF ( NOT ISBLANK ( _v_t ), CALCULATE ( MAX ( hist_kpi[numeric_value] ), hist_kpi[nombre_tag] = "SAG.ALIM.ACUM_DIA", hist_kpi[timestamp] = _v_t ) )
+			RETURN _v
+		formatString: #,0
+		displayFolder: Ventana de planta\Base
+		lineageTag: 580b9c92-1560-4329-9196-f35765718ea9
+
+	/// Horas efectivas del SAG desde el historiador: media hora por cada muestra sobre 100 t/h.
+	measure 'Rd Planta Hist Horas Efectivas' =
+			VAR _ini = [Rd Planta Inicio]
+			VAR _fin = [Rd Planta Fin]
+			VAR _n = CALCULATE ( DISTINCTCOUNT ( hist_kpi[timestamp] ), hist_kpi[nombre_tag] = "SAG.ALIM.TPH", hist_kpi[timestamp] > _ini + 0.0001, hist_kpi[timestamp] <= _fin + 0.0001, hist_kpi[numeric_value] > 100 )
+			RETURN IF ( NOT ISBLANK ( _ini ), 0.5 * COALESCE ( _n, 0 ) )
+		formatString: 0.0
+		displayFolder: Ventana de planta\Cierre
+		lineageTag: f81cd443-3867-4906-a1d3-d4de2157e8aa
+
+	/// Toneladas procesadas por el SAG en el día de planta: cierre publicado o, si falta, acumulado del historiador.
+	measure 'Rd Planta Cierre Toneladas' =
+			VAR _d = [Rd Planta Día]
+			VAR _o = CALCULATE ( MAX ( planta_cierre[Valor] ), planta_cierre[Punto] = "PLANTA.SAG.TON_DIA", planta_cierre[Fecha] = _d )
+			RETURN IF ( [Rd Planta Cierre Oficial], IF ( _o > 0, _o ), [Rd Planta Hist Procesado] )
+		formatString: #,0
+		displayFolder: Ventana de planta\Cierre
+		lineageTag: b6c25530-74ab-42e2-9fee-69c690b8cc8d
+
+	/// Horas efectivas del SAG en el día de planta: cierre publicado o, si falta, muestras con alimentación sobre 100 t/h.
+	measure 'Rd Planta Cierre Horas Efectivas' =
+			VAR _d = [Rd Planta Día]
+			VAR _o0 = CALCULATE ( MAX ( planta_cierre_ejec[Valor] ), planta_cierre_ejec[Punto] = "PLANTA.SAG.HORAS_EF", planta_cierre_ejec[Fecha] = _d )
+			VAR _t = CALCULATE ( MAX ( planta_cierre[Valor] ), planta_cierre[Punto] = "PLANTA.SAG.TON_DIA", planta_cierre[Fecha] = _d )
+			VAR _o = IF ( _o0 > 0 && _o0 <= 25 / 24 && DIVIDE ( _t, _o0 ) > 10000, _o0 * 24, _o0 )
+			RETURN IF ( [Rd Planta Cierre Oficial], _o, [Rd Planta Hist Horas Efectivas] )
+		formatString: 0.0
+		displayFolder: Ventana de planta\Cierre
+		lineageTag: de3fe900-4f9d-4233-9a39-07628b34f3dc
+
+	/// Rendimiento (t/h) del cierre diario; si no está publicado, cálculo desde el historiador.
+	measure 'Rd Planta Cierre TPH' =
+			VAR _d = [Rd Planta Día]
+			VAR _o = CALCULATE ( MAX ( planta_cierre_ejec[Valor] ), planta_cierre_ejec[Punto] = "PLANTA.SAG.TPH_EF", planta_cierre_ejec[Fecha] = _d )
+			VAR _t = CALCULATE ( MAX ( planta_cierre[Valor] ), planta_cierre[Punto] = "PLANTA.SAG.TON_DIA", planta_cierre[Fecha] = _d )
+			VAR _c = IF ( _t > 0, DIVIDE ( _t, [Rd Planta Cierre Horas Efectivas] ) )
+			VAR _ofi = IF ( _o > 0 && ( ISBLANK ( _c ) || ABS ( DIVIDE ( _o, _c ) - 1 ) <= 0.02 ), _o, _c )
+			RETURN IF ( [Rd Planta Cierre Oficial], IF ( _ofi > 0, _ofi ), DIVIDE ( [Rd Planta Hist Procesado], [Rd Planta Hist Horas Efectivas] ) )
+		formatString: #,0
+		displayFolder: Ventana de planta\Cierre
+		lineageTag: bbcc018e-1a44-4c12-a604-aa3086713183
+
+	column Columna
+		isHidden
+		formatString: 0
+		lineageTag: 93769e10-95f6-45e5-aafd-0256e15d046a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Columna]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dax_planta_dia = calculated
+		mode: import
+		source = ROW ( "Columna", BLANK () )

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "txtCalidadAviso",
+  "position": {
+    "x": 910,
+    "y": 15,
+    "width": 820,
+    "height": 36,
+    "z": 49,
+    "tabOrder": 4900
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "⚠ DATOS SINTÉTICOS · empresa ficticia Minera Demo · 03-03-2025 al 31-05-2025",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "fontWeight": "bold",
+                      "color": "#FF8A80"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "right"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Aviso: los datos cargados son sintéticos'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

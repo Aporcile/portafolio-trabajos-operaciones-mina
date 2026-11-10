@@ -1,0 +1,30 @@
+table hist_onoff_ultima
+	lineageTag: a18f3cfc-c146-4bcd-8ad6-fc0b517e1d3c
+
+	column 'ultima_fila.estado'
+		formatString: 0
+		lineageTag: 055ef9a5-9a5f-40f0-8ed3-94f2b4f69ceb
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [ultima_fila.estado]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ultima_fila.dim_variable.name'
+		lineageTag: 33d3e914-e666-4078-aac7-cd40f76afae5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ultima_fila.dim_variable.name]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition hist_onoff_ultima = calculated
+		mode: import
+		source =
+				SELECTCOLUMNS (
+				    GENERATE (
+				        CALCULATETABLE ( VALUES ( hist_senales[item_id] ), hist_senales[dim_variable.tipo_variable] = "OnOff", NOT ISBLANK ( hist_senales[numeric_value] ) ),
+				        TOPN ( 1, CALCULATETABLE ( SELECTCOLUMNS ( hist_senales, "@ts", hist_senales[timestamp], "@e", hist_senales[estado], "@n", hist_senales[dim_variable.name] ), hist_senales[dim_variable.tipo_variable] = "OnOff", NOT ISBLANK ( hist_senales[numeric_value] ) ), [@ts], DESC )
+				    ),
+				    "ultima_fila.estado", [@e], "ultima_fila.dim_variable.name", [@n]
+				)

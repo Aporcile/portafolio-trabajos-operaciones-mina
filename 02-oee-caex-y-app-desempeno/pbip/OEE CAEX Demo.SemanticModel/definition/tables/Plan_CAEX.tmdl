@@ -1,0 +1,61 @@
+/// Plan semanal de la flota CAEX, una fila por día. Los días sin fila no tienen plan. Fuente: Plan_CAEX.csv.
+table Plan_CAEX
+	lineageTag: 2a6d4608-3e83-5e0e-aeed-69000ce7e01a
+
+	column Fecha
+		dataType: dateTime
+		lineageTag: d6f425e0-a9cb-5af2-adf4-59ca86663b59
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Horas Disponibles Plan'
+		dataType: double
+		lineageTag: 3d3b0ae8-10b5-5cab-ad36-2631e82a80fc
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Horas Disponibles Plan
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Horas Efectivas Plan'
+		dataType: double
+		lineageTag: 873ccf66-bec1-5961-aa46-cab7f40d5cbd
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Horas Efectivas Plan
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Horas Nominales Plan'
+		dataType: double
+		lineageTag: 2f3f157e-c6f1-5543-a450-1e0d4a29e0e6
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Horas Nominales Plan
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Toneladas Plan'
+		dataType: double
+		lineageTag: e08838ab-6efb-5365-b9a3-6b2ae67958d3
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Toneladas Plan
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Plan_CAEX = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "Plan_CAEX.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Fecha", type datetime}, {"Horas Disponibles Plan", type number}, {"Horas Efectivas Plan", type number}, {"Horas Nominales Plan", type number}, {"Toneladas Plan", type number}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

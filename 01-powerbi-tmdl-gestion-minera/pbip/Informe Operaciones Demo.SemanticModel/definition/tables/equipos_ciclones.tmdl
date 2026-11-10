@@ -1,0 +1,43 @@
+table equipos_ciclones
+	lineageTag: 404cb2be-d3ab-45b0-bc0e-549926496d84
+
+	column Fecha
+		dataType: dateTime
+		formatString: dd-mm-yyyy
+		lineageTag: 13682bcf-2fda-4d95-a821-1476d7edb70f
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Medicion
+		dataType: string
+		lineageTag: c73e4c76-e677-4803-82e4-2c97a5a5c665
+		summarizeBy: none
+		sourceColumn: Medicion
+
+		annotation SummarizationSetBy = Automatic
+
+	column Valor
+		dataType: double
+		lineageTag: ef84a491-7881-4e73-93a8-5688ffce0fd2
+		summarizeBy: none
+		sourceColumn: Valor
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition equipos_ciclones = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "equipos_ciclones.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Fecha", type date}, {"Medicion", type text}, {"Valor", type number}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table

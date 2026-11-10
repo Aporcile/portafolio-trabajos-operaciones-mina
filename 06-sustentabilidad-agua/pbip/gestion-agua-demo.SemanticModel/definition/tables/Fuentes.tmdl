@@ -1,0 +1,59 @@
+/// Grupos de origen de los datos (áreas del historiador y fuentes sin señal).
+table Fuentes
+	lineageTag: 5d6a4f32-faa5-4a1f-bc30-67986e3eb4aa
+
+	column Fuente
+		dataType: string
+		lineageTag: a77521bc-9b0f-4ae3-9b91-c93578421598
+		summarizeBy: none
+		sourceColumn: Fuente
+		sortByColumn: Orden
+
+		annotation SummarizationSetBy = Automatic
+
+	column FuenteCorta
+		dataType: string
+		lineageTag: 3d6fc3b4-e3f3-4ce1-a49d-d7157650d6bc
+		summarizeBy: none
+		sourceColumn: FuenteCorta
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tipo
+		dataType: string
+		lineageTag: 3e8ff4d8-de1d-4f19-866c-ba4ab0e519dc
+		summarizeBy: none
+		sourceColumn: Tipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Orden
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5990ca13-8909-4b27-a1d0-03a9102f4f43
+		summarizeBy: none
+		sourceColumn: Orden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nota
+		dataType: string
+		lineageTag: e248a560-ba52-4006-b20b-01fda04c393a
+		summarizeBy: none
+		sourceColumn: Nota
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fuentes = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "fuentes.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Fuente", type text}, {"FuenteCorta", type text}, {"Tipo", type text}, {"Orden", Int64.Type}, {"Nota", type text}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

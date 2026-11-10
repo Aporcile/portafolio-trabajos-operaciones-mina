@@ -1,0 +1,112 @@
+# Mapa del rajo de ejemplo: calibración GPS -> pantalla y posiciones nominales.
+# Coordenadas de pantalla normalizadas (x, y en 0..1; origen arriba a la izquierda).
+#
+# Las coordenadas geográficas son FICTICIAS (corresponden a un punto en pleno océano) y no
+# apuntan a ninguna faena real. [calibracion] define qué rectángulo lat/lon ocupa la pantalla:
+# para usar un plano georreferenciado propio, reemplazar el fondo y actualizar las cuatro esquinas.
+
+[calibracion]
+lat_min = 12.00       # borde inferior de la pantalla (y = 1)
+lat_max = 12.12       # borde superior de la pantalla (y = 0)
+lon_min = -35.00      # borde izquierdo (x = 0)
+lon_max = -34.84      # borde derecho (x = 1)
+rotacion_grados = 0
+milisegundos_arco_por_grado = 3600000
+
+# Posiciones nominales (cuando no hay GPS o para equipos sin posición reciente).
+[[frentes]]
+nombre = "PALA-01"
+etiqueta = "Fase 1 · PALA-01"
+x = 0.55
+y = 0.36
+origen = "F01"
+
+[[frentes]]
+nombre = "PALA-02"
+etiqueta = "Fase 2 · PALA-02"
+x = 0.24
+y = 0.44
+origen = "F02"
+
+[[frentes]]
+nombre = "PALA-03"
+etiqueta = "Fase 3 · PALA-03"
+x = 0.33
+y = 0.66
+origen = "F03"
+
+[[frentes]]
+nombre = "PALA-04"
+etiqueta = "Fase 4 · PALA-04"
+x = 0.62
+y = 0.20
+origen = "F04"
+
+[[frentes]]
+nombre = "CARG-01"
+etiqueta = "Stock · CARG-01"
+x = 0.58
+y = 0.80
+origen = "STK"
+
+[[frentes]]
+nombre = "CARG-02"
+etiqueta = "Fase 3 · CARG-02"
+x = 0.17
+y = 0.30
+origen = "F03"
+
+[[destinos]]
+nombre = "CHANCADO PRIMARIO"
+tipo = "chancado"
+x = 0.78
+y = 0.52
+
+[[destinos]]
+nombre = "BOTADERO 1"
+tipo = "botadero"
+x = 0.84
+y = 0.82
+
+[[destinos]]
+nombre = "BOTADERO 2"
+tipo = "botadero"
+x = 0.86
+y = 0.24
+
+[[destinos]]
+nombre = "STOCK 1"
+tipo = "stock"
+x = 0.66
+y = 0.88
+
+# Rutas nominales (polilíneas en coordenadas normalizadas). Las no listadas se trazan rectas.
+[[rutas]]
+origen = "PALA-01"
+destino = "CHANCADO PRIMARIO"
+puntos = [[0.55, 0.36], [0.62, 0.44], [0.70, 0.48], [0.78, 0.52]]
+
+[[rutas]]
+origen = "PALA-02"
+destino = "CHANCADO PRIMARIO"
+puntos = [[0.24, 0.44], [0.38, 0.40], [0.56, 0.50], [0.78, 0.52]]
+
+[[rutas]]
+origen = "PALA-03"
+destino = "BOTADERO 1"
+puntos = [[0.33, 0.66], [0.50, 0.74], [0.70, 0.78], [0.84, 0.82]]
+
+[[rutas]]
+origen = "PALA-04"
+destino = "BOTADERO 2"
+puntos = [[0.62, 0.20], [0.72, 0.21], [0.80, 0.22], [0.86, 0.24]]
+
+[[rutas]]
+origen = "CARG-01"
+destino = "CHANCADO PRIMARIO"
+puntos = [[0.58, 0.80], [0.68, 0.70], [0.76, 0.60], [0.78, 0.52]]
+
+[[rutas]]
+origen = "CARG-02"
+destino = "BOTADERO 2"
+puntos = [[0.17, 0.30], [0.36, 0.16], [0.60, 0.14], [0.86, 0.24]]

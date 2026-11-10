@@ -1,0 +1,17 @@
+﻿Tema,Detalle,Contraparte,ResponsablePropuesto,Decision,Fecha
+Automatizar el resumen semanal del equipo,Generar el resumen desde el tablero en lugar de armarlo a mano.,Auditoría interna,Persona Demo 02,Pospuesto,2025-03-03
+Incorporar revisión cruzada en los reportes,Una segunda persona revisa antes de publicar.,,Persona Demo 02,Aprobado,2025-03-06
+Publicar un calendario compartido de hitos,Visibilizar fechas clave para todo el equipo.,,Persona Demo 01,Por decidir,2025-03-13
+Revisar permisos de acceso del equipo,Confirmar quién necesita acceso a qué carpeta o herramienta.,Persona Demo 15,Persona Demo 01,Aprobado,2025-03-16
+Evaluar plantilla única de acta de reunión,Unificar el formato de actas para todos los equipos del área.,Persona Demo 15,Persona Demo 03,Por decidir,2025-03-23
+Estandarizar nombres de archivos compartidos,Definir un patrón simple de nombres y versiones.,Equipo de Mantención,Persona Demo 02,Descartado,2025-03-27
+Piloto de reunión de cierre quincenal,Revisar logros y pendientes cada dos semanas.,,Persona Demo 03,Por decidir,2025-03-31
+Agregar campo de riesgo a las actividades,Permitiría priorizar mejor las actividades en curso.,,Persona Demo 03,Por decidir,2025-04-01
+Proponer ventana fija para reuniones de coordinación,Reducir interrupciones concentrando las reuniones.,Contratista Demo,Persona Demo 03,Por decidir,2025-04-03
+Definir criterio común de prioridad,"Acordar qué significa prioridad alta, media y baja en el tablero.",Contratista Demo,,Descartado,2025-04-07
+Ordenar la carpeta de documentos del equipo,Depurar duplicados y definir una estructura única.,Equipo de Mantención,Persona Demo 03,Por decidir,2025-04-09
+Centralizar el listado de contrapartes,Un solo listado con contacto y tema de cada contraparte.,Auditoría interna,Persona Demo 01,Pospuesto,2025-04-23
+Medir tiempos de respuesta a solicitudes,Entender cuánto tardan las solicitudes más frecuentes.,Equipo de Operaciones,Persona Demo 02,Descartado,2025-04-30
+Revisar la matriz de responsabilidades,Verificar que cada actividad tenga una sola persona responsable.,Equipo de Mantención,Persona Demo 01,Aprobado,2025-05-03
+Reducir pasos del flujo de aprobación,Eliminar aprobaciones intermedias que no agregan control.,Equipo de Mantención,Persona Demo 01,Por decidir,2025-05-06
+Crear glosario de términos del área,Evitar malentendidos con siglas y nombres de documentos.,Contratista Demo,Persona Demo 03,Pospuesto,2025-05-12

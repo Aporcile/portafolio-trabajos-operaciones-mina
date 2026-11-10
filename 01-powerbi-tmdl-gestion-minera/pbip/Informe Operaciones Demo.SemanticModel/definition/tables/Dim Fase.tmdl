@@ -1,0 +1,46 @@
+table 'Dim Fase'
+	lineageTag: 66fea6dd-2117-47b4-9dad-330c0e36eb28
+
+	column Fase
+		lineageTag: ef786764-8513-4647-b6f3-227a2e54e41b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Fase]
+		sortByColumn: Orden
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Clave
+		isHidden
+		lineageTag: aae9f496-7aa2-4bc0-97cd-4cca3ee7f67f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Clave]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Orden
+		isHidden
+		formatString: 0
+		lineageTag: 1ade5964-2377-4177-b7f3-f7d86531d33d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Orden]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Dim Fase' = calculated
+		mode: import
+		source =
+				DATATABLE (
+				    "Fase", STRING,
+				    "Clave", STRING,
+				    "Orden", INTEGER,
+				    {
+				        { "Fase 1", "F01", 1 },
+				        { "Fase 2", "F02", 2 },
+				        { "Fase 3", "F03", 3 }
+				    }
+				)

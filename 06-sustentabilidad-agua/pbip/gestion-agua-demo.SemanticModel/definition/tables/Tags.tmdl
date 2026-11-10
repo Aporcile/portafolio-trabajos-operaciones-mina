@@ -1,0 +1,104 @@
+/// Catálogo de señales del historiador (TAG_AGUA_001...): activo, medición, unidad y fuente.
+table Tags
+	lineageTag: cd8bfcce-18ee-4ccd-b13b-fe94dfc9727c
+
+	column Tag
+		dataType: string
+		lineageTag: cea69fb5-62d8-4662-845b-5b292c62c483
+		summarizeBy: none
+		sourceColumn: Tag
+
+		annotation SummarizationSetBy = Automatic
+
+	column Descripcion
+		dataType: string
+		lineageTag: 3b06a958-a819-45d6-ba15-736c4b26104e
+		summarizeBy: none
+		sourceColumn: Descripcion
+
+		annotation SummarizationSetBy = Automatic
+
+	column Modulo
+		dataType: string
+		lineageTag: 773f3131-ad05-478b-8e20-570fa7cf47f7
+		summarizeBy: none
+		sourceColumn: Modulo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Familia
+		dataType: string
+		lineageTag: 5d5e83a1-3fd7-49a5-b733-da63f2a5d580
+		summarizeBy: none
+		sourceColumn: Familia
+
+		annotation SummarizationSetBy = Automatic
+
+	column Medicion
+		dataType: string
+		lineageTag: b9067a95-d4e4-4692-a9bf-4bb4ff92066b
+		summarizeBy: none
+		sourceColumn: Medicion
+
+		annotation SummarizationSetBy = Automatic
+
+	column Unidad
+		dataType: string
+		lineageTag: fc6bd96d-858e-4307-8ccd-efb4a249d249
+		summarizeBy: none
+		sourceColumn: Unidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column ActivoID
+		dataType: string
+		lineageTag: d24c750c-2800-4e68-b12d-f8b73f4605c8
+		summarizeBy: none
+		sourceColumn: ActivoID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Fuente
+		dataType: string
+		lineageTag: beafc83a-c838-4fbc-89e0-1af61aa11ddb
+		summarizeBy: none
+		sourceColumn: Fuente
+
+		annotation SummarizationSetBy = Automatic
+
+	column Origen
+		dataType: string
+		lineageTag: d0df0254-d012-4b14-9677-7b6b7edc245e
+		summarizeBy: none
+		sourceColumn: Origen
+
+		annotation SummarizationSetBy = Automatic
+
+	column Principal
+		dataType: string
+		lineageTag: f76ca534-662a-4802-8404-c490421672eb
+		summarizeBy: none
+		sourceColumn: Principal
+
+		annotation SummarizationSetBy = Automatic
+
+	column Confianza
+		dataType: string
+		lineageTag: d9933978-f014-4111-b956-350201b9dd77
+		summarizeBy: none
+		sourceColumn: Confianza
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Tags = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "catalogo_senales.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Tag", type text}, {"Descripcion", type text}, {"Modulo", type text}, {"Familia", type text}, {"Medicion", type text}, {"Unidad", type text}, {"ActivoID", type text}, {"Fuente", type text}, {"Origen", type text}, {"Principal", type text}, {"Confianza", type text}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

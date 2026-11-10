@@ -1,0 +1,6 @@
+﻿Codigo,Estado,Orden,ColorHex
+PH,Por hacer,1,#ADB5BD
+EC,En curso,2,#4F9DDE
+ER,En revisión,3,#E8AA1E
+BQ,Bloqueada,4,#7B61C9
+TE,Terminada,5,#2E7D32

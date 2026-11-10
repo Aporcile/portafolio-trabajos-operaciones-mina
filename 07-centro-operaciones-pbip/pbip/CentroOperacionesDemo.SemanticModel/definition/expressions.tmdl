@@ -1,0 +1,22 @@
+expression RutaDatos = "..\datos_sinteticos\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 32cfe3da-e807-4b08-bb03-bea9693a24a1
+
+	annotation PBI_ResultType = Text
+
+expression FechaReferencia = #date(2025, 5, 31) meta [IsParameterQuery=true, Type="Date", IsParameterQueryRequired=true]
+	lineageTag: 17a4e717-04ee-4bfa-bb59-3fd6c69acf56
+
+	annotation PBI_ResultType = Date
+
+expression DiasHistoria = 90 meta [IsParameterQuery=true, Type="Number", IsParameterQueryRequired=true]
+	lineageTag: f653ff34-35a4-42c4-b4f5-88466d259434
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Number
+
+expression DiasHistoriaGPS = 7 meta [IsParameterQuery=true, Type="Number", IsParameterQueryRequired=true]
+	lineageTag: 5e393409-52a6-4694-a618-8ca40dbd10e1
+
+	annotation PBI_ResultType = Number
+

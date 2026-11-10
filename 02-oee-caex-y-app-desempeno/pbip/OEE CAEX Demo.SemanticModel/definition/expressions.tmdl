@@ -1,0 +1,5 @@
+expression RutaDatos = "<CARPETA_DEL_REPO>\02-oee-caex-y-app-desempeno\datos_sinteticos\oee\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 1db9a3cb-1132-59b8-8a65-2cdee3bcb1aa
+
+	annotation PBI_ResultType = Text
+

@@ -1,0 +1,846 @@
+table Fact_Ciclos
+	lineageTag: a076c522-d044-4289-b180-a1951a821c25
+
+	measure 'Tiempo Ciclo Promedio Min' = ```
+			
+			AVERAGEX(
+			    Fact_Ciclos,
+			    (
+			        Fact_Ciclos[traveling_time] + Fact_Ciclos[waiting_time] + Fact_Ciclos[loading_time] +
+			        Fact_Ciclos[hauling_time] + Fact_Ciclos[queued_time] + Fact_Ciclos[tipping_time]
+			    ) / 60
+			)
+			
+			```
+		formatString: 0.0
+		lineageTag: 195aa6cf-2cc0-4b1b-9fee-e81aaed3899f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Tiempo Ciclo Ultima Hora' = ```
+			
+			VAR UltimoInstante = MAX(Fact_Ciclos[time_empty])
+			RETURN
+			    IF(
+			        ISBLANK(UltimoInstante),
+			        BLANK(),
+			        CALCULATE(
+			            [Tiempo Ciclo Promedio Min],
+			            Fact_Ciclos[time_empty] > UltimoInstante - TIME(1, 0, 0)
+			        )
+			    )
+			
+			```
+		lineageTag: 04de8e3b-d63f-474b-976a-603c02e44c72
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Desviacion Ciclo Minutos' = ```
+			
+			[Tiempo Ciclo Ultima Hora] - [Tiempo Ciclo Promedio Min]
+			
+			```
+		formatString: 0.0
+		lineageTag: 2d24ca73-a838-4438-8960-659c28ca5f5d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Destino Actual' = ```
+			
+			IF(
+			    NOT ISINSCOPE(Dim_Carguio[Equipo]),
+			    BLANK(),
+			    VAR TablaOrdenada =
+			        TOPN(
+			            1,
+			            Fact_Ciclos,
+			            Fact_Ciclos[time],
+			            DESC
+			        )
+			    RETURN
+			        MAXX(TablaOrdenada, Fact_Ciclos[DumpName])
+			)
+			
+			```
+		lineageTag: b4132e98-04b6-49de-bd33-5c204ce46016
+
+	column DiaOperativo
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 8a52a5ee-69c3-4fab-b8fc-cffb873bff89
+		summarizeBy: none
+		sourceColumn: DiaOperativo
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_registro_ciclo
+		dataType: int64
+		formatString: 0
+		lineageTag: cb2fb2dc-d74c-417e-bbfd-a84fe5972b3e
+		summarizeBy: sum
+		sourceColumn: id_registro_ciclo
+
+		annotation SummarizationSetBy = Automatic
+
+	column time
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: ff649276-68d7-41fb-a504-29ca629766a4
+		summarizeBy: none
+		sourceColumn: time
+
+		annotation SummarizationSetBy = Automatic
+
+	column shift_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 727852bc-ce0d-474d-8be1-f7f7ff802e80
+		summarizeBy: sum
+		sourceColumn: shift_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column shift
+		dataType: string
+		lineageTag: f4772543-fd95-4606-a9ab-316dadab5627
+		summarizeBy: none
+		sourceColumn: shift
+
+		annotation SummarizationSetBy = Automatic
+
+	column crew_id
+		dataType: int64
+		formatString: 0
+		lineageTag: e21e59dd-6ea9-4523-85c7-f0a3c195af83
+		summarizeBy: sum
+		sourceColumn: crew_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column crew
+		dataType: string
+		lineageTag: c1025dd9-e510-4873-bbe4-51dae2064a20
+		summarizeBy: none
+		sourceColumn: crew
+
+		annotation SummarizationSetBy = Automatic
+
+	column truck_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 91fec818-e573-4eeb-b8de-a615f649b411
+		summarizeBy: sum
+		sourceColumn: truck_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column TruckName
+		dataType: string
+		lineageTag: 237b1a78-fcdf-46fe-828e-61e1e1d7cbd9
+		summarizeBy: none
+		sourceColumn: TruckName
+
+		annotation SummarizationSetBy = Automatic
+
+	column TruckFleet
+		dataType: string
+		lineageTag: a9e83bc6-f9d4-4516-9225-5f314ffe81b9
+		summarizeBy: none
+		sourceColumn: TruckFleet
+
+		annotation SummarizationSetBy = Automatic
+
+	column shovel_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 9fc792ce-9f95-412a-b6f0-df9e97325553
+		summarizeBy: sum
+		sourceColumn: shovel_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column ShovelName
+		dataType: string
+		lineageTag: 62fc671d-016b-4fc8-aace-8d654eb694ec
+		summarizeBy: none
+		sourceColumn: ShovelName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ShovelFleet
+		dataType: string
+		lineageTag: 13e4553b-5617-47af-a8e0-c137ff2d98d7
+		summarizeBy: none
+		sourceColumn: ShovelFleet
+
+		annotation SummarizationSetBy = Automatic
+
+	column grade_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 285d975c-020d-47f4-98ec-429cb4694c52
+		summarizeBy: sum
+		sourceColumn: grade_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column GradeName
+		dataType: string
+		lineageTag: b7a930c7-4df2-439a-9ad0-cc0bca7903be
+		summarizeBy: none
+		sourceColumn: GradeName
+
+		annotation SummarizationSetBy = Automatic
+
+	column material_id
+		dataType: int64
+		formatString: 0
+		lineageTag: b49ce4c1-71c4-4514-b8e4-e63c27bd7d9a
+		summarizeBy: sum
+		sourceColumn: material_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaterialName
+		dataType: string
+		lineageTag: 7c3ad469-9355-471b-9f84-7919f0cc70c8
+		summarizeBy: none
+		sourceColumn: MaterialName
+
+		annotation SummarizationSetBy = Automatic
+
+	column dump_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 88a83489-0e87-4554-867b-9401c5a81f42
+		summarizeBy: sum
+		sourceColumn: dump_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Dump_LocationType
+		dataType: string
+		lineageTag: 534165ac-1d96-4bcd-9704-252bdd9c6aa4
+		summarizeBy: none
+		sourceColumn: Dump_LocationType
+
+		annotation SummarizationSetBy = Automatic
+
+	column DumpName
+		dataType: string
+		lineageTag: a2a7c79e-6076-4669-9cef-f154196faa2d
+		summarizeBy: none
+		sourceColumn: DumpName
+
+		annotation SummarizationSetBy = Automatic
+
+	column blast_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 63e6af9b-77a3-48ad-9a26-da480ba59d9a
+		summarizeBy: sum
+		sourceColumn: blast_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Blast_LocationType
+		dataType: string
+		lineageTag: 5871113d-ae5c-4bb3-bd43-230cb5986e40
+		summarizeBy: none
+		sourceColumn: Blast_LocationType
+
+		annotation SummarizationSetBy = Automatic
+
+	column BlastName
+		dataType: string
+		lineageTag: 83561027-17d7-4dcf-9c42-796660bbc464
+		summarizeBy: none
+		sourceColumn: BlastName
+
+		annotation SummarizationSetBy = Automatic
+
+	column latitude
+		dataType: int64
+		formatString: 0
+		lineageTag: 13e19a2c-e6c6-48bd-820c-b2b6ebd0ca1c
+		summarizeBy: sum
+		sourceColumn: latitude
+
+		annotation SummarizationSetBy = Automatic
+
+	column longitude
+		dataType: int64
+		formatString: 0
+		lineageTag: a6412fd1-de45-44ce-93d1-789eaed730fe
+		summarizeBy: sum
+		sourceColumn: longitude
+
+		annotation SummarizationSetBy = Automatic
+
+	column elevation
+		dataType: int64
+		formatString: 0
+		lineageTag: b005ff59-b787-4c6e-9907-eb90a80736a9
+		summarizeBy: sum
+		sourceColumn: elevation
+
+		annotation SummarizationSetBy = Automatic
+
+	column northing
+		dataType: double
+		lineageTag: 70ea5fb7-178d-4d77-a7a3-bf361dad31b8
+		summarizeBy: sum
+		sourceColumn: northing
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column easting
+		dataType: double
+		lineageTag: 5e9dd2a6-aa6f-4942-97f1-a96a8063f0c4
+		summarizeBy: sum
+		sourceColumn: easting
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column l_elevation
+		dataType: double
+		lineageTag: 12ba4adc-47f1-491e-919b-add31a107ff9
+		summarizeBy: sum
+		sourceColumn: l_elevation
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column by_dispatcher
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 7652b4e4-d3b1-4575-a2b1-8285981d148c
+		summarizeBy: none
+		sourceColumn: by_dispatcher
+
+		annotation SummarizationSetBy = Automatic
+
+	column assignment_reason_id
+		dataType: int64
+		formatString: 0
+		lineageTag: cdd42cb2-f93b-4144-ac71-c9d5fbd921f9
+		summarizeBy: sum
+		sourceColumn: assignment_reason_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column asignacion_motivo_tipo
+		dataType: string
+		lineageTag: e05e2565-27a3-473f-9658-94e8ac26f8cc
+		summarizeBy: none
+		sourceColumn: asignacion_motivo_tipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column assigned_shovel_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 18b265f0-d2c1-4708-9633-c3ef6b155930
+		summarizeBy: sum
+		sourceColumn: assigned_shovel_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column asignacion_pala_tipo
+		dataType: string
+		lineageTag: 92ba8cfb-75d0-4e4c-88ee-9fb1b1819cc4
+		summarizeBy: none
+		sourceColumn: asignacion_pala_tipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column truck_operator_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 0e682542-ce5b-4aaa-9b36-6447bdfbb713
+		summarizeBy: sum
+		sourceColumn: truck_operator_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column TruckOpName
+		dataType: string
+		lineageTag: 52059031-b041-491c-8eb0-6fdf6d0476bf
+		summarizeBy: none
+		sourceColumn: TruckOpName
+
+		annotation SummarizationSetBy = Automatic
+
+	column TruckOpPayNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: e90c0a04-c8a1-483a-b79e-395141b84b47
+		summarizeBy: sum
+		sourceColumn: TruckOpPayNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column shovel_operator_id
+		dataType: int64
+		formatString: 0
+		lineageTag: a5907637-0110-4f39-b6fd-70cdebb8ba73
+		summarizeBy: sum
+		sourceColumn: shovel_operator_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column ShohvelOpName
+		dataType: string
+		lineageTag: c84ab7b1-f841-4738-b81e-57cd892a1684
+		summarizeBy: none
+		sourceColumn: ShohvelOpName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ShovelOpPayNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: 92817cd8-bd00-402b-bc04-c6e39d053605
+		summarizeBy: sum
+		sourceColumn: ShovelOpPayNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column time_depart
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f3ed4ab2-ca0f-4663-96ed-c39bd86563cf
+		summarizeBy: none
+		sourceColumn: time_depart
+
+		annotation SummarizationSetBy = Automatic
+
+	column time_arrive
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: dc3bbc08-da4b-49d5-a8a6-0e0593030fa6
+		summarizeBy: none
+		sourceColumn: time_arrive
+
+		annotation SummarizationSetBy = Automatic
+
+	column time_spotting
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 900360ef-598e-4bed-9a30-a5582f5581d9
+		summarizeBy: none
+		sourceColumn: time_spotting
+
+		annotation SummarizationSetBy = Automatic
+
+	column time_spotted
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 7c8f8277-308e-4cd4-bdcc-21924c4be52e
+		summarizeBy: none
+		sourceColumn: time_spotted
+
+		annotation SummarizationSetBy = Automatic
+
+	column expected_time
+		dataType: int64
+		formatString: 0
+		lineageTag: 4aa13492-c8a1-46b2-aec4-4dd514ed5274
+		summarizeBy: sum
+		sourceColumn: expected_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column distance
+		dataType: int64
+		formatString: 0
+		lineageTag: da3895a1-5dbf-41ef-897c-cdb3f22d912f
+		summarizeBy: sum
+		sourceColumn: distance
+
+		annotation SummarizationSetBy = Automatic
+
+	column efh
+		dataType: int64
+		formatString: 0
+		lineageTag: 0e6d8172-caff-4a60-b05a-2ba9ba170f10
+		summarizeBy: sum
+		sourceColumn: efh
+
+		annotation SummarizationSetBy = Automatic
+
+	column lift_down
+		dataType: int64
+		formatString: 0
+		lineageTag: b8dfc6ea-66fc-4ca6-a2e6-680faa965df7
+		summarizeBy: sum
+		sourceColumn: lift_down
+
+		annotation SummarizationSetBy = Automatic
+
+	column lift_up
+		dataType: int64
+		formatString: 0
+		lineageTag: d3182624-2f10-4937-89e2-ad4e884c1947
+		summarizeBy: sum
+		sourceColumn: lift_up
+
+		annotation SummarizationSetBy = Automatic
+
+	column lift_distance_down
+		dataType: int64
+		formatString: 0
+		lineageTag: 5fde60b9-f9c9-4a82-a5f8-fc359e616838
+		summarizeBy: sum
+		sourceColumn: lift_distance_down
+
+		annotation SummarizationSetBy = Automatic
+
+	column lift_distance_up
+		dataType: int64
+		formatString: 0
+		lineageTag: 1d915cc7-5088-4543-8cd5-915366de9e5c
+		summarizeBy: sum
+		sourceColumn: lift_distance_up
+
+		annotation SummarizationSetBy = Automatic
+
+	column start_location_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 1ae90bd3-b355-41fc-b5ae-7181258d9bbe
+		summarizeBy: sum
+		sourceColumn: start_location_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column end_location_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 740cf123-59d3-4cc3-a43f-3c9680f62f83
+		summarizeBy: sum
+		sourceColumn: end_location_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_payload
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 69da538d-917a-4cd4-8cac-410a4a71fd7a
+		summarizeBy: none
+		sourceColumn: has_payload
+
+		annotation SummarizationSetBy = Automatic
+
+	column activity_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 96905ae1-24e0-466f-bd41-f42797f3cfe3
+		summarizeBy: sum
+		sourceColumn: activity_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column time_full
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: bee7603a-d0eb-43d4-abc6-d5e0a78c1d81
+		summarizeBy: none
+		sourceColumn: time_full
+
+		annotation SummarizationSetBy = Automatic
+
+	column time_empty
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f6431f5d-1021-4664-b665-6d90e247d52b
+		summarizeBy: none
+		sourceColumn: time_empty
+
+		annotation SummarizationSetBy = Automatic
+
+	column load_count
+		dataType: int64
+		formatString: 0
+		lineageTag: e4d57e54-3748-4af6-a4b4-ec52f04a05c9
+		summarizeBy: sum
+		sourceColumn: load_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column cycle_count
+		dataType: int64
+		formatString: 0
+		lineageTag: cfe12390-c64a-477c-a9b6-a7821164270f
+		summarizeBy: sum
+		sourceColumn: cycle_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column material_tonnage
+		dataType: double
+		lineageTag: 70dfa208-f6cb-407b-9ac9-2acf2495066c
+		summarizeBy: sum
+		sourceColumn: material_tonnage
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column payload
+		dataType: double
+		lineageTag: e552f40d-c324-4821-8654-0003a39bdf03
+		summarizeBy: sum
+		sourceColumn: payload
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column payload_count
+		dataType: int64
+		formatString: 0
+		lineageTag: c10a8df7-a801-4fbe-9766-05f9e46f1312
+		summarizeBy: sum
+		sourceColumn: payload_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column distance_empty
+		dataType: int64
+		formatString: 0
+		lineageTag: fb4fd99d-ceb9-439a-bccf-46c16a8ad6c9
+		summarizeBy: sum
+		sourceColumn: distance_empty
+
+		annotation SummarizationSetBy = Automatic
+
+	column distance_loaded
+		dataType: int64
+		formatString: 0
+		lineageTag: 45b11905-92d3-4135-8456-a2344c4df277
+		summarizeBy: sum
+		sourceColumn: distance_loaded
+
+		annotation SummarizationSetBy = Automatic
+
+	column inactive_time
+		dataType: int64
+		formatString: 0
+		lineageTag: 2a7a8e12-d6ce-4138-bc3b-3b769998f14c
+		summarizeBy: sum
+		sourceColumn: inactive_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column traveling_time
+		dataType: int64
+		formatString: 0
+		lineageTag: 37398af2-68b1-4188-9a0a-f49b816a78e6
+		summarizeBy: sum
+		sourceColumn: traveling_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column waiting_time
+		dataType: int64
+		formatString: 0
+		lineageTag: 8a7df94a-7f79-431b-865c-8b24395c3d82
+		summarizeBy: sum
+		sourceColumn: waiting_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column spotting_time
+		dataType: int64
+		formatString: 0
+		lineageTag: d0d3625e-e602-4bd8-a5d9-0f4b0325d892
+		summarizeBy: sum
+		sourceColumn: spotting_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column loading_time
+		dataType: int64
+		formatString: 0
+		lineageTag: f4d7d074-2a20-48ad-9111-46834d729197
+		summarizeBy: sum
+		sourceColumn: loading_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column hauling_time
+		dataType: int64
+		formatString: 0
+		lineageTag: 0ccfb33a-1851-42aa-84a7-385860d3acbe
+		summarizeBy: sum
+		sourceColumn: hauling_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column queued_time
+		dataType: int64
+		formatString: 0
+		lineageTag: 084d7e6e-c198-4e58-b28f-da77f477af54
+		summarizeBy: sum
+		sourceColumn: queued_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column backing_time
+		dataType: int64
+		formatString: 0
+		lineageTag: 0d2ab280-4cff-4231-a6dd-1fefb66c7b89
+		summarizeBy: sum
+		sourceColumn: backing_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipping_time
+		dataType: int64
+		formatString: 0
+		lineageTag: e092af73-e1af-4be0-ba17-ee3a576a12f3
+		summarizeBy: sum
+		sourceColumn: tipping_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column traveling_efh
+		dataType: int64
+		formatString: 0
+		lineageTag: aa6c0864-4ece-4d1c-ac61-7638b616806e
+		summarizeBy: sum
+		sourceColumn: traveling_efh
+
+		annotation SummarizationSetBy = Automatic
+
+	column hauling_efh
+		dataType: int64
+		formatString: 0
+		lineageTag: d9cd78fa-a598-4c64-a34a-a544f2714265
+		summarizeBy: sum
+		sourceColumn: hauling_efh
+
+		annotation SummarizationSetBy = Automatic
+
+	column swing_times
+		dataType: string
+		lineageTag: 399a5fb5-5652-4185-8eaa-22ff86102da4
+		summarizeBy: none
+		sourceColumn: swing_times
+
+		annotation SummarizationSetBy = Automatic
+
+	column swing_angles
+		dataType: string
+		lineageTag: 1733aaae-7ea8-439b-adec-e49968a64b1b
+		summarizeBy: none
+		sourceColumn: swing_angles
+
+		annotation SummarizationSetBy = Automatic
+
+	column loading_seconds
+		dataType: int64
+		formatString: 0
+		lineageTag: b591f313-58eb-431c-8c55-2358278a644b
+		summarizeBy: sum
+		sourceColumn: loading_seconds
+
+		annotation SummarizationSetBy = Automatic
+
+	column spotting_seconds
+		dataType: int64
+		formatString: 0
+		lineageTag: 61298338-8ddb-45a4-8ccd-4ce17f153e5e
+		summarizeBy: sum
+		sourceColumn: spotting_seconds
+
+		annotation SummarizationSetBy = Automatic
+
+	column waiting_seconds
+		dataType: int64
+		formatString: 0
+		lineageTag: 76892b5c-5ee0-4928-a2ea-d23636090605
+		summarizeBy: sum
+		sourceColumn: waiting_seconds
+
+		annotation SummarizationSetBy = Automatic
+
+	column extraload
+		dataType: int64
+		formatString: 0
+		lineageTag: 44d3a3f6-b6c7-400e-8665-d736f08a5af0
+		summarizeBy: sum
+		sourceColumn: extraload
+
+		annotation SummarizationSetBy = Automatic
+
+	column login_dispatcher
+		dataType: string
+		lineageTag: 8332c45e-e107-4462-8e42-5808f80e5ac0
+		summarizeBy: none
+		sourceColumn: login_dispatcher
+
+		annotation SummarizationSetBy = Automatic
+
+	column PO_CAEX_CARGA_MIN
+		dataType: double
+		lineageTag: ca3c38fc-9f36-42df-a8c1-b42aebf8679e
+		summarizeBy: sum
+		sourceColumn: PO_CAEX_CARGA_MIN
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PO_CAEX_DESCARGA_MIN
+		dataType: double
+		lineageTag: 9f488709-d90b-4bec-aed3-abd996c58403
+		summarizeBy: sum
+		sourceColumn: PO_CAEX_DESCARGA_MIN
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PO_TOTAL_CAEX_MIN
+		dataType: double
+		lineageTag: a09436c6-e18e-466e-b626-1d8716f32946
+		summarizeBy: sum
+		sourceColumn: PO_TOTAL_CAEX_MIN
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PO_CARGUIO_ESPERANDO_CAEX_MIN
+		dataType: double
+		lineageTag: 117bc2b6-4fb0-485d-9a47-078e918bb916
+		summarizeBy: sum
+		sourceColumn: PO_CARGUIO_ESPERANDO_CAEX_MIN
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Fact_Ciclos = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "fact_ciclos.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"DiaOperativo", type datetime}, {"id_registro_ciclo", Int64.Type}, {"time", type datetime}, {"shift_id", Int64.Type}, {"shift", type text}, {"crew_id", Int64.Type}, {"crew", type text}, {"truck_id", Int64.Type}, {"TruckName", type text}, {"TruckFleet", type text}, {"shovel_id", Int64.Type}, {"ShovelName", type text}, {"ShovelFleet", type text}, {"grade_id", Int64.Type}, {"GradeName", type text}, {"material_id", Int64.Type}, {"MaterialName", type text}, {"dump_id", Int64.Type}, {"Dump_LocationType", type text}, {"DumpName", type text}, {"blast_id", Int64.Type}, {"Blast_LocationType", type text}, {"BlastName", type text}, {"latitude", Int64.Type}, {"longitude", Int64.Type}, {"elevation", Int64.Type}, {"northing", type number}, {"easting", type number}, {"l_elevation", type number}, {"by_dispatcher", type logical}, {"assignment_reason_id", Int64.Type}, {"asignacion_motivo_tipo", type text}, {"assigned_shovel_id", Int64.Type}, {"asignacion_pala_tipo", type text}, {"truck_operator_id", Int64.Type}, {"TruckOpName", type text}, {"TruckOpPayNumber", Int64.Type}, {"shovel_operator_id", Int64.Type}, {"ShohvelOpName", type text}, {"ShovelOpPayNumber", Int64.Type}, {"time_depart", type datetime}, {"time_arrive", type datetime}, {"time_spotting", type datetime}, {"time_spotted", type datetime}, {"expected_time", Int64.Type}, {"distance", Int64.Type}, {"efh", Int64.Type}, {"lift_down", Int64.Type}, {"lift_up", Int64.Type}, {"lift_distance_down", Int64.Type}, {"lift_distance_up", Int64.Type}, {"start_location_id", Int64.Type}, {"end_location_id", Int64.Type}, {"has_payload", type logical}, {"activity_id", Int64.Type}, {"time_full", type datetime}, {"time_empty", type datetime}, {"load_count", Int64.Type}, {"cycle_count", Int64.Type}, {"material_tonnage", type number}, {"payload", type number}, {"payload_count", Int64.Type}, {"distance_empty", Int64.Type}, {"distance_loaded", Int64.Type}, {"inactive_time", Int64.Type}, {"traveling_time", Int64.Type}, {"waiting_time", Int64.Type}, {"spotting_time", Int64.Type}, {"loading_time", Int64.Type}, {"hauling_time", Int64.Type}, {"queued_time", Int64.Type}, {"backing_time", Int64.Type}, {"tipping_time", Int64.Type}, {"traveling_efh", Int64.Type}, {"hauling_efh", Int64.Type}, {"swing_times", type text}, {"swing_angles", type text}, {"loading_seconds", Int64.Type}, {"spotting_seconds", Int64.Type}, {"waiting_seconds", Int64.Type}, {"extraload", Int64.Type}, {"login_dispatcher", type text}, {"PO_CAEX_CARGA_MIN", type number}, {"PO_CAEX_DESCARGA_MIN", type number}, {"PO_TOTAL_CAEX_MIN", type number}, {"PO_CARGUIO_ESPERANDO_CAEX_MIN", type number}}, "en-US"),
+				    // Ventana de historia: solo las filas de los ultimos DiasHistoria dias respecto de FechaReferencia.
+				    Ventana = Table.SelectRows(Tipos, each Date.From([DiaOperativo]) >= Date.AddDays(FechaReferencia, -DiasHistoria))
+				in
+				    Ventana
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

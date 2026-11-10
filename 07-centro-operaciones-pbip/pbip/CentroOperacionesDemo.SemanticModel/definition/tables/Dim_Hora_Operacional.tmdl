@@ -1,0 +1,207 @@
+/// Dia operacional de 24 horas: Turno A 08:00-19:59 (orden 1-12) y Turno B 20:00-07:59 (orden 13-24). Las horas 00:00-07:59 pertenecen al dia operacional anterior.
+table Dim_Hora_Operacional
+	lineageTag: 24a76d7c-3e5a-40f1-9a8d-3ecbbae47385
+
+	/// 1 = 08:00 (A-01) ... 12 = 19:00 (A-12), 13 = 20:00 (B-01) ... 24 = 07:00 (B-12). 99 = hueco visual entre turnos (sin datos). 96, 97 y 98 = tres horas vacias antes del turno A (solo las muestra el grafico de chancado). Clave de las relaciones con las tablas de hechos.
+	column Orden_Hora_Dia
+		dataType: int64
+		formatString: 0
+		lineageTag: 4e575524-1a83-4692-a8ef-94665d4b40f8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Orden_Hora_Dia]
+
+	column Turno
+		dataType: string
+		lineageTag: ae95cde4-1690-4ac0-a88c-6f9842cf285e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Turno]
+		sortByColumn: Orden_Turno
+
+	column HoraTurno
+		dataType: int64
+		formatString: 0
+		lineageTag: 6d92b39e-24b4-48a9-82e8-554dd035e368
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [HoraTurno]
+		sortByColumn: Orden_Eje
+
+		annotation SummarizationSetBy = Automatic
+
+	column Hora_Reloj
+		dataType: int64
+		formatString: 0
+		lineageTag: 6e10c0ad-3dc6-490e-ba73-95ac672d8a16
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Hora_Reloj]
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Etiqueta del eje X: A-01..A-12 (Turno A) y B-01..B-12 (Turno B). Ordenada por Orden_Hora_Dia.
+	column Etiqueta_Hora_Turno
+		dataType: string
+		lineageTag: a9c81ffc-4030-413d-ac8f-7d3e9d7664af
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Etiqueta_Hora_Turno]
+		sortByColumn: Orden_Hora_Dia
+
+	/// Hora reloj 08:00..07:00, ordenada por Orden_Hora_Dia.
+	column Etiqueta_Hora_Reloj
+		dataType: string
+		lineageTag: 1d42bc58-243a-4549-a7cc-ec6691c00fc8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Etiqueta_Hora_Reloj]
+		sortByColumn: Orden_Hora_Dia
+
+	/// Etiqueta del eje X cada 2 horas y sin cero adelante (8, 10 ... 18 | 20, 22, 0 ... 6). Las horas impares llevan una cadena invisible unica. Ordenada por Orden_Hora_Dia. La hora completa esta en Etiqueta_Hora_Reloj.
+	column Hora
+		dataType: string
+		lineageTag: 22791cb6-9e99-471d-9caf-c0377e6d5ea3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Hora]
+		sortByColumn: Orden_Eje
+
+	/// Posicion en el eje X: -3, -2 y -1 = horas vacias de inicio, 1-12 Turno A, 13 = hueco entre turnos, 14-25 Turno B. Orden de la columna Hora.
+	column Orden_Eje
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b275207e-8fa3-4746-a4c0-7dd94b8a2ef2
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Orden_Eje]
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Orden del grupo del eje: 0 = horas vacias de inicio, 1 = A, 2 = hueco, 3 = B. Orden de la columna Turno.
+	column Orden_Turno
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 80233ef4-4e75-44fa-a0d0-bbb325e67cf3
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Orden_Turno]
+
+		annotation SummarizationSetBy = Automatic
+
+	/// 1 en las filas de relleno visual sin datos (hueco entre turnos, clave 99, y las 3 horas vacias de inicio, claves 96 a 98); 0 en las 24 horas reales.
+	column Es_Espacio
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5f1f2b9e-b8ab-49a0-b7b6-201cdd8ce7e8
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Es_Espacio]
+
+		annotation SummarizationSetBy = Automatic
+
+	column HoraTurno_Eje
+		lineageTag: 1db3aa19-1928-4f63-8186-abcec8fdf0f6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [HoraTurno_Eje]
+		sortByColumn: Orden_Eje
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Numero de hora dentro del turno (1-12) para la tabla Ley de Alimentacion; el hueco entre turnos y las filas de relleno llevan una cadena invisible unica para que cada casilla del eje sea una columna propia. Ordenada por Orden_Eje.
+	column HoraTurno_Tabla
+		dataType: string
+		lineageTag: 70ee5e7a-f692-4003-82f4-a587eb8571c3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [HoraTurno_Tabla]
+		sortByColumn: Orden_Eje
+
+	partition Dim_Hora_Operacional = calculated
+		mode: import
+		source = ```
+				VAR Horas =
+				    SELECTCOLUMNS(
+				        GENERATESERIES(1, 24, 1),
+				        "Orden_Hora_Dia", [Value],
+				        "Orden_Eje", IF([Value] <= 12, [Value], [Value] + 1),
+				        "Turno", IF([Value] <= 12, "A", "B"),
+				        "Orden_Turno", IF([Value] <= 12, 1, 3),
+				        "Es_Espacio", 0,
+				        "HoraTurno", IF([Value] <= 12, [Value], [Value] - 12),
+				        "Hora_Reloj", MOD([Value] + 7, 24),
+				        "Hora", IF(MOD([Value], 2) = 1, FORMAT(MOD([Value] + 7, 24), "0"), REPT(UNICHAR(8203), QUOTIENT([Value], 2))),
+				"HoraTurno_Eje", IF(MOD([Value], 2) = 0, FORMAT(IF([Value] <= 12, [Value], [Value] - 12), "0"), REPT(UNICHAR(8203), QUOTIENT([Value] + 1, 2))),
+				        "Etiqueta_Hora_Turno", IF([Value] <= 12, "A-", "B-") & FORMAT(IF([Value] <= 12, [Value], [Value] - 12), "00"),
+				        "Etiqueta_Hora_Reloj", FORMAT(MOD([Value] + 7, 24), "00") & ":00",
+				                "HoraTurno_Tabla", FORMAT(IF([Value] <= 12, [Value], [Value] - 12), "0")
+				    )
+				VAR Espacio =
+				    ROW(
+				        "Orden_Hora_Dia", 99,
+				        "Orden_Eje", 13,
+				        "Turno", UNICHAR(8203),
+				        "Orden_Turno", 2,
+				        "Es_Espacio", 1,
+				        "HoraTurno", BLANK(),
+				        "Hora_Reloj", BLANK(),
+				        "Hora", REPT(UNICHAR(8203), 13),
+				"HoraTurno_Eje", REPT(UNICHAR(8203), 13),
+				        "Etiqueta_Hora_Turno", UNICHAR(8212),
+				        "Etiqueta_Hora_Reloj", BLANK(),
+				        "HoraTurno_Tabla", REPT(UNICHAR(8203), 21)
+				    )
+				VAR Inicio0 =
+				    ROW(
+				        "Orden_Hora_Dia", 96,
+				        "Orden_Eje", -3,
+				        "Turno", REPT(UNICHAR(8203), 2),
+				        "Orden_Turno", 0,
+				        "Es_Espacio", 1,
+				        "HoraTurno", BLANK(),
+				        "Hora_Reloj", BLANK(),
+				        "Hora", REPT(UNICHAR(8203), 16),
+				        "HoraTurno_Eje", REPT(UNICHAR(8203), 16),
+				        "Etiqueta_Hora_Turno", BLANK(),
+				        "Etiqueta_Hora_Reloj", BLANK(),
+				        "HoraTurno_Tabla", REPT(UNICHAR(8203), 22)
+				    )
+				VAR Inicio1 =
+				    ROW(
+				        "Orden_Hora_Dia", 97,
+				        "Orden_Eje", -2,
+				        "Turno", REPT(UNICHAR(8203), 2),
+				        "Orden_Turno", 0,
+				        "Es_Espacio", 1,
+				        "HoraTurno", BLANK(),
+				        "Hora_Reloj", BLANK(),
+				        "Hora", REPT(UNICHAR(8203), 14),
+				        "HoraTurno_Eje", REPT(UNICHAR(8203), 14),
+				        "Etiqueta_Hora_Turno", BLANK(),
+				        "Etiqueta_Hora_Reloj", BLANK(),
+				        "HoraTurno_Tabla", REPT(UNICHAR(8203), 23)
+				    )
+				VAR Inicio2 =
+				    ROW(
+				        "Orden_Hora_Dia", 98,
+				        "Orden_Eje", -1,
+				        "Turno", REPT(UNICHAR(8203), 2),
+				        "Orden_Turno", 0,
+				        "Es_Espacio", 1,
+				        "HoraTurno", BLANK(),
+				        "Hora_Reloj", BLANK(),
+				        "Hora", REPT(UNICHAR(8203), 15),
+				        "HoraTurno_Eje", REPT(UNICHAR(8203), 15),
+				        "Etiqueta_Hora_Turno", BLANK(),
+				        "Etiqueta_Hora_Reloj", BLANK(),
+				        "HoraTurno_Tabla", REPT(UNICHAR(8203), 24)
+				    )RETURN
+				    UNION(Horas, Espacio, Inicio0, Inicio1, Inicio2)
+				
+				```
+
+

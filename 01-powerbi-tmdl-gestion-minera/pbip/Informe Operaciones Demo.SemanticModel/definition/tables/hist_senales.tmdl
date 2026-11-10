@@ -1,0 +1,67 @@
+table hist_senales
+	lineageTag: ce3fde10-a8b1-4368-9d4c-9d867828f405
+
+	column item_id
+		dataType: string
+		lineageTag: 99a049e1-4c92-47df-9638-806d72fb0b01
+		summarizeBy: none
+		sourceColumn: item_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column timestamp
+		dataType: dateTime
+		formatString: General Date
+		isAvailableInMdx: false
+		lineageTag: 1c58f1b2-7cb4-499e-a967-943e0a2631b8
+		summarizeBy: none
+		sourceColumn: timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column numeric_value
+		dataType: double
+		lineageTag: 19c8aef2-4634-43bf-8451-c44241d7fcbc
+		summarizeBy: sum
+		sourceColumn: numeric_value
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column estado
+		dataType: int64
+		formatString: 0
+		lineageTag: 4f014ae4-c9da-48cf-887a-37cf49feaff8
+		summarizeBy: sum
+		sourceColumn: estado
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'dim_variable.name'
+		dataType: string
+		lineageTag: e8243e2d-fd2f-49cf-87e5-d439358f4843
+		summarizeBy: none
+		sourceColumn: dim_variable.name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'dim_variable.tipo_variable'
+		dataType: string
+		lineageTag: b3280a0d-b1af-49de-9c86-e977883100a0
+		summarizeBy: none
+		sourceColumn: dim_variable.tipo_variable
+
+		annotation SummarizationSetBy = Automatic
+
+	partition hist_senales = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "hist_senales.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"item_id", type text}, {"timestamp", type datetime}, {"numeric_value", type number}, {"estado", Int64.Type}, {"dim_variable.name", type text}, {"dim_variable.tipo_variable", type text}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table

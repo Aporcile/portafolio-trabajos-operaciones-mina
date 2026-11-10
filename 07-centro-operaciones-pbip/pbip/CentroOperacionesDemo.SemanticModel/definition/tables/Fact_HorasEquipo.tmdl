@@ -1,0 +1,738 @@
+table Fact_HorasEquipo
+	lineageTag: 7a77138c-8900-45ef-9cac-88e53d177eeb
+
+	measure 'Tonelaje Total Turno' =
+			
+			CALCULATE(
+			    SUM(Fact_HorasEquipo[Tonelaje]),
+			    Fact_HorasEquipo[Tipo Equipo] = "Truck"
+			)
+		lineageTag: 268c04c7-2bac-4b14-bbaf-41f0308c4404
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Disponibilidad CAEX' =
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Disponibles]), Fact_HorasEquipo[Tipo Equipo] = "Truck"),
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Nominales]), Fact_HorasEquipo[Tipo Equipo] = "Truck"),
+			    0
+			)
+		lineageTag: 4328e1e3-4e81-4b3f-8b46-c720b5950844
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Utilizacion CAEX' = ```
+			
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Operativas]), Fact_HorasEquipo[Tipo Equipo] = "Truck"),
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Disponibles]), Fact_HorasEquipo[Tipo Equipo] = "Truck")
+			)
+			
+			```
+		lineageTag: 35dd62a4-66c5-4da3-a964-a4dd0f9b2a42
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'UE CAEX' = ```
+			
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Efectivas]), Fact_HorasEquipo[Tipo Equipo] = "Truck"),
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Disponibles]), Fact_HorasEquipo[Tipo Equipo] = "Truck")
+			)
+			
+			
+			```
+		lineageTag: fa360566-a121-4912-a8c5-ae2fed5a93b1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Camiones Operando' = ```
+			
+			CALCULATE(
+			    DISTINCTCOUNT(Fact_HorasEquipo[Equipo]),
+			    Fact_HorasEquipo[Tipo Equipo] = "Truck",
+			    Fact_HorasEquipo[Horas Operativas] > 0
+			)
+			
+			```
+		formatString: 0
+		lineageTag: c4077dc1-0816-4b79-b902-6c6e963a6896
+
+	measure 'Rendimiento Carguio t/h' = ```
+			
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo[Tonelaje]), Fact_HorasEquipo[Tipo Equipo] IN {"Shovel", "Loader"}),
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Efectivas]), Fact_HorasEquipo[Tipo Equipo] IN {"Shovel", "Loader"}),
+			    0
+			)
+			
+			```
+		lineageTag: f398e81f-926c-4383-9017-1318763e5abd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Color Rendimiento Carguio' = ```
+			
+			VAR Real = [Rendimiento Carguio t/h]
+			VAR Plan = [Rendimiento Carguio Plan]
+			RETURN
+			    IF(ISBLANK(Real) || ISBLANK(Plan), "#8FA3B8",
+			        IF(Real >= Plan, "#00C853", "#8FA3B8"))
+			
+			```
+		lineageTag: efc95553-cb2a-4ede-bb79-9fff9841a203
+
+	measure 'Proyeccion Ampliacion' =
+			VAR ExtraidoAcumulado =
+			    CALCULATE(
+			        SUM(Fact_HorasEquipo[Material Extraido]),
+			        Fact_HorasEquipo[Tipo Equipo] = "Truck"
+			    )
+			VAR HorasPeriodo = 12 * COUNTROWS(VALUES(Dim_Turno[Turno]))
+			RETURN
+			    DIVIDE(ExtraidoAcumulado, [Horas Dia Con Datos]) * HorasPeriodo
+		lineageTag: 138e956a-5b1c-4db7-850e-a8a42a3f3ce9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Proyeccion Mov Mina' =
+			VAR MovimientoAcumulado =
+			    CALCULATE(
+			        SUM(Fact_HorasEquipo[Movimiento Total]),
+			        Fact_HorasEquipo[Tipo Equipo] = "Truck"
+			    )
+			VAR HorasPeriodo = 12 * COUNTROWS(VALUES(Dim_Turno[Turno]))
+			RETURN
+			    DIVIDE(MovimientoAcumulado, [Horas Dia Con Datos]) * HorasPeriodo
+		lineageTag: 96e884e7-0104-41c3-99a6-c9ce95e90e04
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Palas Operando' = ```
+			
+			CALCULATE(
+			    DISTINCTCOUNT(Fact_HorasEquipo[Equipo]),
+			    Fact_HorasEquipo[Tipo Equipo] = "Shovel",
+			    Fact_HorasEquipo[Horas Operativas] > 0
+			)
+			
+			```
+		formatString: 0
+		lineageTag: c1e060d5-a5c7-463f-b8ec-4eb2aa71665a
+
+	measure 'Perforadoras Operando' = ```
+			
+			CALCULATE(
+			    DISTINCTCOUNT(Fact_HorasEquipo[Equipo]),
+			    Fact_HorasEquipo[Tipo Equipo] = "Drill",
+			    Fact_HorasEquipo[Horas Operativas] > 0
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 13500556-e2c8-4d54-b285-802c832bdc13
+
+	measure 'Cargadores Operando' = ```
+			
+			CALCULATE(
+			    DISTINCTCOUNT(Fact_HorasEquipo[Equipo]),
+			    Fact_HorasEquipo[Tipo Equipo] = "Loader",
+			    Fact_HorasEquipo[Horas Operativas] > 0
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 8961b62a-fd65-4526-a26d-b0b56f91e442
+
+	measure Camiones = ```
+			
+			[Camiones Operando] & " / " & [Flota CAEX Total]
+			
+			```
+		lineageTag: 4cfee43f-db1c-4417-b808-3fddef350032
+
+	measure Palas = ```
+			
+			[Palas Operando] & " / " & [Flota Palas Total]
+			
+			```
+		lineageTag: 6a389f4e-848a-45ee-bb83-f02a94d6459b
+
+	measure Perforadoras = ```
+			
+			[Perforadoras Operando] & " / " & [Flota Perforadoras Total]
+			
+			```
+		lineageTag: 41365da0-bb28-47a9-aa45-70dd10ab24e3
+
+	measure Cargadores = ```
+			
+			[Cargadores Operando] & " / " & [Flota Cargadores Total]
+			
+			```
+		lineageTag: 8496e1e2-4a55-4f5a-bfa8-01f608be6b7e
+
+	measure 'Utilizacion Carguio' = ```
+			
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Operativas]), Fact_HorasEquipo[Tipo Equipo] IN {"Shovel", "Loader"}),
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Disponibles]), Fact_HorasEquipo[Tipo Equipo] IN {"Shovel", "Loader"}),
+			    0
+			)
+			
+			```
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: 840a242e-49de-4ad2-83e0-debf308b6475
+
+	measure 'Color Utilizacion Carguio' = ```
+			
+			VAR Real = [Utilizacion Carguio]
+			VAR Plan = [Utilizacion Carguio Plan]
+			RETURN
+			    IF(ISBLANK(Real) || ISBLANK(Plan), "#8FA3B8",
+			        IF(Real >= Plan, "#00C853", "#8FA3B8"))
+			
+			```
+		lineageTag: 186541b2-1630-43e9-b94b-06cbc5512944
+
+	measure Color_Tonelaje_Turno = ```
+			
+			VAR Real = [Tonelaje Total Turno]
+			VAR Plan = [Plan Mov Total Dia]
+			RETURN
+			    IF(ISBLANK(Real) || ISBLANK(Plan), "#E6ECF2",
+			        IF(Real >= Plan, "#00C853", "#FF5C5C"))
+			
+			```
+		lineageTag: 463cafd7-9fc8-4c56-bc0f-66831784e31f
+
+	measure Color_Disp_CAEX = ```
+			
+			VAR Real = [Disponibilidad CAEX]
+			VAR Meta = 0.85
+			RETURN
+			    IF(ISBLANK(Real), "#E6ECF2",
+			        IF(Real >= Meta, "#00C853", "#E6ECF2"))
+			
+			```
+		lineageTag: 01767ecc-40e7-4887-9e53-0fab2ae29f8c
+
+	measure Color_UE_CAEX = ```
+			
+			VAR Real = [UE CAEX]
+			VAR Meta = 0.75
+			RETURN
+			    IF(ISBLANK(Real), "#E6ECF2",
+			        IF(Real >= Meta, "#00C853", "#E6ECF2"))
+			
+			```
+		lineageTag: 4efab8f4-b1cd-4d61-8210-e7de45986111
+
+	measure Color_Utilizacion_CAEX = ```
+			
+			VAR Real = [Utilizacion CAEX]
+			VAR Meta = 0.85
+			RETURN
+			    IF(ISBLANK(Real), "#E6ECF2",
+			        IF(Real >= Meta, "#00C853", "#E6ECF2"))
+			
+			```
+		lineageTag: 80042871-53d6-47ee-8f7f-529dcb32c47b
+
+	measure Color_Tonelaje_Chancado = ```
+			
+			VAR Real = [Tonelaje Chancado]
+			VAR Plan = [Plan_Chancado_Dia]
+			RETURN
+			    IF(ISBLANK(Real) || ISBLANK(Plan), "#E6ECF2",
+			        IF(Real >= Plan, "#00C853", "#FF5C5C"))
+			
+			```
+		lineageTag: 1716abc8-8da3-43c2-af25-a653f81f4746
+
+	/// Horas (de 24) del dia operacional con movimiento de camiones mayor a 0.
+	measure 'Horas Dia Con Datos' =
+			VAR TablaHoras =
+			    ADDCOLUMNS(
+			        VALUES(Fact_HorasEquipo[Orden_Hora_Dia]),
+			        "@Mov",
+			            CALCULATE(
+			                SUM(Fact_HorasEquipo[Movimiento Total]),
+			                Fact_HorasEquipo[Tipo Equipo] = "Truck"
+			            )
+			    )
+			RETURN
+			    COUNTROWS(FILTER(TablaHoras, NOT ISBLANK(Fact_HorasEquipo[Orden_Hora_Dia]) && [@Mov] > 0))
+		formatString: 0
+		lineageTag: 7caf3603-14d8-4af1-abe2-82c9398e0165
+
+	measure 'Disponibilidad Carguio' =
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Disponibles]), Fact_HorasEquipo[Tipo Equipo] IN {"Shovel","Loader"}),
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Nominales]), Fact_HorasEquipo[Tipo Equipo] IN {"Shovel","Loader"}),
+			    0
+			)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: 59cc3052-d2bc-480f-b24b-657e83acb86d
+
+	measure 'UEBD Carguio' =
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Efectivas]), Fact_HorasEquipo[Tipo Equipo] IN {"Shovel","Loader"}),
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Disponibles]), Fact_HorasEquipo[Tipo Equipo] IN {"Shovel","Loader"}),
+			    0
+			)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: 13db44d5-c5de-4e20-a306-9eba016114a6
+
+	measure 'Rendimiento CAEX' =
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo[Movimiento Total]), Fact_HorasEquipo[Tipo Equipo] = "Truck"),
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Efectivas]), Fact_HorasEquipo[Tipo Equipo] = "Truck"),
+			    0
+			)
+		formatString: #,0.0
+		lineageTag: a220f568-c71b-4904-bf60-784e95f18e54
+
+	measure 'UEBD CAEX' =
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Efectivas]), Fact_HorasEquipo[Tipo Equipo] = "Truck"),
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Disponibles]), Fact_HorasEquipo[Tipo Equipo] = "Truck"),
+			    0
+			)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: 198cbba2-ac05-4a23-831d-6a13d5680844
+
+	measure 'Disponibilidad Perforadoras' =
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Disponibles]), Fact_HorasEquipo[Tipo Equipo] = "Drill"),
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Nominales]), Fact_HorasEquipo[Tipo Equipo] = "Drill"),
+			    0
+			)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: 2b39cd13-6f80-4d66-ac3c-cb7a7903a376
+
+	measure 'UEBD Perforadoras' =
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Efectivas]), Fact_HorasEquipo[Tipo Equipo] = "Drill"),
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Disponibles]), Fact_HorasEquipo[Tipo Equipo] = "Drill"),
+			    0
+			)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: f9298e82-2505-4cb4-a2cb-223607fb0a8c
+
+	measure 'Rendimiento Perforadoras' =
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo[Metros Perforados]), Fact_HorasEquipo[Tipo Equipo] = "Drill"),
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Efectivas]), Fact_HorasEquipo[Tipo Equipo] = "Drill"),
+			    0
+			)
+		formatString: #,0.0
+		lineageTag: 3f59b87a-68f8-4ea9-a78c-2ded4cecbd54
+
+	measure 'Disponibilidad CAEX Cumplimiento' = DIVIDE([Disponibilidad CAEX], [Disponibilidad CAEX Plan], 0)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: 033791ef-2bf1-4d88-b1fb-0f0eeaf11411
+
+	measure 'UEBD CAEX Cumplimiento' = DIVIDE([UEBD CAEX], [UEBD CAEX Plan], 0)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: d0d8982f-3343-467f-9c9e-5d1795cfbc55
+
+	measure 'Rendimiento CAEX Cumplimiento' = DIVIDE([Rendimiento CAEX], [Rendimiento CAEX Plan], 0)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: 62978ab2-98bb-4783-bf0e-4cdf613c390e
+
+	measure 'Color Disponibilidad CAEX' =
+			VAR Real = [Disponibilidad CAEX]
+			VAR Plan = [Disponibilidad CAEX Plan]
+			RETURN IF(Real >= Plan, "#00C853", "#FF5C5C")
+		lineageTag: e85c8afa-f509-41dd-924b-4066562ee104
+
+	measure 'Color UEBD CAEX' =
+			VAR Real = [UEBD CAEX]
+			VAR Plan = [UEBD CAEX Plan]
+			RETURN IF(Real >= Plan, "#00C853", "#FF5C5C")
+		lineageTag: 75cf11d9-593f-48a0-9970-71631fa6a127
+
+	measure 'Color Rendimiento CAEX' =
+			VAR Real = [Rendimiento CAEX]
+			VAR Plan = [Rendimiento CAEX Plan]
+			RETURN IF(Real >= Plan, "#00C853", "#FF5C5C")
+		lineageTag: e834eea6-d19d-4215-8873-608016169a25
+
+	measure 'Color Disponibilidad Carguio' =
+			VAR Real = [Disponibilidad Carguio]
+			VAR Plan = [Disponibilidad Carguio Plan]
+			RETURN IF(ISBLANK(Real) || ISBLANK(Plan) || Plan = 0, "#8FA3B8", IF(Real >= Plan, "#00C853", "#8FA3B8"))
+		lineageTag: 89761717-6384-4ecb-88c6-2d1a44e75514
+
+	measure 'Color UEBD Carguio' =
+			VAR Real = [UEBD Carguio]
+			VAR Plan = [UEBD Carguio Plan]
+			RETURN IF(ISBLANK(Real) || ISBLANK(Plan) || Plan = 0, "#8FA3B8", IF(Real >= Plan, "#00C853", "#8FA3B8"))
+		lineageTag: 8fde2dfe-46d6-421e-b8f1-b27d247a3c74
+
+	measure 'Color Disponibilidad Perforadoras' =
+			VAR Real = [Disponibilidad Perforadoras]
+			VAR Plan = [Disponibilidad Perforadoras Plan]
+			RETURN IF(ISBLANK(Real) || ISBLANK(Plan) || Plan = 0, "#8FA3B8", IF(Real >= Plan, "#00C853", "#8FA3B8"))
+		lineageTag: 7bcff29d-0fd5-4f5d-b48a-479f160f8d75
+
+	measure 'Color UEBD Perforadoras' =
+			VAR Real = [UEBD Perforadoras]
+			VAR Plan = [UEBD Perforadoras Plan]
+			RETURN IF(ISBLANK(Real) || ISBLANK(Plan) || Plan = 0, "#8FA3B8", IF(Real >= Plan, "#00C853", "#8FA3B8"))
+		lineageTag: 2770900a-caa9-4812-97f3-0ecceef1e534
+
+	measure 'Color Rendimiento Perforadoras' =
+			VAR Real = [Rendimiento Perforadoras]
+			VAR Plan = [Rendimiento Perforadoras Plan]
+			RETURN IF(ISBLANK(Real) || ISBLANK(Plan) || Plan = 0, "#8FA3B8", IF(Real >= Plan, "#00C853", "#8FA3B8"))
+		lineageTag: f150fc36-0b85-496a-9eda-c4d7fc299c16
+
+	measure 'Disponibilidad Pala' =
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Disponibles]), Fact_HorasEquipo[Tipo Equipo] = "Shovel"),
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Nominales]), Fact_HorasEquipo[Tipo Equipo] = "Shovel"),
+			    0
+			)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: f4d065e3-a97d-4a04-8f86-09a6089ae82f
+
+	measure 'UEBD Pala' =
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Efectivas]), Fact_HorasEquipo[Tipo Equipo] = "Shovel"),
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Disponibles]), Fact_HorasEquipo[Tipo Equipo] = "Shovel"),
+			    0
+			)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: dcdf1073-489d-44dd-b6e9-5881634ebc6a
+
+	measure 'Rendimiento Pala' =
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo[Tonelaje]), Fact_HorasEquipo[Tipo Equipo] = "Shovel"),
+			    CALCULATE(SUM(Fact_HorasEquipo[Horas Efectivas]), Fact_HorasEquipo[Tipo Equipo] = "Shovel"),
+			    0
+			)
+		formatString: #,0.0
+		lineageTag: c9735710-4ba8-4f7a-bd00-c3521e1afa9b
+
+	column Fecha
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 9b8827c8-10db-4214-bf4e-44f93f206f95
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+	column Turno
+		dataType: string
+		lineageTag: d1b1ebcc-521d-4303-b5d8-0becb9e4c8c0
+		summarizeBy: none
+		sourceColumn: Turno
+
+		annotation SummarizationSetBy = Automatic
+
+	column Hora
+		dataType: int64
+		formatString: 0
+		lineageTag: bfd2de24-a4d8-409e-a797-56fbf1c198b2
+		summarizeBy: sum
+		sourceColumn: Hora
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tipo Equipo'
+		dataType: string
+		lineageTag: a5877862-4d0a-4490-bd6e-a564833d4055
+		summarizeBy: none
+		sourceColumn: Tipo Equipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Equipo
+		dataType: string
+		lineageTag: 2c44ba57-9871-4aed-9205-b52f2d39b091
+		summarizeBy: none
+		sourceColumn: Equipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Flota
+		dataType: string
+		lineageTag: 6c26e802-32da-4245-bf1a-b9609381d73e
+		summarizeBy: none
+		sourceColumn: Flota
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Horas Nominales'
+		dataType: double
+		lineageTag: a2faa746-2454-46b0-9c32-fb6386709b11
+		summarizeBy: sum
+		sourceColumn: Horas Nominales
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Horas Operativas'
+		dataType: double
+		lineageTag: f175bf69-cf2b-4b2d-bcb4-4e977e623166
+		summarizeBy: sum
+		sourceColumn: Horas Operativas
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Horas Efectivas'
+		dataType: double
+		lineageTag: c94bde66-4283-4e45-9c3e-a7b0d4e37d1e
+		summarizeBy: sum
+		sourceColumn: Horas Efectivas
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Horas PO Espera'
+		dataType: double
+		lineageTag: 8142486d-695b-4686-a791-e301cffa291a
+		summarizeBy: sum
+		sourceColumn: Horas PO Espera
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Horas PO Cola'
+		dataType: double
+		lineageTag: 611ee54c-ea61-4ed6-8160-75bf892f70fe
+		summarizeBy: sum
+		sourceColumn: Horas PO Cola
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Horas PO Totales'
+		dataType: double
+		lineageTag: 6997122c-298c-4d28-9384-20174c0155ea
+		summarizeBy: sum
+		sourceColumn: Horas PO Totales
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Horas Demora No Programada'
+		dataType: double
+		lineageTag: 71881e79-fcf0-4d54-b89c-52f2834af4fd
+		summarizeBy: sum
+		sourceColumn: Horas Demora No Programada
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Horas Demora Programada'
+		dataType: double
+		lineageTag: fa151281-60d6-4c09-b5f4-7d6fca8e6a13
+		summarizeBy: sum
+		sourceColumn: Horas Demora Programada
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Horas Reserva'
+		dataType: double
+		lineageTag: afed8a85-407f-49e0-8d7f-5f23a5c6d23e
+		summarizeBy: sum
+		sourceColumn: Horas Reserva
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Horas Disponibles'
+		dataType: double
+		lineageTag: 4321fc2d-a0ef-42f7-b777-52c1cbd2d75a
+		summarizeBy: sum
+		sourceColumn: Horas Disponibles
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Horas Mantencion Programada'
+		dataType: double
+		lineageTag: ac382aec-1d19-4bf1-80d5-eee939fe35e9
+		summarizeBy: sum
+		sourceColumn: Horas Mantencion Programada
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Horas Mantencion No Programada'
+		dataType: double
+		lineageTag: 04c5e47b-c77d-4d26-9266-1071b6eebe3e
+		summarizeBy: sum
+		sourceColumn: Horas Mantencion No Programada
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Tonelaje
+		dataType: double
+		lineageTag: c17bd38e-d3b9-4968-ac82-b8605f1ae082
+		summarizeBy: sum
+		sourceColumn: Tonelaje
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Material Extraido'
+		dataType: double
+		lineageTag: c6d12d91-a5f6-4239-878d-a8c3f1e9b23e
+		summarizeBy: sum
+		sourceColumn: Material Extraido
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Material Remanejo'
+		dataType: double
+		lineageTag: 21fc8d0c-9957-4a65-9c66-09767e62e702
+		summarizeBy: sum
+		sourceColumn: Material Remanejo
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Movimiento Total'
+		dataType: double
+		lineageTag: fabfd637-0366-43ce-b57f-acf11b3f2f80
+		summarizeBy: sum
+		sourceColumn: Movimiento Total
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Metros Perforados'
+		dataType: double
+		lineageTag: 6dd48d96-5131-4016-b684-473bbeb88b4b
+		summarizeBy: sum
+		sourceColumn: Metros Perforados
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Disponibilidad
+		dataType: double
+		lineageTag: 8bb9436f-96c2-44d9-9a31-760c3ebf27e2
+		summarizeBy: sum
+		sourceColumn: Disponibilidad
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Utilizacion
+		dataType: double
+		lineageTag: 9030d819-7bc0-402e-b944-9dc353ee7b4e
+		summarizeBy: sum
+		sourceColumn: Utilizacion
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column UE
+		dataType: double
+		lineageTag: ca1814dc-2bf4-4eeb-9a7a-bdacae7b58e0
+		summarizeBy: sum
+		sourceColumn: UE
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column OEE_Horas
+		dataType: double
+		lineageTag: b1c0d54f-a720-461b-bce1-7612a8a3288d
+		summarizeBy: sum
+		sourceColumn: OEE_Horas
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Rendimiento
+		dataType: double
+		lineageTag: d1162fa1-d0c4-4d4d-9172-6862d482ca4d
+		summarizeBy: sum
+		sourceColumn: Rendimiento
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Hora_Orden = ```
+			
+			VAR InicioTurno = IF(Fact_HorasEquipo[Turno] = "A", 8, 20)
+			VAR HoraAbsoluta = MOD(InicioTurno + Fact_HorasEquipo[Hora], 24)
+			RETURN
+			    MOD(HoraAbsoluta + 16, 24)
+			
+			```
+		formatString: 0
+		lineageTag: 3133049d-469b-45f1-9780-0a2892fdf8d8
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column HoraTurno = ```
+			Fact_HorasEquipo[Hora] + 1
+			
+			```
+		formatString: 0
+		lineageTag: 0d233938-c36b-43f2-b13c-2bdadb5199dc
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Posicion 1-24 en el dia operacional (Hora = indice 0-11 dentro del turno).
+	column Orden_Hora_Dia =
+			VAR H = Fact_HorasEquipo[Hora]
+			RETURN
+			    IF(H >= 0 && H <= 11, SWITCH(Fact_HorasEquipo[Turno], "A", H + 1, "B", H + 13))
+		isHidden
+		formatString: 0
+		lineageTag: 37b88baf-7183-40a5-bb5e-185f00494305
+		summarizeBy: none
+
+	partition Fact_HorasEquipo = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "fact_horas_equipo.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Fecha", type datetime}, {"Turno", type text}, {"Hora", Int64.Type}, {"Tipo Equipo", type text}, {"Equipo", type text}, {"Flota", type text}, {"Horas Nominales", type number}, {"Horas Operativas", type number}, {"Horas Efectivas", type number}, {"Horas PO Espera", type number}, {"Horas PO Cola", type number}, {"Horas PO Totales", type number}, {"Horas Demora No Programada", type number}, {"Horas Demora Programada", type number}, {"Horas Reserva", type number}, {"Horas Disponibles", type number}, {"Horas Mantencion Programada", type number}, {"Horas Mantencion No Programada", type number}, {"Tonelaje", type number}, {"Material Extraido", type number}, {"Material Remanejo", type number}, {"Movimiento Total", type number}, {"Metros Perforados", type number}, {"Disponibilidad", type number}, {"Utilizacion", type number}, {"UE", type number}, {"OEE_Horas", type number}, {"Rendimiento", type number}}, "en-US"),
+				    // Ventana de historia: solo las filas de los ultimos DiasHistoria dias respecto de FechaReferencia.
+				    Ventana = Table.SelectRows(Tipos, each Date.From([Fecha]) >= Date.AddDays(FechaReferencia, -DiasHistoria))
+				in
+				    Ventana
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

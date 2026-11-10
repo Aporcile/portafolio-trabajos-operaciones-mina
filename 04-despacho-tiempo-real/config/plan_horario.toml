@@ -1,0 +1,18 @@
+# Perfil horario del plan (curva "gaviota" teórica).
+# Cada turno tiene 12 pesos (uno por hora de turno) que suman 1.0. El plan de tonelaje por hora es
+# plan_dia × reparto_turno × peso. Las caídas reflejan el cambio de turno (hora 1), la pausa de
+# descanso (hora 6 en el turno A y hora 5 en el B) y el cierre del turno (hora 12).
+# Valores de ejemplo: ajustar con la curva observada en la operación.
+
+[turno_A]
+pesos = [0.070, 0.090, 0.090, 0.088, 0.088, 0.060, 0.092, 0.090, 0.090, 0.088, 0.084, 0.070]
+pausa_hora_turno = 6
+
+[turno_B]
+pesos = [0.068, 0.090, 0.090, 0.088, 0.058, 0.092, 0.092, 0.090, 0.088, 0.088, 0.086, 0.070]
+pausa_hora_turno = 5
+
+[reparto_turnos]
+# Fracción del plan diario que corresponde a cada turno.
+A = 0.5
+B = 0.5

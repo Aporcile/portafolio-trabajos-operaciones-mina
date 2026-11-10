@@ -1,0 +1,20 @@
+model Model
+	culture: es-ES
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: es-ES
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_ProTooling = ["DevMode"]
+
+annotation PBI_QueryOrder = ["RutaDatos","Fact_Uso","Dim_Reporte","Dim_Fecha","Dim_Usuario","Dim_Area"]
+
+ref table Fact_Uso
+ref table Dim_Reporte
+ref table Dim_Fecha
+ref table Dim_Usuario
+ref table Dim_Area
+ref table _Medidas
+ref table Eje_Detalle
+

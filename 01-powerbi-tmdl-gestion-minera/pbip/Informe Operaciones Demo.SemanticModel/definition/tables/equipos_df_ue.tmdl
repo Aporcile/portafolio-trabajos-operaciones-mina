@@ -1,0 +1,63 @@
+table equipos_df_ue
+	lineageTag: fa0d0bfa-5178-4986-96c8-ce537bf9f960
+
+	/// DF o UE del día de planta (promedio por área), según el filtro de medición.
+	measure Valor_Mantencion_Dia =
+			VAR _d = [Rd Planta Día]
+			RETURN CALCULATE ( AVERAGE ( equipos_df_ue[valor] ), equipos_df_ue[Fecha] = _d )
+		lineageTag: 60a5fa23-f665-462d-a56d-9c887ea57f7f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Fecha
+		dataType: dateTime
+		formatString: dd-mm-yyyy
+		lineageTag: 08796ca6-bec6-4752-a643-fc405cc875c8
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column Nombre
+		dataType: string
+		lineageTag: 831f2c12-275f-455d-8947-00a52ca13fb6
+		summarizeBy: none
+		sourceColumn: Nombre
+
+		annotation SummarizationSetBy = Automatic
+
+	column Medicion
+		dataType: string
+		lineageTag: dae16474-2390-414a-a224-8d140ff71261
+		summarizeBy: none
+		sourceColumn: Medicion
+
+		annotation SummarizationSetBy = Automatic
+
+	column Valor
+		dataType: double
+		lineageTag: 1376c7da-b417-4788-892f-da3afb7c9d25
+		summarizeBy: sum
+		sourceColumn: Valor
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition equipos_df_ue = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "equipos_df_ue.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Fecha", type date}, {"Nombre", type text}, {"Medicion", type text}, {"Valor", type number}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table

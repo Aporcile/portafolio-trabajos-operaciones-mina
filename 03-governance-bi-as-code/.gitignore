@@ -1,0 +1,14 @@
+# Archivos locales de Power BI Desktop (cachés y ajustes del equipo)
+.pbi/
+**/.pbi/
+*.abf
+localSettings.json
+
+# Esquemas JSON extraídos de la instalación local de Desktop (python desarrollo/extraer_esquemas.py)
+desarrollo/esquemas_pbir/
+
+# Temporales de los generadores
+_gen_nuevo/
+_gen_anterior/
+__pycache__/
+*.pyc

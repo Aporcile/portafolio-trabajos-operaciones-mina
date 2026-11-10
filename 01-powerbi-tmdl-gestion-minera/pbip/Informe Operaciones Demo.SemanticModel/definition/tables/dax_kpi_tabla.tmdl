@@ -1,0 +1,1793 @@
+table dax_kpi_tabla
+	lineageTag: 25cf5501-e871-4df8-a160-1bc72c51c93b
+
+	/// Valor de planta por fecha: en línea, el último dato del historiador; en día cerrado, el cierre del día de planta.
+	measure Valor_TPHChancado =
+			IF (
+			    [Rd Pl Vivo],
+			    CALCULATE(MAX(hist_kpi_ultima[numeric_value]), hist_kpi_ultima[nombre_tag] = "CHANC.ALIM.TPH"),
+			    DIVIDE ( [Valor_TChancadoProyectado], 24 )
+			)
+		lineageTag: 8e39a908-8e9f-40dc-97a0-e40d7b29545b
+
+	/// Valor de planta por fecha: en línea, el último dato del historiador; en día cerrado, el cierre del día de planta.
+	measure Valor_TPHChancadoAcumulado =
+			IF (
+			    [Rd Pl Vivo],
+			    VAR _p = CALCULATE ( MAX ( hist_kpi_ultima[numeric_value] ), hist_kpi_ultima[nombre_tag] = "CHANC.ALIM.PROY_DIA" )
+			    VAR _t =
+			        CALCULATE (
+			            MAX ( hist_kpi[timestamp] ),
+			            REMOVEFILTERS ( Calendario ),
+			            hist_kpi[nombre_tag] = "CHANC.ALIM.PROY_DIA",
+			            NOT ISBLANK ( hist_kpi[numeric_value] )
+			        )
+			    VAR _ini = CALCULATE ( [Rd Planta Inicio], REMOVEFILTERS ( Calendario ) )
+			    VAR _iniM = _ini + 1 / 24
+			    VAR _h = ( _t - ( _iniM - ROUNDUP ( MAX ( _iniM - _t, 0 ), 0 ) ) ) * 24
+			    RETURN IF ( NOT ISBLANK ( _p ) && NOT ISBLANK ( _t ) && NOT ISBLANK ( _ini ), _p * _h / 24 ),
+			    [Valor_TChancadoProyectado]
+			)
+		lineageTag: 9d5d0a26-4433-4bbb-976e-d9b15e848f52
+
+	/// Valor de planta por fecha: en línea, el último dato del historiador; en día cerrado, el cierre del día de planta.
+	measure Valor_TChancadoProyectado =
+			IF (
+			    [Rd Pl Vivo],
+			    CALCULATE(MAX(hist_kpi_ultima[numeric_value]), hist_kpi_ultima[nombre_tag] = "CHANC.ALIM.PROY_DIA"),
+			    VAR _iniM = [Rd Planta Inicio] + 1 / 24
+			    VAR _finM = [Rd Planta Fin] + 1 / 24
+			    VAR _t =
+			        CALCULATE (
+			            MAX ( hist_kpi[timestamp] ),
+			            hist_kpi[nombre_tag] = "CHANC.ALIM.PROY_DIA",
+			            NOT ISBLANK ( hist_kpi[numeric_value] ),
+			            hist_kpi[timestamp] > _iniM + 0.0001,
+			            hist_kpi[timestamp] <= _finM - 0.01
+			        )
+			    RETURN
+			        IF (
+			            NOT ISBLANK ( _t ),
+			            CALCULATE ( MAX ( hist_kpi[numeric_value] ), hist_kpi[nombre_tag] = "CHANC.ALIM.PROY_DIA", hist_kpi[timestamp] = _t )
+			        )
+			)
+		lineageTag: 919ff4a9-53b1-4252-8ccb-6dbf7ef1eda2
+
+	/// Nivel del stockpile de gruesos (%): último valor en línea, última muestra válida del día si está cerrado.
+	measure Valor_Stockpile =
+			IF (
+			    [Rd Pl Vivo],
+			    CALCULATE(MAX(hist_kpi_ultima[numeric_value]), hist_kpi_ultima[nombre_tag] = "STOCK.NIVEL.PCT"),
+			    VAR _ini = [Rd Planta Inicio]
+			    VAR _fin = [Rd Planta Fin]
+			    VAR _t =
+			        CALCULATE (
+			            MAX ( hist_kpi[timestamp] ),
+			            hist_kpi[nombre_tag] = "STOCK.NIVEL.PCT",
+			            NOT ISBLANK ( hist_kpi[numeric_value] ),
+			            hist_kpi[timestamp] > _ini + 0.0001,
+			            hist_kpi[timestamp] <= _fin + 0.0001
+			        )
+			    RETURN
+			        IF (
+			            NOT ISBLANK ( _t ),
+			            CALCULATE ( MAX ( hist_kpi[numeric_value] ), hist_kpi[nombre_tag] = "STOCK.NIVEL.PCT", hist_kpi[timestamp] = _t )
+			        )
+			)
+		lineageTag: ae18fd61-9b5d-4691-b915-1b2f7b206613
+
+	/// Rendimiento del SAG (t/h): último dato en línea; en día cerrado, el cierre oficial o el promedio con el SAG operando.
+	measure Valor_TPHSAG =
+			IF (
+			    [Rd Pl Vivo],
+			    CALCULATE(MAX(hist_kpi_ultima[numeric_value]), hist_kpi_ultima[nombre_tag] = "SAG.ALIM.TPH"),
+			    VAR _ini = [Rd Planta Inicio]
+			    VAR _fin = [Rd Planta Fin]
+			    VAR _of = [Rd Planta Cierre TPH]
+			    VAR _sq =
+			        CALCULATE (
+			            AVERAGE ( hist_kpi[numeric_value] ),
+			            hist_kpi[nombre_tag] = "SAG.ALIM.TPH",
+			            hist_kpi[numeric_value] > 100,
+			            hist_kpi[timestamp] > _ini + 0.0001,
+			            hist_kpi[timestamp] <= _fin + 0.0001
+			        )
+			    RETURN IF ( [Rd Planta Cierre Oficial] && _of > 0, _of, _sq )
+			)
+		lineageTag: b530b198-3179-4052-8774-ee510b685ca2
+
+	/// Valor de planta por fecha: en línea, el último dato del historiador; en día cerrado, el cierre del día de planta.
+	measure Valor_ProcesadoSAGAcumulado =
+			IF (
+			    [Rd Pl Vivo],
+			    CALCULATE(MAX(hist_kpi_ultima[numeric_value]), hist_kpi_ultima[nombre_tag] = "SAG.ALIM.ACUM_DIA"),
+			    [Rd Planta Cierre Toneladas]
+			)
+		lineageTag: 0fe53514-beb5-4457-bfde-ce020be64e63
+
+	/// Valor de planta por fecha: en línea, el último dato del historiador; en día cerrado, el cierre del día de planta.
+	measure Valor_PlanMesProcesadoAcumulado =
+			IF (
+			    [Rd Pl Vivo],
+			    CALCULATE(MAX(hist_kpi_ultima[numeric_value]), hist_kpi_ultima[nombre_tag] = "PLAN.SAG.TON_DIA"),
+			    VAR _ini = [Rd Planta Inicio]
+			    VAR _fin = [Rd Planta Fin]
+			    VAR _t =
+			        CALCULATE (
+			            MAX ( hist_kpi[timestamp] ),
+			            hist_kpi[nombre_tag] = "PLAN.SAG.TON_DIA",
+			            NOT ISBLANK ( hist_kpi[numeric_value] ),
+			            hist_kpi[timestamp] > _ini + 0.0001,
+			            hist_kpi[timestamp] <= _fin - 0.01
+			        )
+			    RETURN
+			        IF (
+			            NOT ISBLANK ( _t ),
+			            CALCULATE ( MAX ( hist_kpi[numeric_value] ), hist_kpi[nombre_tag] = "PLAN.SAG.TON_DIA", hist_kpi[timestamp] = _t )
+			        )
+			)
+		lineageTag: ee87a217-d909-414a-bb8f-135b6bd48bd6
+
+	/// Porcentaje de finos de la correa de alimentación al SAG; solo muestras con el SAG cargado (más de 1.000 t/h).
+	measure Valor_Finos =
+			VAR _vivo = [Rd Pl Vivo]
+			VAR _tN = CALCULATE ( MAX ( hist_kpi[timestamp] ), hist_kpi[nombre_tag] = "SAG.CORREA.FINOS_PCT", NOT ISBLANK ( hist_kpi[numeric_value] ) )
+			VAR _w0 = IF ( _vivo, _tN - 0.01, [Rd Planta Inicio] )
+			VAR _w1 = IF ( _vivo, _tN, [Rd Planta Fin] )
+			VAR _m =
+			    CALCULATETABLE (
+			        ADDCOLUMNS (
+			            VALUES ( hist_kpi[timestamp] ),
+			            "@f", CALCULATE ( MAX ( hist_kpi[numeric_value] ), hist_kpi[nombre_tag] = "SAG.CORREA.FINOS_PCT" ),
+			            "@sag", CALCULATE ( MAX ( hist_kpi[numeric_value] ), hist_kpi[nombre_tag] = "SAG.ALIM.TPH" )
+			        ),
+			        hist_kpi[timestamp] > _w0 + 0.0001,
+			        hist_kpi[timestamp] <= _w1 + 0.0001
+			    )
+			RETURN AVERAGEX ( FILTER ( _m, NOT ISBLANK ( [@f] ) && [@sag] > 1000 ), [@f] )
+		lineageTag: 0764ca15-5a7a-4642-95c9-2bf2f69f5640
+
+	/// Dureza SPI (minutos): último valor de la ventana en línea, promedio del día de planta si está cerrado.
+	measure Valor_SPI =
+			IF (
+			    [Rd Pl Vivo],
+			    VAR _tag = "SAG.DUREZA.SPI"
+			    VAR _fin = CALCULATE ( [Rd Planta Fin], REMOVEFILTERS ( Calendario ) )
+			    VAR _t = CALCULATE ( MAX ( hist_kpi[timestamp] ), REMOVEFILTERS ( Calendario ), hist_kpi[nombre_tag] = _tag, NOT ISBLANK ( hist_kpi[numeric_value] ), hist_kpi[timestamp] <= _fin + 0.0001 )
+			    RETURN CALCULATE ( MAX ( hist_kpi[numeric_value] ), REMOVEFILTERS ( Calendario ), hist_kpi[nombre_tag] = _tag, hist_kpi[timestamp] = _t ),
+			    VAR _ini = [Rd Planta Inicio]
+			    VAR _fin = [Rd Planta Fin]
+			    RETURN
+			        CALCULATE (
+			            AVERAGE ( hist_kpi[numeric_value] ),
+			            hist_kpi[nombre_tag] = "SAG.DUREZA.SPI",
+			            hist_kpi[timestamp] > _ini + 0.0001,
+			            hist_kpi[timestamp] <= _fin + 0.0001
+			        )
+			)
+		lineageTag: 13dd6f75-a524-4417-ad62-a53a62a28159
+
+	/// Retorno de pebbles (t/h) en las muestras con el SAG operando.
+	measure Valor_Pebble =
+			IF (
+			    [Rd Pl Vivo],
+			    CALCULATE(MAX(hist_kpi_ultima[numeric_value]), hist_kpi_ultima[nombre_tag] = "PEBBLES.RETORNO.TPH"),
+			    VAR _ini = [Rd Planta Inicio]
+			    VAR _fin = [Rd Planta Fin]
+			    VAR _op =
+			        CALCULATETABLE (
+			            VALUES ( hist_kpi[timestamp] ),
+			            hist_kpi[nombre_tag] = "SAG.ALIM.TPH",
+			            hist_kpi[numeric_value] > 100,
+			            hist_kpi[timestamp] > _ini + 0.0001,
+			            hist_kpi[timestamp] <= _fin + 0.0001
+			        )
+			    RETURN CALCULATE ( AVERAGE ( hist_kpi[numeric_value] ), hist_kpi[nombre_tag] = "PEBBLES.RETORNO.TPH", _op )
+			)
+		lineageTag: 82b84baf-7d9b-47ae-8ca2-fac9c5ed2bb3
+
+	/// P80 de la molienda (µm): último valor en línea, promedio del día de planta si está cerrado.
+	measure Valor_P80 =
+			IF (
+			    [Rd Pl Vivo],
+			    CALCULATE(MAX(hist_kpi_ultima[numeric_value]), hist_kpi_ultima[nombre_tag] = "CICLONES.P80.UM"),
+			    VAR _ini = [Rd Planta Inicio]
+			    VAR _fin = [Rd Planta Fin]
+			    RETURN
+			        CALCULATE (
+			            AVERAGE ( hist_kpi[numeric_value] ),
+			            hist_kpi[nombre_tag] = "CICLONES.P80.UM",
+			            hist_kpi[timestamp] > _ini + 0.0001,
+			            hist_kpi[timestamp] <= _fin + 0.0001
+			        )
+			)
+		lineageTag: cd5b7818-319b-4417-816e-cb48dc9363fb
+
+	/// Valor de planta por fecha: en línea, el último dato del historiador; en día cerrado, el cierre del día de planta.
+	measure Valor_TPHSAGPMES =
+			IF (
+			    [Rd Pl Vivo],
+			    CALCULATE(MAX(hist_kpi_ultima[numeric_value]), hist_kpi_ultima[nombre_tag] = "PLAN.SAG.TPH_SEM"),
+			    VAR _ini = [Rd Planta Inicio]
+			    VAR _fin = [Rd Planta Fin]
+			    VAR _t =
+			        CALCULATE (
+			            MAX ( hist_kpi[timestamp] ),
+			            hist_kpi[nombre_tag] = "PLAN.SAG.TPH_SEM",
+			            NOT ISBLANK ( hist_kpi[numeric_value] ),
+			            hist_kpi[timestamp] > _ini + 0.0001,
+			            hist_kpi[timestamp] <= _fin - 0.01
+			        )
+			    RETURN
+			        IF (
+			            NOT ISBLANK ( _t ),
+			            CALCULATE ( MAX ( hist_kpi[numeric_value] ), hist_kpi[nombre_tag] = "PLAN.SAG.TPH_SEM", hist_kpi[timestamp] = _t )
+			        )
+			)
+		lineageTag: 65096e3a-d64e-4536-8795-51d9f49dd2e2
+
+	/// Día de mina mostrado: el elegido en el segmentador o, sin selección, el día en curso (08:00 a 08:00).
+	measure 'Rd Día' =
+			VAR _sel = CALCULATE ( [Rd Fecha Elegida], REMOVEFILTERS ( 'Dim Destino' ), REMOVEFILTERS ( 'Dim Fase' ) )
+			VAR _ultimo =
+			    CALCULATE (
+			        MAX ( 'Produccion Mina'[time] ),
+			        ALLSELECTED ( Calendario ),
+			        REMOVEFILTERS ( 'Dim Destino' ),
+			        REMOVEFILTERS ( 'Dim Fase' )
+			    )
+			VAR _act = MAX ( 'Rd Actualizacion'[Actualizado] )
+			VAR _t = _act - 8 / 24
+			VAR _diaAct = IF ( NOT ISBLANK ( _act ), DATE ( YEAR ( _t ), MONTH ( _t ), DAY ( _t ) ) )
+			RETURN IF ( NOT ISBLANK ( _sel ), _sel, MAX ( _diaAct, _ultimo ) )
+		formatString: dd-mm-yyyy
+		displayFolder: Tarjetas\Mina
+		lineageTag: d298d000-1266-4d9a-aa89-d2238505859d
+
+	/// Tarjeta SVG (data URI) para una visual de tabla con imagen.
+	measure 'Rd SVG Movimiento' =
+			VAR _d = [Rd Día]
+			VAR _real = CALCULATE ( [Movimiento], Calendario[Fecha] = _d )
+			VAR _proy = _real * [Rd Factor Proyección]
+			VAR _plan = CALCULATE ( [PlanSemanal Movimiento mina CAEX], Calendario[Fecha] = _d )
+			VAR _curso = [Rd Día En Curso]
+			VAR _num = FORMAT ( _real / 1000, "#,0.0" )
+			VAR _uni = "mil"
+			VAR _W = 322
+			VAR _H = 16
+			VAR _Y = 57
+			VAR _tope = MAX ( MAX ( _plan, _proy ), MAX ( _real, 1 ) )
+			VAR _esc = DIVIDE ( _W, _tope )
+			VAR _wPlan = ROUND ( _plan * _esc, 0 )
+			VAR _wReal = ROUND ( _real * _esc, 0 )
+			VAR _wProy = ROUND ( _proy * _esc, 0 )
+			VAR _hayPlan = NOT ISBLANK ( _plan ) && _plan > 0
+			VAR _color = IF ( NOT _hayPlan, "#4F9DDE", IF ( _proy >= _plan, "#2ECC71", "#E74C3C" ) )
+			VAR _vProy = IF ( _curso, FORMAT ( _proy / 1000, "#,0.0" ) & " mil", "—" )
+			VAR _vPlan = IF ( NOT _hayPlan, "Sin plan", FORMAT ( _plan / 1000, "#,0.0" ) & " mil" )
+			VAR _svg =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='326' height='118' viewBox='0 0 326 118'>"
+			        & "<text x='2' y='48' font-family='Segoe UI Semibold, Segoe UI' font-size='52' font-weight='600' fill='#FFFFFF'>" & _num
+			        & "<tspan dx='10' font-family='Segoe UI' font-size='30' font-weight='400' fill='#9AA5B1'>" & _uni & "</tspan></text>"
+			        & IF ( _wPlan > 0, "<rect x='2' y='" & FORMAT ( _Y, "0" ) & "' width='" & FORMAT ( _wPlan, "0" ) & "' height='" & FORMAT ( _H, "0" ) & "' rx='4' fill='#3F464D' stroke='#4A545E' stroke-width='1'/>" )
+			        & IF ( _wProy > _wReal, "<rect x='" & FORMAT ( _wReal + 2, "0" ) & "' y='" & FORMAT ( _Y + _H / 4, "0" ) & "' width='" & FORMAT ( _wProy - _wReal, "0" ) & "' height='" & FORMAT ( _H / 2, "0" ) & "' rx='" & FORMAT ( _H / 4, "0" ) & "' fill='" & _color & "' fill-opacity='0.55'/>" )
+			        & IF ( _wReal > 0, "<rect x='2' y='" & FORMAT ( _Y, "0" ) & "' width='" & FORMAT ( _wReal, "0" ) & "' height='" & FORMAT ( _H, "0" ) & "' rx='4' fill='" & _color & "'/>" )
+			        & IF ( _wPlan > 0, "<line x1='" & FORMAT ( _wPlan + 2, "0" ) & "' y1='" & FORMAT ( _Y - 4, "0" ) & "' x2='" & FORMAT ( _wPlan + 2, "0" ) & "' y2='" & FORMAT ( _Y + _H + 4, "0" ) & "' stroke='#E6E6E6' stroke-width='2'/>" )
+			        & "<text x='2' y='94' font-family='Segoe UI' font-size='15' fill='#7F8C99'>Real día</text>"
+			        & "<text x='2' y='114' font-family='Segoe UI Semibold, Segoe UI' font-size='18' font-weight='600' fill='#E6E6E6'>" & _num & " mil" & "</text>"
+			        & "<text x='163' y='94' text-anchor='middle' font-family='Segoe UI' font-size='15' fill='#7F8C99'>Proy. día</text>"
+			        & "<text x='163' y='114' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='18' font-weight='600' fill='" & IF ( _curso, "#8EC3EE", "#5D6B7A" ) & "'>" & _vProy & "</text>"
+			        & "<text x='324' y='94' text-anchor='end' font-family='Segoe UI' font-size='15' fill='#7F8C99'>Plan día</text>"
+			        & "<text x='324' y='114' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='18' font-weight='600' fill='#E6E6E6'>" & _vPlan & "</text>"
+			        & "</svg>"
+			RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )
+		displayFolder: Tarjetas\Mina
+		lineageTag: f3a18f3c-3867-4a3e-8f08-44e2f7fc32c2
+		dataCategory: ImageUrl
+
+	/// Tarjeta SVG (data URI) para una visual de tabla con imagen.
+	measure 'Rd SVG Ampliacion' =
+			VAR _d = [Rd Día]
+			VAR _real = CALCULATE ( [Extraccion Mina (Ex- Pit)], Calendario[Fecha] = _d )
+			VAR _proy = _real * [Rd Factor Proyección]
+			VAR _plan = CALCULATE ( [PlanSemanal Ampliacion], Calendario[Fecha] = _d )
+			VAR _curso = [Rd Día En Curso]
+			VAR _num = FORMAT ( _real / 1000, "#,0.0" )
+			VAR _uni = "mil"
+			VAR _W = 322
+			VAR _H = 16
+			VAR _Y = 57
+			VAR _tope = MAX ( MAX ( _plan, _proy ), MAX ( _real, 1 ) )
+			VAR _esc = DIVIDE ( _W, _tope )
+			VAR _wPlan = ROUND ( _plan * _esc, 0 )
+			VAR _wReal = ROUND ( _real * _esc, 0 )
+			VAR _wProy = ROUND ( _proy * _esc, 0 )
+			VAR _hayPlan = NOT ISBLANK ( _plan ) && _plan > 0
+			VAR _color = IF ( NOT _hayPlan, "#4F9DDE", IF ( _proy >= _plan, "#2ECC71", "#E74C3C" ) )
+			VAR _vProy = IF ( _curso, FORMAT ( _proy / 1000, "#,0.0" ) & " mil", "—" )
+			VAR _vPlan = IF ( NOT _hayPlan, "Sin plan", FORMAT ( _plan / 1000, "#,0.0" ) & " mil" )
+			VAR _svg =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='326' height='118' viewBox='0 0 326 118'>"
+			        & "<text x='2' y='48' font-family='Segoe UI Semibold, Segoe UI' font-size='46' font-weight='600' fill='#FFFFFF'>" & _num
+			        & "<tspan dx='10' font-family='Segoe UI' font-size='28' font-weight='400' fill='#9AA5B1'>" & _uni & "</tspan></text>"
+			        & IF ( _wPlan > 0, "<rect x='2' y='" & FORMAT ( _Y, "0" ) & "' width='" & FORMAT ( _wPlan, "0" ) & "' height='" & FORMAT ( _H, "0" ) & "' rx='4' fill='#3F464D' stroke='#4A545E' stroke-width='1'/>" )
+			        & IF ( _wProy > _wReal, "<rect x='" & FORMAT ( _wReal + 2, "0" ) & "' y='" & FORMAT ( _Y + _H / 4, "0" ) & "' width='" & FORMAT ( _wProy - _wReal, "0" ) & "' height='" & FORMAT ( _H / 2, "0" ) & "' rx='" & FORMAT ( _H / 4, "0" ) & "' fill='" & _color & "' fill-opacity='0.55'/>" )
+			        & IF ( _wReal > 0, "<rect x='2' y='" & FORMAT ( _Y, "0" ) & "' width='" & FORMAT ( _wReal, "0" ) & "' height='" & FORMAT ( _H, "0" ) & "' rx='4' fill='" & _color & "'/>" )
+			        & IF ( _wPlan > 0, "<line x1='" & FORMAT ( _wPlan + 2, "0" ) & "' y1='" & FORMAT ( _Y - 4, "0" ) & "' x2='" & FORMAT ( _wPlan + 2, "0" ) & "' y2='" & FORMAT ( _Y + _H + 4, "0" ) & "' stroke='#E6E6E6' stroke-width='2'/>" )
+			        & "<text x='2' y='94' font-family='Segoe UI' font-size='15' fill='#7F8C99'>Real día</text>"
+			        & "<text x='2' y='114' font-family='Segoe UI Semibold, Segoe UI' font-size='18' font-weight='600' fill='#E6E6E6'>" & _num & " mil" & "</text>"
+			        & "<text x='163' y='94' text-anchor='middle' font-family='Segoe UI' font-size='15' fill='#7F8C99'>Proy. día</text>"
+			        & "<text x='163' y='114' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='18' font-weight='600' fill='" & IF ( _curso, "#8EC3EE", "#5D6B7A" ) & "'>" & _vProy & "</text>"
+			        & "<text x='324' y='94' text-anchor='end' font-family='Segoe UI' font-size='15' fill='#7F8C99'>Plan día</text>"
+			        & "<text x='324' y='114' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='18' font-weight='600' fill='#E6E6E6'>" & _vPlan & "</text>"
+			        & "</svg>"
+			RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )
+		displayFolder: Tarjetas\Mina
+		lineageTag: d6b8ea8c-dec4-4352-b1cf-f9d9a9627f11
+		dataCategory: ImageUrl
+
+	/// Tarjeta SVG (data URI) para una visual de tabla con imagen.
+	measure 'Rd SVG Remanejo' =
+			VAR _d = [Rd Día]
+			VAR _real = CALCULATE ( [Remanejo], Calendario[Fecha] = _d )
+			VAR _proy = _real * [Rd Factor Proyección]
+			VAR _plan = CALCULATE ( [PlanSemanal Remanejo], Calendario[Fecha] = _d )
+			VAR _curso = [Rd Día En Curso]
+			VAR _num = FORMAT ( _real / 1000, "#,0.0" )
+			VAR _uni = "mil"
+			VAR _W = 322
+			VAR _H = 16
+			VAR _Y = 57
+			VAR _tope = MAX ( MAX ( _plan, _proy ), MAX ( _real, 1 ) )
+			VAR _esc = DIVIDE ( _W, _tope )
+			VAR _wPlan = ROUND ( _plan * _esc, 0 )
+			VAR _wReal = ROUND ( _real * _esc, 0 )
+			VAR _wProy = ROUND ( _proy * _esc, 0 )
+			VAR _hayPlan = NOT ISBLANK ( _plan ) && _plan > 0
+			VAR _color = IF ( NOT _hayPlan, "#4F9DDE", IF ( _proy >= _plan, "#2ECC71", "#E74C3C" ) )
+			VAR _vProy = IF ( _curso, FORMAT ( _proy / 1000, "#,0.0" ) & " mil", "—" )
+			VAR _vPlan = IF ( NOT _hayPlan, "Sin plan", FORMAT ( _plan / 1000, "#,0.0" ) & " mil" )
+			VAR _svg =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='326' height='118' viewBox='0 0 326 118'>"
+			        & "<text x='2' y='48' font-family='Segoe UI Semibold, Segoe UI' font-size='46' font-weight='600' fill='#FFFFFF'>" & _num
+			        & "<tspan dx='10' font-family='Segoe UI' font-size='28' font-weight='400' fill='#9AA5B1'>" & _uni & "</tspan></text>"
+			        & IF ( _wPlan > 0, "<rect x='2' y='" & FORMAT ( _Y, "0" ) & "' width='" & FORMAT ( _wPlan, "0" ) & "' height='" & FORMAT ( _H, "0" ) & "' rx='4' fill='#3F464D' stroke='#4A545E' stroke-width='1'/>" )
+			        & IF ( _wProy > _wReal, "<rect x='" & FORMAT ( _wReal + 2, "0" ) & "' y='" & FORMAT ( _Y + _H / 4, "0" ) & "' width='" & FORMAT ( _wProy - _wReal, "0" ) & "' height='" & FORMAT ( _H / 2, "0" ) & "' rx='" & FORMAT ( _H / 4, "0" ) & "' fill='" & _color & "' fill-opacity='0.55'/>" )
+			        & IF ( _wReal > 0, "<rect x='2' y='" & FORMAT ( _Y, "0" ) & "' width='" & FORMAT ( _wReal, "0" ) & "' height='" & FORMAT ( _H, "0" ) & "' rx='4' fill='" & _color & "'/>" )
+			        & IF ( _wPlan > 0, "<line x1='" & FORMAT ( _wPlan + 2, "0" ) & "' y1='" & FORMAT ( _Y - 4, "0" ) & "' x2='" & FORMAT ( _wPlan + 2, "0" ) & "' y2='" & FORMAT ( _Y + _H + 4, "0" ) & "' stroke='#E6E6E6' stroke-width='2'/>" )
+			        & "<text x='2' y='94' font-family='Segoe UI' font-size='15' fill='#7F8C99'>Real día</text>"
+			        & "<text x='2' y='114' font-family='Segoe UI Semibold, Segoe UI' font-size='18' font-weight='600' fill='#E6E6E6'>" & _num & " mil" & "</text>"
+			        & "<text x='163' y='94' text-anchor='middle' font-family='Segoe UI' font-size='15' fill='#7F8C99'>Proy. día</text>"
+			        & "<text x='163' y='114' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='18' font-weight='600' fill='" & IF ( _curso, "#8EC3EE", "#5D6B7A" ) & "'>" & _vProy & "</text>"
+			        & "<text x='324' y='94' text-anchor='end' font-family='Segoe UI' font-size='15' fill='#7F8C99'>Plan día</text>"
+			        & "<text x='324' y='114' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='18' font-weight='600' fill='#E6E6E6'>" & _vPlan & "</text>"
+			        & "</svg>"
+			RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )
+		displayFolder: Tarjetas\Mina
+		lineageTag: 33b756d3-fefd-490d-8d7a-7bc3b60007f0
+		dataCategory: ImageUrl
+
+	/// Tarjeta SVG (data URI) para una visual de tabla con imagen.
+	measure 'Rd SVG Plan Movimiento' =
+			VAR _d = [Rd Día]
+			VAR _ini = DATE ( YEAR ( _d ), MONTH ( _d ), 1 )
+			VAR _r =
+			    CALCULATE (
+			        [Movimiento PM],
+			        REMOVEFILTERS ( Calendario ),
+			        Calendario[Fecha] >= _ini,
+			        Calendario[Fecha] <= _d
+			    )
+			VAR _pAnt =
+			    CALCULATE (
+			        [PlanMensual Movimiento mina],
+			        REMOVEFILTERS ( Calendario ),
+			        Calendario[Fecha] >= _ini,
+			        Calendario[Fecha] < _d
+			    )
+			VAR _pDia = CALCULATE ( [PlanMensual Movimiento mina], REMOVEFILTERS ( Calendario ), Calendario[Fecha] = _d )
+			VAR _h = [Rd Horas Transcurridas]
+			VAR _p = IF ( NOT ISBLANK ( _pAnt ) || NOT ISBLANK ( _pDia ), _pAnt + _pDia * _h / 24 )
+			VAR _rat = IF ( _p > 0 && NOT ISBLANK ( _r ), DIVIDE ( _r, _p ) )
+			VAR _c = IF ( ISBLANK ( _rat ), "#5D6B7A", IF ( _rat >= 1, "#2ECC71", IF ( _rat >= 0.9, "#F1C40F", "#E74C3C" ) ) )
+			VAR _fmt = IF ( MAX ( _r, _p ) >= 1000000, "#,0", "#,0.0" )
+			VAR _nr = IF ( ISBLANK ( _r ), "—", FORMAT ( _r / 1000, _fmt ) )
+			VAR _np = IF ( ISBLANK ( _p ), "—", FORMAT ( _p / 1000, _fmt ) )
+			VAR _rango = IF ( ISBLANK ( _d ), "", FORMAT ( _ini, "dd-mm" ) & " al " & FORMAT ( _d, "dd-mm" ) )
+			VAR _svg =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='326' height='118' viewBox='0 0 326 118'>"
+			        & "<circle cx='8' cy='29' r='6' fill='" & _c & "'/>"
+			        & "<text x='22' y='34' font-family='Segoe UI' font-size='15' fill='#7F8C99'>Acumulado</text>"
+			        & "<text x='22' y='51' font-family='Segoe UI' font-size='12' fill='#7F8C99'>" & _rango & "</text>"
+			        & "<text x='324' y='50' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='46' font-weight='600' fill='" & IF ( ISBLANK ( _r ), "#5D6B7A", "#FFFFFF" ) & "'>" & _nr
+			        & "<tspan dx='10' font-family='Segoe UI' font-size='28' font-weight='400' fill='#9AA5B1'>" & IF ( ISBLANK ( _r ), "s/d", "mil" ) & "</tspan></text>"
+			        & "<line x1='2' y1='66' x2='324' y2='66' stroke='#2E3844' stroke-width='1'/>"
+			        & "<text x='22' y='93' font-family='Segoe UI' font-size='15' fill='#7F8C99'>Plan mensual</text>"
+			        & "<text x='22' y='110' font-family='Segoe UI' font-size='12' fill='#7F8C99'>a la fecha</text>"
+			        & "<text x='324' y='109' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='46' font-weight='600' fill='" & IF ( ISBLANK ( _p ), "#5D6B7A", "#FFFFFF" ) & "'>" & _np
+			        & "<tspan dx='10' font-family='Segoe UI' font-size='28' font-weight='400' fill='#9AA5B1'>" & IF ( ISBLANK ( _p ), "sin plan", "mil" ) & "</tspan></text>"
+			        & "</svg>"
+			RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )
+		displayFolder: Tarjetas\Mina
+		lineageTag: 517216ee-d613-4837-b160-4a4dbf19707f
+		dataCategory: ImageUrl
+
+	/// Cascada plan semanal a real de la flota CAEX: disponibilidad, UEBD, rendimiento y horas nominales.
+	measure 'Rd SVG Cascada CAEX' =
+			VAR _d = [Rd Día]
+			VAR _hEq = CALCULATE ( MAXX ( VALUES ( 'Horas Palas Turno'[equipment] ), CALCULATE ( SUM ( 'Horas Palas Turno'[Nominal] ) ) ), Calendario[Fecha] = _d )
+			VAR _f = IF ( [Rd Horas Transcurridas] < 24 && _hEq > 0, MIN ( 1, _hEq / 24 ), 1 )
+			VAR _ok = CALCULATE ( [PlanSemanal - Horas Nominales CAEX] >= 24 && [PlanSemanal - Disponibilidad CAEX] <= 1 && [PlanSemanal - UEBD CAEX] <= 1, Calendario[Fecha] = _d )
+			VAR _p0 = CALCULATE ( [PlanSemanal - movimiento calculado CAEX], Calendario[Fecha] = _d )
+			VAR _d10 = CALCULATE ( [Waterfall - Plansemanal dif Disponibilidad], Calendario[Fecha] = _d )
+			VAR _d20 = CALCULATE ( [Waterfall - Plansemanal dif UEBD], Calendario[Fecha] = _d )
+			VAR _d30 = CALCULATE ( [Waterfall - Plansemanal dif rendimiento], Calendario[Fecha] = _d )
+			VAR _d40 = CALCULATE ( [Waterfall - Plansemanal dif hrs nominales], Calendario[Fecha] = _d )
+			VAR _p = _f * _p0
+			VAR _d1 = _f * _d10
+			VAR _d2 = _f * _d20
+			VAR _d3 = _f * _d30
+			VAR _d4 = _d40 + ( 1 - _f ) * ( _p0 + _d10 + _d20 + _d30 )
+			VAR _r = CALCULATE ( [Movimiento PM], Calendario[Fecha] = _d )
+			VAR _c0 = _p
+			VAR _c1 = _c0 + _d1
+			VAR _c2 = _c1 + _d2
+			VAR _c3 = _c2 + _d3
+			VAR _c4 = _c3 + _d4
+			VAR _hi = MAX ( MAX ( MAX ( _p, _r ), MAX ( _c1, _c2 ) ), MAX ( MAX ( _c3, _c4 ), 0 ) )
+			VAR _lo = MIN ( MIN ( MIN ( _c1, _c2 ), MIN ( _c3, _c4 ) ), MIN ( _r, 0 ) )
+			VAR _rng = IF ( _hi - _lo = 0, 1, _hi - _lo )
+			VAR _svg =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='512' height='454' viewBox='0 0 512 454'>"
+			        & IF ( ISBLANK ( _p ), "<text x='256' y='184' text-anchor='middle' font-family='Segoe UI' font-size='15' fill='#7F8C99'>Sin plan semanal cargado para el día</text>",
+			            IF ( NOT _ok, "<text x='256' y='178' text-anchor='middle' font-family='Segoe UI' font-size='15' fill='#7F8C99'>Plan semanal con error en el origen</text>" & "<text x='256' y='200' text-anchor='middle' font-family='Segoe UI' font-size='13' fill='#7F8C99'>Horas del plan inconsistentes: sin desglose de la diferencia</text>",
+			            "<line x1='0' y1='" & FORMAT ( ( 324 - ( ( 0 ) - _lo ) / _rng * 278 ), "0" ) & "' x2='512' y2='" & FORMAT ( ( 324 - ( ( 0 ) - _lo ) / _rng * 278 ), "0" ) & "' stroke='#343F4D' stroke-width='1'/>"
+			            & "<rect x='17' y='" & FORMAT ( ( 324 - ( ( MAX ( _p, 0 ) ) - _lo ) / _rng * 278 ), "0" ) & "' width='52' height='" & FORMAT ( MAX ( ( 324 - ( ( MIN ( _p, 0 ) ) - _lo ) / _rng * 278 ) - ( 324 - ( ( MAX ( _p, 0 ) ) - _lo ) / _rng * 278 ), 2 ), "0" ) & "' rx='2' fill='" & "#8FA3B8" & "'/>"
+			            & "<text x='43' y='" & FORMAT ( ( 324 - ( ( MAX ( _p, 0 ) ) - _lo ) / _rng * 278 ) - 8, "0" ) & "' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='15' font-weight='600' fill='" & "#FFFFFF" & "'>" & FORMAT ( ( _p ) / 1000, "#,0" ) & "K" & "</text>"
+			            & "<line x1='69' y1='" & FORMAT ( ( 324 - ( ( _p ) - _lo ) / _rng * 278 ), "0" ) & "' x2='102' y2='" & FORMAT ( ( 324 - ( ( _p ) - _lo ) / _rng * 278 ), "0" ) & "' stroke='#5D6B7A' stroke-width='1' stroke-dasharray='3 3'/>"
+			            & "<rect x='102' y='" & FORMAT ( ( 324 - ( ( MAX ( _c0, _c1 ) ) - _lo ) / _rng * 278 ), "0" ) & "' width='52' height='" & FORMAT ( MAX ( ( 324 - ( ( MIN ( _c0, _c1 ) ) - _lo ) / _rng * 278 ) - ( 324 - ( ( MAX ( _c0, _c1 ) ) - _lo ) / _rng * 278 ), 2 ), "0" ) & "' rx='2' fill='" & IF ( _d1 <= -500, "#E74C3C", "#2ECC71" ) & "'/>"
+			            & "<text x='128' y='" & FORMAT ( ( 324 - ( ( MAX ( _c0, _c1 ) ) - _lo ) / _rng * 278 ) - 8, "0" ) & "' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='15' font-weight='600' fill='" & IF ( _d1 <= -500, "#E74C3C", "#2ECC71" ) & "'>" & IF ( ABS ( _d1 ) < 500, "0K", IF ( _d1 >= 0, "+", "−" ) & FORMAT ( ( ABS ( _d1 ) ) / 1000, "#,0" ) & "K" ) & "</text>"
+			            & "<line x1='154' y1='" & FORMAT ( ( 324 - ( ( _c1 ) - _lo ) / _rng * 278 ), "0" ) & "' x2='187' y2='" & FORMAT ( ( 324 - ( ( _c1 ) - _lo ) / _rng * 278 ), "0" ) & "' stroke='#5D6B7A' stroke-width='1' stroke-dasharray='3 3'/>"
+			            & "<rect x='187' y='" & FORMAT ( ( 324 - ( ( MAX ( _c1, _c2 ) ) - _lo ) / _rng * 278 ), "0" ) & "' width='52' height='" & FORMAT ( MAX ( ( 324 - ( ( MIN ( _c1, _c2 ) ) - _lo ) / _rng * 278 ) - ( 324 - ( ( MAX ( _c1, _c2 ) ) - _lo ) / _rng * 278 ), 2 ), "0" ) & "' rx='2' fill='" & IF ( _d2 <= -500, "#E74C3C", "#2ECC71" ) & "'/>"
+			            & "<text x='213' y='" & FORMAT ( ( 324 - ( ( MAX ( _c1, _c2 ) ) - _lo ) / _rng * 278 ) - 8, "0" ) & "' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='15' font-weight='600' fill='" & IF ( _d2 <= -500, "#E74C3C", "#2ECC71" ) & "'>" & IF ( ABS ( _d2 ) < 500, "0K", IF ( _d2 >= 0, "+", "−" ) & FORMAT ( ( ABS ( _d2 ) ) / 1000, "#,0" ) & "K" ) & "</text>"
+			            & "<line x1='239' y1='" & FORMAT ( ( 324 - ( ( _c2 ) - _lo ) / _rng * 278 ), "0" ) & "' x2='273' y2='" & FORMAT ( ( 324 - ( ( _c2 ) - _lo ) / _rng * 278 ), "0" ) & "' stroke='#5D6B7A' stroke-width='1' stroke-dasharray='3 3'/>"
+			            & "<rect x='273' y='" & FORMAT ( ( 324 - ( ( MAX ( _c2, _c3 ) ) - _lo ) / _rng * 278 ), "0" ) & "' width='52' height='" & FORMAT ( MAX ( ( 324 - ( ( MIN ( _c2, _c3 ) ) - _lo ) / _rng * 278 ) - ( 324 - ( ( MAX ( _c2, _c3 ) ) - _lo ) / _rng * 278 ), 2 ), "0" ) & "' rx='2' fill='" & IF ( _d3 <= -500, "#E74C3C", "#2ECC71" ) & "'/>"
+			            & "<text x='299' y='" & FORMAT ( ( 324 - ( ( MAX ( _c2, _c3 ) ) - _lo ) / _rng * 278 ) - 8, "0" ) & "' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='15' font-weight='600' fill='" & IF ( _d3 <= -500, "#E74C3C", "#2ECC71" ) & "'>" & IF ( ABS ( _d3 ) < 500, "0K", IF ( _d3 >= 0, "+", "−" ) & FORMAT ( ( ABS ( _d3 ) ) / 1000, "#,0" ) & "K" ) & "</text>"
+			            & "<line x1='325' y1='" & FORMAT ( ( 324 - ( ( _c3 ) - _lo ) / _rng * 278 ), "0" ) & "' x2='358' y2='" & FORMAT ( ( 324 - ( ( _c3 ) - _lo ) / _rng * 278 ), "0" ) & "' stroke='#5D6B7A' stroke-width='1' stroke-dasharray='3 3'/>"
+			            & "<rect x='358' y='" & FORMAT ( ( 324 - ( ( MAX ( _c3, _c4 ) ) - _lo ) / _rng * 278 ), "0" ) & "' width='52' height='" & FORMAT ( MAX ( ( 324 - ( ( MIN ( _c3, _c4 ) ) - _lo ) / _rng * 278 ) - ( 324 - ( ( MAX ( _c3, _c4 ) ) - _lo ) / _rng * 278 ), 2 ), "0" ) & "' rx='2' fill='" & IF ( _d4 <= -500, "#E74C3C", "#2ECC71" ) & "'/>"
+			            & "<text x='384' y='" & FORMAT ( ( 324 - ( ( MAX ( _c3, _c4 ) ) - _lo ) / _rng * 278 ) - 8, "0" ) & "' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='15' font-weight='600' fill='" & IF ( _d4 <= -500, "#E74C3C", "#2ECC71" ) & "'>" & IF ( ABS ( _d4 ) < 500, "0K", IF ( _d4 >= 0, "+", "−" ) & FORMAT ( ( ABS ( _d4 ) ) / 1000, "#,0" ) & "K" ) & "</text>"
+			            & "<line x1='410' y1='" & FORMAT ( ( 324 - ( ( _c4 ) - _lo ) / _rng * 278 ), "0" ) & "' x2='443' y2='" & FORMAT ( ( 324 - ( ( _c4 ) - _lo ) / _rng * 278 ), "0" ) & "' stroke='#5D6B7A' stroke-width='1' stroke-dasharray='3 3'/>"
+			            & "<rect x='443' y='" & FORMAT ( ( 324 - ( ( MAX ( _r, 0 ) ) - _lo ) / _rng * 278 ), "0" ) & "' width='52' height='" & FORMAT ( MAX ( ( 324 - ( ( MIN ( _r, 0 ) ) - _lo ) / _rng * 278 ) - ( 324 - ( ( MAX ( _r, 0 ) ) - _lo ) / _rng * 278 ), 2 ), "0" ) & "' rx='2' fill='" & "#8FA3B8" & "'/>"
+			            & "<text x='469' y='" & FORMAT ( ( 324 - ( ( MAX ( _r, 0 ) ) - _lo ) / _rng * 278 ) - 8, "0" ) & "' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='18' font-weight='700' fill='" & "#FFFFFF" & "'>" & FORMAT ( ( _r ) / 1000, "#,0" ) & "K" & "</text>"
+			            )
+			        )
+			        & "<text x='43' y='350' text-anchor='middle' font-family='Segoe UI' font-size='14' fill='#9AA5B1'>Plan sem.</text>"
+			        & "<text x='128' y='350' text-anchor='middle' font-family='Segoe UI' font-size='14' fill='#9AA5B1'>Disp.</text>"
+			        & "<text x='213' y='350' text-anchor='middle' font-family='Segoe UI' font-size='14' fill='#9AA5B1'>UEBD</text>"
+			        & "<text x='299' y='350' text-anchor='middle' font-family='Segoe UI' font-size='14' fill='#9AA5B1'>Rend.</text>"
+			        & "<text x='384' y='350' text-anchor='middle' font-family='Segoe UI' font-size='14' fill='#9AA5B1'>Hs nom.</text>"
+			        & "<text x='469' y='350' text-anchor='middle' font-family='Segoe UI' font-size='14' fill='#9AA5B1'>Real</text>"
+			        & "<g transform='translate(0,362)'>" & [Rd Frag Tabla CAEX] & "</g>"
+			        & "</svg>"
+			RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )
+		displayFolder: Tarjetas\Mina
+		lineageTag: 6f1cb314-259d-4b66-8d60-92ef92af8cfc
+		dataCategory: ImageUrl
+
+	/// Cascada plan semanal a real de la flota de carguío.
+	measure 'Rd SVG Cascada Carguío' =
+			VAR _d = [Rd Día]
+			VAR _hEq = CALCULATE ( MAXX ( VALUES ( 'Horas Palas Turno'[equipment] ), CALCULATE ( SUM ( 'Horas Palas Turno'[Nominal] ) ) ), Calendario[Fecha] = _d )
+			VAR _f = IF ( [Rd Horas Transcurridas] < 24 && _hEq > 0, MIN ( 1, _hEq / 24 ), 1 )
+			VAR _bPD = CALCULATE ( [PlanSemanal - Disponibilidad PALAS], Calendario[Fecha] = _d )
+			VAR _bPU = CALCULATE ( [PlanSemanal - UEBD PALAS], Calendario[Fecha] = _d )
+			VAR _bPR = CALCULATE ( [PlanSemanal - Rendimiento PALAS], Calendario[Fecha] = _d )
+			VAR _bPH = CALCULATE ( [PlanSemanal - Horas Nominales PALAS], Calendario[Fecha] = _d )
+			VAR _bRD = CALCULATE ( [Disponibilidad Palas turno], Calendario[Fecha] = _d )
+			VAR _bRU = CALCULATE ( [UEBD Palas turno], Calendario[Fecha] = _d )
+			VAR _bRT = CALCULATE ( [TPH efectivo Palas Por Turno Palas], Calendario[Fecha] = _d )
+			VAR _bNom = CALCULATE ( SUM ( 'Horas Palas Turno'[Nominal] ), Calendario[Fecha] = _d )
+			VAR _ok = _bPH >= 24 && _bPD <= 1 && _bPU <= 1
+			VAR _p0 = CALCULATE ( [PlanSemanal - movimiento calculado CAEX], Calendario[Fecha] = _d )
+			VAR _d10 = ( _bRD * _bPU * _bPR * _bPH ) - ( _bPD * _bPU * _bPR * _bPH )
+			VAR _d20 = ( _bRD * _bRU * _bPR * _bPH ) - ( _bRD * _bPU * _bPR * _bPH )
+			VAR _d30 = ( _bRD * _bRU * _bRT * _bPH ) - ( _bRD * _bRU * _bPR * _bPH )
+			VAR _d40 = ( _bRD * _bRU * _bRT * _bNom ) - ( _bRD * _bRU * _bRT * _bPH )
+			VAR _p = _f * _p0
+			VAR _d1 = _f * _d10
+			VAR _d2 = _f * _d20
+			VAR _d3 = _f * _d30
+			VAR _d4 = _d40 + ( 1 - _f ) * ( _p0 + _d10 + _d20 + _d30 )
+			VAR _r = CALCULATE ( [Movimiento Palas], Calendario[Fecha] = _d )
+			VAR _c0 = _p
+			VAR _c1 = _c0 + _d1
+			VAR _c2 = _c1 + _d2
+			VAR _c3 = _c2 + _d3
+			VAR _c4 = _c3 + _d4
+			VAR _hi = MAX ( MAX ( MAX ( _p, _r ), MAX ( _c1, _c2 ) ), MAX ( MAX ( _c3, _c4 ), 0 ) )
+			VAR _lo = MIN ( MIN ( MIN ( _c1, _c2 ), MIN ( _c3, _c4 ) ), MIN ( _r, 0 ) )
+			VAR _rng = IF ( _hi - _lo = 0, 1, _hi - _lo )
+			VAR _svg =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='512' height='454' viewBox='0 0 512 454'>"
+			        & IF ( ISBLANK ( _p ), "<text x='256' y='184' text-anchor='middle' font-family='Segoe UI' font-size='15' fill='#7F8C99'>Sin plan semanal cargado para el día</text>",
+			            IF ( NOT _ok, "<text x='256' y='178' text-anchor='middle' font-family='Segoe UI' font-size='15' fill='#7F8C99'>Plan semanal con error en el origen</text>" & "<text x='256' y='200' text-anchor='middle' font-family='Segoe UI' font-size='13' fill='#7F8C99'>Horas del plan inconsistentes: sin desglose de la diferencia</text>",
+			            "<line x1='0' y1='" & FORMAT ( ( 324 - ( ( 0 ) - _lo ) / _rng * 278 ), "0" ) & "' x2='512' y2='" & FORMAT ( ( 324 - ( ( 0 ) - _lo ) / _rng * 278 ), "0" ) & "' stroke='#343F4D' stroke-width='1'/>"
+			            & "<rect x='17' y='" & FORMAT ( ( 324 - ( ( MAX ( _p, 0 ) ) - _lo ) / _rng * 278 ), "0" ) & "' width='52' height='" & FORMAT ( MAX ( ( 324 - ( ( MIN ( _p, 0 ) ) - _lo ) / _rng * 278 ) - ( 324 - ( ( MAX ( _p, 0 ) ) - _lo ) / _rng * 278 ), 2 ), "0" ) & "' rx='2' fill='" & "#8FA3B8" & "'/>"
+			            & "<text x='43' y='" & FORMAT ( ( 324 - ( ( MAX ( _p, 0 ) ) - _lo ) / _rng * 278 ) - 8, "0" ) & "' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='15' font-weight='600' fill='" & "#FFFFFF" & "'>" & FORMAT ( ( _p ) / 1000, "#,0" ) & "K" & "</text>"
+			            & "<line x1='69' y1='" & FORMAT ( ( 324 - ( ( _p ) - _lo ) / _rng * 278 ), "0" ) & "' x2='102' y2='" & FORMAT ( ( 324 - ( ( _p ) - _lo ) / _rng * 278 ), "0" ) & "' stroke='#5D6B7A' stroke-width='1' stroke-dasharray='3 3'/>"
+			            & "<rect x='102' y='" & FORMAT ( ( 324 - ( ( MAX ( _c0, _c1 ) ) - _lo ) / _rng * 278 ), "0" ) & "' width='52' height='" & FORMAT ( MAX ( ( 324 - ( ( MIN ( _c0, _c1 ) ) - _lo ) / _rng * 278 ) - ( 324 - ( ( MAX ( _c0, _c1 ) ) - _lo ) / _rng * 278 ), 2 ), "0" ) & "' rx='2' fill='" & IF ( _d1 <= -500, "#E74C3C", "#2ECC71" ) & "'/>"
+			            & "<text x='128' y='" & FORMAT ( ( 324 - ( ( MAX ( _c0, _c1 ) ) - _lo ) / _rng * 278 ) - 8, "0" ) & "' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='15' font-weight='600' fill='" & IF ( _d1 <= -500, "#E74C3C", "#2ECC71" ) & "'>" & IF ( ABS ( _d1 ) < 500, "0K", IF ( _d1 >= 0, "+", "−" ) & FORMAT ( ( ABS ( _d1 ) ) / 1000, "#,0" ) & "K" ) & "</text>"
+			            & "<line x1='154' y1='" & FORMAT ( ( 324 - ( ( _c1 ) - _lo ) / _rng * 278 ), "0" ) & "' x2='187' y2='" & FORMAT ( ( 324 - ( ( _c1 ) - _lo ) / _rng * 278 ), "0" ) & "' stroke='#5D6B7A' stroke-width='1' stroke-dasharray='3 3'/>"
+			            & "<rect x='187' y='" & FORMAT ( ( 324 - ( ( MAX ( _c1, _c2 ) ) - _lo ) / _rng * 278 ), "0" ) & "' width='52' height='" & FORMAT ( MAX ( ( 324 - ( ( MIN ( _c1, _c2 ) ) - _lo ) / _rng * 278 ) - ( 324 - ( ( MAX ( _c1, _c2 ) ) - _lo ) / _rng * 278 ), 2 ), "0" ) & "' rx='2' fill='" & IF ( _d2 <= -500, "#E74C3C", "#2ECC71" ) & "'/>"
+			            & "<text x='213' y='" & FORMAT ( ( 324 - ( ( MAX ( _c1, _c2 ) ) - _lo ) / _rng * 278 ) - 8, "0" ) & "' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='15' font-weight='600' fill='" & IF ( _d2 <= -500, "#E74C3C", "#2ECC71" ) & "'>" & IF ( ABS ( _d2 ) < 500, "0K", IF ( _d2 >= 0, "+", "−" ) & FORMAT ( ( ABS ( _d2 ) ) / 1000, "#,0" ) & "K" ) & "</text>"
+			            & "<line x1='239' y1='" & FORMAT ( ( 324 - ( ( _c2 ) - _lo ) / _rng * 278 ), "0" ) & "' x2='273' y2='" & FORMAT ( ( 324 - ( ( _c2 ) - _lo ) / _rng * 278 ), "0" ) & "' stroke='#5D6B7A' stroke-width='1' stroke-dasharray='3 3'/>"
+			            & "<rect x='273' y='" & FORMAT ( ( 324 - ( ( MAX ( _c2, _c3 ) ) - _lo ) / _rng * 278 ), "0" ) & "' width='52' height='" & FORMAT ( MAX ( ( 324 - ( ( MIN ( _c2, _c3 ) ) - _lo ) / _rng * 278 ) - ( 324 - ( ( MAX ( _c2, _c3 ) ) - _lo ) / _rng * 278 ), 2 ), "0" ) & "' rx='2' fill='" & IF ( _d3 <= -500, "#E74C3C", "#2ECC71" ) & "'/>"
+			            & "<text x='299' y='" & FORMAT ( ( 324 - ( ( MAX ( _c2, _c3 ) ) - _lo ) / _rng * 278 ) - 8, "0" ) & "' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='15' font-weight='600' fill='" & IF ( _d3 <= -500, "#E74C3C", "#2ECC71" ) & "'>" & IF ( ABS ( _d3 ) < 500, "0K", IF ( _d3 >= 0, "+", "−" ) & FORMAT ( ( ABS ( _d3 ) ) / 1000, "#,0" ) & "K" ) & "</text>"
+			            & "<line x1='325' y1='" & FORMAT ( ( 324 - ( ( _c3 ) - _lo ) / _rng * 278 ), "0" ) & "' x2='358' y2='" & FORMAT ( ( 324 - ( ( _c3 ) - _lo ) / _rng * 278 ), "0" ) & "' stroke='#5D6B7A' stroke-width='1' stroke-dasharray='3 3'/>"
+			            & "<rect x='358' y='" & FORMAT ( ( 324 - ( ( MAX ( _c3, _c4 ) ) - _lo ) / _rng * 278 ), "0" ) & "' width='52' height='" & FORMAT ( MAX ( ( 324 - ( ( MIN ( _c3, _c4 ) ) - _lo ) / _rng * 278 ) - ( 324 - ( ( MAX ( _c3, _c4 ) ) - _lo ) / _rng * 278 ), 2 ), "0" ) & "' rx='2' fill='" & IF ( _d4 <= -500, "#E74C3C", "#2ECC71" ) & "'/>"
+			            & "<text x='384' y='" & FORMAT ( ( 324 - ( ( MAX ( _c3, _c4 ) ) - _lo ) / _rng * 278 ) - 8, "0" ) & "' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='15' font-weight='600' fill='" & IF ( _d4 <= -500, "#E74C3C", "#2ECC71" ) & "'>" & IF ( ABS ( _d4 ) < 500, "0K", IF ( _d4 >= 0, "+", "−" ) & FORMAT ( ( ABS ( _d4 ) ) / 1000, "#,0" ) & "K" ) & "</text>"
+			            & "<line x1='410' y1='" & FORMAT ( ( 324 - ( ( _c4 ) - _lo ) / _rng * 278 ), "0" ) & "' x2='443' y2='" & FORMAT ( ( 324 - ( ( _c4 ) - _lo ) / _rng * 278 ), "0" ) & "' stroke='#5D6B7A' stroke-width='1' stroke-dasharray='3 3'/>"
+			            & "<rect x='443' y='" & FORMAT ( ( 324 - ( ( MAX ( _r, 0 ) ) - _lo ) / _rng * 278 ), "0" ) & "' width='52' height='" & FORMAT ( MAX ( ( 324 - ( ( MIN ( _r, 0 ) ) - _lo ) / _rng * 278 ) - ( 324 - ( ( MAX ( _r, 0 ) ) - _lo ) / _rng * 278 ), 2 ), "0" ) & "' rx='2' fill='" & "#8FA3B8" & "'/>"
+			            & "<text x='469' y='" & FORMAT ( ( 324 - ( ( MAX ( _r, 0 ) ) - _lo ) / _rng * 278 ) - 8, "0" ) & "' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='18' font-weight='700' fill='" & "#FFFFFF" & "'>" & FORMAT ( ( _r ) / 1000, "#,0" ) & "K" & "</text>"
+			            )
+			        )
+			        & "<text x='43' y='350' text-anchor='middle' font-family='Segoe UI' font-size='14' fill='#9AA5B1'>Plan sem.</text>"
+			        & "<text x='128' y='350' text-anchor='middle' font-family='Segoe UI' font-size='14' fill='#9AA5B1'>Disp.</text>"
+			        & "<text x='213' y='350' text-anchor='middle' font-family='Segoe UI' font-size='14' fill='#9AA5B1'>UEBD</text>"
+			        & "<text x='299' y='350' text-anchor='middle' font-family='Segoe UI' font-size='14' fill='#9AA5B1'>Rend.</text>"
+			        & "<text x='384' y='350' text-anchor='middle' font-family='Segoe UI' font-size='14' fill='#9AA5B1'>Hs nom.</text>"
+			        & "<text x='469' y='350' text-anchor='middle' font-family='Segoe UI' font-size='14' fill='#9AA5B1'>Real</text>"
+			        & "<g transform='translate(0,362)'>" & [Rd Frag Tabla Carguío] & "</g>"
+			        & "</svg>"
+			RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )
+		displayFolder: Tarjetas\Mina
+		lineageTag: 0eb6e300-102e-445d-a8f4-b98c58bec30a
+		dataCategory: ImageUrl
+
+	/// Toneladas cargadas por las palas con destino chancado, por hora del día de mina.
+	measure 'Rd Alim Hora' =
+			VAR _d = [Rd Día]
+			RETURN
+			    CALCULATE (
+			        [Movimiento Palas por hora],
+			        Calendario[Fecha] = _d,
+			        'Produccion Palas Hora'[dump] = "CHANCADO"
+			    )
+		formatString: #,0
+		displayFolder: Tarjetas\Mina
+		lineageTag: 74e51d83-9a0c-4c12-884c-54e73182a209
+
+	/// Sinóptico SVG de Chancado: equipo coloreado según su estado y valor real contra plan.
+	measure 'Rd SVG Sinóptico Chancado' =
+			VAR _eq = [Rd Pl Estados]
+			VAR _on = VALUE ( MID ( _eq, 1, 1 ) )
+			VAR _cico = IF ( _on = 1, "#2ECC71", IF ( _on = 2, "#5D6B7A", "#E74C3C" ) )
+			VAR _tph = [Valor_TPHChancado]
+			VAR _d = [Rd Planta Día]
+			VAR _planDia = CALCULATE ( [PlanSemanal Total Toneladas Chancado], Calendario[Fecha] = _d )
+			VAR _plan = IF ( _planDia > 0, DIVIDE ( _planDia, 24 ) )
+			VAR _rH = IF ( NOT ISBLANK ( _plan ) && NOT ISBLANK ( _tph ), DIVIDE ( _tph, _plan ) )
+			VAR _creal = IF ( ISBLANK ( _rH ), "#FFFFFF", IF ( _rH >= 1, "#2ECC71", IF ( _rH >= 0.9, "#F1C40F", "#E74C3C" ) ) )
+			VAR _svg =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='276.5' height='302.4' viewBox='0 0 256 280'><g transform='translate(0,-12)'>"
+			        & "<polygon points='74,40 182,40 150,150 106,150' fill='" & _cico & "' fill-opacity='0.8' stroke='" & _cico & "' stroke-width='1.5'/>"
+			        & "<polygon points='128,52 139,138 117,138' fill='#11161B' fill-opacity='0.35'/>"
+			        & "<rect x='14' y='188' width='228' height='76' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='128' y='224' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='27' font-weight='700' fill='" & _creal & "'>" & IF ( ISBLANK ( _tph ), "s/d", FORMAT ( _tph, "#,0" ) ) & "<tspan font-size='21' fill='#7F8C99'> / " & IF ( NOT ISBLANK ( _plan ), FORMAT ( _plan, "#,0" ), "sin plan" ) & "</tspan>" & "<tspan font-size='15' fill='#7F8C99'> TPH</tspan></text>"
+			        & "<text x='128' y='250' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & IF ( _on = 1, "#2ECC71", IF ( _on = 2, "#5D6B7A", "#E74C3C" ) ) & "' letter-spacing='0.5'>" & IF ( _on = 1, "OPERANDO", IF ( _on = 2, "SIN SEÑAL", "DETENIDO" ) ) & "</text>"
+			        & "</g></svg>"
+			RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )
+		displayFolder: Tarjetas\Molienda
+		lineageTag: 04762717-bfdd-4037-9401-930a86035b35
+		dataCategory: ImageUrl
+
+	/// Sinóptico SVG de Stockpile: equipo coloreado según su estado y valor real contra plan.
+	measure 'Rd SVG Sinóptico Stockpile' =
+			VAR _eq = [Rd Pl Estados]
+			VAR _f1 = VALUE ( MID ( _eq, 2, 1 ) )
+			VAR _f2 = VALUE ( MID ( _eq, 3, 1 ) )
+			VAR _f3 = VALUE ( MID ( _eq, 4, 1 ) )
+			VAR _f4 = VALUE ( MID ( _eq, 5, 1 ) )
+			VAR _f5 = VALUE ( MID ( _eq, 6, 1 ) )
+			VAR _f6 = VALUE ( MID ( _eq, 7, 1 ) )
+			VAR _niv = [Valor_Stockpile]
+			VAR _plan = [Rd Stockpile Plan Nivel]
+			VAR _nr = ROUND ( _niv, 0 )
+			VAR _c = IF ( ISBLANK ( _niv ), "#5D6B7A", IF ( _nr >= _plan, "#2ECC71", IF ( _nr >= 40, "#F1C40F", "#E74C3C" ) ) )
+			VAR _amar = _c = "#F1C40F"
+			VAR _yl = 150 - 116 * MIN ( MAX ( _niv, 0 ), 100 ) / 100
+			VAR _yp = 150 - 116 * MIN ( MAX ( _plan, 0 ), 100 ) / 100
+			VAR _hw = ( _yp - 34 ) / 116 * 72
+			VAR _svg =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='276.5' height='302.4' viewBox='0 0 256 280'><g transform='translate(0,-12)'>"
+			        & "<defs><clipPath id='nv'><rect x='0' y='" & FORMAT ( _yl, "0" ) & "' width='256' height='" & FORMAT ( 150 - _yl, "0" ) & "'/></clipPath></defs>"
+			        & "<polygon points='56,150 200,150 128,34' fill='#1F262E' stroke='" & _c & "' stroke-width='1.5'/>"
+			        & "<polygon points='56,150 200,150 128,34' fill='" & _c & "' fill-opacity='0.8' clip-path='url(#nv)'/>"
+			        & IF ( NOT ISBLANK ( _plan ), "<line x1='" & FORMAT ( 128 - _hw - 10, "0" ) & "' y1='" & FORMAT ( _yp, "0" ) & "' x2='" & FORMAT ( 128 + _hw + 10, "0" ) & "' y2='" & FORMAT ( _yp, "0" ) & "' stroke='#E6E6E6' stroke-width='1.5' stroke-dasharray='4,3'/>" & "<text x='" & FORMAT ( 128 + _hw + 14, "0" ) & "' y='" & FORMAT ( _yp + 4, "0" ) & "' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#E6E6E6' letter-spacing='0.5'>PLAN " & FORMAT ( _plan, "0" ) & " %</text>" )
+			        & "<text x='128' y='119' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='22' font-weight='700' fill='" & IF ( _amar, "#11161B", "#FFFFFF" ) & "' stroke='#11161B' stroke-width='3' stroke-opacity='" & IF ( _amar, "0", "0.5" ) & "' paint-order='stroke'>" & IF ( ISBLANK ( _niv ), "s/d", FORMAT ( _niv, "0" ) & "%" ) & "</text>"
+			        & "<rect x='14' y='188' width='228' height='76' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='128' y='206' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#7F8C99' letter-spacing='0.5'>6 ALIMENTADORES</text>"
+			        & "<rect x='23' y='213' width='30' height='44' rx='4' fill='#1B2127' stroke='" & IF ( _f1 = 1, "#2ECC71", IF ( _f1 = 2, "#5D6B7A", "#E74C3C" ) ) & "' stroke-width='1.5'/>"
+			        & "<text x='38' y='231' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#FFFFFF'>F1</text>"
+			        & "<circle cx='38' cy='245' r='5' fill='" & IF ( _f1 = 1, "#2ECC71", IF ( _f1 = 2, "#5D6B7A", "#E74C3C" ) ) & "'/>"
+			        & "<rect x='59' y='213' width='30' height='44' rx='4' fill='#1B2127' stroke='" & IF ( _f2 = 1, "#2ECC71", IF ( _f2 = 2, "#5D6B7A", "#E74C3C" ) ) & "' stroke-width='1.5'/>"
+			        & "<text x='74' y='231' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#FFFFFF'>F2</text>"
+			        & "<circle cx='74' cy='245' r='5' fill='" & IF ( _f2 = 1, "#2ECC71", IF ( _f2 = 2, "#5D6B7A", "#E74C3C" ) ) & "'/>"
+			        & "<rect x='95' y='213' width='30' height='44' rx='4' fill='#1B2127' stroke='" & IF ( _f3 = 1, "#2ECC71", IF ( _f3 = 2, "#5D6B7A", "#E74C3C" ) ) & "' stroke-width='1.5'/>"
+			        & "<text x='110' y='231' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#FFFFFF'>F3</text>"
+			        & "<circle cx='110' cy='245' r='5' fill='" & IF ( _f3 = 1, "#2ECC71", IF ( _f3 = 2, "#5D6B7A", "#E74C3C" ) ) & "'/>"
+			        & "<rect x='131' y='213' width='30' height='44' rx='4' fill='#1B2127' stroke='" & IF ( _f4 = 1, "#2ECC71", IF ( _f4 = 2, "#5D6B7A", "#E74C3C" ) ) & "' stroke-width='1.5'/>"
+			        & "<text x='146' y='231' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#FFFFFF'>F4</text>"
+			        & "<circle cx='146' cy='245' r='5' fill='" & IF ( _f4 = 1, "#2ECC71", IF ( _f4 = 2, "#5D6B7A", "#E74C3C" ) ) & "'/>"
+			        & "<rect x='167' y='213' width='30' height='44' rx='4' fill='#1B2127' stroke='" & IF ( _f5 = 1, "#2ECC71", IF ( _f5 = 2, "#5D6B7A", "#E74C3C" ) ) & "' stroke-width='1.5'/>"
+			        & "<text x='182' y='231' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#FFFFFF'>F5</text>"
+			        & "<circle cx='182' cy='245' r='5' fill='" & IF ( _f5 = 1, "#2ECC71", IF ( _f5 = 2, "#5D6B7A", "#E74C3C" ) ) & "'/>"
+			        & "<rect x='203' y='213' width='30' height='44' rx='4' fill='#1B2127' stroke='" & IF ( _f6 = 1, "#2ECC71", IF ( _f6 = 2, "#5D6B7A", "#E74C3C" ) ) & "' stroke-width='1.5'/>"
+			        & "<text x='218' y='231' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#FFFFFF'>F6</text>"
+			        & "<circle cx='218' cy='245' r='5' fill='" & IF ( _f6 = 1, "#2ECC71", IF ( _f6 = 2, "#5D6B7A", "#E74C3C" ) ) & "'/>"
+			        & "</g></svg>"
+			RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )
+		displayFolder: Tarjetas\Molienda
+		lineageTag: 8538c6b7-beea-4e21-aaeb-c8fa5a000079
+		dataCategory: ImageUrl
+
+	/// Sinóptico SVG de SAG: equipo coloreado según su estado y valor real contra plan.
+	measure 'Rd SVG Sinóptico SAG' =
+			VAR _vivo = [Rd Pl Vivo]
+			VAR _eq = [Rd Pl Estados]
+			VAR _on = VALUE ( MID ( _eq, 8, 1 ) )
+			VAR _cico = IF ( _on = 1, "#2ECC71", IF ( _on = 2, "#5D6B7A", "#E74C3C" ) )
+			VAR _tph = [Valor_TPHSAG]
+			VAR _plan = [Valor_TPHSAGPMES]
+			VAR _hayPlan = NOT ISBLANK ( _plan ) && _plan > 0
+			VAR _r = IF ( _hayPlan && NOT ISBLANK ( _tph ), DIVIDE ( _tph, _plan ) )
+			VAR _creal = IF ( ISBLANK ( _r ), "#FFFFFF", IF ( _r >= 1, "#2ECC71", IF ( _r >= 0.9, "#F1C40F", "#E74C3C" ) ) )
+			VAR _spi = [Valor_SPI]
+			VAR _pSPI = [Rd SAG Plan SPI]
+			VAR _svg =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='276.5' height='302.4' viewBox='0 0 256 280'><g transform='translate(0,-12)'>"
+			        & "<rect x='40' y='46' width='20' height='32' rx='4' fill='" & _cico & "' fill-opacity='0.55' stroke='" & _cico & "'/>"
+			        & "<rect x='196' y='46' width='20' height='32' rx='4' fill='" & _cico & "' fill-opacity='0.55' stroke='" & _cico & "'/>"
+			        & "<rect x='58' y='28' width='140' height='68' rx='10' fill='" & _cico & "' fill-opacity='0.8' stroke='" & _cico & "' stroke-width='1.5'/>"
+			        & "<line x1='105' y1='30' x2='105' y2='94' stroke='#11161B' stroke-opacity='0.35'/>"
+			        & "<line x1='151' y1='30' x2='151' y2='94' stroke='#11161B' stroke-opacity='0.35'/>"
+			        & "<rect x='14' y='104' width='228' height='76' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='128' y='140' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='27' font-weight='700' fill='#FFFFFF'>" & IF ( ISBLANK ( _spi ), "s/d", FORMAT ( _spi, "0" ) ) & IF ( NOT ISBLANK ( _pSPI ), "<tspan font-size='21' fill='#7F8C99'> / " & FORMAT ( _pSPI, "0" ) & "</tspan>" ) & IF ( NOT ISBLANK ( _spi ) || NOT ISBLANK ( _pSPI ), "<tspan font-size='15' fill='#7F8C99'> min</tspan>" ) & "</text>"
+			        & "<text x='128' y='166' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='#9AA5B1' letter-spacing='0.5'>" & IF ( _vivo, "DUREZA SPI", "DUREZA SPI · PROM. DÍA" ) & "</text>"
+			        & "<rect x='14' y='188' width='228' height='76' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='128' y='224' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='27' font-weight='700' fill='" & _creal & "'>" & IF ( ISBLANK ( _tph ), "s/d", FORMAT ( _tph, "#,0" ) ) & "<tspan font-size='21' fill='#7F8C99'> / " & IF ( _hayPlan, FORMAT ( _plan, "#,0" ), "sin plan" ) & "</tspan>" & "<tspan font-size='15' fill='#7F8C99'> TPH</tspan></text>"
+			        & "<text x='128' y='250' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & IF ( _on = 1, "#2ECC71", IF ( _on = 2, "#5D6B7A", "#E74C3C" ) ) & "' letter-spacing='0.5'>" & IF ( _on = 1, "OPERANDO", IF ( _on = 2, "SIN SEÑAL", "DETENIDO" ) ) & "</text>"
+			        & "</g></svg>"
+			RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )
+		displayFolder: Tarjetas\Molienda
+		lineageTag: 9c2da2ee-a409-46c4-b7ef-6b5d7351dbe7
+		dataCategory: ImageUrl
+
+	/// Sinóptico SVG de Pebbles: equipo coloreado según su estado y valor real contra plan.
+	measure 'Rd SVG Sinóptico Pebbles' =
+			VAR _vivo = [Rd Pl Vivo]
+			VAR _eq = [Rd Pl Estados]
+			VAR _xTPHSAG = [Valor_TPHSAG]
+			VAR _p1 = VALUE ( MID ( _eq, 9, 1 ) )
+			VAR _p2 = VALUE ( MID ( _eq, 10, 1 ) )
+			VAR _p3 = VALUE ( MID ( _eq, 11, 1 ) )
+			VAR _tph = [Valor_Pebble]
+			VAR _cc = IF ( _xTPHSAG >= 100, DIVIDE ( _tph, _xTPHSAG ) )
+			VAR _plan = [Rd Pebbles Plan TPH]
+			VAR _hayPlan = NOT ISBLANK ( _plan ) && _plan > 0
+			VAR _r = IF ( _hayPlan && NOT ISBLANK ( _tph ), DIVIDE ( _tph, _plan ) )
+			VAR _creal = IF ( ISBLANK ( _r ), "#FFFFFF", IF ( _r >= 1, "#2ECC71", IF ( _r >= 0.9, "#F1C40F", "#E74C3C" ) ) )
+			VAR _c1 = IF ( _p1 = 1, "#2ECC71", IF ( _p1 = 2, "#5D6B7A", "#E74C3C" ) )
+			VAR _c2 = IF ( _p2 = 1, "#2ECC71", IF ( _p2 = 2, "#5D6B7A", "#E74C3C" ) )
+			VAR _c3 = IF ( _p3 = 1, "#2ECC71", IF ( _p3 = 2, "#5D6B7A", "#E74C3C" ) )
+			VAR _svg =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='276.5' height='302.4' viewBox='0 0 256 280'><g transform='translate(0,-12)'>"
+			        & "<rect x='14' y='40' width='228' height='30' rx='5' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<polygon points='24,46 46,46 39,64 31,64' fill='" & _c1 & "' fill-opacity='0.8' stroke='" & _c1 & "'/>"
+			        & "<text x='56' y='60' font-family='Segoe UI Semibold, Segoe UI' font-size='15' font-weight='700' fill='#FFFFFF'>Chancador #1</text>"
+			        & "<text x='232' y='60' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='" & IF ( _p1 = 1, "#2ECC71", IF ( _p1 = 2, "#5D6B7A", "#E74C3C" ) ) & "' letter-spacing='0.5'>" & IF ( _p1 = 1, "OPERANDO", IF ( _p1 = 2, "SIN SEÑAL", "DETENIDO" ) ) & "</text>"
+			        & "<rect x='14' y='81' width='228' height='30' rx='5' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<polygon points='24,87 46,87 39,105 31,105' fill='" & _c2 & "' fill-opacity='0.8' stroke='" & _c2 & "'/>"
+			        & "<text x='56' y='101' font-family='Segoe UI Semibold, Segoe UI' font-size='15' font-weight='700' fill='#FFFFFF'>Chancador #2</text>"
+			        & "<text x='232' y='101' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='" & IF ( _p2 = 1, "#2ECC71", IF ( _p2 = 2, "#5D6B7A", "#E74C3C" ) ) & "' letter-spacing='0.5'>" & IF ( _p2 = 1, "OPERANDO", IF ( _p2 = 2, "SIN SEÑAL", "DETENIDO" ) ) & "</text>"
+			        & "<rect x='14' y='122' width='228' height='30' rx='5' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<polygon points='24,128 46,128 39,146 31,146' fill='" & _c3 & "' fill-opacity='0.8' stroke='" & _c3 & "'/>"
+			        & "<text x='56' y='142' font-family='Segoe UI Semibold, Segoe UI' font-size='15' font-weight='700' fill='#FFFFFF'>Chancador #3</text>"
+			        & "<text x='232' y='142' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='" & IF ( _p3 = 1, "#2ECC71", IF ( _p3 = 2, "#5D6B7A", "#E74C3C" ) ) & "' letter-spacing='0.5'>" & IF ( _p3 = 1, "OPERANDO", IF ( _p3 = 2, "SIN SEÑAL", "DETENIDO" ) ) & "</text>"
+			        & "<rect x='14' y='188' width='228' height='76' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='128' y='224' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='27' font-weight='700' fill='" & _creal & "'>" & IF ( ISBLANK ( _tph ), "s/d", FORMAT ( _tph, "#,0" ) ) & "<tspan font-size='21' fill='#7F8C99'> / " & IF ( _hayPlan, FORMAT ( _plan, "#,0" ), "sin plan" ) & "</tspan>" & "<tspan font-size='15' fill='#7F8C99'> TPH</tspan></text>"
+			        & "<text x='128' y='250' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='#9AA5B1' letter-spacing='0.5'>" & IF ( ISBLANK ( _cc ), "CARGA CIRC.: s/d", IF ( _vivo, "CARGA CIRCULANTE: ", "CARGA CIRC. DÍA: " ) & FORMAT ( _cc, "0.0%" ) ) & "</text>"
+			        & "</g></svg>"
+			RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )
+		displayFolder: Tarjetas\Molienda
+		lineageTag: 21ff54f8-dfcf-4f8c-9862-9c6081ccb26d
+		dataCategory: ImageUrl
+
+	/// Sinóptico SVG de Bolas: equipo coloreado según su estado y valor real contra plan.
+	measure 'Rd SVG Sinóptico Bolas' =
+			VAR _vivo = [Rd Pl Vivo]
+			VAR _eq = [Rd Pl Estados]
+			VAR _m1 = VALUE ( MID ( _eq, 12, 1 ) )
+			VAR _m2 = VALUE ( MID ( _eq, 13, 1 ) )
+			VAR _nm = INT ( _m1 = 1 ) + INT ( _m2 = 1 )
+			VAR _nss = INT ( _m1 = 2 ) + INT ( _m2 = 2 )
+			VAR _df1 = CALCULATE ( [Valor_Mantencion_Dia], equipos_df_ue[Nombre] = "MB1", equipos_df_ue[Medicion] = "DF" )
+			VAR _df2 = CALCULATE ( [Valor_Mantencion_Dia], equipos_df_ue[Nombre] = "MB2", equipos_df_ue[Medicion] = "DF" )
+			VAR _ue1 = CALCULATE ( [Valor_Mantencion_Dia], equipos_df_ue[Nombre] = "MB1", equipos_df_ue[Medicion] = "UE" )
+			VAR _ue2 = CALCULATE ( [Valor_Mantencion_Dia], equipos_df_ue[Nombre] = "MB2", equipos_df_ue[Medicion] = "UE" )
+			VAR _c1 = IF ( _m1 = 1, "#2ECC71", IF ( _m1 = 2, "#5D6B7A", "#E74C3C" ) )
+			VAR _c2 = IF ( _m2 = 1, "#2ECC71", IF ( _m2 = 2, "#5D6B7A", "#E74C3C" ) )
+			VAR _e1 = IF ( _m1 = 1, "OPERANDO", IF ( _m1 = 2, "SIN SEÑAL", "DETENIDO" ) )
+			VAR _e2 = IF ( _m2 = 1, "OPERANDO", IF ( _m2 = 2, "SIN SEÑAL", "DETENIDO" ) )
+			VAR _svg =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='276.5' height='302.4' viewBox='0 0 256 280'><g transform='translate(0,-12)'>"
+			        & "<rect x='26' y='46' width='12' height='24' rx='3' fill='" & _c1 & "' fill-opacity='0.55' stroke='" & _c1 & "'/>"
+			        & "<rect x='218' y='46' width='12' height='24' rx='3' fill='" & _c1 & "' fill-opacity='0.55' stroke='" & _c1 & "'/>"
+			        & "<rect x='38' y='36' width='180' height='44' rx='7' fill='" & _c1 & "' fill-opacity='0.8' stroke='" & _c1 & "' stroke-width='1.5'/>"
+			        & "<text x='128' y='55' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='#11161B'>MOLINO DE BOLAS #1</text>"
+			        & "<text x='128' y='72' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='600' fill='#11161B' fill-opacity='0.8'>Disp. día: " & IF ( ISBLANK ( _df1 ), "s/d", FORMAT ( _df1, "0.0" ) & " %" ) & "</text>"
+			        & "<text x='128' y='97' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & _c1 & "' letter-spacing='0.5'>" & _e1 & "</text>"
+			        & "<rect x='26' y='122' width='12' height='24' rx='3' fill='" & _c2 & "' fill-opacity='0.55' stroke='" & _c2 & "'/>"
+			        & "<rect x='218' y='122' width='12' height='24' rx='3' fill='" & _c2 & "' fill-opacity='0.55' stroke='" & _c2 & "'/>"
+			        & "<rect x='38' y='112' width='180' height='44' rx='7' fill='" & _c2 & "' fill-opacity='0.8' stroke='" & _c2 & "' stroke-width='1.5'/>"
+			        & "<text x='128' y='131' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='#11161B'>MOLINO DE BOLAS #2</text>"
+			        & "<text x='128' y='148' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='600' fill='#11161B' fill-opacity='0.8'>Disp. día: " & IF ( ISBLANK ( _df2 ), "s/d", FORMAT ( _df2, "0.0" ) & " %" ) & "</text>"
+			        & "<text x='128' y='173' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & _c2 & "' letter-spacing='0.5'>" & _e2 & "</text>"
+			        & "<rect x='14' y='188' width='228' height='76' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='128' y='226' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='" & IF ( _nss > 0, IF ( _vivo, "21", "19" ), "27" ) & "' font-weight='700' fill='#FFFFFF'>" & _nm & " / 2 OPERANDO" & IF ( _nss > 0, "<tspan font-size='14' fill='#5D6B7A'> · " & _nss & " s/señal</tspan>" ) & "</text>"
+			        & "<text x='128' y='251' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#9AA5B1' letter-spacing='0.3'>" & "UE día:  #1 " & IF ( ISBLANK ( _ue1 ), "s/d", FORMAT ( _ue1, "0.0" ) & " %" ) & "  ·  #2 " & IF ( ISBLANK ( _ue2 ), "s/d", FORMAT ( _ue2, "0.0" ) & " %" ) & "</text>"
+			        & "</g></svg>"
+			RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )
+		displayFolder: Tarjetas\Molienda
+		lineageTag: a0724789-d3f6-4159-ab31-9776d5072f57
+		dataCategory: ImageUrl
+
+	/// Sinóptico SVG de Ciclones: equipo coloreado según su estado y valor real contra plan.
+	measure 'Rd SVG Sinóptico Ciclones' =
+			VAR _vivo = [Rd Pl Vivo]
+			VAR _eq = [Rd Pl Estados]
+			VAR _m1 = VALUE ( MID ( _eq, 12, 1 ) )
+			VAR _m2 = VALUE ( MID ( _eq, 13, 1 ) )
+			VAR _vlv = [Rd Pl Válvulas]
+			VAR _v1 = IFERROR ( VALUE ( PATHITEM ( _vlv, 1 ) ), BLANK () )
+			VAR _v2 = IFERROR ( VALUE ( PATHITEM ( _vlv, 2 ) ), BLANK () )
+			VAR _v3 = IFERROR ( VALUE ( PATHITEM ( _vlv, 3 ) ), BLANK () )
+			VAR _v4 = IFERROR ( VALUE ( PATHITEM ( _vlv, 4 ) ), BLANK () )
+			VAR _p80 = [Valor_P80]
+			VAR _plan = [Rd Ciclones Plan P80]
+			VAR _hayPlan = NOT ISBLANK ( _plan ) && _plan > 0
+			VAR _r = IF ( _hayPlan && NOT ISBLANK ( _p80 ), DIVIDE ( _p80, _plan ) )
+			VAR _creal = IF ( ISBLANK ( _r ), "#FFFFFF", IF ( _r <= 1, "#2ECC71", IF ( _r <= 1.05, "#F1C40F", "#E74C3C" ) ) )
+			VAR _c12 = IF ( _m1 = 1, "#2ECC71", IF ( _m1 = 2, "#5D6B7A", "#E74C3C" ) )
+			VAR _c34 = IF ( _m2 = 1, "#2ECC71", IF ( _m2 = 2, "#5D6B7A", "#E74C3C" ) )
+			VAR _nb = 2 * INT ( _m1 = 1 ) + 2 * INT ( _m2 = 1 )
+			VAR _nss = INT ( _m1 = 2 ) + INT ( _m2 = 2 )
+			VAR _svg =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='276.5' height='302.4' viewBox='0 0 256 280'><g transform='translate(0,-12)'>"
+			        & "<rect x='40' y='22' width='64' height='12' rx='3' fill='" & _c12 & "' fill-opacity='0.55' stroke='" & _c12 & "'/>"
+			        & "<polygon points='40,34 104,34 83,72 61,72' fill='" & _c12 & "' fill-opacity='0.8' stroke='" & _c12 & "' stroke-width='1.5'/>"
+			        & "<rect x='65' y='72' width='14' height='6' rx='1' fill='" & _c12 & "' fill-opacity='0.55' stroke='" & _c12 & "'/>"
+			        & "<text x='72' y='61' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='20' font-weight='700' fill='#11161B'>" & IF ( ISBLANK ( _v1 ), "–", _v1 & "" ) & "</text>"
+			        & "<text x='72' y='92' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#9AA5B1' letter-spacing='0.4'>B1</text>"
+			        & "<rect x='152' y='22' width='64' height='12' rx='3' fill='" & _c12 & "' fill-opacity='0.55' stroke='" & _c12 & "'/>"
+			        & "<polygon points='152,34 216,34 195,72 173,72' fill='" & _c12 & "' fill-opacity='0.8' stroke='" & _c12 & "' stroke-width='1.5'/>"
+			        & "<rect x='177' y='72' width='14' height='6' rx='1' fill='" & _c12 & "' fill-opacity='0.55' stroke='" & _c12 & "'/>"
+			        & "<text x='184' y='61' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='20' font-weight='700' fill='#11161B'>" & IF ( ISBLANK ( _v2 ), "–", _v2 & "" ) & "</text>"
+			        & "<text x='184' y='92' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#9AA5B1' letter-spacing='0.4'>B2</text>"
+			        & "<rect x='40' y='104' width='64' height='12' rx='3' fill='" & _c34 & "' fill-opacity='0.55' stroke='" & _c34 & "'/>"
+			        & "<polygon points='40,116 104,116 83,154 61,154' fill='" & _c34 & "' fill-opacity='0.8' stroke='" & _c34 & "' stroke-width='1.5'/>"
+			        & "<rect x='65' y='154' width='14' height='6' rx='1' fill='" & _c34 & "' fill-opacity='0.55' stroke='" & _c34 & "'/>"
+			        & "<text x='72' y='143' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='20' font-weight='700' fill='#11161B'>" & IF ( ISBLANK ( _v3 ), "–", _v3 & "" ) & "</text>"
+			        & "<text x='72' y='174' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#9AA5B1' letter-spacing='0.4'>B3</text>"
+			        & "<rect x='152' y='104' width='64' height='12' rx='3' fill='" & _c34 & "' fill-opacity='0.55' stroke='" & _c34 & "'/>"
+			        & "<polygon points='152,116 216,116 195,154 173,154' fill='" & _c34 & "' fill-opacity='0.8' stroke='" & _c34 & "' stroke-width='1.5'/>"
+			        & "<rect x='177' y='154' width='14' height='6' rx='1' fill='" & _c34 & "' fill-opacity='0.55' stroke='" & _c34 & "'/>"
+			        & "<text x='184' y='143' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='20' font-weight='700' fill='#11161B'>" & IF ( ISBLANK ( _v4 ), "–", _v4 & "" ) & "</text>"
+			        & "<text x='184' y='174' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#9AA5B1' letter-spacing='0.4'>B4</text>"
+			        & "<rect x='14' y='188' width='228' height='76' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='128' y='206' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#7F8C99' letter-spacing='0.5'>" & IF ( _vivo, "P80 · REAL / PLAN", "P80 PROM. DÍA / PLAN" ) & "</text>"
+			        & "<text x='128' y='234' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='27' font-weight='700' fill='" & _creal & "'>" & IF ( ISBLANK ( _p80 ), "s/d", FORMAT ( _p80, "0" ) ) & "<tspan font-size='21' fill='#7F8C99'> / " & IF ( _hayPlan, FORMAT ( _plan, "0" ), "sin plan" ) & "</tspan>" & "<tspan font-size='15' fill='#7F8C99'> µm</tspan></text>"
+			        & "<text x='128' y='255' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & IF ( _nb = 4, "#2ECC71", IF ( _nb > 0, "#F1C40F", IF ( _nss > 0, "#5D6B7A", "#E74C3C" ) ) ) & "' letter-spacing='0.5'>" & _nb & " / 4 BATERÍAS OPERANDO" & "</text>"
+			        & "</g></svg>"
+			RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )
+		displayFolder: Tarjetas\Molienda
+		lineageTag: 356dee24-b1bc-4282-b034-263117e43a01
+		dataCategory: ImageUrl
+
+	/// Tarjeta SVG de Chancado: estado del equipo, DF y UE del día y valor real contra plan.
+	measure 'Rd SVG Tarjeta Chancado' =
+			VAR _vivo = [Rd Pl Vivo]
+			VAR _eq = [Rd Pl Estados]
+			VAR _xTPHChancadoAcumulado = [Valor_TPHChancadoAcumulado]
+			VAR _on = VALUE ( MID ( _eq, 1, 1 ) )
+			VAR _df = CALCULATE ( [Valor_Mantencion_Dia], equipos_df_ue[Nombre] = "Chancado Primario", equipos_df_ue[Medicion] = "DF" )
+			VAR _ut = CALCULATE ( [Valor_Mantencion_Dia], equipos_df_ue[Nombre] = "Chancado Primario", equipos_df_ue[Medicion] = "UE" )
+			VAR _act = _on = 1
+			VAR _cdf = IF ( ISBLANK ( _df ) || _vivo, "#5D6B7A", IF ( _df >= 85, "#2ECC71", IF ( _df >= 70, "#F1C40F", "#E74C3C" ) ) )
+			VAR _cut = IF ( ISBLANK ( _ut ) || _vivo, "#5D6B7A", IF ( _ut >= 85, "#2ECC71", IF ( _ut >= 70, "#F1C40F", "#E74C3C" ) ) )
+			VAR _aten = ( NOT ISBLANK ( _df ) && _df < 85 ) || ( NOT ISBLANK ( _ut ) && _ut < 85 )
+			VAR _nss = LEN ( MID ( _eq, 1, 1 ) ) - LEN ( SUBSTITUTE ( MID ( _eq, 1, 1 ), "2", "" ) )
+			VAR _ss = _nss > 0
+			VAR _est = IF ( NOT _act, IF ( _ss, "SIN SEÑAL", "DETENIDO" ), IF ( _aten, "ATENCIÓN", "OPERANDO" ) )
+			VAR _cest = IF ( NOT _act, IF ( _ss, "#5D6B7A", "#E74C3C" ), IF ( _aten, "#F1C40F", "#2ECC71" ) )
+			VAR _d = [Rd Planta Día]
+			VAR _planDia = CALCULATE ( [PlanSemanal Total Toneladas Chancado], Calendario[Fecha] = _d )
+			VAR _dvp = IF ( _planDia > 0 && NOT ISBLANK ( _xTPHChancadoAcumulado ), DIVIDE ( _xTPHChancadoAcumulado, _planDia ) - 1 )
+			VAR _rH = IF ( _planDia > 0, DIVIDE ( IF ( _vivo, [Valor_TChancadoProyectado], _xTPHChancadoAcumulado ), _planDia ) )
+			VAR _cH = IF ( ISBLANK ( _rH ), "#FFFFFF", IF ( _rH >= 1, "#2ECC71", IF ( _rH >= 0.9, "#F1C40F", "#E74C3C" ) ) )
+			VAR _svg =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='279.3' height='441' viewBox='0 0 266 420'>"
+			        & "<rect x='1' y='1' width='264' height='124' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='14' y='30' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='#7F8C99' letter-spacing='0.4'>" & IF ( _vivo, "TON ACUMULADO DÍA", "TON DÍA · CIERRE" ) & "</text>"
+			        & "<text x='14' y='96' font-family='Segoe UI Semibold, Segoe UI' font-size='46' font-weight='700' fill='" & _cH & "'>" & FORMAT ( _xTPHChancadoAcumulado, "#,0" ) & IF ( ISBLANK ( _xTPHChancadoAcumulado ), "s/d", " t" ) & "</text>"
+			        & "<rect x='1' y='139' width='264' height='125' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='14' y='168' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='#7F8C99' letter-spacing='0.4'>" & IF ( _vivo, "TON PROYECTADO DÍA", "PLAN DÍA" ) & "</text>"
+			        & "<text x='14' y='228' font-family='Segoe UI Semibold, Segoe UI' font-size='34' font-weight='700' fill='#E6E6E6'>" & IF ( _vivo, FORMAT ( [Valor_TChancadoProyectado], "#,0" ) & " t", IF ( _planDia > 0, FORMAT ( _planDia, "#,0" ) & " t" & IF ( NOT ISBLANK ( _dvp ), "<tspan font-size='20' fill='#9AA5B1'> (" & IF ( _dvp >= 0, "+", "" ) & FORMAT ( _dvp, "0.0%" ) & ")</tspan>" ), "Sin plan" ) ) & "</text>"
+			        & "<rect x='1' y='278' width='264' height='140' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='14' y='314' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#9AA5B1'>DF</text>"
+			        & "<text x='80' y='314' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & _cdf & "'>" & IF ( ISBLANK ( _df ), "s/d", FORMAT ( _df, "0" ) & "%" ) & "</text>"
+			        & "<rect x='92' y='304' width='160' height='11' rx='5' fill='#2A333D'/>"
+			        & IF ( NOT ISBLANK ( _df ), "<rect x='92' y='304' width='" & FORMAT ( 160 * MIN ( MAX ( _df, 0 ), 100 ) / 100, "0" ) & "' height='11' rx='5' fill='" & _cdf & "'/>" )
+			        & "<text x='14' y='348' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#9AA5B1'>UE</text>"
+			        & "<text x='80' y='348' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & _cut & "'>" & IF ( ISBLANK ( _ut ), "s/d", FORMAT ( _ut, "0" ) & "%" ) & "</text>"
+			        & "<rect x='92' y='338' width='160' height='11' rx='5' fill='#2A333D'/>"
+			        & IF ( NOT ISBLANK ( _ut ), "<rect x='92' y='338' width='" & FORMAT ( 160 * MIN ( MAX ( _ut, 0 ), 100 ) / 100, "0" ) & "' height='11' rx='5' fill='" & _cut & "'/>" )
+			        & "<line x1='14' y1='372' x2='252' y2='372' stroke='#2E3844'/>"
+			        & "<text x='133' y='400' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & _cest & "' letter-spacing='0.4'>" & _est & "</text>"
+			        & "</svg>"
+			RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )
+		displayFolder: Tarjetas\Molienda
+		lineageTag: 3b94408b-5178-4721-9c44-a2c2fbac7a4d
+		dataCategory: ImageUrl
+
+	/// Tarjeta SVG de Stockpile: estado del equipo, DF y UE del día y valor real contra plan.
+	measure 'Rd SVG Tarjeta Stockpile' =
+			VAR _vivo = [Rd Pl Vivo]
+			VAR _eq = [Rd Pl Estados]
+			VAR _niv = [Valor_Stockpile]
+			VAR _plan = [Rd Stockpile Plan Nivel]
+			VAR _cH = IF ( ISBLANK ( _niv ) || ISBLANK ( _plan ), "#FFFFFF", IF ( ROUND ( _niv, 0 ) >= _plan, "#2ECC71", IF ( ROUND ( _niv, 0 ) >= 40, "#F1C40F", "#E74C3C" ) ) )
+			VAR _tend = [Rd Stockpile Tendencia]
+			VAR _fino = [Valor_Finos]
+			VAR _sag = [Valor_TPHSAG]
+			VAR _nf = INT ( VALUE ( MID ( _eq, 2, 1 ) ) = 1 ) + INT ( VALUE ( MID ( _eq, 3, 1 ) ) = 1 ) + INT ( VALUE ( MID ( _eq, 4, 1 ) ) = 1 ) + INT ( VALUE ( MID ( _eq, 5, 1 ) ) = 1 ) + INT ( VALUE ( MID ( _eq, 6, 1 ) ) = 1 ) + INT ( VALUE ( MID ( _eq, 7, 1 ) ) = 1 )
+			VAR _df = CALCULATE ( [Valor_Mantencion_Dia], equipos_df_ue[Nombre] = "Feeders", equipos_df_ue[Medicion] = "DF" )
+			VAR _ut = CALCULATE ( [Valor_Mantencion_Dia], equipos_df_ue[Nombre] = "Feeders", equipos_df_ue[Medicion] = "UE" )
+			VAR _act = _nf > 0
+			VAR _cdf = IF ( ISBLANK ( _df ) || _vivo, "#5D6B7A", IF ( _df >= 85, "#2ECC71", IF ( _df >= 70, "#F1C40F", "#E74C3C" ) ) )
+			VAR _cut = IF ( ISBLANK ( _ut ) || _vivo, "#5D6B7A", IF ( _ut >= 85, "#2ECC71", IF ( _ut >= 70, "#F1C40F", "#E74C3C" ) ) )
+			VAR _aten = ( NOT ISBLANK ( _df ) && _df < 85 ) || ( NOT ISBLANK ( _ut ) && _ut < 85 )
+			VAR _nss = LEN ( MID ( _eq, 2, 6 ) ) - LEN ( SUBSTITUTE ( MID ( _eq, 2, 6 ), "2", "" ) )
+			VAR _ss = _nss > 0
+			VAR _est = IF ( NOT _act, IF ( _ss, "SIN SEÑAL", "DETENIDO" ), IF ( _aten, "ATENCIÓN", "OPERANDO" ) )
+			VAR _cest = IF ( NOT _act, IF ( _ss, "#5D6B7A", "#E74C3C" ), IF ( _aten, "#F1C40F", "#2ECC71" ) )
+			VAR _umb = IF ( _vivo, 0.5, 2 )
+			VAR _dir = IF ( ISBLANK ( _tend ), 0, IF ( _tend >= _umb, 1, IF ( _tend <= - _umb, -1, 0 ) ) )
+			VAR _hrs = SWITCH ( TRUE (), ISBLANK ( _tend ) || ISBLANK ( _niv ), BLANK (), _dir = -1, _niv / - _tend, _dir = 1 && _niv < _plan, ( _plan - _niv ) / _tend, _dir = 1, ( 100 - _niv ) / _tend )
+			VAR _hTxt = IF ( _hrs > 48, "más de 48 h", "~" & FORMAT ( MAX ( _hrs, 1 ), "0" ) & " h" )
+			VAR _sub =
+			    IF (
+			        _vivo,
+			        SWITCH (
+			            TRUE (),
+			            ISBLANK ( _tend ), "sin datos de nivel en las últimas 3 h",
+			            _dir = -1, "a este ritmo: 0 % en " & _hTxt,
+			            _dir = 1 && _niv < _plan, "a este ritmo: plan " & FORMAT ( _plan, "0" ) & " % en " & _hTxt,
+			            _dir = 1, "a este ritmo: 100 % en " & _hTxt,
+			            ""
+			        ),
+			        IF ( ISBLANK ( _tend ) || ISBLANK ( _niv ), "sin datos de nivel del día", "de " & FORMAT ( _niv - _tend, "0.0" ) & " % a " & FORMAT ( _niv, "0.0" ) & " % (07:00 → 07:00)" )
+			    )
+			VAR _flecha = SWITCH ( _dir, 1, "<polygon points='14,72 25,52 36,72' fill='" & _cH & "'/>", -1, "<polygon points='14,52 25,72 36,52' fill='" & _cH & "'/>", "<rect x='14' y='59' width='22' height='6' rx='2' fill='" & _cH & "'/>" )
+			VAR _dy = IF ( _sub = "", 8, 0 )
+			VAR _tN = CALCULATE ( MAX ( hist_kpi[timestamp] ), hist_kpi[nombre_tag] = "STOCK.NIVEL.PCT", NOT ISBLANK ( hist_kpi[numeric_value] ) )
+			VAR _w0 = IF ( _vivo, _tN - 1, [Rd Planta Inicio] )
+			VAR _w1 = IF ( _vivo, _tN, [Rd Planta Fin] )
+			VAR _pts =
+			    CALCULATETABLE (
+			        ADDCOLUMNS ( VALUES ( hist_kpi[timestamp] ), "@v", CALCULATE ( MAX ( hist_kpi[numeric_value] ) ) ),
+			        hist_kpi[nombre_tag] = "STOCK.NIVEL.PCT",
+			        NOT ISBLANK ( hist_kpi[numeric_value] ),
+			        hist_kpi[timestamp] > _w0 + 0.0001,
+			        hist_kpi[timestamp] <= _w1 + 0.0001
+			    )
+			VAR _xy =
+			    ADDCOLUMNS (
+			        _pts,
+			        "@x", ROUND ( 14 + 238 * DIVIDE ( hist_kpi[timestamp] - _w0, _w1 - _w0 ), 0 ),
+			        "@y", ROUND ( 212 - 62 * MIN ( MAX ( [@v], 0 ), 100 ) / 100, 0 )
+			    )
+			VAR _n = COUNTROWS ( _xy )
+			VAR _linea = CONCATENATEX ( _xy, [@x] & "," & [@y], " ", hist_kpi[timestamp], ASC )
+			VAR _xa = MINX ( _xy, [@x] )
+			VAR _xb = MAXX ( _xy, [@x] )
+			VAR _yb = MAXX ( TOPN ( 1, _xy, hist_kpi[timestamp], DESC ), [@y] )
+			VAR _yp = ROUND ( 212 - 62 * MIN ( MAX ( _plan, 0 ), 100 ) / 100, 0 )
+			VAR _svg =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='279.3' height='441' viewBox='0 0 266 420'>"
+			        & "<rect x='1' y='1' width='264' height='110' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='14' y='28' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='#7F8C99' letter-spacing='0.4'>" & IF ( _vivo, "TENDENCIA DEL NIVEL", "VARIACIÓN EN EL DÍA" ) & "</text>"
+			        & "<g transform='translate(0," & _dy & ")'>" & IF ( NOT ISBLANK ( _tend ), _flecha )
+			        & "<text x='" & IF ( ISBLANK ( _tend ), "14", "44" ) & "' y='78' font-family='Segoe UI Semibold, Segoe UI' font-size='40' font-weight='700' fill='" & _cH & "'>" & IF ( ISBLANK ( _tend ), "s/d", FORMAT ( ABS ( _tend ), "0.0" ) & "<tspan font-size='20' fill='#7F8C99'>" & IF ( _vivo, " %/h", " pts" ) & "</tspan>" ) & "</text>" & "</g>"
+			        & IF ( _sub <> "", "<text x='14' y='100' font-family='Segoe UI' font-size='14' fill='#9AA5B1'>" & _sub & "</text>" )
+			        & "<rect x='1' y='124' width='264' height='140' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='14' y='144' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#7F8C99' letter-spacing='0.4'>" & IF ( _vivo, "NIVEL · ÚLTIMAS 24 H", "NIVEL DEL DÍA" ) & "</text>"
+			        & "<text x='133' y='224' text-anchor='middle' font-family='Segoe UI' font-size='12' font-weight='400' fill='#9AA5B1'>" & IF ( _n > 0, "mín " & FORMAT ( MINX ( _pts, [@v] ), "0" ) & " · máx " & FORMAT ( MAXX ( _pts, [@v] ), "0" ) & " %" ) & "</text>"
+			        & "<line x1='14' y1='212' x2='252' y2='212' stroke='#3A4654'/>"
+			        & IF ( NOT ISBLANK ( _plan ), "<line x1='14' y1='" & _yp & "' x2='252' y2='" & _yp & "' stroke='#9AA5B1' stroke-width='1' stroke-dasharray='4,3'/>" & "<text x='252' y='" & ( _yp - 4 ) & "' text-anchor='end' font-family='Segoe UI' font-size='12' fill='#9AA5B1'>plan " & FORMAT ( _plan, "0" ) & " %</text>" )
+			        & IF (
+			            _n > 1,
+			            "<polygon points='" & _xa & ",212 " & _linea & " " & _xb & ",212' fill='#8EC3EE' fill-opacity='0.10'/>"
+			                & "<polyline points='" & _linea & "' fill='none' stroke='#8EC3EE' stroke-width='1.6' stroke-linejoin='round'/>"
+			                & "<circle cx='" & _xb & "' cy='" & _yb & "' r='2.8' fill='#8EC3EE'/>",
+			            "<text x='133' y='186' text-anchor='middle' font-family='Segoe UI' font-size='14' fill='#5D6B7A'>sin datos de nivel</text>"
+			        )
+			        & "<text x='14' y='224' font-family='Segoe UI' font-size='12' fill='#7F8C99'>" & IF ( _vivo, "−24 h", "07:00" ) & "</text>"
+			        & "<text x='252' y='224' text-anchor='end' font-family='Segoe UI' font-size='12' fill='#7F8C99'>" & IF ( _vivo, "ahora", "07:00" ) & "</text>"
+			        & "<line x1='14' y1='232' x2='252' y2='232' stroke='#2E3844'/>"
+			        & "<text x='14' y='253' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#7F8C99' letter-spacing='0.4'>" & IF ( _vivo, "FINOS ALIM. SAG", "FINOS SAG · PROM. DÍA" ) & "</text>"
+			        & "<text x='252' y='254' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='18' font-weight='600' fill='#E6E6E6'>" & IF ( NOT ISBLANK ( _fino ), FORMAT ( _fino, "0" ) & " %", IF ( _vivo && _sag < 1000, "sin carga", "s/d" ) ) & "</text>"
+			        & "<rect x='1' y='278' width='264' height='140' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='14' y='314' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#9AA5B1'>DF</text>"
+			        & "<text x='80' y='314' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & _cdf & "'>" & IF ( ISBLANK ( _df ), "s/d", FORMAT ( _df, "0" ) & "%" ) & "</text>"
+			        & "<rect x='92' y='304' width='160' height='11' rx='5' fill='#2A333D'/>"
+			        & IF ( NOT ISBLANK ( _df ), "<rect x='92' y='304' width='" & FORMAT ( 160 * MIN ( MAX ( _df, 0 ), 100 ) / 100, "0" ) & "' height='11' rx='5' fill='" & _cdf & "'/>" )
+			        & "<text x='14' y='348' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#9AA5B1'>UE</text>"
+			        & "<text x='80' y='348' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & _cut & "'>" & IF ( ISBLANK ( _ut ), "s/d", FORMAT ( _ut, "0" ) & "%" ) & "</text>"
+			        & "<rect x='92' y='338' width='160' height='11' rx='5' fill='#2A333D'/>"
+			        & IF ( NOT ISBLANK ( _ut ), "<rect x='92' y='338' width='" & FORMAT ( 160 * MIN ( MAX ( _ut, 0 ), 100 ) / 100, "0" ) & "' height='11' rx='5' fill='" & _cut & "'/>" )
+			        & "<line x1='14' y1='372' x2='252' y2='372' stroke='#2E3844'/>"
+			        & "<text x='133' y='400' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & _cest & "' letter-spacing='0.4'>" & _est & "</text>"
+			        & "</svg>"
+			RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )
+		displayFolder: Tarjetas\Molienda
+		lineageTag: d63c739a-8f54-41d2-b51c-e1b248eb54e1
+		dataCategory: ImageUrl
+
+	/// Tarjeta SVG de SAG: estado del equipo, DF y UE del día y valor real contra plan.
+	measure 'Rd SVG Tarjeta SAG' =
+			VAR _vivo = [Rd Pl Vivo]
+			VAR _eq = [Rd Pl Estados]
+			VAR _xProc = [Valor_ProcesadoSAGAcumulado]
+			VAR _xPlanT = [Valor_PlanMesProcesadoAcumulado]
+			VAR _on = VALUE ( MID ( _eq, 8, 1 ) )
+			VAR _h = [Rd Planta Horas]
+			VAR _kwh = [Rd SAG kWh t]
+			VAR _proy = IF ( _vivo, IF ( _h >= 1 && NOT ISBLANK ( _xProc ), _xProc * 24 / _h ), _xProc )
+			VAR _dvT = IF ( _xPlanT > 0 && NOT ISBLANK ( _proy ), DIVIDE ( _proy, _xPlanT ) - 1 )
+			VAR _cT = IF ( ISBLANK ( _dvT ), "#9AA5B1", IF ( _dvT >= 0, "#2ECC71", IF ( _dvT >= -0.1, "#F1C40F", "#E74C3C" ) ) )
+			VAR _df = CALCULATE ( [Valor_Mantencion_Dia], equipos_df_ue[Nombre] = "Molienda", equipos_df_ue[Medicion] = "DF" )
+			VAR _ut = CALCULATE ( [Valor_Mantencion_Dia], equipos_df_ue[Nombre] = "Molienda", equipos_df_ue[Medicion] = "UE" )
+			VAR _act = _on = 1
+			VAR _cdf = IF ( ISBLANK ( _df ) || _vivo, "#5D6B7A", IF ( _df >= 85, "#2ECC71", IF ( _df >= 70, "#F1C40F", "#E74C3C" ) ) )
+			VAR _cut = IF ( ISBLANK ( _ut ) || _vivo, "#5D6B7A", IF ( _ut >= 85, "#2ECC71", IF ( _ut >= 70, "#F1C40F", "#E74C3C" ) ) )
+			VAR _aten = ( NOT ISBLANK ( _df ) && _df < 85 ) || ( NOT ISBLANK ( _ut ) && _ut < 85 )
+			VAR _nss = LEN ( MID ( _eq, 8, 1 ) ) - LEN ( SUBSTITUTE ( MID ( _eq, 8, 1 ), "2", "" ) )
+			VAR _ss = _nss > 0
+			VAR _est = IF ( NOT _act, IF ( _ss, "SIN SEÑAL", "DETENIDO" ), IF ( _aten, "ATENCIÓN", "OPERANDO" ) )
+			VAR _cest = IF ( NOT _act, IF ( _ss, "#5D6B7A", "#E74C3C" ), IF ( _aten, "#F1C40F", "#2ECC71" ) )
+			VAR _svg =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='279.3' height='441' viewBox='0 0 266 420'>"
+			        & "<rect x='1' y='1' width='264' height='110' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='14' y='28' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='#7F8C99' letter-spacing='0.4'>" & IF ( _vivo, "TON PROCESADAS DÍA", "TON PROCESADAS EN EL DÍA" ) & "</text>"
+			        & "<text x='14' y='88' font-family='Segoe UI Semibold, Segoe UI' font-size='46' font-weight='700' fill='" & IF ( ISBLANK ( _dvT ), "#FFFFFF", _cT ) & "'>" & IF ( ISBLANK ( _xProc ), "s/d", FORMAT ( _xProc, "#,0" ) & " t" ) & "</text>"
+			        & "<rect x='1' y='124' width='264' height='74' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='14' y='147' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='#7F8C99' letter-spacing='0.4'>" & IF ( _vivo, "TON PROYECTADO DÍA", "PLAN DÍA · PLAN MES" ) & "</text>"
+			        & "<text x='14' y='184' font-family='Segoe UI Semibold, Segoe UI' font-size='30' font-weight='700' fill='#E6E6E6'>" & IF ( _vivo, IF ( ISBLANK ( _proy ), "s/d", FORMAT ( _proy, "#,0" ) & " t" ), IF ( _xPlanT > 0, FORMAT ( _xPlanT, "#,0" ) & " t", "Sin plan" ) ) & IF ( NOT ISBLANK ( _dvT ), "<tspan font-size='18' fill='#9AA5B1'> (" & IF ( _dvT >= 0, "+", "" ) & FORMAT ( _dvT, "0.0%" ) & ")</tspan>" ) & "</text>"
+			        & "<rect x='1' y='210' width='264' height='54' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='14' y='230' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#7F8C99' letter-spacing='0.4'>" & IF ( _vivo, "ENERGÍA SAG", "ENERGÍA SAG · DÍA" ) & "</text>"
+			        & "<text x='14' y='252' font-family='Segoe UI Semibold, Segoe UI' font-size='17' font-weight='600' fill='#E6E6E6'>" & IF ( ISBLANK ( _kwh ), "s/d", FORMAT ( _kwh, "0.00" ) & " kWh/t" ) & "</text>"
+			        & "<rect x='1' y='278' width='264' height='140' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='14' y='314' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#9AA5B1'>DF</text>"
+			        & "<text x='80' y='314' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & _cdf & "'>" & IF ( ISBLANK ( _df ), "s/d", FORMAT ( _df, "0" ) & "%" ) & "</text>"
+			        & "<rect x='92' y='304' width='160' height='11' rx='5' fill='#2A333D'/>"
+			        & IF ( NOT ISBLANK ( _df ), "<rect x='92' y='304' width='" & FORMAT ( 160 * MIN ( MAX ( _df, 0 ), 100 ) / 100, "0" ) & "' height='11' rx='5' fill='" & _cdf & "'/>" )
+			        & "<text x='14' y='348' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#9AA5B1'>UE</text>"
+			        & "<text x='80' y='348' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & _cut & "'>" & IF ( ISBLANK ( _ut ), "s/d", FORMAT ( _ut, "0" ) & "%" ) & "</text>"
+			        & "<rect x='92' y='338' width='160' height='11' rx='5' fill='#2A333D'/>"
+			        & IF ( NOT ISBLANK ( _ut ), "<rect x='92' y='338' width='" & FORMAT ( 160 * MIN ( MAX ( _ut, 0 ), 100 ) / 100, "0" ) & "' height='11' rx='5' fill='" & _cut & "'/>" )
+			        & "<line x1='14' y1='372' x2='252' y2='372' stroke='#2E3844'/>"
+			        & "<text x='133' y='400' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & _cest & "' letter-spacing='0.4'>" & _est & "</text>"
+			        & "</svg>"
+			RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )
+		displayFolder: Tarjetas\Molienda
+		lineageTag: 9e62a6fd-b6d1-4c88-9115-f6eaac76650c
+		dataCategory: ImageUrl
+
+	/// Tarjeta SVG de Pebbles: estado del equipo, DF y UE del día y valor real contra plan.
+	measure 'Rd SVG Tarjeta Pebbles' =
+			VAR _vivo = [Rd Pl Vivo]
+			VAR _eq = [Rd Pl Estados]
+			VAR _ini = [Rd Planta Inicio]
+			VAR _fin = [Rd Planta Fin]
+			VAR _h = [Rd Planta Horas]
+			VAR _m =
+			    CALCULATETABLE (
+			        ADDCOLUMNS ( VALUES ( hist_kpi[timestamp] ), "@v", CALCULATE ( MAX ( hist_kpi[numeric_value] ) ) ),
+			        hist_kpi[nombre_tag] = "PEBBLES.RETORNO.TPH",
+			        NOT ISBLANK ( hist_kpi[numeric_value] ),
+			        hist_kpi[timestamp] > _ini + 0.0001,
+			        hist_kpi[timestamp] <= _fin + 0.0001
+			    )
+			VAR _ton = IF ( NOT ISEMPTY ( _m ), SUMX ( _m, MAX ( [@v], 0 ) ) * 0.5 )
+			VAR _np = INT ( VALUE ( MID ( _eq, 9, 1 ) ) = 1 ) + INT ( VALUE ( MID ( _eq, 10, 1 ) ) = 1 ) + INT ( VALUE ( MID ( _eq, 11, 1 ) ) = 1 )
+			VAR _df = CALCULATE ( [Valor_Mantencion_Dia], equipos_df_ue[Nombre] = "Circuitos Pebbles", equipos_df_ue[Medicion] = "DF" )
+			VAR _ut = CALCULATE ( [Valor_Mantencion_Dia], equipos_df_ue[Nombre] = "Circuitos Pebbles", equipos_df_ue[Medicion] = "UE" )
+			VAR _act = _np > 0
+			VAR _cdf = IF ( ISBLANK ( _df ) || _vivo, "#5D6B7A", IF ( _df >= 85, "#2ECC71", IF ( _df >= 70, "#F1C40F", "#E74C3C" ) ) )
+			VAR _cut = IF ( ISBLANK ( _ut ) || _vivo, "#5D6B7A", IF ( _ut >= 85, "#2ECC71", IF ( _ut >= 70, "#F1C40F", "#E74C3C" ) ) )
+			VAR _aten = ( NOT ISBLANK ( _df ) && _df < 85 ) || ( NOT ISBLANK ( _ut ) && _ut < 85 )
+			VAR _nss = LEN ( MID ( _eq, 9, 3 ) ) - LEN ( SUBSTITUTE ( MID ( _eq, 9, 3 ), "2", "" ) )
+			VAR _ss = _nss > 0
+			VAR _est = IF ( NOT _act, IF ( _ss, "SIN SEÑAL", "DETENIDO" ), IF ( _aten, "ATENCIÓN", "OPERANDO" ) )
+			VAR _cest = IF ( NOT _act, IF ( _ss, "#5D6B7A", "#E74C3C" ), IF ( _aten, "#F1C40F", "#2ECC71" ) )
+			VAR _pPlan = [Rd Pebbles Plan TPH]
+			VAR _rH = IF ( _pPlan > 0 && _h >= 1 && NOT ISBLANK ( _ton ), DIVIDE ( _ton, _pPlan * _h ) )
+			VAR _cH = IF ( ISBLANK ( _rH ), "#FFFFFF", IF ( _rH >= 1, "#2ECC71", IF ( _rH >= 0.9, "#F1C40F", "#E74C3C" ) ) )
+			VAR _n = COUNTROWS ( _m )
+			VAR _vmax = MAXX ( _m, MAX ( [@v], 0 ) )
+			VAR _vprom = AVERAGEX ( _m, MAX ( [@v], 0 ) )
+			VAR _top = CEILING ( MAX ( COALESCE ( _vmax, 0 ), COALESCE ( _pPlan, 0 ) ) * 1.1 + 1, 50 )
+			VAR _xy =
+			    ADDCOLUMNS (
+			        _m,
+			        "@x", ROUND ( 14 + 238 * DIVIDE ( hist_kpi[timestamp] - _ini, _fin - _ini ), 0 ),
+			        "@y", ROUND ( 228 - 66 * DIVIDE ( MAX ( [@v], 0 ), _top ), 0 )
+			    )
+			VAR _linea = CONCATENATEX ( _xy, [@x] & "," & [@y], " ", hist_kpi[timestamp], ASC )
+			VAR _xa = MINX ( _xy, [@x] )
+			VAR _xb = MAXX ( _xy, [@x] )
+			VAR _yb = MAXX ( TOPN ( 1, _xy, hist_kpi[timestamp], DESC ), [@y] )
+			VAR _yp = IF ( _pPlan > 0 && _n > 0, ROUND ( 228 - 66 * DIVIDE ( _pPlan, _top ), 0 ) )
+			VAR _svg =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='279.3' height='441' viewBox='0 0 266 420'>"
+			        & "<rect x='1' y='1' width='264' height='110' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='14' y='28' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='#7F8C99' letter-spacing='0.4'>" & IF ( _vivo, "TON PEBBLES DÍA", "TON PEBBLES EN EL DÍA" ) & "</text>"
+			        & "<text x='14' y='88' font-family='Segoe UI Semibold, Segoe UI' font-size='46' font-weight='700' fill='" & _cH & "'>" & IF ( ISBLANK ( _ton ), "s/d", FORMAT ( _ton, "#,0" ) & " t" ) & "</text>"
+			        & "<rect x='1' y='124' width='264' height='140' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='14' y='151' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#7F8C99' letter-spacing='0.4'>PEBBLES DEL DÍA</text>"
+			        & "<line x1='14' y1='228' x2='252' y2='228' stroke='#3A4654'/>"
+			        & IF ( NOT ISBLANK ( _yp ), "<line x1='14' y1='" & _yp & "' x2='252' y2='" & _yp & "' stroke='#9AA5B1' stroke-width='1' stroke-dasharray='4,3'/>" & "<text x='252' y='151' text-anchor='end' font-family='Segoe UI' font-size='12' fill='#9AA5B1'>plan " & FORMAT ( _pPlan, "#,0" ) & " t/h</text>" )
+			        & IF (
+			            _n > 1,
+			            "<polygon points='" & _xa & ",228 " & _linea & " " & _xb & ",228' fill='#8EC3EE' fill-opacity='0.10'/>"
+			                & "<polyline points='" & _linea & "' fill='none' stroke='#8EC3EE' stroke-width='1.6' stroke-linejoin='round'/>"
+			                & "<circle cx='" & _xb & "' cy='" & _yb & "' r='2.8' fill='#8EC3EE'/>",
+			            "<text x='133' y='198' text-anchor='middle' font-family='Segoe UI' font-size='13' fill='#5D6B7A'>sin datos de pebbles</text>"
+			        )
+			        & "<text x='14' y='248' font-family='Segoe UI' font-size='12' fill='#7F8C99'>07:00</text>"
+			        & "<text x='133' y='248' text-anchor='middle' font-family='Segoe UI' font-size='12' fill='#9AA5B1'>" & IF ( _n > 0, "prom " & FORMAT ( _vprom, "#,0" ) & " · máx " & FORMAT ( _vmax, "#,0" ) & " t/h" ) & "</text>"
+			        & "<text x='252' y='248' text-anchor='end' font-family='Segoe UI' font-size='12' fill='#7F8C99'>" & IF ( _vivo, "ahora", "07:00" ) & "</text>"
+			        & "<rect x='1' y='278' width='264' height='140' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='14' y='314' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#9AA5B1'>DF</text>"
+			        & "<text x='80' y='314' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & _cdf & "'>" & IF ( ISBLANK ( _df ), "s/d", FORMAT ( _df, "0" ) & "%" ) & "</text>"
+			        & "<rect x='92' y='304' width='160' height='11' rx='5' fill='#2A333D'/>"
+			        & IF ( NOT ISBLANK ( _df ), "<rect x='92' y='304' width='" & FORMAT ( 160 * MIN ( MAX ( _df, 0 ), 100 ) / 100, "0" ) & "' height='11' rx='5' fill='" & _cdf & "'/>" )
+			        & "<text x='14' y='348' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#9AA5B1'>UE</text>"
+			        & "<text x='80' y='348' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & _cut & "'>" & IF ( ISBLANK ( _ut ), "s/d", FORMAT ( _ut, "0" ) & "%" ) & "</text>"
+			        & "<rect x='92' y='338' width='160' height='11' rx='5' fill='#2A333D'/>"
+			        & IF ( NOT ISBLANK ( _ut ), "<rect x='92' y='338' width='" & FORMAT ( 160 * MIN ( MAX ( _ut, 0 ), 100 ) / 100, "0" ) & "' height='11' rx='5' fill='" & _cut & "'/>" )
+			        & "<line x1='14' y1='372' x2='252' y2='372' stroke='#2E3844'/>"
+			        & "<text x='133' y='400' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & _cest & "' letter-spacing='0.4'>" & _est & "</text>"
+			        & "</svg>"
+			RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )
+		displayFolder: Tarjetas\Molienda
+		lineageTag: c612e481-c7fc-42c4-bf36-58567de3d3e7
+		dataCategory: ImageUrl
+
+	/// Tarjeta SVG de Bolas: estado del equipo, DF y UE del día y valor real contra plan.
+	measure 'Rd SVG Tarjeta Bolas' =
+			VAR _vivo = [Rd Pl Vivo]
+			VAR _eq = [Rd Pl Estados]
+			VAR _m1 = VALUE ( MID ( _eq, 12, 1 ) )
+			VAR _m2 = VALUE ( MID ( _eq, 13, 1 ) )
+			VAR _nm = INT ( _m1 = 1 ) + INT ( _m2 = 1 )
+			VAR _ini = [Rd Planta Inicio]
+			VAR _fin = [Rd Planta Fin]
+			VAR _dz = ROUND ( ( 7 / 24 - MOD ( _ini, 1 ) ) * 24, 0 ) / 24
+			VAR _p1 =
+			    CALCULATETABLE (
+			        ADDCOLUMNS ( VALUES ( hist_potencia[timestamp] ), "@v", CALCULATE ( MAX ( hist_potencia[numeric_value] ) ) ),
+			        hist_potencia[nombre_tag] = "BOLAS.01.KW",
+			        NOT ISBLANK ( hist_potencia[numeric_value] ),
+			        hist_potencia[timestamp] > _ini + _dz + 0.0001,
+			        hist_potencia[timestamp] <= _fin + _dz + 0.0001
+			    )
+			VAR _p2 =
+			    CALCULATETABLE (
+			        ADDCOLUMNS ( VALUES ( hist_potencia[timestamp] ), "@v", CALCULATE ( MAX ( hist_potencia[numeric_value] ) ) ),
+			        hist_potencia[nombre_tag] = "BOLAS.02.KW",
+			        NOT ISBLANK ( hist_potencia[numeric_value] ),
+			        hist_potencia[timestamp] > _ini + _dz + 0.0001,
+			        hist_potencia[timestamp] <= _fin + _dz + 0.0001
+			    )
+			VAR _k1 = IF ( _vivo, MAXX ( TOPN ( 1, _p1, hist_potencia[timestamp], DESC ), MAX ( [@v], 0 ) ), AVERAGEX ( FILTER ( _p1, [@v] > 5000 ), [@v] ) )
+			VAR _k2 = IF ( _vivo, MAXX ( TOPN ( 1, _p2, hist_potencia[timestamp], DESC ), MAX ( [@v], 0 ) ), AVERAGEX ( FILTER ( _p2, [@v] > 5000 ), [@v] ) )
+			VAR _df = CALCULATE ( [Valor_Mantencion_Dia], equipos_df_ue[Nombre] = "Molienda Secundaria", equipos_df_ue[Medicion] = "DF" )
+			VAR _ut = CALCULATE ( [Valor_Mantencion_Dia], equipos_df_ue[Nombre] = "Molienda Secundaria", equipos_df_ue[Medicion] = "UE" )
+			VAR _act = _nm > 0
+			VAR _cdf = IF ( ISBLANK ( _df ) || _vivo, "#5D6B7A", IF ( _df >= 85, "#2ECC71", IF ( _df >= 70, "#F1C40F", "#E74C3C" ) ) )
+			VAR _cut = IF ( ISBLANK ( _ut ) || _vivo, "#5D6B7A", IF ( _ut >= 85, "#2ECC71", IF ( _ut >= 70, "#F1C40F", "#E74C3C" ) ) )
+			VAR _aten = ( NOT ISBLANK ( _df ) && _df < 85 ) || ( NOT ISBLANK ( _ut ) && _ut < 85 )
+			VAR _nss = LEN ( MID ( _eq, 12, 2 ) ) - LEN ( SUBSTITUTE ( MID ( _eq, 12, 2 ), "2", "" ) )
+			VAR _ss = _nss > 0
+			VAR _est = IF ( NOT _act, IF ( _ss, "SIN SEÑAL", "DETENIDO" ), IF ( _aten, "ATENCIÓN", "OPERANDO" ) )
+			VAR _cest = IF ( NOT _act, IF ( _ss, "#5D6B7A", "#E74C3C" ), IF ( _aten, "#F1C40F", "#2ECC71" ) )
+			VAR _c1 = IF ( ISEMPTY ( _p1 ), "#5D6B7A", IF ( ISBLANK ( _k1 ), "#E74C3C", IF ( _m1 = 1, "#2ECC71", IF ( _m1 = 2, "#5D6B7A", "#E74C3C" ) ) ) )
+			VAR _c2 = IF ( ISEMPTY ( _p2 ), "#5D6B7A", IF ( ISBLANK ( _k2 ), "#E74C3C", IF ( _m2 = 1, "#2ECC71", IF ( _m2 = 2, "#5D6B7A", "#E74C3C" ) ) ) )
+			VAR _t1 = IF ( ISEMPTY ( _p1 ), "s/d", IF ( ISBLANK ( _k1 ), "<tspan font-size='24'>no operó</tspan>", FORMAT ( _k1 / 1000, "0.0" ) & "<tspan font-size='18' fill='#7F8C99'> MW</tspan>" ) )
+			VAR _t2 = IF ( ISEMPTY ( _p2 ), "s/d", IF ( ISBLANK ( _k2 ), "<tspan font-size='24'>no operó</tspan>", FORMAT ( _k2 / 1000, "0.0" ) & "<tspan font-size='18' fill='#7F8C99'> MW</tspan>" ) )
+			VAR _top = MAX ( CEILING ( MAX ( COALESCE ( MAXX ( _p1, [@v] ), 0 ), COALESCE ( MAXX ( _p2, [@v] ), 0 ) ) + 500, 5000 ), 5000 )
+			VAR _xy1 = ADDCOLUMNS ( _p1, "@x", ROUND ( 14 + 238 * DIVIDE ( hist_potencia[timestamp] - _dz - _ini, _fin - _ini ), 0 ), "@y", ROUND ( 228 - 66 * DIVIDE ( MAX ( [@v], 0 ), _top ), 0 ) )
+			VAR _xy2 = ADDCOLUMNS ( _p2, "@x", ROUND ( 14 + 238 * DIVIDE ( hist_potencia[timestamp] - _dz - _ini, _fin - _ini ), 0 ), "@y", ROUND ( 228 - 66 * DIVIDE ( MAX ( [@v], 0 ), _top ), 0 ) )
+			VAR _l1 = CONCATENATEX ( _xy1, [@x] & "," & [@y], " ", hist_potencia[timestamp], ASC )
+			VAR _l2 = CONCATENATEX ( _xy2, [@x] & "," & [@y], " ", hist_potencia[timestamp], ASC )
+			VAR _b1 = TOPN ( 1, _xy1, hist_potencia[timestamp], DESC )
+			VAR _b2 = TOPN ( 1, _xy2, hist_potencia[timestamp], DESC )
+			VAR _n1 = COUNTROWS ( _p1 )
+			VAR _n2 = COUNTROWS ( _p2 )
+			VAR _svg =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='279.3' height='441' viewBox='0 0 266 420'>"
+			        & "<rect x='1' y='1' width='264' height='110' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='14' y='28' font-family='Segoe UI Semibold, Segoe UI' font-weight='700' font-size='14' fill='#7F8C99' letter-spacing='0.4'>" & IF ( _vivo, "POTENCIA", "POTENCIA PROM. OPERANDO" ) & "</text>"
+			        & "<line x1='133' y1='42' x2='133' y2='100' stroke='#2E3844'/>"
+			        & "<text x='14' y='56' font-family='Segoe UI Semibold, Segoe UI' font-weight='700' font-size='12' fill='#7F8C99' letter-spacing='0.3'>MOLINO #1</text>"
+			        & "<text x='14' y='94' font-family='Segoe UI Semibold, Segoe UI' font-weight='700' font-size='32' fill='" & _c1 & "'>" & _t1 & "</text>"
+			        & "<text x='146' y='56' font-family='Segoe UI Semibold, Segoe UI' font-weight='700' font-size='12' fill='#7F8C99' letter-spacing='0.3'>MOLINO #2</text>"
+			        & "<text x='146' y='94' font-family='Segoe UI Semibold, Segoe UI' font-weight='700' font-size='32' fill='" & _c2 & "'>" & _t2 & "</text>"
+			        & "<rect x='1' y='124' width='264' height='140' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='14' y='151' font-family='Segoe UI Semibold, Segoe UI' font-weight='700' font-size='13' fill='#7F8C99' letter-spacing='0.4'>POTENCIA DEL DÍA</text>"
+			        & "<line x1='176' y1='147' x2='188' y2='147' stroke='#8EC3EE' stroke-width='2'/>"
+			        & "<text x='192' y='151' font-family='Segoe UI' font-size='12' fill='#9AA5B1'>#1</text>"
+			        & "<line x1='218' y1='147' x2='230' y2='147' stroke='#E6E6E6' stroke-width='2'/>"
+			        & "<text x='234' y='151' font-family='Segoe UI' font-size='12' fill='#9AA5B1'>#2</text>"
+			        & "<line x1='14' y1='228' x2='252' y2='228' stroke='#3A4654'/>"
+			        & IF (
+			            _n1 > 1 || _n2 > 1,
+			            IF ( _n2 > 1, "<polyline points='" & _l2 & "' fill='none' stroke='#E6E6E6' stroke-width='1.4' stroke-linejoin='round'/>" )
+			                & IF ( _n1 > 1, "<polyline points='" & _l1 & "' fill='none' stroke='#8EC3EE' stroke-width='1.6' stroke-linejoin='round'/>" )
+			                & IF ( _n2 > 0, "<circle cx='" & MAXX ( _b2, [@x] ) & "' cy='" & MAXX ( _b2, [@y] ) & "' r='2.6' fill='#E6E6E6'/>" )
+			                & IF ( _n1 > 0, "<circle cx='" & MAXX ( _b1, [@x] ) & "' cy='" & MAXX ( _b1, [@y] ) & "' r='2.8' fill='#8EC3EE'/>" ),
+			            "<text x='133' y='198' text-anchor='middle' font-family='Segoe UI' font-size='13' fill='#5D6B7A'>sin datos de potencia</text>"
+			        )
+			        & "<text x='14' y='248' font-family='Segoe UI' font-size='12' fill='#7F8C99'>07:00</text>"
+			        & "<text x='133' y='248' text-anchor='middle' font-family='Segoe UI' font-size='12' fill='#9AA5B1'>escala 0 – " & FORMAT ( _top / 1000, "0" ) & " MW</text>"
+			        & "<text x='252' y='248' text-anchor='end' font-family='Segoe UI' font-size='12' fill='#7F8C99'>" & IF ( _vivo, "ahora", "07:00" ) & "</text>"
+			        & "<rect x='1' y='278' width='264' height='140' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='14' y='314' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#9AA5B1'>DF</text>"
+			        & "<text x='80' y='314' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & _cdf & "'>" & IF ( ISBLANK ( _df ), "s/d", FORMAT ( _df, "0" ) & "%" ) & "</text>"
+			        & "<rect x='92' y='304' width='160' height='11' rx='5' fill='#2A333D'/>"
+			        & IF ( NOT ISBLANK ( _df ), "<rect x='92' y='304' width='" & FORMAT ( 160 * MIN ( MAX ( _df, 0 ), 100 ) / 100, "0" ) & "' height='11' rx='5' fill='" & _cdf & "'/>" )
+			        & "<text x='14' y='348' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#9AA5B1'>UE</text>"
+			        & "<text x='80' y='348' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & _cut & "'>" & IF ( ISBLANK ( _ut ), "s/d", FORMAT ( _ut, "0" ) & "%" ) & "</text>"
+			        & "<rect x='92' y='338' width='160' height='11' rx='5' fill='#2A333D'/>"
+			        & IF ( NOT ISBLANK ( _ut ), "<rect x='92' y='338' width='" & FORMAT ( 160 * MIN ( MAX ( _ut, 0 ), 100 ) / 100, "0" ) & "' height='11' rx='5' fill='" & _cut & "'/>" )
+			        & "<line x1='14' y1='372' x2='252' y2='372' stroke='#2E3844'/>"
+			        & "<text x='133' y='400' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & _cest & "' letter-spacing='0.4'>" & _est & "</text>"
+			        & "</svg>"
+			RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )
+		displayFolder: Tarjetas\Molienda
+		lineageTag: c66a4463-b79b-47d8-ae74-2d6f1e66eef3
+		dataCategory: ImageUrl
+
+	/// Tarjeta SVG de Ciclones: estado del equipo, DF y UE del día y valor real contra plan.
+	measure 'Rd SVG Tarjeta Ciclones' =
+			VAR _vivo = [Rd Pl Vivo]
+			VAR _eq = [Rd Pl Estados]
+			VAR _m1 = VALUE ( MID ( _eq, 12, 1 ) )
+			VAR _m2 = VALUE ( MID ( _eq, 13, 1 ) )
+			VAR _plan = [Rd Ciclones Plan P80]
+			VAR _hayPlan = NOT ISBLANK ( _plan ) && _plan > 0
+			VAR _nb = 2 * INT ( _m1 = 1 ) + 2 * INT ( _m2 = 1 )
+			VAR _nss = INT ( _m1 = 2 ) + INT ( _m2 = 2 )
+			VAR _ini = [Rd Planta Inicio]
+			VAR _fin = [Rd Planta Fin]
+			VAR _pts =
+			    CALCULATETABLE (
+			        ADDCOLUMNS ( VALUES ( hist_kpi[timestamp] ), "@v", CALCULATE ( MAX ( hist_kpi[numeric_value] ) ) ),
+			        hist_kpi[nombre_tag] = "CICLONES.P80.UM",
+			        NOT ISBLANK ( hist_kpi[numeric_value] ),
+			        hist_kpi[timestamp] > _ini + 0.0001,
+			        hist_kpi[timestamp] <= _fin + 0.0001
+			    )
+			VAR _n = COUNTROWS ( _pts )
+			VAR _min = MINX ( _pts, [@v] )
+			VAR _max = MAXX ( _pts, [@v] )
+			VAR _df = [Rd Ciclones DF Día]
+			VAR _ut = [Rd Ciclones UE Día]
+			VAR _act = _nb > 0
+			VAR _cdf = IF ( ISBLANK ( _df ) || _vivo, "#5D6B7A", IF ( _df >= 85, "#2ECC71", IF ( _df >= 70, "#F1C40F", "#E74C3C" ) ) )
+			VAR _cut = IF ( ISBLANK ( _ut ) || _vivo, "#5D6B7A", IF ( _ut >= 85, "#2ECC71", IF ( _ut >= 70, "#F1C40F", "#E74C3C" ) ) )
+			VAR _aten = ( NOT ISBLANK ( _df ) && _df < 85 ) || ( NOT ISBLANK ( _ut ) && _ut < 85 )
+			VAR _est = IF ( NOT _act, IF ( _nss > 0, "SIN SEÑAL", "DETENIDO" ), IF ( _aten, "ATENCIÓN", "OPERANDO" ) )
+			VAR _cest = IF ( NOT _act, IF ( _nss > 0, "#5D6B7A", "#E74C3C" ), IF ( _aten, "#F1C40F", "#2ECC71" ) )
+			VAR _a = IF ( _hayPlan, MIN ( _min, _plan ), _min )
+			VAR _b = IF ( _hayPlan, MAX ( _max, _plan ), _max )
+			VAR _lo = FLOOR ( _a - 5, 10 )
+			VAR _hi = CEILING ( _b + 5, 10 )
+			VAR _xy =
+			    ADDCOLUMNS (
+			        _pts,
+			        "@x", ROUND ( 14 + 238 * DIVIDE ( hist_kpi[timestamp] - _ini, _fin - _ini ), 0 ),
+			        "@y", ROUND ( 226 - 166 * DIVIDE ( [@v] - _lo, _hi - _lo ), 0 )
+			    )
+			VAR _linea = CONCATENATEX ( _xy, [@x] & "," & [@y], " ", hist_kpi[timestamp], ASC )
+			VAR _xa = MINX ( _xy, [@x] )
+			VAR _xb = MAXX ( _xy, [@x] )
+			VAR _yb = MAXX ( TOPN ( 1, _xy, hist_kpi[timestamp], DESC ), [@y] )
+			VAR _yp = IF ( _hayPlan && _n > 0, ROUND ( 226 - 166 * DIVIDE ( _plan - _lo, _hi - _lo ), 0 ) )
+			VAR _svg =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='279.3' height='441' viewBox='0 0 266 420'>"
+			        & "<rect x='1' y='1' width='264' height='263' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='14' y='28' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='#7F8C99' letter-spacing='0.4'>P80 DEL DÍA</text>"
+			        & "<line x1='14' y1='226' x2='252' y2='226' stroke='#3A4654'/>"
+			        & IF ( _n > 0, "<text x='14' y='54' font-family='Segoe UI' font-size='12' fill='#7F8C99'>" & FORMAT ( _hi, "0" ) & " µm</text>" & "<text x='14' y='220' font-family='Segoe UI' font-size='12' fill='#7F8C99'>" & FORMAT ( _lo, "0" ) & "</text>" )
+			        & IF ( NOT ISBLANK ( _yp ), "<line x1='14' y1='" & _yp & "' x2='252' y2='" & _yp & "' stroke='#9AA5B1' stroke-width='1' stroke-dasharray='4,3'/>" & "<text x='252' y='28' text-anchor='end' font-family='Segoe UI' font-size='12' fill='#9AA5B1'>plan " & FORMAT ( _plan, "0" ) & " µm</text>" )
+			        & IF (
+			            _n > 1,
+			            "<polygon points='" & _xa & ",226 " & _linea & " " & _xb & ",226' fill='#8EC3EE' fill-opacity='0.10'/>"
+			                & "<polyline points='" & _linea & "' fill='none' stroke='#8EC3EE' stroke-width='1.6' stroke-linejoin='round'/>"
+			                & "<circle cx='" & _xb & "' cy='" & _yb & "' r='2.8' fill='#8EC3EE'/>",
+			            "<text x='133' y='146' text-anchor='middle' font-family='Segoe UI' font-size='13' fill='#5D6B7A'>sin datos de P80</text>"
+			        )
+			        & "<text x='14' y='248' font-family='Segoe UI' font-size='12' fill='#7F8C99'>07:00</text>"
+			        & "<text x='133' y='248' text-anchor='middle' font-family='Segoe UI' font-size='12' fill='#9AA5B1'>" & IF ( _n > 0, "mín " & FORMAT ( _min, "0" ) & " · máx " & FORMAT ( _max, "0" ) & " µm" ) & "</text>"
+			        & "<text x='252' y='248' text-anchor='end' font-family='Segoe UI' font-size='12' fill='#7F8C99'>" & IF ( _vivo, "ahora", "07:00" ) & "</text>"
+			        & "<rect x='1' y='278' width='264' height='140' rx='6' fill='#1B2127' stroke='#343F4D'/>"
+			        & "<text x='14' y='314' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#9AA5B1'>DF</text>"
+			        & "<text x='80' y='314' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & _cdf & "'>" & IF ( ISBLANK ( _df ), "s/d", FORMAT ( _df, "0" ) & "%" ) & "</text>"
+			        & "<rect x='92' y='304' width='160' height='11' rx='5' fill='#2A333D'/>"
+			        & IF ( NOT ISBLANK ( _df ), "<rect x='92' y='304' width='" & FORMAT ( 160 * MIN ( MAX ( _df, 0 ), 100 ) / 100, "0" ) & "' height='11' rx='5' fill='" & _cdf & "'/>" )
+			        & "<text x='14' y='348' font-family='Segoe UI Semibold, Segoe UI' font-size='13' font-weight='700' fill='#9AA5B1'>UE</text>"
+			        & "<text x='80' y='348' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & _cut & "'>" & IF ( ISBLANK ( _ut ), "s/d", FORMAT ( _ut, "0" ) & "%" ) & "</text>"
+			        & "<rect x='92' y='338' width='160' height='11' rx='5' fill='#2A333D'/>"
+			        & IF ( NOT ISBLANK ( _ut ), "<rect x='92' y='338' width='" & FORMAT ( 160 * MIN ( MAX ( _ut, 0 ), 100 ) / 100, "0" ) & "' height='11' rx='5' fill='" & _cut & "'/>" )
+			        & "<line x1='14' y1='372' x2='252' y2='372' stroke='#2E3844'/>"
+			        & "<text x='133' y='400' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='700' fill='" & _cest & "' letter-spacing='0.4'>" & _est & "</text>"
+			        & "</svg>"
+			RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )
+		displayFolder: Tarjetas\Molienda
+		lineageTag: 6f3c0cc7-9451-4f39-9f89-c0c16e66a19c
+		dataCategory: ImageUrl
+
+	/// Horas del día de mina cubiertas por los datos cargados (24 si el día está cerrado).
+	measure 'Rd Horas Transcurridas' =
+			VAR _d = [Rd Día]
+			VAR _diaCorte =
+			    CALCULATE (
+			        MAX ( 'Produccion Mina'[time] ),
+			        REMOVEFILTERS ( Calendario ),
+			        REMOVEFILTERS ( 'Dim Destino' ),
+			        REMOVEFILTERS ( 'Dim Fase' )
+			    )
+			VAR _hCorte =
+			    CALCULATE (
+			        MAX ( 'Produccion Mina'[Rd Hora Op] ),
+			        REMOVEFILTERS ( Calendario ),
+			        REMOVEFILTERS ( 'Dim Destino' ),
+			        REMOVEFILTERS ( 'Dim Fase' ),
+			        'Produccion Mina'[time] = _diaCorte
+			    )
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( _d ) || ISBLANK ( _diaCorte ), 0,
+			        _d < _diaCorte, 24,
+			        _d > _diaCorte, 0,
+			        MIN ( MAX ( _hCorte - 0.5, 0 ), 24 )
+			    )
+		formatString: 0
+		displayFolder: Tarjetas\Mina
+		lineageTag: bd77b097-021c-486b-9200-4c0d5012f05f
+
+	/// Verdadero si el día mostrado está en curso.
+	measure 'Rd Día En Curso' =
+			VAR _h = [Rd Horas Transcurridas]
+			RETURN _h > 0 && _h < 24
+		displayFolder: Tarjetas\Mina
+		lineageTag: e6815a9e-9b61-44b6-b032-58c3aec9b7a5
+
+	/// Factor de extrapolación lineal a 24 h; 1 en día cerrado.
+	measure 'Rd Factor Proyección' =
+			VAR _h = [Rd Horas Transcurridas]
+			RETURN IF ( _h >= 24 || _h <= 0, 1, DIVIDE ( 24, _h ) )
+		formatString: #,0.00
+		displayFolder: Tarjetas\Mina
+		lineageTag: a4a230d3-44dc-4b54-b19d-8219251e19d4
+
+	/// Toneladas del día del destino de la fila (0 si no hubo movimiento; vacío en el miembro en blanco).
+	measure 'Rd Destino Real' =
+			VAR _k = SELECTEDVALUE ( 'Dim Destino'[Clave] )
+			VAR _d = [Rd Día]
+			VAR _t = CALCULATE ( SUM ( 'Produccion Mina'[material_tonnage] ), Calendario[Fecha] = _d )
+			RETURN IF ( ISBLANK ( _k ), BLANK (), IF ( ISBLANK ( _t ), 0, _t ) )
+		formatString: #,0
+		displayFolder: Tarjetas\Mina
+		lineageTag: 2180aa4e-2204-4b18-a174-7ae703e4b8ff
+
+	/// Real del destino por el factor de proyección a 24 h.
+	measure 'Rd Destino Proyección' = [Rd Destino Real] * [Rd Factor Proyección]
+		formatString: #,0
+		displayFolder: Tarjetas\Mina
+		lineageTag: 3edd3548-cd5f-405a-aa2f-fff7715086ff
+
+	/// Plan semanal del día para el destino de la fila (chancado, dump, estéril o stock).
+	measure 'Rd Destino Plan' =
+			VAR _d = [Rd Día]
+			VAR _k = SELECTEDVALUE ( 'Dim Destino'[Clave] )
+			RETURN
+			    SWITCH (
+			        _k,
+			        "CHA", CALCULATE ( [PlanSemanal Total Toneladas Chancado], REMOVEFILTERS ( 'Dim Destino' ), Calendario[Fecha] = _d ),
+			        "DL_", CALCULATE ( [PlanSemanal Total Toneladas Dump], REMOVEFILTERS ( 'Dim Destino' ), Calendario[Fecha] = _d ),
+			        "BOT", CALCULATE ( [PlanSemanal Total Toneladas Esteril], REMOVEFILTERS ( 'Dim Destino' ), Calendario[Fecha] = _d ),
+			        "STO", CALCULATE ( [PlanSemanal Total Toneladas Stock Sulfuro], REMOVEFILTERS ( 'Dim Destino' ), Calendario[Fecha] = _d )
+			    )
+		formatString: #,0
+		displayFolder: Tarjetas\Mina
+		lineageTag: 1eda0ed9-48f4-4427-a973-ed68353f1fbe
+
+	/// Toneladas del día de la fase de la fila (0 si no hubo movimiento; vacío en el miembro en blanco).
+	measure 'Rd Fase Real' =
+			VAR _k = SELECTEDVALUE ( 'Dim Fase'[Clave] )
+			VAR _d = [Rd Día]
+			VAR _t = CALCULATE ( SUM ( 'Produccion Mina'[material_tonnage] ), Calendario[Fecha] = _d )
+			RETURN IF ( ISBLANK ( _k ), BLANK (), IF ( ISBLANK ( _t ), 0, _t ) )
+		formatString: #,0
+		displayFolder: Tarjetas\Mina
+		lineageTag: 491b6bc2-3813-4bb4-9d5a-71c8c52953b6
+
+	/// Real de la fase por el factor de proyección a 24 h.
+	measure 'Rd Fase Proyección' = [Rd Fase Real] * [Rd Factor Proyección]
+		formatString: #,0
+		displayFolder: Tarjetas\Mina
+		lineageTag: 03100131-780a-4fde-ae0b-a9d6a383e5a0
+
+	/// Escala común de las barras de fase: el mayor entre plan y proyección de las fases.
+	measure 'Rd Fase Máximo Día' = MAXX ( ALL ( 'Dim Fase' ), MAX ( [Rd Fase Plan], [Rd Fase Proyección] ) )
+		formatString: #,0
+		displayFolder: Tarjetas\Mina
+		lineageTag: 5c781f5d-d7ca-4684-adfe-5c82a134a1b6
+
+	/// Barras bullet por fase: real, proyección y plan del día.
+	measure 'Rd SVG Bullet Fase' =
+			VAR _clave = SELECTEDVALUE ( 'Dim Fase'[Clave] )
+			VAR _W = 226
+			VAR _H = 16
+			VAR _Y = 5
+			VAR _real = [Rd Fase Real]
+			VAR _proy = [Rd Fase Proyección]
+			VAR _plan = [Rd Fase Plan]
+			VAR _hayPlan = NOT ISBLANK ( _plan ) && _plan > 0
+			VAR _color = IF ( NOT _hayPlan, "#4F9DDE", IF ( _proy >= _plan, "#2ECC71", "#E74C3C" ) )
+			VAR _dia = [Rd Día]
+			VAR _totDia = CALCULATE ( [Movimiento PM], REMOVEFILTERS ( 'Dim Fase' ), Calendario[Fecha] = _dia )
+			VAR _part = DIVIDE ( _real, _totDia )
+			VAR _tope = MAX ( [Rd Fase Máximo Día], 1 )
+			VAR _esc = DIVIDE ( _W, _tope )
+			VAR _wPlan = IF ( _hayPlan, ROUND ( _plan * _esc, 0 ), 0 )
+			VAR _wReal = ROUND ( _real * _esc, 0 )
+			VAR _wProy = ROUND ( _proy * _esc, 0 )
+			VAR _svg =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='290' height='26' viewBox='0 0 290 26'>"
+			        & IF ( _wPlan > 0, "<rect x='2' y='" & FORMAT ( _Y, "0" ) & "' width='" & FORMAT ( _wPlan, "0" ) & "' height='" & FORMAT ( _H, "0" ) & "' rx='4' fill='#3F464D' stroke='#4A545E' stroke-width='1'/>" )
+			        & IF ( _wProy > _wReal, "<rect x='" & FORMAT ( _wReal + 2, "0" ) & "' y='" & FORMAT ( _Y + _H / 4, "0" ) & "' width='" & FORMAT ( _wProy - _wReal, "0" ) & "' height='" & FORMAT ( _H / 2, "0" ) & "' rx='" & FORMAT ( _H / 4, "0" ) & "' fill='" & _color & "' fill-opacity='0.55'/>" )
+			        & IF ( _wReal > 0, "<rect x='2' y='" & FORMAT ( _Y, "0" ) & "' width='" & FORMAT ( _wReal, "0" ) & "' height='" & FORMAT ( _H, "0" ) & "' rx='4' fill='" & _color & "'/>",
+			            "<text x='6' y='19' font-family='Segoe UI' font-size='15' fill='#7F8C99'>Sin movimiento</text>" )
+			        & IF ( _wPlan > 0, "<line x1='" & FORMAT ( _wPlan + 2, "0" ) & "' y1='1' x2='" & FORMAT ( _wPlan + 2, "0" ) & "' y2='25' stroke='#E6E6E6' stroke-width='2'/>" )
+			        & IF ( _real > 0, "<text x='288' y='19' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='15' font-weight='600' fill='#9AA5B1'>" & FORMAT ( _part, "0 %" ) & "</text>" )
+			        & "</svg>"
+			RETURN
+			    IF (
+			        ISBLANK ( _clave ),
+			        BLANK (),
+			        "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )
+			    )
+		displayFolder: Tarjetas\Mina
+		lineageTag: 9ed38568-58e2-4bd6-a59d-b820c851ebe9
+		dataCategory: ImageUrl
+
+	/// Tarjeta por destino (chancado, dump leach, botadero, stock): real, proyección y plan.
+	measure 'Rd SVG Tarjeta Destino' =
+			VAR _clave = SELECTEDVALUE ( 'Dim Destino'[Clave] )
+			VAR _real = [Rd Destino Real]
+			VAR _proy = [Rd Destino Proyección]
+			VAR _plan = [Rd Destino Plan]
+			VAR _curso = [Rd Día En Curso]
+			VAR _num = FORMAT ( _real / 1000, "#,0.0" )
+			VAR _uni = "mil"
+			VAR _W = 322
+			VAR _H = 16
+			VAR _Y = 57
+			VAR _tope = MAX ( MAX ( _plan, _proy ), MAX ( _real, 1 ) )
+			VAR _esc = DIVIDE ( _W, _tope )
+			VAR _wPlan = ROUND ( _plan * _esc, 0 )
+			VAR _wReal = ROUND ( _real * _esc, 0 )
+			VAR _wProy = ROUND ( _proy * _esc, 0 )
+			VAR _hayPlan = NOT ISBLANK ( _plan ) && _plan > 0
+			VAR _color = IF ( NOT _hayPlan, "#4F9DDE", IF ( _proy >= _plan, "#2ECC71", "#E74C3C" ) )
+			VAR _vProy = IF ( _curso, FORMAT ( _proy / 1000, "#,0.0" ) & " mil", "—" )
+			VAR _vPlan = IF ( NOT _hayPlan, "Sin plan", FORMAT ( _plan / 1000, "#,0.0" ) & " mil" )
+			VAR _svg =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='326' height='118' viewBox='0 0 326 118'>"
+			        & "<text x='2' y='48' font-family='Segoe UI Semibold, Segoe UI' font-size='46' font-weight='600' fill='#FFFFFF'>" & _num
+			        & "<tspan dx='10' font-family='Segoe UI' font-size='28' font-weight='400' fill='#9AA5B1'>" & _uni & "</tspan></text>"
+			        & IF ( _wPlan > 0, "<rect x='2' y='" & FORMAT ( _Y, "0" ) & "' width='" & FORMAT ( _wPlan, "0" ) & "' height='" & FORMAT ( _H, "0" ) & "' rx='4' fill='#3F464D' stroke='#4A545E' stroke-width='1'/>" )
+			        & IF ( _wProy > _wReal, "<rect x='" & FORMAT ( _wReal + 2, "0" ) & "' y='" & FORMAT ( _Y + _H / 4, "0" ) & "' width='" & FORMAT ( _wProy - _wReal, "0" ) & "' height='" & FORMAT ( _H / 2, "0" ) & "' rx='" & FORMAT ( _H / 4, "0" ) & "' fill='" & _color & "' fill-opacity='0.55'/>" )
+			        & IF ( _wReal > 0, "<rect x='2' y='" & FORMAT ( _Y, "0" ) & "' width='" & FORMAT ( _wReal, "0" ) & "' height='" & FORMAT ( _H, "0" ) & "' rx='4' fill='" & _color & "'/>" )
+			        & IF ( _wPlan > 0, "<line x1='" & FORMAT ( _wPlan + 2, "0" ) & "' y1='" & FORMAT ( _Y - 4, "0" ) & "' x2='" & FORMAT ( _wPlan + 2, "0" ) & "' y2='" & FORMAT ( _Y + _H + 4, "0" ) & "' stroke='#E6E6E6' stroke-width='2'/>" )
+			        & "<text x='2' y='94' font-family='Segoe UI' font-size='15' fill='#7F8C99'>Real día</text>"
+			        & "<text x='2' y='114' font-family='Segoe UI Semibold, Segoe UI' font-size='18' font-weight='600' fill='#E6E6E6'>" & _num & " mil" & "</text>"
+			        & "<text x='163' y='94' text-anchor='middle' font-family='Segoe UI' font-size='15' fill='#7F8C99'>Proy. día</text>"
+			        & "<text x='163' y='114' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='18' font-weight='600' fill='" & IF ( _curso, "#8EC3EE", "#5D6B7A" ) & "'>" & _vProy & "</text>"
+			        & "<text x='324' y='94' text-anchor='end' font-family='Segoe UI' font-size='15' fill='#7F8C99'>Plan día</text>"
+			        & "<text x='324' y='114' text-anchor='end' font-family='Segoe UI Semibold, Segoe UI' font-size='18' font-weight='600' fill='#E6E6E6'>" & _vPlan & "</text>"
+			        & "</svg>"
+			RETURN
+			    IF (
+			        ISBLANK ( _clave ),
+			        BLANK (),
+			        "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )
+			    )
+		displayFolder: Tarjetas\Mina
+		lineageTag: 960dafbc-e193-4044-95c8-4d757848c447
+		dataCategory: ImageUrl
+
+	/// Fecha elegida en el segmentador de fecha; vacío equivale al día en curso.
+	measure 'Rd Fecha Elegida' =
+			IF (
+			    HASONEVALUE ( Calendario[Fecha] )
+			        && SELECTEDVALUE ( Calendario[Día Reporte] ) <> "Día actual",
+			    MAX ( Calendario[Fecha] )
+			)
+		formatString: dd-mm-yyyy
+		displayFolder: Tarjetas\Fecha
+		lineageTag: b592bc87-1e60-4d89-bdfa-cdd21c15f87b
+
+	/// Verdadero en vista en línea (sin fecha elegida o fecha en curso); falso para un día de planta cerrado.
+	measure 'Rd Pl Vivo' =
+			VAR _sel = [Rd Fecha Elegida]
+			RETURN
+			    IF (
+			        ISBLANK ( _sel ),
+			        TRUE (),
+			        VAR _ult = CALCULATE ( [Rd Planta Último TS], REMOVEFILTERS ( Calendario ) )
+			        VAR _dUlt = IF ( NOT ISBLANK ( _ult ), DATE ( YEAR ( _ult ), MONTH ( _ult ), DAY ( _ult ) ) )
+			        RETURN
+			            SWITCH (
+			                TRUE (),
+			                ISBLANK ( _ult ), TRUE (),
+			                _sel >= _dUlt, TRUE (),
+			                _sel < _dUlt - 1, FALSE (),
+			                VAR _hoy = CALCULATE ( [Rd Planta Día], REMOVEFILTERS ( Calendario ) )
+			                RETURN ISBLANK ( _hoy ) || _sel >= _hoy
+			            )
+			    )
+		displayFolder: Tarjetas\Molienda\Día
+		lineageTag: 25e43989-9f9d-4bb7-9f65-e19610399f14
+
+	/// Estado de los 13 equipos on/off de planta, un carácter por equipo: 1 operando, 0 detenido, 2 sin señal.
+	measure 'Rd Pl Estados' =
+			VAR _tags = { ( 1, "EST.CHANC.01" ), ( 2, "EST.ALIM.01" ), ( 3, "EST.ALIM.02" ), ( 4, "EST.ALIM.03" ), ( 5, "EST.ALIM.04" ), ( 6, "EST.ALIM.05" ), ( 7, "EST.ALIM.06" ), ( 8, "EST.SAG.01" ), ( 9, "EST.PEBBLES.01" ), ( 10, "EST.PEBBLES.02" ), ( 11, "EST.PEBBLES.03" ), ( 12, "EST.BOLAS.01" ), ( 13, "EST.BOLAS.02" ) }
+			VAR _vivo = [Rd Pl Vivo]
+			VAR _ini = IF ( NOT _vivo, [Rd Planta Inicio] )
+			VAR _ref = IF ( _vivo, [Rd Planta Último TS], [Rd Planta Fin] )
+			VAR _ult =
+			    CALCULATETABLE (
+			        ADDCOLUMNS ( VALUES ( hist_senales[dim_variable.name] ), "@t", CALCULATE ( MAX ( hist_senales[timestamp] ) ) ),
+			        TREATAS ( SELECTCOLUMNS ( _tags, "@n", [Value2] ), hist_senales[dim_variable.name] ),
+			        hist_senales[dim_variable.tipo_variable] = "OnOff",
+			        NOT ISBLANK ( hist_senales[numeric_value] ),
+			        hist_senales[timestamp] > IF ( _vivo, DATE ( 1900, 1, 1 ), _ini + 0.0001 ),
+			        hist_senales[timestamp] <= IF ( _vivo, DATE ( 2100, 1, 1 ), _ref + 0.0001 )
+			    )
+			VAR _enVivo =
+			    CALCULATETABLE (
+			        ADDCOLUMNS ( VALUES ( hist_onoff_ultima[ultima_fila.dim_variable.name] ), "@e", CALCULATE ( MAX ( hist_onoff_ultima[ultima_fila.estado] ) ) ),
+			        TREATAS ( SELECTCOLUMNS ( _tags, "@n", [Value2] ), hist_onoff_ultima[ultima_fila.dim_variable.name] )
+			    )
+			VAR _alCierre =
+			    CALCULATETABLE (
+			        ADDCOLUMNS ( VALUES ( hist_senales[dim_variable.name] ), "@e", CALCULATE ( MAX ( hist_senales[estado] ) ) ),
+			        TREATAS ( SELECTCOLUMNS ( _ult, "@n", hist_senales[dim_variable.name], "@t", [@t] ), hist_senales[dim_variable.name], hist_senales[timestamp] ),
+			        hist_senales[dim_variable.tipo_variable] = "OnOff",
+			        NOT ISBLANK ( hist_senales[numeric_value] )
+			    )
+			RETURN
+			    CONCATENATEX (
+			        _tags,
+			        VAR _n = [Value2]
+			        VAR _t = MAXX ( FILTER ( _ult, hist_senales[dim_variable.name] = _n ), [@t] )
+			        VAR _e =
+			            IF (
+			                _vivo,
+			                MAXX ( FILTER ( _enVivo, hist_onoff_ultima[ultima_fila.dim_variable.name] = _n ), [@e] ),
+			                MAXX ( FILTER ( _alCierre, hist_senales[dim_variable.name] = _n ), [@e] )
+			            )
+			        RETURN IF ( ISBLANK ( _t ) || _ref - _t > 1 / 24 + 0.0001, "2", IF ( _e = 1, "1", "0" ) ),
+			        "",
+			        [Value1], ASC
+			    )
+		displayFolder: Tarjetas\Molienda\Día
+		lineageTag: c155fa81-b364-4737-90bd-ca663371e2d9
+
+	/// Válvulas abiertas de las 4 baterías de ciclones, como texto v1|v2|v3|v4.
+	measure 'Rd Pl Válvulas' =
+			VAR _tags = { ( 1, "CIC.VALVULAS_ABIERTAS.01" ), ( 2, "CIC.VALVULAS_ABIERTAS.02" ), ( 3, "CIC.VALVULAS_ABIERTAS.03" ), ( 4, "CIC.VALVULAS_ABIERTAS.04" ) }
+			VAR _vivo = [Rd Pl Vivo]
+			VAR _ini = IF ( NOT _vivo, [Rd Planta Inicio] )
+			VAR _fin = IF ( NOT _vivo, [Rd Planta Fin] )
+			VAR _enVivo =
+			    CALCULATETABLE (
+			        ADDCOLUMNS (
+			            VALUES ( hist_contador_ultima[ultima_fila.dim_variable.name] ),
+			            "@v", IFERROR ( VALUE ( CALCULATE ( MAX ( hist_contador_ultima[ultima_fila.numeric_value] ) ) ), BLANK () )
+			        ),
+			        TREATAS ( SELECTCOLUMNS ( _tags, "@n", [Value2] ), hist_contador_ultima[ultima_fila.dim_variable.name] )
+			    )
+			VAR _ult =
+			    CALCULATETABLE (
+			        ADDCOLUMNS ( VALUES ( hist_senales[dim_variable.name] ), "@t", CALCULATE ( MAX ( hist_senales[timestamp] ) ) ),
+			        TREATAS ( SELECTCOLUMNS ( _tags, "@n", [Value2] ), hist_senales[dim_variable.name] ),
+			        hist_senales[dim_variable.tipo_variable] = "Contador",
+			        NOT ISBLANK ( hist_senales[numeric_value] ),
+			        hist_senales[timestamp] > _ini + 0.0001,
+			        hist_senales[timestamp] <= _fin + 0.0001
+			    )
+			VAR _alCierre =
+			    CALCULATETABLE (
+			        ADDCOLUMNS ( VALUES ( hist_senales[dim_variable.name] ), "@v", CALCULATE ( MAX ( hist_senales[numeric_value] ) ) ),
+			        TREATAS ( SELECTCOLUMNS ( _ult, "@n", hist_senales[dim_variable.name], "@t", [@t] ), hist_senales[dim_variable.name], hist_senales[timestamp] ),
+			        hist_senales[dim_variable.tipo_variable] = "Contador",
+			        NOT ISBLANK ( hist_senales[numeric_value] )
+			    )
+			RETURN
+			    CONCATENATEX (
+			        _tags,
+			        VAR _n = [Value2]
+			        RETURN
+			            IF (
+			                _vivo,
+			                MAXX ( FILTER ( _enVivo, hist_contador_ultima[ultima_fila.dim_variable.name] = _n ), [@v] ),
+			                MAXX ( FILTER ( _alCierre, hist_senales[dim_variable.name] = _n ), [@v] )
+			            ) & "",
+			        "|",
+			        [Value1], ASC
+			    )
+		displayFolder: Tarjetas\Molienda\Día
+		lineageTag: 5790c3d5-f9e9-4e20-999b-a5371f13eb59
+
+	/// Meta de nivel del stockpile (%): constante del modelo.
+	measure 'Rd Stockpile Plan Nivel' = 75
+		formatString: 0
+		displayFolder: Tarjetas\Molienda
+		lineageTag: f8e2bf7c-d23d-4f5e-95dc-2700800b36d4
+
+	/// Variación del nivel del stockpile: %/h en línea (medianas de muestras recientes), puntos del día si está cerrado.
+	measure 'Rd Stockpile Tendencia' =
+			VAR _tag = "STOCK.NIVEL.PCT"
+			RETURN
+			    IF (
+			        [Rd Pl Vivo],
+			        VAR _tN = CALCULATE ( MAX ( hist_kpi[timestamp] ), hist_kpi[nombre_tag] = _tag, NOT ISBLANK ( hist_kpi[numeric_value] ) )
+			        VAR _b = CALCULATE ( MEDIAN ( hist_kpi[numeric_value] ), hist_kpi[nombre_tag] = _tag, hist_kpi[timestamp] > _tN - 1.1 / 24, hist_kpi[timestamp] <= _tN + 0.0001 )
+			        VAR _a = CALCULATE ( MEDIAN ( hist_kpi[numeric_value] ), hist_kpi[nombre_tag] = _tag, hist_kpi[timestamp] > _tN - 3.1 / 24, hist_kpi[timestamp] <= _tN - 1.9 / 24 )
+			        RETURN IF ( NOT ISBLANK ( _tN ) && NOT ISBLANK ( _a ) && NOT ISBLANK ( _b ), ( _b - _a ) / 2 ),
+			        VAR _ini = [Rd Planta Inicio]
+			        VAR _t0 = CALCULATE ( MAX ( hist_kpi[timestamp] ), hist_kpi[nombre_tag] = _tag, NOT ISBLANK ( hist_kpi[numeric_value] ), hist_kpi[timestamp] > _ini - 0.5, hist_kpi[timestamp] <= _ini + 0.0001 )
+			        VAR _v0 = CALCULATE ( MAX ( hist_kpi[numeric_value] ), hist_kpi[nombre_tag] = _tag, hist_kpi[timestamp] = _t0 )
+			        VAR _v1 = [Valor_Stockpile]
+			        RETURN IF ( NOT ISBLANK ( _t0 ) && NOT ISBLANK ( _v1 ), _v1 - _v0 )
+			    )
+		formatString: 0.0
+		displayFolder: Tarjetas\Molienda
+		lineageTag: 5184c7dd-20ef-41ac-baf5-f49aebafe2db
+
+	/// Plan de dureza SPI (minutos) del día de planta.
+	measure 'Rd SAG Plan SPI' =
+			VAR _d = [Rd Planta Día]
+			RETURN CALCULATE ( MAX ( planta_plan_spi[Valor] ), planta_plan_spi[Fecha] = _d )
+		formatString: 0
+		displayFolder: Tarjetas\Molienda
+		lineageTag: 43a8b451-68e3-4e0b-aba3-bcf78983ef99
+
+	/// Plan de pebbles (t/h): plan semanal del SAG por la carga circulante objetivo (20 %).
+	measure 'Rd Pebbles Plan TPH' =
+			VAR _ccObjetivo = 0.20
+			VAR _planSAG = [Valor_TPHSAGPMES]
+			RETURN IF ( _planSAG > 0, _planSAG * _ccObjetivo )
+		formatString: #,0
+		displayFolder: Tarjetas\Molienda
+		lineageTag: da7ac04b-2468-46d0-bf6e-a1ab39b692d6
+
+	/// Plan de P80 (µm) del día de planta; vacío si no hay plan.
+	measure 'Rd Ciclones Plan P80' =
+			VAR _d = [Rd Planta Día]
+			RETURN CALCULATE ( MAX ( planta_plan_puntos[Valor] ), planta_plan_puntos[Punto] = "PLANTA.P80.PLAN", planta_plan_puntos[Fecha] = _d )
+		formatString: 0
+		displayFolder: Tarjetas\Molienda
+		lineageTag: ce857c3e-9be4-4f32-ba01-c28dc5409b08
+
+	/// Disponibilidad física del día de planta, promedio de las 4 baterías de hidrociclones.
+	measure 'Rd Ciclones DF Día' =
+			VAR _d = [Rd Planta Día]
+			RETURN CALCULATE ( AVERAGE ( equipos_ciclones[Valor] ), equipos_ciclones[Medicion] = "DF", equipos_ciclones[Fecha] = _d )
+		formatString: 0.0
+		displayFolder: Tarjetas\Molienda
+		lineageTag: 77683710-cb42-403e-8409-7e742a782371
+
+	/// Utilización efectiva del día de planta, promedio de las 4 baterías de hidrociclones.
+	measure 'Rd Ciclones UE Día' =
+			VAR _d = [Rd Planta Día]
+			RETURN CALCULATE ( AVERAGE ( equipos_ciclones[Valor] ), equipos_ciclones[Medicion] = "UE", equipos_ciclones[Fecha] = _d )
+		formatString: 0.0
+		displayFolder: Tarjetas\Molienda
+		lineageTag: c0f3c010-f879-425a-917e-01dfd3f33d3b
+
+	/// Recuadro de encabezado con la hora de la última actualización del modelo.
+	measure 'Rd SVG Última Actualización' =
+			VAR _t = MAX ( 'Rd Actualizacion'[Actualizado] )
+			VAR _ahora = NOW ()
+			VAR _viejo = NOT ISBLANK ( _t ) && INT ( _t ) < INT ( _ahora )
+			VAR _txt = IF ( ISBLANK ( _t ), "sin actualizar", IF ( _viejo, FORMAT ( _t, "dd-mm-yyyy" ) & " · ", "" ) & FORMAT ( _t, "hh:nn" ) )
+			VAR _svg =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='240' height='44' viewBox='0 0 240 44'>"
+			        & "<text x='120' y='15' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='12' font-weight='700' fill='#9AA5B1' letter-spacing='0.5'>ÚLTIMA ACTUALIZACIÓN</text>"
+			        & "<text x='120' y='38' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='20' font-weight='700' fill='#FFFFFF'>" & _txt & "</text>"
+			        & "</svg>"
+			RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )
+		displayFolder: Tarjetas\Encabezado
+		lineageTag: df384693-8d87-47bf-9d73-0903d45d6578
+		dataCategory: ImageUrl
+
+	/// Fragmento SVG con la tabla real y plan bajo la cascada de la flota CAEX.
+	measure 'Rd Frag Tabla CAEX' =
+			VAR _d = [Rd Día]
+			VAR _hEq = CALCULATE ( MAXX ( VALUES ( 'Horas Palas Turno'[equipment] ), CALCULATE ( SUM ( 'Horas Palas Turno'[Nominal] ) ) ), Calendario[Fecha] = _d )
+			VAR _f = IF ( [Rd Horas Transcurridas] < 24 && _hEq > 0, MIN ( 1, _hEq / 24 ), 1 )
+			VAR _ok = CALCULATE ( [PlanSemanal - Horas Nominales CAEX] >= 24 && [PlanSemanal - Disponibilidad CAEX] <= 1 && [PlanSemanal - UEBD CAEX] <= 1, Calendario[Fecha] = _d )
+			VAR _df = CALCULATE ( [Disponibilidad CAEX], Calendario[Fecha] = _d )
+			VAR _dfp = IF ( _ok, CALCULATE ( [PlanSemanal - Disponibilidad CAEX], Calendario[Fecha] = _d ) )
+			VAR _ue = CALCULATE ( [UEBD CAEX], Calendario[Fecha] = _d )
+			VAR _uep = IF ( _ok, CALCULATE ( [PlanSemanal - UEBD CAEX], Calendario[Fecha] = _d ) )
+			VAR _re = CALCULATE ( [TPH efectivo CAEX REV], Calendario[Fecha] = _d )
+			VAR _rep = IF ( _ok, CALCULATE ( [PlanSemanal - Rendimiento CAEX], Calendario[Fecha] = _d ) )
+			VAR _hn = CALCULATE ( [Hr nominales], Calendario[Fecha] = _d )
+			VAR _hnp = IF ( _ok, _f * CALCULATE ( [PlanSemanal - Horas Nominales CAEX], Calendario[Fecha] = _d ) )
+			VAR _t = CALCULATE ( [Movimiento PM], Calendario[Fecha] = _d )
+			VAR _tp = _f * CALCULATE ( [PlanSemanal - movimiento calculado CAEX], Calendario[Fecha] = _d )
+			RETURN
+			    "<line x1='0' y1='0' x2='512' y2='0' stroke='#2E3844' stroke-width='1'/>"
+			        & "<text x='43' y='28' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='600' fill='#9AA5B1'>Real</text>"
+			        & "<text x='128' y='28' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='17' font-weight='600' fill='" & IF ( ISBLANK ( _df ) || ISBLANK ( _dfp ), "#E6E6E6", IF ( ROUND ( _df, 3 ) >= ROUND ( _dfp, 3 ), "#2ECC71", IF ( _df >= 0.9 * _dfp, "#F1C40F", "#E74C3C" ) ) ) & "'>" & IF ( ISBLANK ( _df ), "—", FORMAT ( _df, "0.0 %" ) ) & "</text>"
+			        & "<text x='213' y='28' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='17' font-weight='600' fill='" & IF ( ISBLANK ( _ue ) || ISBLANK ( _uep ), "#E6E6E6", IF ( ROUND ( _ue, 3 ) >= ROUND ( _uep, 3 ), "#2ECC71", IF ( _ue >= 0.9 * _uep, "#F1C40F", "#E74C3C" ) ) ) & "'>" & IF ( ISBLANK ( _ue ), "—", FORMAT ( _ue, "0.0 %" ) ) & "</text>"
+			        & "<text x='299' y='28' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='17' font-weight='600' fill='" & IF ( ISBLANK ( _re ) || ISBLANK ( _rep ), "#E6E6E6", IF ( ROUND ( _re, 1 ) >= ROUND ( _rep, 0 ), "#2ECC71", IF ( _re >= 0.9 * _rep, "#F1C40F", "#E74C3C" ) ) ) & "'>" & IF ( ISBLANK ( _re ), "—", FORMAT ( _re, "#,0.0" ) & "<tspan font-size='12' fill='#7F8C99'> t/h</tspan>" ) & "</text>"
+			        & "<text x='384' y='28' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='17' font-weight='600' fill='" & IF ( ISBLANK ( _hn ) || ISBLANK ( _hnp ), "#E6E6E6", IF ( ROUND ( _hn, 0 ) >= ROUND ( _hnp, 0 ), "#2ECC71", IF ( _hn >= 0.9 * _hnp, "#F1C40F", "#E74C3C" ) ) ) & "'>" & IF ( ISBLANK ( _hn ), "—", FORMAT ( _hn, "#,0" ) & "<tspan font-size='12' fill='#7F8C99'> h</tspan>" ) & "</text>"
+			        & "<text x='469' y='28' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='17' font-weight='600' fill='" & IF ( ISBLANK ( _t ) || ISBLANK ( _tp ), "#E6E6E6", IF ( ROUND ( _t, 0 ) >= ROUND ( _tp, 0 ), "#2ECC71", IF ( _t >= 0.9 * _tp, "#F1C40F", "#E74C3C" ) ) ) & "'>" & IF ( ISBLANK ( _t ), "—", FORMAT ( _t, "#,0" ) & "<tspan font-size='12' fill='#7F8C99'> t</tspan>" ) & "</text>"
+			        & "<line x1='0' y1='42' x2='512' y2='42' stroke='#2E3844' stroke-width='1'/>"
+			        & "<text x='43' y='68' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='600' fill='#9AA5B1'>Plan</text>"
+			        & "<text x='128' y='68' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='16' font-weight='600' fill='" & "#9AA5B1" & "'>" & IF ( ISBLANK ( _dfp ), "—", FORMAT ( _dfp, "0.0 %" ) ) & "</text>"
+			        & "<text x='213' y='68' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='16' font-weight='600' fill='" & "#9AA5B1" & "'>" & IF ( ISBLANK ( _uep ), "—", FORMAT ( _uep, "0.0 %" ) ) & "</text>"
+			        & "<text x='299' y='68' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='16' font-weight='600' fill='" & "#9AA5B1" & "'>" & IF ( ISBLANK ( _rep ), "—", FORMAT ( _rep, "#,0" ) & "<tspan font-size='12' fill='#7F8C99'> t/h</tspan>" ) & "</text>"
+			        & "<text x='384' y='68' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='16' font-weight='600' fill='" & "#9AA5B1" & "'>" & IF ( ISBLANK ( _hnp ), "—", FORMAT ( _hnp, "#,0" ) & "<tspan font-size='12' fill='#7F8C99'> h</tspan>" ) & "</text>"
+			        & "<text x='469' y='68' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='16' font-weight='600' fill='" & "#9AA5B1" & "'>" & IF ( ISBLANK ( _tp ), "—", FORMAT ( _tp, "#,0" ) & "<tspan font-size='12' fill='#7F8C99'> t</tspan>" ) & "</text>"
+		displayFolder: Tarjetas\Mina
+		lineageTag: 272d3ac3-a7eb-4372-bcd8-681ce1c7851d
+
+	/// Fragmento SVG con la tabla real y plan bajo la cascada de la flota de carguío.
+	measure 'Rd Frag Tabla Carguío' =
+			VAR _d = [Rd Día]
+			VAR _hEq = CALCULATE ( MAXX ( VALUES ( 'Horas Palas Turno'[equipment] ), CALCULATE ( SUM ( 'Horas Palas Turno'[Nominal] ) ) ), Calendario[Fecha] = _d )
+			VAR _f = IF ( [Rd Horas Transcurridas] < 24 && _hEq > 0, MIN ( 1, _hEq / 24 ), 1 )
+			VAR _ok = CALCULATE ( [PlanSemanal - Horas Nominales PALAS] >= 24 && [PlanSemanal - Disponibilidad PALAS] <= 1 && [PlanSemanal - UEBD PALAS] <= 1, Calendario[Fecha] = _d )
+			VAR _df = CALCULATE ( [Disponibilidad Palas turno], Calendario[Fecha] = _d )
+			VAR _dfp = IF ( _ok, CALCULATE ( [PlanSemanal - Disponibilidad PALAS], Calendario[Fecha] = _d ) )
+			VAR _ue = CALCULATE ( [UEBD Palas turno], Calendario[Fecha] = _d )
+			VAR _uep = IF ( _ok, CALCULATE ( [PlanSemanal - UEBD PALAS], Calendario[Fecha] = _d ) )
+			VAR _re = CALCULATE ( [TPH efectivo Palas Por Turno Palas], Calendario[Fecha] = _d )
+			VAR _rep = IF ( _ok, CALCULATE ( [PlanSemanal - Rendimiento Palas], Calendario[Fecha] = _d ) )
+			VAR _hn = CALCULATE ( SUM ( 'Horas Palas Turno'[Nominal] ), Calendario[Fecha] = _d )
+			VAR _hnp = IF ( _ok, _f * CALCULATE ( [PlanSemanal - Horas Nominales PALAS], Calendario[Fecha] = _d ) )
+			VAR _t = CALCULATE ( [Movimiento Palas], Calendario[Fecha] = _d )
+			VAR _tp = _f * CALCULATE ( [PlanSemanal - movimiento calculado CAEX], Calendario[Fecha] = _d )
+			RETURN
+			    "<line x1='0' y1='0' x2='512' y2='0' stroke='#2E3844' stroke-width='1'/>"
+			        & "<text x='43' y='28' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='600' fill='#9AA5B1'>Real</text>"
+			        & "<text x='128' y='28' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='17' font-weight='600' fill='" & IF ( ISBLANK ( _df ) || ISBLANK ( _dfp ), "#E6E6E6", IF ( ROUND ( _df, 3 ) >= ROUND ( _dfp, 3 ), "#2ECC71", IF ( _df >= 0.9 * _dfp, "#F1C40F", "#E74C3C" ) ) ) & "'>" & IF ( ISBLANK ( _df ), "—", FORMAT ( _df, "0.0 %" ) ) & "</text>"
+			        & "<text x='213' y='28' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='17' font-weight='600' fill='" & IF ( ISBLANK ( _ue ) || ISBLANK ( _uep ), "#E6E6E6", IF ( ROUND ( _ue, 3 ) >= ROUND ( _uep, 3 ), "#2ECC71", IF ( _ue >= 0.9 * _uep, "#F1C40F", "#E74C3C" ) ) ) & "'>" & IF ( ISBLANK ( _ue ), "—", FORMAT ( _ue, "0.0 %" ) ) & "</text>"
+			        & "<text x='299' y='28' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='17' font-weight='600' fill='" & IF ( ISBLANK ( _re ) || ISBLANK ( _rep ), "#E6E6E6", IF ( ROUND ( _re, 1 ) >= ROUND ( _rep, 0 ), "#2ECC71", IF ( _re >= 0.9 * _rep, "#F1C40F", "#E74C3C" ) ) ) & "'>" & IF ( ISBLANK ( _re ), "—", FORMAT ( _re, "#,0.0" ) & "<tspan font-size='12' fill='#7F8C99'> t/h</tspan>" ) & "</text>"
+			        & "<text x='384' y='28' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='17' font-weight='600' fill='" & IF ( ISBLANK ( _hn ) || ISBLANK ( _hnp ), "#E6E6E6", IF ( ROUND ( _hn, 0 ) >= ROUND ( _hnp, 0 ), "#2ECC71", IF ( _hn >= 0.9 * _hnp, "#F1C40F", "#E74C3C" ) ) ) & "'>" & IF ( ISBLANK ( _hn ), "—", FORMAT ( _hn, "#,0" ) & "<tspan font-size='12' fill='#7F8C99'> h</tspan>" ) & "</text>"
+			        & "<text x='469' y='28' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='17' font-weight='600' fill='" & IF ( ISBLANK ( _t ) || ISBLANK ( _tp ), "#E6E6E6", IF ( ROUND ( _t, 0 ) >= ROUND ( _tp, 0 ), "#2ECC71", IF ( _t >= 0.9 * _tp, "#F1C40F", "#E74C3C" ) ) ) & "'>" & IF ( ISBLANK ( _t ), "—", FORMAT ( _t, "#,0" ) & "<tspan font-size='12' fill='#7F8C99'> t</tspan>" ) & "</text>"
+			        & "<line x1='0' y1='42' x2='512' y2='42' stroke='#2E3844' stroke-width='1'/>"
+			        & "<text x='43' y='68' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='14' font-weight='600' fill='#9AA5B1'>Plan</text>"
+			        & "<text x='128' y='68' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='16' font-weight='600' fill='" & "#9AA5B1" & "'>" & IF ( ISBLANK ( _dfp ), "—", FORMAT ( _dfp, "0.0 %" ) ) & "</text>"
+			        & "<text x='213' y='68' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='16' font-weight='600' fill='" & "#9AA5B1" & "'>" & IF ( ISBLANK ( _uep ), "—", FORMAT ( _uep, "0.0 %" ) ) & "</text>"
+			        & "<text x='299' y='68' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='16' font-weight='600' fill='" & "#9AA5B1" & "'>" & IF ( ISBLANK ( _rep ), "—", FORMAT ( _rep, "#,0" ) & "<tspan font-size='12' fill='#7F8C99'> t/h</tspan>" ) & "</text>"
+			        & "<text x='384' y='68' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='16' font-weight='600' fill='" & "#9AA5B1" & "'>" & IF ( ISBLANK ( _hnp ), "—", FORMAT ( _hnp, "#,0" ) & "<tspan font-size='12' fill='#7F8C99'> h</tspan>" ) & "</text>"
+			        & "<text x='469' y='68' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='16' font-weight='600' fill='" & "#9AA5B1" & "'>" & IF ( ISBLANK ( _tp ), "—", FORMAT ( _tp, "#,0" ) & "<tspan font-size='12' fill='#7F8C99'> t</tspan>" ) & "</text>"
+		displayFolder: Tarjetas\Mina
+		lineageTag: d393f654-5774-4005-935d-040f170689ca
+
+	/// Consumo específico del SAG del día de planta: kWh por tonelada alimentada (muestras con SAG cargado).
+	measure 'Rd SAG kWh t' =
+			VAR _ini = [Rd Planta Inicio]
+			VAR _fin = [Rd Planta Fin]
+			VAR _dz = ROUND ( ( 7 / 24 - MOD ( _ini, 1 ) ) * 24, 0 ) / 24
+			VAR _p =
+			    CALCULATETABLE (
+			        ADDCOLUMNS ( VALUES ( hist_potencia[timestamp] ), "@kw", CALCULATE ( MAX ( hist_potencia[numeric_value] ) ) ),
+			        hist_potencia[nombre_tag] = "SAG.MOTOR.KW",
+			        NOT ISBLANK ( hist_potencia[numeric_value] ),
+			        hist_potencia[timestamp] > _ini + _dz + 0.0001,
+			        hist_potencia[timestamp] <= _fin + _dz + 0.0001
+			    )
+			VAR _w =
+			    CALCULATETABLE (
+			        ADDCOLUMNS ( VALUES ( hist_kpi[timestamp] ), "@tphw", CALCULATE ( MAX ( hist_kpi[numeric_value] ) ) ),
+			        hist_kpi[nombre_tag] = "SAG.ALIM.TPH",
+			        hist_kpi[timestamp] > _ini - 0.006,
+			        hist_kpi[timestamp] < _fin + 0.006,
+			        REMOVEFILTERS ( hist_potencia )
+			    )
+			VAR _x =
+			    ADDCOLUMNS (
+			        _p,
+			        "@tph",
+			            VAR _t = hist_potencia[timestamp] - _dz
+			            RETURN MAXX ( FILTER ( _w, hist_kpi[timestamp] > _t - 0.005 && hist_kpi[timestamp] < _t + 0.005 ), [@tphw] )
+			    )
+			VAR _f = FILTER ( _x, [@tph] > 100 && [@kw] > 0 )
+			RETURN IF ( NOT ISBLANK ( _ini ), DIVIDE ( SUMX ( _f, [@kw] ), SUMX ( _f, [@tph] ) ) )
+		formatString: 0.00
+		displayFolder: Tarjetas\Molienda
+		lineageTag: 8389f348-3dc9-41cf-abf7-d927712cb444
+
+	/// Leyenda de la ventana del día de mina (08:00 a 08:00).
+	measure 'Rd Ventana Mina' =
+			VAR _d = [Rd Día]
+			RETURN
+			    IF (
+			        ISBLANK ( _d ),
+			        "08:00 → 08:00 h",
+			        FORMAT ( _d, "dd-mm" ) & " 08:00 → " & FORMAT ( _d + 1, "dd-mm" ) & " 08:00 h"
+			    )
+		displayFolder: Tarjetas\Fecha
+		lineageTag: 82c2fd5c-c29e-490c-905f-fa363f33da61
+
+	/// Leyenda de la ventana del día de planta (07:00 a 07:00).
+	measure 'Rd Ventana Planta' =
+			VAR _d = [Rd Planta Día]
+			RETURN
+			    IF (
+			        ISBLANK ( _d ),
+			        "07:00 → 07:00 h",
+			        FORMAT ( _d, "dd-mm" ) & " 07:00 → " & FORMAT ( _d + 1, "dd-mm" ) & " 07:00 h"
+			    )
+		displayFolder: Tarjetas\Fecha
+		lineageTag: cf468850-3b2d-4a93-a516-d567af0a37bb
+
+	/// Plan del día de la fase en contexto de fila de la dimensión de fases.
+	measure 'Rd Fase Plan' =
+			VAR _k = SELECTEDVALUE ( 'Dim Fase'[Clave] )
+			VAR _d = [Rd Día]
+			RETURN
+			    IF (
+			        NOT ISBLANK ( _k ),
+			        CALCULATE ( SUM ( planta_plan_fase[Toneladas] ), planta_plan_fase[Clave] = _k, planta_plan_fase[Fecha] = _d )
+			    )
+		formatString: #,0
+		displayFolder: Tarjetas\Mina
+		lineageTag: 9afeebe0-a482-4366-8a6d-77bff2dbe0fe
+
+	column Column
+		formatString: 0
+		lineageTag: 21427264-0255-45af-bd4f-8823de1e06f2
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dax_kpi_tabla = calculated
+		mode: import
+		source = Row("Column", BLANK())

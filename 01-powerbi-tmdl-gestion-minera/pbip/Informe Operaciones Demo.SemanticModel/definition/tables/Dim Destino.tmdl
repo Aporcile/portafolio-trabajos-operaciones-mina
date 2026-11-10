@@ -1,0 +1,47 @@
+table 'Dim Destino'
+	lineageTag: 8a0bd60c-714b-43f3-828b-4414ca3a26d0
+
+	column Destino
+		lineageTag: 7aefcaa7-74b5-4de8-bd84-ef9d88c64cd8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Destino]
+		sortByColumn: Orden
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Clave
+		isHidden
+		lineageTag: 80ec82f4-c804-4834-8100-8d116b116f12
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Clave]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Orden
+		isHidden
+		formatString: 0
+		lineageTag: 1a7ecfaf-8bd1-49f3-90c2-90b1ac46fcc7
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Orden]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Dim Destino' = calculated
+		mode: import
+		source =
+				DATATABLE (
+				    "Destino", STRING,
+				    "Clave", STRING,
+				    "Orden", INTEGER,
+				    {
+				        { "Chancado", "CHA", 1 },
+				        { "Dump Leach", "DL_", 2 },
+				        { "Botadero", "BOT", 3 },
+				        { "Stock", "STO", 4 }
+				    }
+				)

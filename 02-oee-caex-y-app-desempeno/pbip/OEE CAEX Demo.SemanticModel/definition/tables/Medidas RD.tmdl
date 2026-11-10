@@ -1,0 +1,886 @@
+/// Medidas del OEE de transporte (CAEX) y de su detalle. La tabla solo aloja medidas. Generada por pbip/generador/gen_pbi_oee.py.
+table 'Medidas RD'
+	lineageTag: b60bc96f-b539-5798-9cb7-26e911076a50
+
+	/// Último día del periodo elegido.
+	measure 'Fin periodo' = SWITCH([Periodo elegido], "JUE-DOM", [Fin JD], "MENSUAL", [Fin mes], [Último día])
+		formatString: dd-mm-yyyy
+		displayFolder: Periodo
+		lineageTag: 873c1346-056d-536e-b5bc-e1fd40568876
+
+	/// Lunes de la semana de ayer: de lunes a ayer (el lunes de la reunión, la semana completa hasta el domingo).
+	measure 'Inicio semana' =
+			VAR f = [Último día]
+			RETURN IF(ISBLANK(f), BLANK(), f - MOD(WEEKDAY(f, 2) - 1, 7))
+		formatString: dd-mm-yyyy
+		displayFolder: Periodo
+		lineageTag: e03d3958-cd20-50d4-a9a8-65b82d38228a
+
+	/// Jueves del último jueves a domingo hasta ayer (de lunes a miércoles, el que ya cerró).
+	measure 'Inicio JD' =
+			VAR f = [Último día]
+			RETURN IF(ISBLANK(f), BLANK(), f - MOD(WEEKDAY(f, 2) - 4, 7))
+		formatString: dd-mm-yyyy
+		displayFolder: Periodo
+		lineageTag: 8a2ae5ed-f156-5bd6-bfd8-a845b9889dcb
+
+	/// Día 1 del mes de ayer (mes a la fecha) o, el primer lunes del mes, día 1 del mes anterior.
+	measure 'Inicio mes' =
+			VAR h = [Hoy datos]
+			VAR f = [Último día]
+			RETURN IF(ISBLANK(f), BLANK(),
+			    IF([Mes anterior], DATE(YEAR(EOMONTH(h, -1)), MONTH(EOMONTH(h, -1)), 1), DATE(YEAR(f), MONTH(f), 1)))
+		formatString: dd-mm-yyyy
+		displayFolder: Periodo
+		lineageTag: 3f78dc85-7335-575f-8ec5-5549edd68f53
+
+	measure 'Periodo elegido' = SELECTEDVALUE('Periodo RD'[Periodo], "SEMANAL")
+		displayFolder: Periodo
+		lineageTag: e3b6f64c-8b58-5cca-8563-e66b56fd268b
+
+	measure 'Inicio periodo' = SWITCH([Periodo elegido], "JUE-DOM", [Inicio JD], "MENSUAL", [Inicio mes], [Inicio semana])
+		formatString: dd-mm-yyyy
+		displayFolder: Periodo
+		lineageTag: 9d97171c-e384-5897-8cbd-eee2436e087c
+
+	measure 'Texto periodo' =
+			VAR i = [Inicio periodo]
+			VAR f = [Fin periodo]
+			RETURN
+			    IF(ISBLANK(i), BLANK(),
+			        SUBSTITUTE(FORMAT(i, "ddd dd"), ".", "") & " a " & SUBSTITUTE(FORMAT(f, "ddd dd-mm"), ".", ""))
+		displayFolder: Periodo
+		lineageTag: a2e53efa-4c38-5c06-ac2b-04ee73f25d91
+
+	/// Con algún día sin plan semanal, JUE-DOM y SEMANAL dicen cuántos («sin plan en 4 de 7 días») en vez de «contra el plan …».
+	measure 'Texto plan' =
+			VAR n = [Días sin plan semanal]
+			RETURN
+			    IF([Periodo elegido] <> "MENSUAL" && n > 0,
+			        "sin plan en " & n & " de " & [Días periodo] & IF([Días periodo] = 1, " día", " días"),
+			        SWITCH([Periodo elegido],
+			            "JUE-DOM", "contra el plan diario",
+			            "MENSUAL", "contra el plan mensual",
+			            "contra el plan semanal"))
+		displayFolder: Periodo
+		lineageTag: bf39b913-0d4f-5051-8568-ad26e1a624a6
+
+	measure 'Texto encabezado' =
+			VAR t = [Texto periodo]
+			RETURN IF(ISBLANK(t), "Sin datos", t & " · " & [Texto plan])
+		displayFolder: Periodo
+		lineageTag: ceadd077-70c5-5648-b900-9b59842bed38
+
+	/// Hora de los datos cargados (su última actualización).
+	measure 'Texto copia' =
+			VAR m = MAX(Dim_Actualizacion[Marca])
+			RETURN IF(ISBLANK(m), BLANK(), "Datos al " & SUBSTITUTE(FORMAT(m, "ddd dd-mm hh:mm"), ".", ""))
+		displayFolder: Periodo
+		lineageTag: 8e34168a-7753-5c86-9afb-7165f3f1e7aa
+
+	/// Días del periodo elegido en el contexto (uno por día en los gráficos por día).
+	measure 'Días periodo' = CALCULATE(COUNTROWS(Dim_Tiempo), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], [Inicio periodo], [Fin periodo])))
+		formatString: 0
+		displayFolder: Periodo
+		lineageTag: fb00b98e-a490-56a0-a3bb-5596ecf38940
+
+	/// Suma de Fact_HorasEquipo[Horas Nominales] de los CAEX (Truck) en el periodo elegido.
+	measure 'HN real' =
+			VAR i = [Inicio periodo]
+			VAR f = [Fin periodo]
+			RETURN CALCULATE(SUM(Fact_HorasEquipo[Horas Nominales]), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], i, f)))
+		formatString: #,0
+		displayFolder: OEE\Real
+		lineageTag: 9147e383-6df2-5e8d-9383-e5f367c87e3e
+
+	/// Suma de Fact_HorasEquipo[Horas Disponibles] de los CAEX (Truck) en el periodo elegido.
+	measure 'HD real' =
+			VAR i = [Inicio periodo]
+			VAR f = [Fin periodo]
+			RETURN CALCULATE(SUM(Fact_HorasEquipo[Horas Disponibles]), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], i, f)))
+		formatString: #,0
+		displayFolder: OEE\Real
+		lineageTag: eed863fc-ecec-55d4-b4d4-d04303a5aa70
+
+	/// Suma de Fact_HorasEquipo[Horas Efectivas] de los CAEX (Truck) en el periodo elegido.
+	measure 'HE real' =
+			VAR i = [Inicio periodo]
+			VAR f = [Fin periodo]
+			RETURN CALCULATE(SUM(Fact_HorasEquipo[Horas Efectivas]), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], i, f)))
+		formatString: #,0
+		displayFolder: OEE\Real
+		lineageTag: 99ed9597-9008-5599-a1c9-928e2dc5161f
+
+	/// Suma de Fact_HorasEquipo[Movimiento Total] de los CAEX (Truck) en el periodo elegido.
+	measure 'Movimiento real' =
+			VAR i = [Inicio periodo]
+			VAR f = [Fin periodo]
+			RETURN CALCULATE(SUM(Fact_HorasEquipo[Movimiento Total]), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], i, f)))
+		formatString: #,0
+		displayFolder: OEE\Real
+		lineageTag: 23f6ceba-a5bb-5a1a-8bde-e4eac69306a5
+
+	/// Disponibilidad física: horas disponibles / nominales.
+	measure 'DF real' = DIVIDE([HD real], [HN real])
+		formatString: 0.0%
+		displayFolder: OEE\Real
+		lineageTag: 38fd7974-99cf-56df-8d14-4b20ef836e2d
+
+	/// Utilización efectiva: horas efectivas / disponibles.
+	measure 'UEBD real' = DIVIDE([HE real], [HD real])
+		formatString: 0.0%
+		displayFolder: OEE\Real
+		lineageTag: e2655e3f-2127-5c8f-a50d-f5ca27b2af92
+
+	/// Rendimiento efectivo: movimiento total / horas efectivas (t/h).
+	measure 'Rendimiento real' = DIVIDE([Movimiento real], [HE real])
+		formatString: #,0
+		displayFolder: OEE\Real
+		lineageTag: 0c218276-f33b-580a-b730-2fab74be23d9
+
+	/// SEMANAL y JUE-DOM: Plan_CAEX[Horas Nominales Plan] (plan semanal, día a día), en blanco si a algún día del periodo le falta el plan. MENSUAL: «Horas Nominales CAEX» del plan mensual (Planes_Mina), día a día hasta el domingo de cierre.
+	measure 'HN plan' =
+			VAR i = [Inicio periodo]
+			VAR f = [Fin periodo]
+			RETURN
+			    IF([Periodo elegido] = "MENSUAL",
+			        VAR fechas = CALCULATETABLE(VALUES(Dim_Tiempo[Fecha]), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], i, f)))
+			        RETURN CALCULATE(SUM(Planes_Mina[value]), Planes_Mina[plan_type] = "Mensual", Planes_Mina[property_name] = "Horas Nominales CAEX",
+			            TREATAS(fechas, Planes_Mina[start_date])),
+			        IF([Días sin plan semanal] = 0,
+			            CALCULATE(SUM(Plan_CAEX[Horas Nominales Plan]), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], i, f))))
+			    )
+		formatString: #,0
+		displayFolder: OEE\Plan
+		lineageTag: eda94310-9fbb-5db0-aea4-ecf56439e387
+
+	/// SEMANAL y JUE-DOM: Plan_CAEX[Horas Disponibles Plan] (plan semanal, día a día), en blanco si a algún día del periodo le falta el plan. MENSUAL: «Horas Disponibles CAEX» del plan mensual (Planes_Mina), día a día hasta el domingo de cierre.
+	measure 'HD plan' =
+			VAR i = [Inicio periodo]
+			VAR f = [Fin periodo]
+			RETURN
+			    IF([Periodo elegido] = "MENSUAL",
+			        VAR fechas = CALCULATETABLE(VALUES(Dim_Tiempo[Fecha]), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], i, f)))
+			        RETURN CALCULATE(SUM(Planes_Mina[value]), Planes_Mina[plan_type] = "Mensual", Planes_Mina[property_name] = "Horas Disponibles CAEX",
+			            TREATAS(fechas, Planes_Mina[start_date])),
+			        IF([Días sin plan semanal] = 0,
+			            CALCULATE(SUM(Plan_CAEX[Horas Disponibles Plan]), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], i, f))))
+			    )
+		formatString: #,0
+		displayFolder: OEE\Plan
+		lineageTag: a4fdb521-e2b2-5c05-9e26-76a947a9d98b
+
+	/// SEMANAL y JUE-DOM: Plan_CAEX[Horas Efectivas Plan] (plan semanal, día a día), en blanco si a algún día del periodo le falta el plan. MENSUAL: «Horas Efectivas CAEX» del plan mensual (Planes_Mina), día a día hasta el domingo de cierre.
+	measure 'HE plan' =
+			VAR i = [Inicio periodo]
+			VAR f = [Fin periodo]
+			RETURN
+			    IF([Periodo elegido] = "MENSUAL",
+			        VAR fechas = CALCULATETABLE(VALUES(Dim_Tiempo[Fecha]), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], i, f)))
+			        RETURN CALCULATE(SUM(Planes_Mina[value]), Planes_Mina[plan_type] = "Mensual", Planes_Mina[property_name] = "Horas Efectivas CAEX",
+			            TREATAS(fechas, Planes_Mina[start_date])),
+			        IF([Días sin plan semanal] = 0,
+			            CALCULATE(SUM(Plan_CAEX[Horas Efectivas Plan]), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], i, f))))
+			    )
+		formatString: #,0
+		displayFolder: OEE\Plan
+		lineageTag: 97e10e92-4f0e-59bf-bc59-9edca5415222
+
+	/// SEMANAL y JUE-DOM: Plan_CAEX[Toneladas Plan] (plan semanal, día a día), en blanco si a algún día del periodo le falta el plan. MENSUAL: «Total Toneladas CAEX» del plan mensual (Planes_Mina), día a día hasta el domingo de cierre.
+	measure 'Toneladas plan' =
+			VAR i = [Inicio periodo]
+			VAR f = [Fin periodo]
+			RETURN
+			    IF([Periodo elegido] = "MENSUAL",
+			        VAR fechas = CALCULATETABLE(VALUES(Dim_Tiempo[Fecha]), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], i, f)))
+			        RETURN CALCULATE(SUM(Planes_Mina[value]), Planes_Mina[plan_type] = "Mensual", Planes_Mina[property_name] = "Total Toneladas CAEX",
+			            TREATAS(fechas, Planes_Mina[start_date])),
+			        IF([Días sin plan semanal] = 0,
+			            CALCULATE(SUM(Plan_CAEX[Toneladas Plan]), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], i, f))))
+			    )
+		formatString: #,0
+		displayFolder: OEE\Plan
+		lineageTag: 34cca54e-64e4-5b92-9460-5d0189f2178e
+
+	measure 'DF plan' = DIVIDE([HD plan], [HN plan])
+		formatString: 0.0%
+		displayFolder: OEE\Plan
+		lineageTag: 9a2bcefd-2040-5c59-a40a-46e13131aecb
+
+	measure 'UEBD plan' = DIVIDE([HE plan], [HD plan])
+		formatString: 0.0%
+		displayFolder: OEE\Plan
+		lineageTag: 95b08f81-7b2a-5a2e-a6e5-953fe5b89400
+
+	measure 'Rendimiento plan' = DIVIDE([Toneladas plan], [HE plan])
+		formatString: #,0
+		displayFolder: OEE\Plan
+		lineageTag: 85121a89-6196-51e5-80b1-872ee06e95a4
+
+	/// Días del periodo elegido (en el contexto) sin plan semanal en Plan_CAEX: sin fila o con las toneladas o las horas nominales en blanco. Con algún día sin plan, JUE-DOM y SEMANAL quedan sin plan en vez de comparar un plan a medias con el real completo.
+	measure 'Días sin plan semanal' =
+			VAR i = [Inicio periodo]
+			VAR f = [Fin periodo]
+			VAR conPlan = CALCULATE(DISTINCTCOUNT(Plan_CAEX[Fecha]), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], i, f)),
+			    NOT ISBLANK(Plan_CAEX[Toneladas Plan]), NOT ISBLANK(Plan_CAEX[Horas Nominales Plan]))
+			RETURN MAX(0, [Días periodo] - conPlan)
+		formatString: 0
+		displayFolder: OEE\Plan
+		lineageTag: 32bedc58-f89c-53bb-999b-1b0887eff0da
+
+	/// Toneladas que se ganaron o perdieron por la disponibilidad: HN plan × (DF real − DF plan) × UEBD plan × rendimiento plan.
+	measure 'Pérdida disponibilidad' =
+			VAR hnp = [HN plan]
+			VAR dfp = [DF plan]
+			VAR up = [UEBD plan]
+			VAR rp = [Rendimiento plan]
+			VAR hnr = [HN real]
+			VAR dfr = [DF real]
+			VAR ur = [UEBD real]
+			VAR rr = [Rendimiento real]
+			VAR ok = NOT ISBLANK(hnp) && hnp <> 0 && NOT ISBLANK(hnr) && hnr <> 0
+			RETURN IF(ok, hnp * (dfr - dfp) * up * rp)
+		formatString: +#,0;-#,0
+		displayFolder: OEE
+		lineageTag: e4bb6289-30c1-57cd-ae5d-31cb7523dee9
+
+	/// Por la UEBD: HN plan × DF real × (UEBD real − UEBD plan) × rendimiento plan.
+	measure 'Pérdida UEBD' =
+			VAR hnp = [HN plan]
+			VAR dfp = [DF plan]
+			VAR up = [UEBD plan]
+			VAR rp = [Rendimiento plan]
+			VAR hnr = [HN real]
+			VAR dfr = [DF real]
+			VAR ur = [UEBD real]
+			VAR rr = [Rendimiento real]
+			VAR ok = NOT ISBLANK(hnp) && hnp <> 0 && NOT ISBLANK(hnr) && hnr <> 0
+			RETURN IF(ok, hnp * dfr * (ur - up) * rp)
+		formatString: +#,0;-#,0
+		displayFolder: OEE
+		lineageTag: f0048ce1-8ed3-5397-b4c4-d7204871d2d8
+
+	/// Por el rendimiento efectivo: HN plan × DF real × UEBD real × (rendimiento real − plan).
+	measure 'Pérdida rendimiento' =
+			VAR hnp = [HN plan]
+			VAR dfp = [DF plan]
+			VAR up = [UEBD plan]
+			VAR rp = [Rendimiento plan]
+			VAR hnr = [HN real]
+			VAR dfr = [DF real]
+			VAR ur = [UEBD real]
+			VAR rr = [Rendimiento real]
+			VAR ok = NOT ISBLANK(hnp) && hnp <> 0 && NOT ISBLANK(hnr) && hnr <> 0
+			RETURN IF(ok, hnp * dfr * ur * (rr - rp))
+		formatString: +#,0;-#,0
+		displayFolder: OEE
+		lineageTag: 0546cd95-e169-59c6-9da8-cdaa6f9da53a
+
+	/// Por las horas nominales (CAEX en flota): (HN real − HN plan) × DF real × UEBD real × rendimiento real.
+	measure 'Pérdida horas nominales' =
+			VAR hnp = [HN plan]
+			VAR dfp = [DF plan]
+			VAR up = [UEBD plan]
+			VAR rp = [Rendimiento plan]
+			VAR hnr = [HN real]
+			VAR dfr = [DF real]
+			VAR ur = [UEBD real]
+			VAR rr = [Rendimiento real]
+			VAR ok = NOT ISBLANK(hnp) && hnp <> 0 && NOT ISBLANK(hnr) && hnr <> 0
+			RETURN IF(ok, (hnr - hnp) * dfr * ur * rr)
+		formatString: +#,0;-#,0
+		displayFolder: OEE
+		lineageTag: 657fbbf8-9c2b-56ec-b873-fe6a067c6f78
+
+	/// Movimiento total plan de los CAEX (= HN × DF × UEBD × rendimiento del plan).
+	measure 'Producción plan' = [Toneladas plan]
+		formatString: #,0
+		displayFolder: OEE
+		lineageTag: f84398d8-fe19-5a90-95f4-7faf589a1e7f
+
+	/// Movimiento total real de los CAEX.
+	measure 'Producción real' = [Movimiento real]
+		formatString: #,0
+		displayFolder: OEE
+		lineageTag: f735550d-e95b-5bce-814d-db01931b1b9e
+
+	measure 'Variación producción' =
+			VAR p = [Producción plan]
+			VAR r = [Producción real]
+			RETURN IF(ISBLANK(p) || p = 0 || ISBLANK(r), BLANK(), r / p - 1)
+		formatString: +0.00%;-0.00%
+		displayFolder: OEE
+		lineageTag: 0edc1a8e-1969-56c3-8824-a9b9664e51d7
+
+	/// OEE del plan: DF × UEBD (el rendimiento del plan es la base, vale 1).
+	measure 'OEE plan' = [DF plan] * [UEBD plan]
+		formatString: 0.0%
+		displayFolder: OEE
+		lineageTag: b9d387b4-bc34-5017-944a-82ed4ad96b23
+
+	/// OEE real: DF × UEBD × rendimiento real / rendimiento plan.
+	measure 'OEE real' =
+			VAR rp = [Rendimiento plan]
+			RETURN IF(ISBLANK(rp) || rp = 0, BLANK(), [DF real] * [UEBD real] * [Rendimiento real] / rp)
+		formatString: 0.0%
+		displayFolder: OEE
+		lineageTag: 580aafb4-66f5-5c2a-bfd3-229310d43e95
+
+	/// Debe dar 0: el plan más las cuatro pérdidas es el real.
+	measure 'Control cascada' = [Producción plan] + [Pérdida disponibilidad] + [Pérdida UEBD] + [Pérdida rendimiento] + [Pérdida horas nominales] - [Producción real]
+		formatString: #,0
+		isHidden
+		displayFolder: OEE
+		lineageTag: 1e9e3f95-e83b-506e-9721-0a91be0314db
+
+	/// Parte invisible de cada barra de pérdida: el menor de los niveles antes y después de la palanca.
+	measure 'Cascada base' =
+			VAR o = SELECTEDVALUE('Cascada OEE'[Orden])
+			VAR p = [Producción plan]
+			VAR d1 = [Pérdida disponibilidad]
+			VAR d2 = [Pérdida UEBD]
+			VAR d3 = [Pérdida rendimiento]
+			VAR d4 = [Pérdida horas nominales]
+			VAR l1 = p + d1
+			VAR l2 = l1 + d2
+			VAR l3 = l2 + d3
+			VAR l4 = l3 + d4
+			RETURN IF(ISBLANK(p) || ISBLANK(d1), BLANK(),
+			    SWITCH(o, 2, MIN(p, l1), 3, MIN(l1, l2), 4, MIN(l2, l3), 5, MIN(l3, l4)))
+		formatString: #,0
+		isHidden
+		displayFolder: OEE\Gráfico
+		lineageTag: 91c70f85-d17a-581a-b100-f50652fa49cd
+
+	measure 'Cascada total' = SWITCH(SELECTEDVALUE('Cascada OEE'[Orden]), 1, [Producción plan], 6, [Producción real])
+		formatString: #,0
+		isHidden
+		displayFolder: OEE\Gráfico
+		lineageTag: 3276f774-baab-5ac2-98e1-17385c58dd7b
+
+	measure 'Cascada pérdida' =
+			VAR d = SWITCH(SELECTEDVALUE('Cascada OEE'[Orden]), 2, [Pérdida disponibilidad], 3, [Pérdida UEBD], 4, [Pérdida rendimiento], 5, [Pérdida horas nominales])
+			RETURN IF(d < 0, -d)
+		formatString: -#,0
+		isHidden
+		displayFolder: OEE\Gráfico
+		lineageTag: 520ed0a3-f6f8-5194-ab0c-ef9609fc9a3e
+
+	measure 'Cascada ganancia' =
+			VAR d = SWITCH(SELECTEDVALUE('Cascada OEE'[Orden]), 2, [Pérdida disponibilidad], 3, [Pérdida UEBD], 4, [Pérdida rendimiento], 5, [Pérdida horas nominales])
+			RETURN IF(d > 0, d)
+		formatString: +#,0
+		isHidden
+		displayFolder: OEE\Gráfico
+		lineageTag: a33a1a8c-4fd3-5a00-8011-767860040799
+
+	measure 'Txt movimiento plan' =
+			VAR v = [Producción plan]
+			RETURN IF(ISBLANK(v), "—", FORMAT(v, "#,0") & " t")
+		displayFolder: OEE\Gráfico
+		lineageTag: 565f839f-0fcd-5569-8d6f-f64205490b71
+
+	measure 'Txt movimiento real' =
+			VAR v = [Producción real]
+			RETURN IF(ISBLANK(v), "—", FORMAT(v, "#,0") & " t")
+		displayFolder: OEE\Gráfico
+		lineageTag: 650e2af5-9d36-5402-ac73-198653eb52f5
+
+	measure 'Txt pérdida df' =
+			VAR v = [Pérdida disponibilidad]
+			RETURN IF(ISBLANK(v), "—", FORMAT(v, "+#,0;-#,0") & " t")
+		displayFolder: OEE\Gráfico
+		lineageTag: 195aa902-7da3-597c-8ce5-37864453b757
+
+	measure 'Color pérdida df' =
+			VAR v = [Pérdida disponibilidad]
+			VAR tol = 0.001 * [Producción plan]
+			RETURN IF(ISBLANK(v) || ABS(v) <= tol, "#3A4352", IF(v < 0, "#C62828", "#2E7D32"))
+		isHidden
+		displayFolder: OEE\Gráfico
+		lineageTag: 037de4f9-4bfc-5fd7-90f8-3a58d9862ce2
+
+	/// El botón de una palanca que perdió más del 0,1 % del plan va en rojo (es el foco de la reunión); las demás, en azul medianoche.
+	measure 'Color botón df' =
+			VAR v = [Pérdida disponibilidad]
+			VAR tol = 0.001 * [Producción plan]
+			RETURN IF(NOT ISBLANK(v) && v < -tol, "#C62828", "#1B2A41")
+		isHidden
+		displayFolder: OEE\Gráfico
+		lineageTag: f0dd251e-9a15-54b7-9c49-7422d65b8cd0
+
+	measure 'Txt pérdida uebd' =
+			VAR v = [Pérdida UEBD]
+			RETURN IF(ISBLANK(v), "—", FORMAT(v, "+#,0;-#,0") & " t")
+		displayFolder: OEE\Gráfico
+		lineageTag: 94d199d8-7fa4-5406-9174-273c52878607
+
+	measure 'Color pérdida uebd' =
+			VAR v = [Pérdida UEBD]
+			VAR tol = 0.001 * [Producción plan]
+			RETURN IF(ISBLANK(v) || ABS(v) <= tol, "#3A4352", IF(v < 0, "#C62828", "#2E7D32"))
+		isHidden
+		displayFolder: OEE\Gráfico
+		lineageTag: ae339355-2f1e-59f7-8dc9-769787116027
+
+	/// El botón de una palanca que perdió más del 0,1 % del plan va en rojo (es el foco de la reunión); las demás, en azul medianoche.
+	measure 'Color botón uebd' =
+			VAR v = [Pérdida UEBD]
+			VAR tol = 0.001 * [Producción plan]
+			RETURN IF(NOT ISBLANK(v) && v < -tol, "#C62828", "#1B2A41")
+		isHidden
+		displayFolder: OEE\Gráfico
+		lineageTag: b3568d89-7151-554b-8906-14198d923fa1
+
+	measure 'Txt pérdida rend' =
+			VAR v = [Pérdida rendimiento]
+			RETURN IF(ISBLANK(v), "—", FORMAT(v, "+#,0;-#,0") & " t")
+		displayFolder: OEE\Gráfico
+		lineageTag: a0ca7006-5750-59b8-950c-3e8b2b843c5f
+
+	measure 'Color pérdida rend' =
+			VAR v = [Pérdida rendimiento]
+			VAR tol = 0.001 * [Producción plan]
+			RETURN IF(ISBLANK(v) || ABS(v) <= tol, "#3A4352", IF(v < 0, "#C62828", "#2E7D32"))
+		isHidden
+		displayFolder: OEE\Gráfico
+		lineageTag: a73fdf7f-f306-5097-9b80-29e82f2f97ba
+
+	/// El botón de una palanca que perdió más del 0,1 % del plan va en rojo (es el foco de la reunión); las demás, en azul medianoche.
+	measure 'Color botón rend' =
+			VAR v = [Pérdida rendimiento]
+			VAR tol = 0.001 * [Producción plan]
+			RETURN IF(NOT ISBLANK(v) && v < -tol, "#C62828", "#1B2A41")
+		isHidden
+		displayFolder: OEE\Gráfico
+		lineageTag: 79b7d26e-8d5b-5bc8-bbd8-7d50ad96c689
+
+	measure 'Txt pérdida hn' =
+			VAR v = [Pérdida horas nominales]
+			RETURN IF(ISBLANK(v), "—", FORMAT(v, "+#,0;-#,0") & " t")
+		displayFolder: OEE\Gráfico
+		lineageTag: 6915b6f1-78c5-5471-99fd-a44683688cda
+
+	measure 'Color pérdida hn' =
+			VAR v = [Pérdida horas nominales]
+			VAR tol = 0.001 * [Producción plan]
+			RETURN IF(ISBLANK(v) || ABS(v) <= tol, "#3A4352", IF(v < 0, "#C62828", "#2E7D32"))
+		isHidden
+		displayFolder: OEE\Gráfico
+		lineageTag: 6b91c761-ef90-5256-b577-c3a7e686c13e
+
+	/// El botón de una palanca que perdió más del 0,1 % del plan va en rojo (es el foco de la reunión); las demás, en azul medianoche.
+	measure 'Color botón hn' =
+			VAR v = [Pérdida horas nominales]
+			VAR tol = 0.001 * [Producción plan]
+			RETURN IF(NOT ISBLANK(v) && v < -tol, "#C62828", "#1B2A41")
+		isHidden
+		displayFolder: OEE\Gráfico
+		lineageTag: 2c6ae91d-e6ba-5218-8afb-dcde81d60156
+
+	measure 'Txt botón' = "Ver detalle  ›"
+		isHidden
+		displayFolder: OEE\Gráfico
+		lineageTag: 6dc590c8-b5e2-5533-9d16-14032f55b608
+
+	measure 'Txt variación producción' =
+			VAR v = [Variación producción]
+			RETURN IF(ISBLANK(v), "—", FORMAT(v, "+0.00%;-0.00%"))
+		displayFolder: OEE\Gráfico
+		lineageTag: a80c321c-8aeb-5bbb-95c4-4e28298fc546
+
+	measure 'Color variación producción' =
+			VAR v = [Variación producción]
+			RETURN IF(ISBLANK(v) || v >= -0.001, "#1B2A41", "#C62828")
+		isHidden
+		displayFolder: OEE\Gráfico
+		lineageTag: 13ecb8b2-a968-53bb-b703-7c274c191308
+
+	measure 'Tabla plan' =
+			VAR o = SELECTEDVALUE('Datos OEE'[Orden])
+			VAR v = SWITCH(o, 1, [Producción plan], 2, [DF plan], 3, [UEBD plan], 4, [Rendimiento plan], 5, [HN plan], 6, [OEE plan])
+			RETURN IF(ISBLANK(v), "—", SWITCH(o, 2, FORMAT(v, "0.0%"), 3, FORMAT(v, "0.0%"), 6, FORMAT(v, "0.0%"), FORMAT(v, "#,0")))
+		displayFolder: OEE\Tabla
+		lineageTag: 910d8b02-918c-551e-9cb9-0bf4e436238c
+
+	measure 'Tabla real' =
+			VAR o = SELECTEDVALUE('Datos OEE'[Orden])
+			VAR v = SWITCH(o, 1, [Producción real], 2, [DF real], 3, [UEBD real], 4, [Rendimiento real], 5, [HN real], 6, [OEE real])
+			RETURN IF(ISBLANK(v), "—", SWITCH(o, 2, FORMAT(v, "0.0%"), 3, FORMAT(v, "0.0%"), 6, FORMAT(v, "0.0%"), FORMAT(v, "#,0")))
+		displayFolder: OEE\Tabla
+		lineageTag: e7c21ac5-6b9a-5a51-b84d-eb497cab83b1
+
+	measure 'Tabla variación num' =
+			VAR o = SELECTEDVALUE('Datos OEE'[Orden])
+			VAR r = SWITCH(o, 1, [Producción real], 2, [DF real], 3, [UEBD real], 4, [Rendimiento real], 5, [HN real], 6, [OEE real])
+			VAR p = SWITCH(o, 1, [Producción plan], 2, [DF plan], 3, [UEBD plan], 4, [Rendimiento plan], 5, [HN plan], 6, [OEE plan])
+			RETURN IF(ISBLANK(r) || ISBLANK(p) || p = 0, BLANK(), r / p - 1)
+		formatString: +0.00%;-0.00%
+		isHidden
+		displayFolder: OEE\Tabla
+		lineageTag: 2a95cd5d-983a-509a-a49b-de962c17b55f
+
+	measure 'Tabla variación' =
+			VAR v = [Tabla variación num]
+			RETURN IF(ISBLANK(v), "—", FORMAT(v, "+0.00%;-0.00%"))
+		displayFolder: OEE\Tabla
+		lineageTag: a8c257f0-02de-5fc3-b298-8bc34b290dca
+
+	measure 'Tabla pérdida num' =
+			VAR o = SELECTEDVALUE('Datos OEE'[Orden])
+			RETURN SWITCH(o, 2, [Pérdida disponibilidad], 3, [Pérdida UEBD], 4, [Pérdida rendimiento], 5, [Pérdida horas nominales])
+		formatString: +#,0;-#,0
+		isHidden
+		displayFolder: OEE\Tabla
+		lineageTag: afb2086f-f526-51b8-84cc-f280f2182bc0
+
+	measure 'Tabla pérdida' =
+			VAR v = [Tabla pérdida num]
+			RETURN IF(ISBLANK(v), "", FORMAT(v, "+#,0;-#,0"))
+		displayFolder: OEE\Tabla
+		lineageTag: 24daf72b-0f29-5ba1-bfdc-b42b2bdead4c
+
+	measure 'Color tabla variación' =
+			VAR v = [Tabla variación num]
+			RETURN IF(ISBLANK(v) || ABS(v) <= 0.001, "#3A4352", IF(v < 0, "#C62828", "#2E7D32"))
+		isHidden
+		displayFolder: OEE\Tabla
+		lineageTag: 82b1d780-15a8-51c6-9d12-d2b7712ddffd
+
+	measure 'Color tabla pérdida' =
+			VAR v = [Tabla pérdida num]
+			VAR tol = 0.001 * [Producción plan]
+			RETURN IF(ISBLANK(v) || ABS(v) <= tol, "#3A4352", IF(v < 0, "#C62828", "#2E7D32"))
+		isHidden
+		displayFolder: OEE\Tabla
+		lineageTag: 811ca72f-2ad7-5dde-8170-905043368b3b
+
+	measure 'Txt df real' =
+			VAR v = [DF real]
+			RETURN IF(ISBLANK(v), "—", FORMAT(v, "0.0%"))
+		displayFolder: Detalle\Encabezado
+		lineageTag: d3c99a4b-141f-5308-a8b8-72c932842032
+
+	measure 'Txt df plan' =
+			VAR r = [DF real]
+			VAR p = [DF plan]
+			VAR t = [Pérdida disponibilidad]
+			RETURN IF(ISBLANK(p), "Sin plan",
+			    "Plan " & FORMAT(p, "0.0%") & IF(ISBLANK(r), "", " · " & FORMAT((r - p) * 100, "+0.0;-0.0") & " pp") & IF(ISBLANK(t), "", " · " & FORMAT(t, "+#,0;-#,0") & " t"))
+		displayFolder: Detalle\Encabezado
+		lineageTag: 57ab601d-5d77-5ae3-ac8c-1db5c58a7956
+
+	measure 'Color df encabezado' =
+			VAR t = [Pérdida disponibilidad]
+			VAR tol = 0.001 * [Producción plan]
+			RETURN IF(ISBLANK(t) || t >= -tol, "#A5D6A7", "#FFAB91")
+		isHidden
+		displayFolder: Detalle\Encabezado
+		lineageTag: d8c786c2-cccf-547b-accd-bb6f93602c20
+
+	measure 'Txt uebd real' =
+			VAR v = [UEBD real]
+			RETURN IF(ISBLANK(v), "—", FORMAT(v, "0.0%"))
+		displayFolder: Detalle\Encabezado
+		lineageTag: cab35e34-34be-5035-a582-c92f43553fb3
+
+	measure 'Txt uebd plan' =
+			VAR r = [UEBD real]
+			VAR p = [UEBD plan]
+			VAR t = [Pérdida UEBD]
+			RETURN IF(ISBLANK(p), "Sin plan",
+			    "Plan " & FORMAT(p, "0.0%") & IF(ISBLANK(r), "", " · " & FORMAT((r - p) * 100, "+0.0;-0.0") & " pp") & IF(ISBLANK(t), "", " · " & FORMAT(t, "+#,0;-#,0") & " t"))
+		displayFolder: Detalle\Encabezado
+		lineageTag: ffeef171-1455-504f-92e1-f09e2157fb39
+
+	measure 'Color uebd encabezado' =
+			VAR t = [Pérdida UEBD]
+			VAR tol = 0.001 * [Producción plan]
+			RETURN IF(ISBLANK(t) || t >= -tol, "#A5D6A7", "#FFAB91")
+		isHidden
+		displayFolder: Detalle\Encabezado
+		lineageTag: 05e34be2-fb08-5410-a37f-45a6a1826b12
+
+	measure 'Txt rend real' =
+			VAR v = [Rendimiento real]
+			RETURN IF(ISBLANK(v), "—", FORMAT(v, "#,0") & " t/h")
+		displayFolder: Detalle\Encabezado
+		lineageTag: fe92e243-6c9d-5a40-92cb-32af2cce0523
+
+	measure 'Txt rend plan' =
+			VAR r = [Rendimiento real]
+			VAR p = [Rendimiento plan]
+			VAR t = [Pérdida rendimiento]
+			RETURN IF(ISBLANK(p), "Sin plan",
+			    "Plan " & FORMAT(p, "#,0") & IF(ISBLANK(r), "", " · " & FORMAT(r - p, "+#,0;-#,0") & " t/h") & IF(ISBLANK(t), "", " · " & FORMAT(t, "+#,0;-#,0") & " t"))
+		displayFolder: Detalle\Encabezado
+		lineageTag: 668102f1-edd2-525e-b947-6fe001f2465d
+
+	measure 'Color rend encabezado' =
+			VAR t = [Pérdida rendimiento]
+			VAR tol = 0.001 * [Producción plan]
+			RETURN IF(ISBLANK(t) || t >= -tol, "#A5D6A7", "#FFAB91")
+		isHidden
+		displayFolder: Detalle\Encabezado
+		lineageTag: 5409a6ae-4ae0-569e-a394-a229158536c4
+
+	measure 'Txt hn real' =
+			VAR v = [HN real]
+			RETURN IF(ISBLANK(v), "—", FORMAT(v, "#,0") & " h")
+		displayFolder: Detalle\Encabezado
+		lineageTag: 345fec95-0de6-5de7-aed2-ccdb3a9fa0c2
+
+	measure 'Txt hn plan' =
+			VAR r = [HN real]
+			VAR p = [HN plan]
+			VAR t = [Pérdida horas nominales]
+			RETURN IF(ISBLANK(p), "Sin plan",
+			    "Plan " & FORMAT(p, "#,0") & IF(ISBLANK(r), "", " · " & FORMAT(r - p, "+#,0;-#,0") & " h") & IF(ISBLANK(t), "", " · " & FORMAT(t, "+#,0;-#,0") & " t"))
+		displayFolder: Detalle\Encabezado
+		lineageTag: fcaf023d-5c7b-54fe-8f7b-8151853a9e46
+
+	measure 'Color hn encabezado' =
+			VAR t = [Pérdida horas nominales]
+			VAR tol = 0.001 * [Producción plan]
+			RETURN IF(ISBLANK(t) || t >= -tol, "#A5D6A7", "#FFAB91")
+		isHidden
+		displayFolder: Detalle\Encabezado
+		lineageTag: e5ae096f-43fe-5be8-9529-53225cea7a09
+
+	measure 'Color DF' =
+			VAR r = [DF real]
+			VAR p = [DF plan]
+			RETURN
+			    SWITCH(TRUE(),
+			        ISBLANK(r), BLANK(),
+			        ISBLANK(p) || p = 0, "#4F9DDE",
+			        r >= 0.999 * p, "#2E7D32",
+			        r >= 0.95 * p, "#F28C28",
+			        "#C62828"
+			    )
+		isHidden
+		displayFolder: Detalle
+		lineageTag: b8fa55f2-2bcd-5753-93d7-c61b5bcd727d
+
+	measure 'Color UEBD' =
+			VAR r = [UEBD real]
+			VAR p = [UEBD plan]
+			RETURN
+			    SWITCH(TRUE(),
+			        ISBLANK(r), BLANK(),
+			        ISBLANK(p) || p = 0, "#4F9DDE",
+			        r >= 0.999 * p, "#2E7D32",
+			        r >= 0.95 * p, "#F28C28",
+			        "#C62828"
+			    )
+		isHidden
+		displayFolder: Detalle
+		lineageTag: 254e5778-c497-566a-972e-d5d05e4a8249
+
+	measure 'Color rendimiento' =
+			VAR r = [Rendimiento real]
+			VAR p = [Rendimiento plan]
+			RETURN
+			    SWITCH(TRUE(),
+			        ISBLANK(r), BLANK(),
+			        ISBLANK(p) || p = 0, "#4F9DDE",
+			        r >= 0.999 * p, "#2E7D32",
+			        r >= 0.95 * p, "#F28C28",
+			        "#C62828"
+			    )
+		isHidden
+		displayFolder: Detalle
+		lineageTag: 392770f0-c895-5f93-99fa-a600d4375621
+
+	/// CAEX equivalentes en flota: horas nominales / (24 × días). Por día es el número de CAEX que contó la flota.
+	measure 'CAEX en flota' = DIVIDE([HN real], 24 * [Días periodo])
+		formatString: 0.0
+		displayFolder: Detalle
+		lineageTag: e05af7cd-0e48-5c7a-8392-88f256df8c15
+
+	/// CAEX equivalentes del plan.
+	measure 'CAEX en flota plan' = DIVIDE([HN plan], 24 * [Días periodo])
+		formatString: 0.0
+		displayFolder: Detalle
+		lineageTag: f3496bba-14c9-548b-bdf4-7446442fad23
+
+	measure 'Color flota' =
+			VAR r = [CAEX en flota]
+			VAR p = [CAEX en flota plan]
+			RETURN
+			    SWITCH(TRUE(),
+			        ISBLANK(r), BLANK(),
+			        ISBLANK(p) || p = 0, "#4F9DDE",
+			        r >= 0.999 * p, "#2E7D32",
+			        r >= 0.95 * p, "#F28C28",
+			        "#C62828"
+			    )
+		isHidden
+		displayFolder: Detalle
+		lineageTag: f5957ca0-87f8-51a7-8329-34f264a52a92
+
+	/// Días de 24 h que el CAEX contó en la flota en el periodo.
+	measure 'Días en flota' = DIVIDE([HN real], 24)
+		formatString: 0.0
+		displayFolder: Detalle
+		lineageTag: 90600108-9e4b-5eb5-91c7-23799693cc10
+
+	/// Horas de mantención (programada, no programada, neumáticos y daño) por código.
+	measure 'Horas no disponibles' =
+			VAR i = [Inicio periodo]
+			VAR f = [Fin periodo]
+			RETURN CALCULATE(SUM(Horas_Codigo_CAEX[Horas]), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], i, f)), KEEPFILTERS(Horas_Codigo_CAEX[Categoria] IN {"Mantención programada", "Mantención no programada", "Daño operacional", "Neumáticos", "Cambio programado de neumáticos"}))
+		formatString: #,0.0
+		displayFolder: Detalle\Códigos
+		lineageTag: be88c8a4-542a-5f5b-897e-42cfeec3f540
+
+	/// Horas del código sobre las horas nominales de la flota: los puntos de disponibilidad que se van en ese código.
+	measure '% del nominal' = DIVIDE([Horas no disponibles], CALCULATE([HN real], REMOVEFILTERS(Horas_Codigo_CAEX)))
+		formatString: 0.0%
+		displayFolder: Detalle\Códigos
+		lineageTag: 83112cf9-2bba-5f4d-bcea-9128cdf9b3f3
+
+	/// Horas de demora programada, no programada y reserva por código.
+	measure 'Horas no efectivas' =
+			VAR i = [Inicio periodo]
+			VAR f = [Fin periodo]
+			RETURN CALCULATE(SUM(Horas_Codigo_CAEX[Horas]), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], i, f)), KEEPFILTERS(Horas_Codigo_CAEX[Categoria] IN {"Demora programada", "Demora no programada", "Reserva"}))
+		formatString: #,0.0
+		displayFolder: Detalle\Códigos
+		lineageTag: e93537b8-a9a2-594b-9628-8f2d8c3679e6
+
+	/// Horas del código sobre las horas disponibles de la flota: los puntos de UEBD que se van en ese código.
+	measure '% del disponible' = DIVIDE([Horas no efectivas], CALCULATE([HD real], REMOVEFILTERS(Horas_Codigo_CAEX)))
+		formatString: 0.0%
+		displayFolder: Detalle\Códigos
+		lineageTag: 926905c4-4eea-59c1-8172-2920ecd80c3a
+
+	/// Horas disponibles no efectivas de los CAEX por tipo: demoras, reserva y pérdida operacional.
+	measure 'Horas tipo UEBD' =
+			SWITCH(SELECTEDVALUE('Tipos UEBD'[Orden]),
+			    1, CALCULATE(SUM(Fact_HorasEquipo[Horas Demora Programada]), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], [Inicio periodo], [Fin periodo]))),
+			    2, CALCULATE(SUM(Fact_HorasEquipo[Horas Demora No Programada]), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], [Inicio periodo], [Fin periodo]))),
+			    3, CALCULATE(SUM(Fact_HorasEquipo[Horas Reserva]), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], [Inicio periodo], [Fin periodo]))),
+			    4, CALCULATE(SUM(Fact_HorasEquipo[Horas PO Espera]), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], [Inicio periodo], [Fin periodo]))),
+			    5, CALCULATE(SUM(Fact_HorasEquipo[Horas PO Cola]), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], [Inicio periodo], [Fin periodo]))))
+		formatString: #,0
+		displayFolder: Detalle\Códigos
+		lineageTag: ad18fea4-b00c-57bd-9a3c-f32135ba245a
+
+	/// Promedio del payload de los ciclos con carga completa (Fact_Ciclos): entre 200 y 330 t.
+	measure 'Factor de carga' =
+			VAR i = [Inicio periodo]
+			VAR f = [Fin periodo]
+			RETURN CALCULATE(CALCULATE(AVERAGE(Fact_Ciclos[payload]), Fact_Ciclos[payload] > 200, Fact_Ciclos[payload] < 330), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], i, f)))
+		formatString: #,0.0
+		displayFolder: Detalle\Ciclos
+		lineageTag: 864a180f-0825-5069-9361-a0c93b79e2ef
+
+	/// Plan diario del factor de carga (Plan_FactorCarga); sin plan en el periodo, el último conocido.
+	measure 'Factor de carga plan' =
+			VAR i = [Inicio periodo]
+			VAR f = [Fin periodo]
+			VAR p = CALCULATE(AVERAGE(Plan_FactorCarga[Plan]), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], i, f)))
+			RETURN
+			    IF(ISBLANK(f), BLANK(), COALESCE(p,
+			        CALCULATE(LASTNONBLANKVALUE(Plan_FactorCarga[Fecha], AVERAGE(Plan_FactorCarga[Plan])),
+			            REMOVEFILTERS(Dim_Tiempo), Plan_FactorCarga[Fecha] <= f)))
+		formatString: #,0
+		displayFolder: Detalle\Ciclos
+		lineageTag: 3f559aa8-d4b6-5926-aea5-e608bdcba52e
+
+	measure 'Color factor de carga' =
+			VAR r = [Factor de carga]
+			VAR p = [Factor de carga plan]
+			RETURN
+			    SWITCH(TRUE(),
+			        ISBLANK(r), BLANK(),
+			        ISBLANK(p) || p = 0, "#4F9DDE",
+			        r >= 0.999 * p, "#2E7D32",
+			        r >= 0.95 * p, "#F28C28",
+			        "#C62828"
+			    )
+		isHidden
+		displayFolder: Detalle\Ciclos
+		lineageTag: 53d35a89-706d-52b2-a73d-87522b5d6887
+
+	/// Minutos promedio por ciclo de cada componente (Fact_Ciclos, segundos / 60) en el periodo.
+	measure 'Ciclo componente (min)' =
+			SWITCH(SELECTEDVALUE('Componentes ciclo'[Orden]),
+			    1, CALCULATE(AVERAGE(Fact_Ciclos[traveling_time]) / 60, KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], [Inicio periodo], [Fin periodo]))),
+			    2, CALCULATE(AVERAGE(Fact_Ciclos[waiting_time]) / 60, KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], [Inicio periodo], [Fin periodo]))),
+			    3, CALCULATE(AVERAGE(Fact_Ciclos[spotting_time]) / 60, KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], [Inicio periodo], [Fin periodo]))),
+			    4, CALCULATE(AVERAGE(Fact_Ciclos[loading_time]) / 60, KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], [Inicio periodo], [Fin periodo]))),
+			    5, CALCULATE(AVERAGE(Fact_Ciclos[hauling_time]) / 60, KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], [Inicio periodo], [Fin periodo]))),
+			    6, CALCULATE(AVERAGE(Fact_Ciclos[queued_time]) / 60, KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], [Inicio periodo], [Fin periodo]))),
+			    7, CALCULATE(AVERAGE(Fact_Ciclos[tipping_time]) / 60, KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], [Inicio periodo], [Fin periodo]))),
+			    8, CALCULATE(AVERAGE(Fact_Ciclos[backing_time]) / 60, KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], [Inicio periodo], [Fin periodo]))))
+		formatString: 0.0
+		displayFolder: Detalle\Ciclos
+		lineageTag: 9533fe3e-11dd-5511-9a47-a277d940b7c8
+
+	/// Ciclos de acarreo en el periodo.
+	measure Ciclos =
+			VAR i = [Inicio periodo]
+			VAR f = [Fin periodo]
+			RETURN CALCULATE(COUNTROWS(Fact_Ciclos), KEEPFILTERS(DATESBETWEEN(Dim_Tiempo[Fecha], i, f)))
+		formatString: #,0
+		displayFolder: Detalle\Ciclos
+		lineageTag: 1a94c8a0-6024-5133-8680-d4b5f9cd716a
+
+	/// Día calendario de la hora de los datos cargados.
+	measure 'Hoy datos' =
+			VAR m = MAX(Dim_Actualizacion[Marca])
+			RETURN IF(ISBLANK(m), [Fecha_Operacional_Actual], DATE(YEAR(m), MONTH(m), DAY(m)))
+		formatString: dd-mm-yyyy
+		isHidden
+		displayFolder: Periodo
+		lineageTag: 5bb6d917-07f5-57da-b3bb-ce147ee78e52
+
+	/// Ayer: último día de los periodos (días operacionales de 08:00 a 08:00). El lunes es el domingo.
+	measure 'Último día' =
+			VAR h = [Hoy datos]
+			RETURN IF(ISBLANK(h), BLANK(), h - 1)
+		formatString: dd-mm-yyyy
+		displayFolder: Periodo
+		lineageTag: 2f2eb8e1-2423-5f86-a962-87407ee75af9
+
+	/// Domingo de ese jueves a domingo, sin pasar de ayer.
+	measure 'Fin JD' =
+			VAR i = [Inicio JD]
+			RETURN IF(ISBLANK(i), BLANK(), MIN(i + 3, [Último día]))
+		formatString: dd-mm-yyyy
+		displayFolder: Periodo
+		lineageTag: 352708a2-0885-5ff3-8235-7d0fc76428d3
+
+	/// Verdadero el primer lunes de cada mes: MENSUAL muestra el mes anterior completo.
+	measure 'Mes anterior' =
+			VAR h = [Hoy datos]
+			RETURN NOT ISBLANK(h) && WEEKDAY(h, 2) = 1 && DAY(h) <= 7
+		isHidden
+		displayFolder: Periodo
+		lineageTag: 9fd1617f-385a-5f6b-b8cd-dc5bae805351
+
+	/// Ayer o, el primer lunes del mes, el último día del mes anterior.
+	measure 'Fin mes' =
+			VAR h = [Hoy datos]
+			RETURN IF([Mes anterior], EOMONTH(h, -1), [Último día])
+		formatString: dd-mm-yyyy
+		displayFolder: Periodo
+		lineageTag: f8236e2b-8045-524a-926d-b388df69124f
+
+	column Valor
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: fa58f327-466c-5644-85f7-e54d8560c526
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Valor]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Medidas RD' = calculated
+		mode: import
+		source = ROW("Valor", 0)
+

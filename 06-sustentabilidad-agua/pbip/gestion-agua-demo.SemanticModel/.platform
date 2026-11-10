@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Gestión del agua Demo"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "8fffe612-39c6-4cab-bce8-b1f668621431"
+  }
+}

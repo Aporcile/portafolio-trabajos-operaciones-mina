@@ -1,0 +1,105 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "paginaCalidad",
+  "displayName": "Calidad",
+  "displayOption": "FitToPage",
+  "height": 1080,
+  "width": 1920,
+  "visualInteractions": [
+    {
+      "source": "slcCalidadArea",
+      "target": "cardProfundidad",
+      "type": "NoFilter"
+    },
+    {
+      "source": "slcCalidadArea",
+      "target": "cardDiasActividad",
+      "type": "NoFilter"
+    },
+    {
+      "source": "slcCalidadArea",
+      "target": "cardDatosDesde",
+      "type": "NoFilter"
+    },
+    {
+      "source": "tblAperturasSinVistas",
+      "target": "cardProfundidad",
+      "type": "NoFilter"
+    },
+    {
+      "source": "tblAperturasSinVistas",
+      "target": "cardDiasActividad",
+      "type": "NoFilter"
+    },
+    {
+      "source": "tblAperturasSinVistas",
+      "target": "cardDatosDesde",
+      "type": "NoFilter"
+    },
+    {
+      "source": "tblCobertura",
+      "target": "cardProfundidad",
+      "type": "NoFilter"
+    },
+    {
+      "source": "tblCobertura",
+      "target": "cardDiasActividad",
+      "type": "NoFilter"
+    },
+    {
+      "source": "tblCobertura",
+      "target": "cardDatosDesde",
+      "type": "NoFilter"
+    },
+    {
+      "source": "tblRatioUsuario",
+      "target": "cardProfundidad",
+      "type": "NoFilter"
+    },
+    {
+      "source": "tblRatioUsuario",
+      "target": "cardDiasActividad",
+      "type": "NoFilter"
+    },
+    {
+      "source": "tblRatioUsuario",
+      "target": "cardDatosDesde",
+      "type": "NoFilter"
+    },
+    {
+      "source": "tblNombresDuplicados",
+      "target": "cardProfundidad",
+      "type": "NoFilter"
+    },
+    {
+      "source": "tblNombresDuplicados",
+      "target": "cardDiasActividad",
+      "type": "NoFilter"
+    },
+    {
+      "source": "tblNombresDuplicados",
+      "target": "cardDatosDesde",
+      "type": "NoFilter"
+    },
+    {
+      "source": "slcCalidadArea",
+      "target": "tblNombresDuplicados",
+      "type": "NoFilter"
+    },
+    {
+      "source": "tblAperturasSinVistas",
+      "target": "tblNombresDuplicados",
+      "type": "NoFilter"
+    },
+    {
+      "source": "tblCobertura",
+      "target": "tblNombresDuplicados",
+      "type": "NoFilter"
+    },
+    {
+      "source": "tblRatioUsuario",
+      "target": "tblNombresDuplicados",
+      "type": "NoFilter"
+    }
+  ]
+}

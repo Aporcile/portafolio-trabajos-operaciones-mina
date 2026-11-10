@@ -1,0 +1,503 @@
+- conColRevA:
+    Control: GroupContainer@1.5.0
+    Variant: ManualLayout
+    Properties:
+      Fill: =RGBA(232, 236, 242, 1)
+      X: =32
+      Y: =124
+      Width: =800
+      Height: =632
+      DropShadow: =DropShadow.None
+      RadiusTopLeft: =10
+      RadiusTopRight: =10
+      RadiusBottomLeft: =10
+      RadiusBottomRight: =10
+      BorderThickness: =0
+      Visible: =Coalesce(varVista, "area") = "revisar"
+- lblColRevA:
+    Control: Label@2.5.1
+    Properties:
+      Text: ="POR DECIDIR · " & CountRows(galRevA.AllItems)
+      Font: =Font.'Segoe UI'
+      Size: =9.5
+      Color: =RGBA(150, 100, 0, 1)
+      X: =48
+      Y: =134
+      Width: =400
+      Height: =22
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      FontWeight: =FontWeight.Bold
+      Visible: =Coalesce(varVista, "area") = "revisar"
+- btnAgregarRev:
+    Control: Classic/Button@2.2.0
+    Properties:
+      Fill: =RGBA(255, 255, 255, 1)
+      Color: =RGBA(33, 37, 41, 1)
+      HoverFill: =RGBA(232, 236, 242, 1)
+      HoverColor: =RGBA(33, 37, 41, 1)
+      PressedFill: =RGBA(232, 236, 242, 1)
+      PressedColor: =RGBA(33, 37, 41, 1)
+      BorderColor: =RGBA(219, 225, 233, 1)
+      HoverBorderColor: =RGBA(170, 182, 198, 1)
+      BorderThickness: =1
+      Text: ="+ Agregar tema"
+      OnSelect: =Set(varModoRev, "nuevo"); Select(btnResetRev); Set(varPanelRev, true)
+      Font: =Font.'Segoe UI'
+      Size: =9.5
+      FontWeight: =FontWeight.Semibold
+      X: =696
+      Y: =130
+      Width: =124
+      Height: =28
+      RadiusTopLeft: =8
+      RadiusTopRight: =8
+      RadiusBottomLeft: =8
+      RadiusBottomRight: =8
+      Visible: =Coalesce(varVista, "area") = "revisar"
+- galRevA:
+    Control: Gallery@2.15.0
+    Variant: VariableHeight
+    Properties:
+      Items: |-
+        =With(
+            {q: Trim(txtBuscar.Text), r: ddResp.Selected.Value},
+            Filter(
+                PorRevisar,
+                Coalesce(Decision, "Por decidir") = "Por decidir",
+                IsBlank(q) || q in Tema || q in Detalle || q in Contraparte,
+                r = "Todos los responsables" || (r = "Sin responsable" && IsBlank(ResponsablePropuesto)) || ResponsablePropuesto = r
+            )
+        )
+      X: =38
+      Y: =168
+      Width: =792
+      Height: =582
+      TemplateSize: =98
+      TemplatePadding: =0
+      ShowScrollbar: =true
+      Fill: =RGBA(0, 0, 0, 0)
+      TemplateFill: =RGBA(0, 0, 0, 0)
+      BorderThickness: =0
+      Visible: =Coalesce(varVista, "area") = "revisar"
+      OnSelect: =Set(varRev, ThisItem); Set(varModoRev, "editar"); Select(btnResetRev); Set(varPanelRev, true)
+    Children:
+                      - conTarjRevA:
+                          Control: GroupContainer@1.5.0
+                          Variant: ManualLayout
+                          Properties:
+                            Fill: =RGBA(255, 255, 255, 1)
+                            X: =0
+                            Y: =0
+                            Width: =(Parent.TemplateWidth - 30)
+                            Height: =Max(lblMetaRevA.Y + lblMetaRevA.Height + 10, 90)
+                            DropShadow: =DropShadow.None
+                            RadiusTopLeft: =6
+                            RadiusTopRight: =6
+                            RadiusBottomLeft: =6
+                            RadiusBottomRight: =6
+                            BorderColor: =RGBA(219, 225, 233, 1)
+                            BorderThickness: =1
+                      - lblTemaRevA:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =ThisItem.Tema
+                            Font: =Font.'Segoe UI'
+                            Size: =10.5
+                            Color: =RGBA(33, 37, 41, 1)
+                            X: =14
+                            Y: =8
+                            Width: =(Parent.TemplateWidth - 30) - 330
+                            Height: =20
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            FontWeight: =FontWeight.Bold
+                            AutoHeight: =true
+                      - lblDetRevA:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =Coalesce(ThisItem.Detalle, "Sin detalle")
+                            Font: =Font.'Segoe UI'
+                            Size: =9
+                            Color: =If(IsBlank(ThisItem.Detalle), RGBA(173, 181, 189, 1), RGBA(73, 80, 87, 1))
+                            X: =14
+                            Y: =lblTemaRevA.Y + lblTemaRevA.Height + 3
+                            Width: =(Parent.TemplateWidth - 30) - 330
+                            Height: =16
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                      - lblMetaRevA:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: |-
+                              =If(IsBlank(ThisItem.Contraparte), "", "Contraparte: " & ThisItem.Contraparte & "  ·  ") & "Propone: " & Coalesce(ThisItem.ResponsablePropuesto, "sin asignar") & If(IsBlank(ThisItem.Fecha), "", "  ·  " & Text(DateValue(ThisItem.Fecha), "dd-mm-yyyy"))
+                            Font: =Font.'Segoe UI'
+                            Size: =8
+                            Color: =RGBA(108, 117, 125, 1)
+                            X: =14
+                            Y: =lblDetRevA.Y + lblDetRevA.Height + 5
+                            Width: =(Parent.TemplateWidth - 30) - 330
+                            Height: =16
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                      - btnHitRevA:
+                          Control: Classic/Button@2.2.0
+                          Properties:
+                            Text: =""
+                            Fill: =RGBA(0, 0, 0, 0)
+                            HoverFill: =RGBA(27, 42, 65, 0.05)
+                            PressedFill: =RGBA(27, 42, 65, 0.10)
+                            BorderThickness: =0
+                            FocusedBorderThickness: =1
+                            FocusedBorderColor: =RGBA(36, 100, 170, 1)
+                            OnSelect: =Select(Parent)
+                            X: =0
+                            Y: =0
+                            Width: =(Parent.TemplateWidth - 30) - 310
+                            Height: =conTarjRevA.Height
+                            RadiusTopLeft: =6
+                            RadiusTopRight: =6
+                            RadiusBottomLeft: =6
+                            RadiusBottomRight: =6
+                      - btnCrearRev:
+                          Control: Classic/Button@2.2.0
+                          Properties:
+                            Fill: =RGBA(27, 42, 65, 1)
+                            Color: =RGBA(255, 255, 255, 1)
+                            HoverFill: =RGBA(44, 66, 98, 1)
+                            HoverColor: =RGBA(255, 255, 255, 1)
+                            PressedFill: =RGBA(18, 29, 46, 1)
+                            PressedColor: =RGBA(255, 255, 255, 1)
+                            BorderThickness: =0
+                            Text: ="Crear actividad"
+                            OnSelect: |-
+                              =With(
+                                  {
+                                      nueva: Patch(
+                                          Actividades,
+                                          Defaults(Actividades),
+                                          {
+                                              ID: lblNextID.Text,
+                                              Area: "",
+                                              Actividad: ThisItem.Tema,
+                                              Descripcion: Coalesce(ThisItem.Detalle, ""),
+                                              Responsable: Coalesce(ThisItem.ResponsablePropuesto, ""),
+                                              Contraparte: Coalesce(ThisItem.Contraparte, ""),
+                                              Prioridad: "",
+                                              Estado: "Por hacer",
+                                              FechaInicio: Text(Today(), "yyyy-mm-dd"),
+                                              FechaCompromiso: "",
+                                              FechaTermino: "",
+                                              StatusActual: "Creada desde Por revisar el " & Text(Today(), "dd-mm-yyyy"),
+                                              Bloqueo: ""
+                                          }
+                                      )
+                                  },
+                                  If(
+                                      IsEmpty(Errors(Actividades)),
+                                          Patch(PorRevisar, ThisItem, {Decision: "Aprobado"});
+                                          Set(varAct, nueva); Set(varModo, "editar"); Select(btnReset); Set(varPanel, true);
+                                          Notify("Actividad creada. Completa área, prioridad y fechas.", NotificationType.Success),
+                                          Notify("No se pudo crear la actividad: " & First(Errors(Actividades)).Message, NotificationType.Error)
+                                  )
+                              )
+                            Font: =Font.'Segoe UI'
+                            Size: =9.5
+                            FontWeight: =FontWeight.Semibold
+                            X: =(Parent.TemplateWidth - 30) - 296
+                            Y: =10
+                            Width: =158
+                            Height: =30
+                            RadiusTopLeft: =8
+                            RadiusTopRight: =8
+                            RadiusBottomLeft: =8
+                            RadiusBottomRight: =8
+                      - btnDescartarRev:
+                          Control: Classic/Button@2.2.0
+                          Properties:
+                            Fill: =RGBA(255, 255, 255, 1)
+                            Color: =RGBA(33, 37, 41, 1)
+                            HoverFill: =RGBA(232, 236, 242, 1)
+                            HoverColor: =RGBA(33, 37, 41, 1)
+                            PressedFill: =RGBA(232, 236, 242, 1)
+                            PressedColor: =RGBA(33, 37, 41, 1)
+                            BorderColor: =RGBA(219, 225, 233, 1)
+                            HoverBorderColor: =RGBA(170, 182, 198, 1)
+                            BorderThickness: =1
+                            Text: ="Descartar"
+                            OnSelect: |-
+                              =Patch(PorRevisar, ThisItem, {Decision: "Descartado"}); If(IsEmpty(Errors(PorRevisar)), Notify("Tema descartado.", NotificationType.Information), Notify("No se pudo actualizar: " & First(Errors(PorRevisar)).Message, NotificationType.Error))
+                            Font: =Font.'Segoe UI'
+                            Size: =9.5
+                            FontWeight: =FontWeight.Semibold
+                            X: =(Parent.TemplateWidth - 30) - 130
+                            Y: =10
+                            Width: =116
+                            Height: =30
+                            RadiusTopLeft: =8
+                            RadiusTopRight: =8
+                            RadiusBottomLeft: =8
+                            RadiusBottomRight: =8
+                      - btnPosponerRev:
+                          Control: Classic/Button@2.2.0
+                          Properties:
+                            Fill: =RGBA(255, 255, 255, 1)
+                            Color: =RGBA(33, 37, 41, 1)
+                            HoverFill: =RGBA(232, 236, 242, 1)
+                            HoverColor: =RGBA(33, 37, 41, 1)
+                            PressedFill: =RGBA(232, 236, 242, 1)
+                            PressedColor: =RGBA(33, 37, 41, 1)
+                            BorderColor: =RGBA(219, 225, 233, 1)
+                            HoverBorderColor: =RGBA(170, 182, 198, 1)
+                            BorderThickness: =1
+                            Text: ="Posponer"
+                            OnSelect: |-
+                              =Patch(PorRevisar, ThisItem, {Decision: "Pospuesto"}); If(IsEmpty(Errors(PorRevisar)), Notify("Tema pospuesto.", NotificationType.Information), Notify("No se pudo actualizar: " & First(Errors(PorRevisar)).Message, NotificationType.Error))
+                            Font: =Font.'Segoe UI'
+                            Size: =9.5
+                            FontWeight: =FontWeight.Semibold
+                            X: =(Parent.TemplateWidth - 30) - 296
+                            Y: =50
+                            Width: =158
+                            Height: =28
+                            RadiusTopLeft: =8
+                            RadiusTopRight: =8
+                            RadiusBottomLeft: =8
+                            RadiusBottomRight: =8
+                      - recSepRevA:
+                          Control: Rectangle@2.3.0
+                          Properties:
+                            Fill: =RGBA(0, 0, 0, 0)
+                            X: =0
+                            Y: =conTarjRevA.Height
+                            Width: =10
+                            Height: =8
+                            OnSelect: =false
+- lblVacioRevA:
+    Control: Label@2.5.1
+    Properties:
+      Text: ="No hay temas por decidir."
+      Font: =Font.'Segoe UI'
+      Size: =9
+      Color: =RGBA(173, 181, 189, 1)
+      X: =32
+      Y: =190
+      Width: =800
+      Height: =20
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      Visible: =Coalesce(varVista, "area") = "revisar" && CountRows(galRevA.AllItems) = 0
+      Align: =Align.Center
+- conColRevB:
+    Control: GroupContainer@1.5.0
+    Variant: ManualLayout
+    Properties:
+      Fill: =RGBA(232, 236, 242, 1)
+      X: =846
+      Y: =124
+      Width: =488
+      Height: =632
+      DropShadow: =DropShadow.None
+      RadiusTopLeft: =10
+      RadiusTopRight: =10
+      RadiusBottomLeft: =10
+      RadiusBottomRight: =10
+      BorderThickness: =0
+      Visible: =Coalesce(varVista, "area") = "revisar"
+- lblColRevB:
+    Control: Label@2.5.1
+    Properties:
+      Text: ="RESUELTOS · " & CountRows(galRevB.AllItems)
+      Font: =Font.'Segoe UI'
+      Size: =9.5
+      Color: =RGBA(46, 125, 50, 1)
+      X: =862
+      Y: =134
+      Width: =300
+      Height: =22
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      FontWeight: =FontWeight.Bold
+      Visible: =Coalesce(varVista, "area") = "revisar"
+- galRevB:
+    Control: Gallery@2.15.0
+    Variant: VariableHeight
+    Properties:
+      Items: |-
+        =With(
+            {q: Trim(txtBuscar.Text), r: ddResp.Selected.Value},
+            Filter(
+                PorRevisar,
+                Coalesce(Decision, "Por decidir") <> "Por decidir",
+                IsBlank(q) || q in Tema || q in Detalle || q in Contraparte,
+                r = "Todos los responsables" || (r = "Sin responsable" && IsBlank(ResponsablePropuesto)) || ResponsablePropuesto = r
+            )
+        )
+      X: =852
+      Y: =168
+      Width: =480
+      Height: =582
+      TemplateSize: =78
+      TemplatePadding: =0
+      ShowScrollbar: =true
+      Fill: =RGBA(0, 0, 0, 0)
+      TemplateFill: =RGBA(0, 0, 0, 0)
+      BorderThickness: =0
+      Visible: =Coalesce(varVista, "area") = "revisar"
+      OnSelect: =Set(varRev, ThisItem); Set(varModoRev, "editar"); Select(btnResetRev); Set(varPanelRev, true)
+    Children:
+                      - conTarjRevB:
+                          Control: GroupContainer@1.5.0
+                          Variant: ManualLayout
+                          Properties:
+                            Fill: =RGBA(255, 255, 255, 1)
+                            X: =0
+                            Y: =0
+                            Width: =(Parent.TemplateWidth - 30)
+                            Height: =If(IsBlank(lblDetRevB.Text), lblMetaRevB.Y + lblMetaRevB.Height, lblDetRevB.Y + lblDetRevB.Height) + 10
+                            DropShadow: =DropShadow.None
+                            RadiusTopLeft: =6
+                            RadiusTopRight: =6
+                            RadiusBottomLeft: =6
+                            RadiusBottomRight: =6
+                            BorderColor: =RGBA(219, 225, 233, 1)
+                            BorderThickness: =1
+                      - lblTemaRevB:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =ThisItem.Tema
+                            Font: =Font.'Segoe UI'
+                            Size: =9.5
+                            Color: =RGBA(33, 37, 41, 1)
+                            X: =12
+                            Y: =8
+                            Width: =(Parent.TemplateWidth - 30) - 120
+                            Height: =20
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            FontWeight: =FontWeight.Bold
+                            AutoHeight: =true
+                      - btnDecRevB:
+                          Control: Classic/Button@2.2.0
+                          Properties:
+                            Text: =ThisItem.Decision
+                            Font: =Font.'Segoe UI'
+                            Size: =7.5
+                            FontWeight: =FontWeight.Bold
+                            Fill: =Switch(ThisItem.Decision, "Aprobado", RGBA(225, 241, 226, 1), "Pospuesto", RGBA(255, 243, 214, 1), RGBA(233, 236, 239, 1))
+                            Color: =Switch(ThisItem.Decision, "Aprobado", RGBA(46, 125, 50, 1), "Pospuesto", RGBA(150, 100, 0, 1), RGBA(73, 80, 87, 1))
+                            HoverFill: =Switch(ThisItem.Decision, "Aprobado", RGBA(225, 241, 226, 1), "Pospuesto", RGBA(255, 243, 214, 1), RGBA(233, 236, 239, 1))
+                            HoverColor: =Switch(ThisItem.Decision, "Aprobado", RGBA(46, 125, 50, 1), "Pospuesto", RGBA(150, 100, 0, 1), RGBA(73, 80, 87, 1))
+                            PressedFill: =Switch(ThisItem.Decision, "Aprobado", RGBA(225, 241, 226, 1), "Pospuesto", RGBA(255, 243, 214, 1), RGBA(233, 236, 239, 1))
+                            PressedColor: =Switch(ThisItem.Decision, "Aprobado", RGBA(46, 125, 50, 1), "Pospuesto", RGBA(150, 100, 0, 1), RGBA(73, 80, 87, 1))
+                            BorderThickness: =0
+                            FocusedBorderThickness: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            OnSelect: =Select(Parent)
+                            TabIndex: =-1
+                            X: =(Parent.TemplateWidth - 30) - 100
+                            Y: =9
+                            Width: =88
+                            Height: =18
+                            RadiusTopLeft: =9
+                            RadiusTopRight: =9
+                            RadiusBottomLeft: =9
+                            RadiusBottomRight: =9
+                      - lblMetaRevB:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: |-
+                              =If(IsBlank(ThisItem.Contraparte), "", "Contraparte: " & ThisItem.Contraparte & "  ·  ") & "Propone: " & Coalesce(ThisItem.ResponsablePropuesto, "sin asignar") & If(IsBlank(ThisItem.Fecha), "", "  ·  " & Text(DateValue(ThisItem.Fecha), "dd-mm-yyyy"))
+                            Font: =Font.'Segoe UI'
+                            Size: =8
+                            Color: =RGBA(108, 117, 125, 1)
+                            X: =12
+                            Y: =lblTemaRevB.Y + lblTemaRevB.Height + 3
+                            Width: =(Parent.TemplateWidth - 30) - 24
+                            Height: =16
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                      - lblDetRevB:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =Coalesce(ThisItem.Detalle, "")
+                            Font: =Font.'Segoe UI'
+                            Size: =8
+                            Color: =RGBA(73, 80, 87, 1)
+                            X: =12
+                            Y: =If(IsBlank(lblDetRevB.Text), lblMetaRevB.Y, lblMetaRevB.Y + lblMetaRevB.Height + 3)
+                            Width: =(Parent.TemplateWidth - 30) - 24
+                            Height: =16
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                            Visible: =!IsBlank(lblDetRevB.Text)
+                      - btnHitRevB:
+                          Control: Classic/Button@2.2.0
+                          Properties:
+                            Text: =""
+                            Fill: =RGBA(0, 0, 0, 0)
+                            HoverFill: =RGBA(27, 42, 65, 0.05)
+                            PressedFill: =RGBA(27, 42, 65, 0.10)
+                            BorderThickness: =0
+                            FocusedBorderThickness: =1
+                            FocusedBorderColor: =RGBA(36, 100, 170, 1)
+                            OnSelect: =Select(Parent)
+                            X: =0
+                            Y: =0
+                            Width: =(Parent.TemplateWidth - 30)
+                            Height: =conTarjRevB.Height
+                            RadiusTopLeft: =6
+                            RadiusTopRight: =6
+                            RadiusBottomLeft: =6
+                            RadiusBottomRight: =6
+                      - recSepRevB:
+                          Control: Rectangle@2.3.0
+                          Properties:
+                            Fill: =RGBA(0, 0, 0, 0)
+                            X: =0
+                            Y: =conTarjRevB.Height
+                            Width: =10
+                            Height: =8
+                            OnSelect: =false
+- lblVacioRevB:
+    Control: Label@2.5.1
+    Properties:
+      Text: ="Aquí aparecen los temas ya decididos."
+      Font: =Font.'Segoe UI'
+      Size: =9
+      Color: =RGBA(173, 181, 189, 1)
+      X: =846
+      Y: =190
+      Width: =488
+      Height: =20
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      Visible: =Coalesce(varVista, "area") = "revisar" && CountRows(galRevB.AllItems) = 0
+      Align: =Align.Center

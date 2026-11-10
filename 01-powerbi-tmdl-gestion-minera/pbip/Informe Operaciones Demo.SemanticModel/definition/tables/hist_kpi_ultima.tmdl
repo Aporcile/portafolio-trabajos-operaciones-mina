@@ -1,0 +1,29 @@
+table hist_kpi_ultima
+	lineageTag: d1c53ace-89ff-4246-8cbb-87f7afccb834
+
+	column numeric_value
+		lineageTag: 52831cb8-966c-47d4-a879-c8b5832f0b46
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [numeric_value]
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre_tag
+		lineageTag: 132274f9-4eac-4bcb-a025-4ffeced5a502
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [nombre_tag]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition hist_kpi_ultima = calculated
+		mode: import
+		source =
+				SELECTCOLUMNS (
+				    GENERATE (
+				        CALCULATETABLE ( VALUES ( hist_kpi[item_id] ), NOT ISBLANK ( hist_kpi[numeric_value] ) ),
+				        TOPN ( 1, CALCULATETABLE ( SELECTCOLUMNS ( hist_kpi, "@ts", hist_kpi[timestamp], "@v", hist_kpi[numeric_value], "@tag", hist_kpi[nombre_tag] ), NOT ISBLANK ( hist_kpi[numeric_value] ) ), [@ts], DESC )
+				    ),
+				    "numeric_value", [@v], "nombre_tag", [@tag]
+				)

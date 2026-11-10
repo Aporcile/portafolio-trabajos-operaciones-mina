@@ -1,0 +1,59 @@
+table 'Calendario Turno Pala Hora'
+	lineageTag: 101bef0b-a5df-42e4-9c00-acee8393a39c
+
+	column time
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: aed31f85-7329-44fe-9306-7c8cf918649f
+		summarizeBy: none
+		sourceColumn: time
+
+		annotation SummarizationSetBy = Automatic
+
+	column shift
+		dataType: string
+		lineageTag: 9a05d179-3b86-4aaf-bf4f-563daa542e16
+		summarizeBy: none
+		sourceColumn: shift
+
+		annotation SummarizationSetBy = Automatic
+
+	column hour
+		dataType: int64
+		formatString: 0
+		lineageTag: 5736bee5-d807-47f7-8538-ea7f5fe160b1
+		summarizeBy: sum
+		sourceColumn: hour
+
+		annotation SummarizationSetBy = Automatic
+
+	column ShiftID = CONCATENATE('Calendario Turno Pala Hora'[time],'Calendario Turno Pala Hora'[shift])
+		lineageTag: 2780ee2f-3c24-4a59-b7dc-c372b1f54c66
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column ShiftIDhora = CONCATENATE('Calendario Turno Pala Hora'[ShiftID],  'Calendario Turno Pala Hora'[hora])
+		lineageTag: 9f6097f9-deb3-4fa1-b2eb-8d9cc28ddc18
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column hora = 'Calendario Turno Pala Hora'[hour]+1
+		formatString: 0
+		lineageTag: 35ffd503-27d6-4e58-91df-710131beae06
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Calendario Turno Pala Hora' = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "calendario_turno_hora.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"time", type datetime}, {"shift", type text}, {"hour", Int64.Type}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table

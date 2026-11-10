@@ -1,0 +1,44 @@
+Equipo,TipoEquipo,Flota,Activo_KPI
+CAEX-01,Truck,CAEX-A,1
+CAEX-02,Truck,CAEX-A,1
+CAEX-03,Truck,CAEX-A,1
+CAEX-04,Truck,CAEX-A,1
+CAEX-05,Truck,CAEX-A,1
+CAEX-06,Truck,CAEX-A,1
+CAEX-07,Truck,CAEX-A,1
+CAEX-08,Truck,CAEX-A,1
+CAEX-09,Truck,CAEX-A,1
+CAEX-10,Truck,CAEX-A,1
+CAEX-11,Truck,CAEX-A,1
+CAEX-12,Truck,CAEX-A,1
+CAEX-13,Truck,CAEX-A,1
+CAEX-14,Truck,CAEX-A,1
+CAEX-15,Truck,CAEX-B,1
+CAEX-16,Truck,CAEX-B,1
+CAEX-17,Truck,CAEX-B,1
+CAEX-18,Truck,CAEX-B,1
+CAEX-19,Truck,CAEX-B,1
+CAEX-20,Truck,CAEX-B,1
+CAEX-21,Truck,CAEX-B,1
+CAEX-22,Truck,CAEX-B,1
+CAEX-23,Truck,CAEX-B,1
+CAEX-24,Truck,CAEX-B,1
+CAEX-25,Truck,CAEX-B,1
+CAEX-26,Truck,CAEX-B,1
+CAEX-27_M,Truck,CAEX-B,0
+CAEX-28_M,Truck,CAEX-B,0
+CAEX-90,Truck,CAEX-B,0
+CAEX-90_M,Truck,CAEX-B,0
+CAEX-91,Truck,Equipo Testeo,0
+PALA-01,Shovel,Pala Hidraulica,1
+PALA-02,Shovel,Pala Hidraulica,1
+PALA-03,Shovel,Pala Electrica,1
+PALA-04,Shovel,Pala Electrica,1
+PALA-05_M,Shovel,Pala Hidraulica,0
+CARG-01,Loader,Cargador Frontal,1
+CARG-02,Loader,Cargador Frontal,1
+CARG-03_M,Loader,Cargador Frontal,0
+PERF-01,Drill,Perforadora Rotatoria,1
+PERF-02,Drill,Perforadora Rotatoria,1
+PERF-03,Drill,Perforadora Rotatoria,1
+PERF-04,Drill,Perforadora Rotatoria,1

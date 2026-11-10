@@ -1,0 +1,16 @@
+relationship 147f3bee-8391-4978-71e0-f66e567f2c20
+	fromColumn: Fact_Uso.report_id
+	toColumn: Dim_Reporte.report_id
+
+relationship 9c23cb00-e9f6-85fb-284f-c9cb69015e4a
+	fromColumn: Fact_Uso.fecha
+	toColumn: Dim_Fecha.Fecha
+
+relationship 45524620-ab25-3428-f3ef-5ef83b99dfb6
+	fromColumn: Fact_Uso.usuario
+	toColumn: Dim_Usuario.usuario
+
+relationship 868bfd93-e476-07b0-4971-79ebd3122115
+	fromColumn: Dim_Reporte.workspace_id
+	toColumn: Dim_Area.workspace_id
+

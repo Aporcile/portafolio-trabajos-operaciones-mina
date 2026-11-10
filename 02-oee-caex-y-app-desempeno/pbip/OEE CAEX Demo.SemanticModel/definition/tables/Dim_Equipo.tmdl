@@ -1,0 +1,64 @@
+/// Equipos: 26 CAEX (Truck) y 4 palas (Shovel). Fuente: Dim_Equipo.csv.
+table Dim_Equipo
+	lineageTag: 33157b44-eb78-5afb-8184-363cfab4e083
+
+	column Equipo
+		dataType: string
+		isNullable: false
+		lineageTag: 20fd8e80-a276-5422-825e-9cf1985fb1c6
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Equipo
+
+		annotation SummarizationSetBy = User
+
+	column TipoEquipo
+		dataType: string
+		lineageTag: 4bfc209e-76b5-5268-a243-579be748d7e7
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: TipoEquipo
+
+		annotation SummarizationSetBy = User
+
+	column Flota
+		dataType: string
+		lineageTag: 27aa25ce-b48d-594e-8050-4b114f5d6bca
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Flota
+
+		annotation SummarizationSetBy = User
+
+	column Activo_KPI
+		dataType: int64
+		formatString: 0
+		lineageTag: 1bbaa574-1cd8-51de-8757-6e7d11b73d6e
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Activo_KPI
+
+		annotation SummarizationSetBy = User
+
+	column 'Es Carguio'
+		dataType: int64
+		formatString: 0
+		lineageTag: 1127309e-1457-5fe4-81ab-f8d398f4ac6e
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Es Carguio
+
+		annotation SummarizationSetBy = User
+
+	partition Dim_Equipo = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "Dim_Equipo.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Equipo", type text}, {"TipoEquipo", type text}, {"Flota", type text}, {"Activo_KPI", Int64.Type}, {"Es Carguio", Int64.Type}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

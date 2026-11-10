@@ -1,0 +1,148 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "tblCobertura",
+  "position": {
+    "x": 1092,
+    "y": 180,
+    "width": 812,
+    "height": 330,
+    "z": 56,
+    "tabOrder": 5600
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Area"
+                    }
+                  },
+                  "Property": "Area"
+                }
+              },
+              "queryRef": "Dim_Area.Area",
+              "nativeQueryRef": "Area",
+              "displayName": "Área"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Total reportes"
+                }
+              },
+              "queryRef": "_Medidas.Total reportes",
+              "nativeQueryRef": "Total reportes",
+              "displayName": "Reportes"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Reportes en uso"
+                }
+              },
+              "queryRef": "_Medidas.Reportes en uso",
+              "nativeQueryRef": "Reportes en uso",
+              "displayName": "En uso"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Reportes solo aperturas"
+                }
+              },
+              "queryRef": "_Medidas.Reportes solo aperturas",
+              "nativeQueryRef": "Reportes solo aperturas",
+              "displayName": "Solo aperturas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Reportes sin uso"
+                }
+              },
+              "queryRef": "_Medidas.Reportes sin uso",
+              "nativeQueryRef": "Reportes sin uso",
+              "displayName": "Sin uso"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Ultima lectura"
+                }
+              },
+              "queryRef": "_Medidas.Ultima lectura",
+              "nativeQueryRef": "Ultima lectura",
+              "displayName": "Última lectura"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'COBERTURA POR ÁREA'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Tabla con el total de reportes, su estado y la fecha de la última lectura de la extracción por área'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

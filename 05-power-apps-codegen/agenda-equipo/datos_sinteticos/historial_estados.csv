@@ -1,0 +1,278 @@
+﻿ID,Fecha,EstadoAnterior,EstadoNuevo,Usuario
+A-01-25,2025-03-05,,Por hacer,Persona Demo 01
+A-02-25,2025-03-06,,Por hacer,Persona Demo 02
+A-03-25,2025-03-06,,Por hacer,Persona Demo 01
+A-04-25,2025-03-06,,Por hacer,Persona Demo 02
+A-05-25,2025-03-06,,Por hacer,Persona Demo 01
+A-06-25,2025-03-07,,Por hacer,Persona Demo 03
+A-07-25,2025-03-07,,Por hacer,Persona Demo 03
+A-08-25,2025-03-07,,Por hacer,Persona Demo 01
+A-09-25,2025-03-07,,Por hacer,Persona Demo 03
+A-10-25,2025-03-07,,Por hacer,Persona Demo 02
+A-03-25,2025-03-08,Por hacer,En curso,Persona Demo 01
+A-11-25,2025-03-08,,Por hacer,Persona Demo 03
+A-10-25,2025-03-09,Por hacer,En curso,Persona Demo 02
+A-12-25,2025-03-09,,Por hacer,Persona Demo 01
+A-09-25,2025-03-10,Por hacer,En curso,Persona Demo 03
+A-05-25,2025-03-11,Por hacer,En curso,Persona Demo 01
+A-13-25,2025-03-11,,Por hacer,Persona Demo 03
+A-14-25,2025-03-11,,Por hacer,Persona Demo 03
+A-15-25,2025-03-11,,Por hacer,Persona Demo 03
+A-16-25,2025-03-12,,Por hacer,Persona Demo 01
+A-17-25,2025-03-13,,Por hacer,Persona Demo 03
+A-04-25,2025-03-14,Por hacer,En curso,Persona Demo 02
+A-09-25,2025-03-14,En curso,En revisión,Persona Demo 03
+A-14-25,2025-03-14,Por hacer,En curso,Persona Demo 03
+A-18-25,2025-03-14,,Por hacer,Persona Demo 01
+A-01-25,2025-03-15,Por hacer,En curso,Persona Demo 01
+A-10-25,2025-03-15,En curso,En revisión,Persona Demo 02
+A-12-25,2025-03-15,Por hacer,En curso,Persona Demo 01
+A-17-25,2025-03-15,Por hacer,En curso,Persona Demo 03
+A-01-25,2025-03-16,En curso,En revisión,Persona Demo 01
+A-02-25,2025-03-16,Por hacer,En curso,Persona Demo 02
+A-19-25,2025-03-16,,Por hacer,Persona Demo 01
+A-20-25,2025-03-16,,Por hacer,Persona Demo 01
+A-15-25,2025-03-17,Por hacer,En curso,Persona Demo 03
+A-21-25,2025-03-17,,Por hacer,Persona Demo 02
+A-11-25,2025-03-18,Por hacer,En curso,Persona Demo 03
+A-21-25,2025-03-18,Por hacer,En curso,Persona Demo 02
+A-07-25,2025-03-19,Por hacer,En curso,Persona Demo 03
+A-08-25,2025-03-19,Por hacer,En curso,Persona Demo 01
+A-16-25,2025-03-19,Por hacer,En curso,Persona Demo 01
+A-22-25,2025-03-19,,Por hacer,Persona Demo 02
+A-23-25,2025-03-19,,Por hacer,Persona Demo 03
+A-09-25,2025-03-20,En revisión,Terminada,Persona Demo 03
+A-17-25,2025-03-20,En curso,Bloqueada,Persona Demo 03
+A-24-25,2025-03-20,,Por hacer,Persona Demo 02
+A-25-25,2025-03-20,,Por hacer,Persona Demo 03
+A-26-25,2025-03-20,,Por hacer,Persona Demo 03
+A-15-25,2025-03-21,En curso,Bloqueada,Persona Demo 03
+A-27-25,2025-03-21,,Por hacer,Persona Demo 02
+A-15-25,2025-03-22,Bloqueada,En curso,Persona Demo 03
+A-28-25,2025-03-22,,Por hacer,Persona Demo 03
+A-04-25,2025-03-23,En curso,En revisión,Persona Demo 02
+A-18-25,2025-03-23,Por hacer,En curso,Persona Demo 01
+A-20-25,2025-03-23,Por hacer,En curso,Persona Demo 01
+A-29-25,2025-03-23,,Por hacer,Persona Demo 02
+A-07-25,2025-03-25,En curso,Bloqueada,Persona Demo 03
+A-14-25,2025-03-25,En curso,Terminada,Persona Demo 03
+A-19-25,2025-03-25,Por hacer,En curso,Persona Demo 01
+A-30-25,2025-03-25,,Por hacer,Persona Demo 03
+A-31-25,2025-03-25,,Por hacer,Persona Demo 01
+A-21-25,2025-03-26,En curso,En revisión,Persona Demo 02
+A-23-25,2025-03-26,Por hacer,En curso,Persona Demo 03
+A-26-25,2025-03-26,Por hacer,En curso,Persona Demo 03
+A-31-25,2025-03-26,Por hacer,En curso,Persona Demo 01
+A-32-25,2025-03-26,,Por hacer,Persona Demo 02
+A-33-25,2025-03-26,,Por hacer,Persona Demo 01
+A-23-25,2025-03-27,En curso,En revisión,Persona Demo 03
+A-34-25,2025-03-27,,Por hacer,Persona Demo 03
+A-22-25,2025-03-28,Por hacer,En curso,Persona Demo 02
+A-28-25,2025-03-28,Por hacer,En curso,Persona Demo 03
+A-35-25,2025-03-28,,Por hacer,Persona Demo 03
+A-36-25,2025-03-28,,Por hacer,Persona Demo 02
+A-08-25,2025-03-29,En curso,Bloqueada,Persona Demo 01
+A-18-25,2025-03-29,En curso,Terminada,Persona Demo 01
+A-23-25,2025-03-29,En revisión,Terminada,Persona Demo 03
+A-27-25,2025-03-29,Por hacer,En curso,Persona Demo 02
+A-34-25,2025-03-29,Por hacer,En curso,Persona Demo 03
+A-21-25,2025-03-30,En revisión,Terminada,Persona Demo 02
+A-30-25,2025-03-30,Por hacer,En curso,Persona Demo 03
+A-37-25,2025-03-30,,Por hacer,Persona Demo 02
+A-26-25,2025-03-31,En curso,En revisión,Persona Demo 03
+A-38-25,2025-03-31,,Por hacer,Persona Demo 02
+A-20-25,2025-04-01,En curso,Terminada,Persona Demo 01
+A-25-25,2025-04-01,Por hacer,En curso,Persona Demo 03
+A-29-25,2025-04-01,Por hacer,En curso,Persona Demo 02
+A-33-25,2025-04-01,Por hacer,En curso,Persona Demo 01
+A-39-25,2025-04-01,,Por hacer,Persona Demo 03
+A-15-25,2025-04-02,En curso,En revisión,Persona Demo 03
+A-25-25,2025-04-02,En curso,En revisión,Persona Demo 03
+A-34-25,2025-04-02,En curso,En revisión,Persona Demo 03
+A-36-25,2025-04-02,Por hacer,En curso,Persona Demo 02
+A-40-25,2025-04-02,,Por hacer,Persona Demo 01
+A-32-25,2025-04-03,Por hacer,En curso,Persona Demo 02
+A-34-25,2025-04-03,En revisión,Terminada,Persona Demo 03
+A-41-25,2025-04-03,,Por hacer,Persona Demo 01
+A-35-25,2025-04-04,Por hacer,En curso,Persona Demo 03
+A-42-25,2025-04-04,,Por hacer,Persona Demo 01
+A-19-25,2025-04-05,En curso,En revisión,Persona Demo 01
+A-31-25,2025-04-05,En curso,Bloqueada,Persona Demo 01
+A-37-25,2025-04-06,Por hacer,En curso,Persona Demo 02
+A-40-25,2025-04-06,Por hacer,En curso,Persona Demo 01
+A-43-25,2025-04-07,,Por hacer,Persona Demo 01
+A-44-25,2025-04-07,,Por hacer,Persona Demo 02
+A-45-25,2025-04-07,,Por hacer,Persona Demo 03
+A-15-25,2025-04-08,En revisión,Terminada,Persona Demo 03
+A-29-25,2025-04-09,En curso,En revisión,Persona Demo 02
+A-39-25,2025-04-09,Por hacer,En curso,Persona Demo 03
+A-46-25,2025-04-09,,Por hacer,Persona Demo 01
+A-47-25,2025-04-09,,Por hacer,Persona Demo 01
+A-26-25,2025-04-10,En revisión,Terminada,Persona Demo 03
+A-30-25,2025-04-10,En curso,Terminada,Persona Demo 03
+A-43-25,2025-04-10,Por hacer,En curso,Persona Demo 01
+A-25-25,2025-04-11,En revisión,Terminada,Persona Demo 03
+A-31-25,2025-04-11,Bloqueada,En curso,Persona Demo 01
+A-32-25,2025-04-11,En curso,En revisión,Persona Demo 02
+A-48-25,2025-04-11,,Por hacer,Persona Demo 03
+A-38-25,2025-04-12,Por hacer,En curso,Persona Demo 02
+A-44-25,2025-04-12,Por hacer,En curso,Persona Demo 02
+A-46-25,2025-04-12,Por hacer,En curso,Persona Demo 01
+A-49-25,2025-04-12,,Por hacer,Persona Demo 01
+A-50-25,2025-04-12,,Por hacer,Persona Demo 02
+A-37-25,2025-04-13,En curso,Bloqueada,Persona Demo 02
+A-42-25,2025-04-13,Por hacer,En curso,Persona Demo 01
+A-51-25,2025-04-13,,Por hacer,Persona Demo 02
+A-50-25,2025-04-14,Por hacer,En curso,Persona Demo 02
+A-52-25,2025-04-14,,Por hacer,Persona Demo 01
+A-29-25,2025-04-15,En revisión,Terminada,Persona Demo 02
+A-41-25,2025-04-15,Por hacer,En curso,Persona Demo 01
+A-48-25,2025-04-15,Por hacer,En curso,Persona Demo 03
+A-45-25,2025-04-16,Por hacer,En curso,Persona Demo 03
+A-53-25,2025-04-16,,Por hacer,Persona Demo 01
+A-54-25,2025-04-16,,Por hacer,Persona Demo 01
+A-19-25,2025-04-17,En revisión,Terminada,Persona Demo 01
+A-38-25,2025-04-17,En curso,Terminada,Persona Demo 02
+A-50-25,2025-04-17,En curso,En revisión,Persona Demo 02
+A-55-25,2025-04-17,,Por hacer,Persona Demo 01
+A-42-25,2025-04-18,En curso,Bloqueada,Persona Demo 01
+A-54-25,2025-04-18,Por hacer,En curso,Persona Demo 01
+A-56-25,2025-04-18,,Por hacer,Persona Demo 02
+A-57-25,2025-04-18,,Por hacer,Persona Demo 02
+A-58-25,2025-04-18,,Por hacer,Persona Demo 02
+A-51-25,2025-04-19,Por hacer,En curso,Persona Demo 02
+A-31-25,2025-04-20,En curso,En revisión,Persona Demo 01
+A-50-25,2025-04-20,En revisión,Terminada,Persona Demo 02
+A-51-25,2025-04-20,En curso,Terminada,Persona Demo 02
+A-39-25,2025-04-21,En curso,En revisión,Persona Demo 03
+A-48-25,2025-04-21,En curso,En revisión,Persona Demo 03
+A-59-25,2025-04-21,,Por hacer,Persona Demo 01
+A-60-25,2025-04-21,,Por hacer,Persona Demo 01
+A-44-25,2025-04-22,En curso,Bloqueada,Persona Demo 02
+A-52-25,2025-04-22,Por hacer,En curso,Persona Demo 01
+A-32-25,2025-04-23,En revisión,Terminada,Persona Demo 02
+A-49-25,2025-04-23,Por hacer,En curso,Persona Demo 01
+A-61-25,2025-04-23,,Por hacer,Persona Demo 02
+A-37-25,2025-04-24,Bloqueada,En curso,Persona Demo 02
+A-53-25,2025-04-24,Por hacer,En curso,Persona Demo 01
+A-62-25,2025-04-24,,Por hacer,Persona Demo 01
+A-44-25,2025-04-25,Bloqueada,En curso,Persona Demo 02
+A-49-25,2025-04-25,En curso,En revisión,Persona Demo 01
+A-53-25,2025-04-25,En curso,Terminada,Persona Demo 01
+A-57-25,2025-04-26,Por hacer,En curso,Persona Demo 02
+A-61-25,2025-04-26,Por hacer,En curso,Persona Demo 02
+A-42-25,2025-04-28,Bloqueada,En curso,Persona Demo 01
+A-58-25,2025-04-28,Por hacer,En curso,Persona Demo 02
+A-62-25,2025-04-28,Por hacer,En curso,Persona Demo 01
+A-63-25,2025-04-28,,Por hacer,Persona Demo 02
+A-64-25,2025-04-28,,Por hacer,Persona Demo 03
+A-56-25,2025-04-29,Por hacer,En curso,Persona Demo 02
+A-65-25,2025-04-29,,Por hacer,Persona Demo 02
+A-49-25,2025-04-30,En revisión,Terminada,Persona Demo 01
+A-59-25,2025-04-30,Por hacer,En curso,Persona Demo 01
+A-66-25,2025-04-30,,Por hacer,Persona Demo 03
+A-67-25,2025-04-30,,Por hacer,Persona Demo 03
+A-68-25,2025-04-30,,Por hacer,Persona Demo 02
+A-69-25,2025-05-01,,Por hacer,Persona Demo 03
+A-70-25,2025-05-01,,Por hacer,Persona Demo 03
+A-71-25,2025-05-01,,Por hacer,Persona Demo 03
+A-64-25,2025-05-02,Por hacer,En curso,Persona Demo 03
+A-60-25,2025-05-03,Por hacer,En curso,Persona Demo 01
+A-64-25,2025-05-03,En curso,En revisión,Persona Demo 03
+A-72-25,2025-05-03,,Por hacer,Persona Demo 01
+A-73-25,2025-05-03,,Por hacer,Persona Demo 03
+A-74-25,2025-05-03,,Por hacer,Persona Demo 01
+A-58-25,2025-05-04,En curso,Bloqueada,Persona Demo 02
+A-72-25,2025-05-04,Por hacer,En curso,Persona Demo 01
+A-67-25,2025-05-05,Por hacer,En curso,Persona Demo 03
+A-71-25,2025-05-05,Por hacer,En curso,Persona Demo 03
+A-73-25,2025-05-05,Por hacer,En curso,Persona Demo 03
+A-75-25,2025-05-05,,Por hacer,Persona Demo 03
+A-37-25,2025-05-06,En curso,En revisión,Persona Demo 02
+A-44-25,2025-05-06,En curso,En revisión,Persona Demo 02
+A-56-25,2025-05-06,En curso,En revisión,Persona Demo 02
+A-64-25,2025-05-06,En revisión,Terminada,Persona Demo 03
+A-66-25,2025-05-06,Por hacer,En curso,Persona Demo 03
+A-70-25,2025-05-06,Por hacer,En curso,Persona Demo 03
+A-72-25,2025-05-06,En curso,Terminada,Persona Demo 01
+A-74-25,2025-05-06,Por hacer,En curso,Persona Demo 01
+A-76-25,2025-05-06,,Por hacer,Persona Demo 01
+A-37-25,2025-05-07,En revisión,Terminada,Persona Demo 02
+A-44-25,2025-05-07,En revisión,Terminada,Persona Demo 02
+A-77-25,2025-05-07,,Por hacer,Persona Demo 01
+A-60-25,2025-05-08,En curso,En revisión,Persona Demo 01
+A-78-25,2025-05-08,,Por hacer,Persona Demo 01
+A-79-25,2025-05-08,,Por hacer,Persona Demo 03
+A-42-25,2025-05-09,En curso,En revisión,Persona Demo 01
+A-63-25,2025-05-09,Por hacer,En curso,Persona Demo 02
+A-68-25,2025-05-09,Por hacer,En curso,Persona Demo 02
+A-80-25,2025-05-09,,Por hacer,Persona Demo 02
+A-81-25,2025-05-09,,Por hacer,Persona Demo 02
+A-82-25,2025-05-09,,Por hacer,Persona Demo 01
+A-83-25,2025-05-09,,Por hacer,Persona Demo 02
+A-84-25,2025-05-10,,Por hacer,Persona Demo 03
+A-71-25,2025-05-11,En curso,En revisión,Persona Demo 03
+A-85-25,2025-05-11,,Por hacer,Persona Demo 02
+A-76-25,2025-05-12,Por hacer,En curso,Persona Demo 01
+A-82-25,2025-05-12,Por hacer,En curso,Persona Demo 01
+A-86-25,2025-05-12,,Por hacer,Persona Demo 02
+A-87-25,2025-05-12,,Por hacer,Persona Demo 02
+A-85-25,2025-05-13,Por hacer,En curso,Persona Demo 02
+A-88-25,2025-05-13,,Por hacer,Persona Demo 01
+A-89-25,2025-05-13,,Por hacer,Persona Demo 03
+A-90-25,2025-05-13,,Por hacer,Persona Demo 01
+A-67-25,2025-05-14,En curso,En revisión,Persona Demo 03
+A-91-25,2025-05-14,,Por hacer,Persona Demo 03
+A-92-25,2025-05-14,,Por hacer,Persona Demo 03
+A-93-25,2025-05-14,,Por hacer,Persona Demo 02
+A-70-25,2025-05-15,En curso,En revisión,Persona Demo 03
+A-71-25,2025-05-15,En revisión,Terminada,Persona Demo 03
+A-75-25,2025-05-15,Por hacer,En curso,Persona Demo 03
+A-77-25,2025-05-15,Por hacer,En curso,Persona Demo 01
+A-68-25,2025-05-16,En curso,En revisión,Persona Demo 02
+A-78-25,2025-05-16,Por hacer,En curso,Persona Demo 01
+A-73-25,2025-05-17,En curso,En revisión,Persona Demo 03
+A-74-25,2025-05-17,En curso,Bloqueada,Persona Demo 01
+A-94-25,2025-05-17,,Por hacer,Persona Demo 02
+A-77-25,2025-05-18,En curso,Bloqueada,Persona Demo 01
+A-78-25,2025-05-18,En curso,Terminada,Persona Demo 01
+A-83-25,2025-05-18,Por hacer,En curso,Persona Demo 02
+A-79-25,2025-05-19,Por hacer,En curso,Persona Demo 03
+A-83-25,2025-05-19,En curso,Bloqueada,Persona Demo 02
+A-95-25,2025-05-19,,Por hacer,Persona Demo 02
+A-80-25,2025-05-20,Por hacer,En curso,Persona Demo 02
+A-82-25,2025-05-20,En curso,Bloqueada,Persona Demo 01
+A-96-25,2025-05-20,,Por hacer,Persona Demo 02
+A-68-25,2025-05-21,En revisión,Terminada,Persona Demo 02
+A-84-25,2025-05-21,Por hacer,En curso,Persona Demo 03
+A-75-25,2025-05-22,En curso,Bloqueada,Persona Demo 03
+A-84-25,2025-05-22,En curso,Terminada,Persona Demo 03
+A-85-25,2025-05-22,En curso,En revisión,Persona Demo 02
+A-88-25,2025-05-22,Por hacer,En curso,Persona Demo 01
+A-82-25,2025-05-23,Bloqueada,En curso,Persona Demo 01
+A-85-25,2025-05-23,En revisión,Terminada,Persona Demo 02
+A-87-25,2025-05-23,Por hacer,En curso,Persona Demo 02
+A-90-25,2025-05-23,Por hacer,En curso,Persona Demo 01
+A-91-25,2025-05-23,Por hacer,En curso,Persona Demo 03
+A-92-25,2025-05-23,Por hacer,En curso,Persona Demo 03
+A-70-25,2025-05-24,En revisión,Terminada,Persona Demo 03
+A-76-25,2025-05-24,En curso,Terminada,Persona Demo 01
+A-86-25,2025-05-24,Por hacer,En curso,Persona Demo 02
+A-93-25,2025-05-24,Por hacer,En curso,Persona Demo 02
+A-95-25,2025-05-24,Por hacer,En curso,Persona Demo 02
+A-82-25,2025-05-25,En curso,En revisión,Persona Demo 01
+A-96-25,2025-05-25,Por hacer,En curso,Persona Demo 02
+A-67-25,2025-05-26,En revisión,Terminada,Persona Demo 03
+A-93-25,2025-05-27,En curso,Bloqueada,Persona Demo 02
+A-79-25,2025-05-28,En curso,Bloqueada,Persona Demo 03
+A-86-25,2025-05-28,En curso,En revisión,Persona Demo 02
+A-94-25,2025-05-28,Por hacer,En curso,Persona Demo 02
+A-88-25,2025-05-29,En curso,Terminada,Persona Demo 01
+A-87-25,2025-05-30,En curso,Bloqueada,Persona Demo 02
+A-80-25,2025-05-31,En curso,En revisión,Persona Demo 02
+A-80-25,2025-05-31,En revisión,Terminada,Persona Demo 02
+A-82-25,2025-05-31,En revisión,Terminada,Persona Demo 01
+A-90-25,2025-05-31,En curso,En revisión,Persona Demo 01
+A-92-25,2025-05-31,En curso,Bloqueada,Persona Demo 03
+A-94-25,2025-05-31,En curso,Bloqueada,Persona Demo 02
+A-95-25,2025-05-31,En curso,Bloqueada,Persona Demo 02

@@ -1,0 +1,37 @@
+/// Periodos de la reunión de los lunes, hasta ayer: JUE-DOM (último jueves a domingo), SEMANAL (de lunes a ayer; el lunes, la semana completa) y MENSUAL (mes a la fecha; el primer lunes del mes, el mes anterior completo). Sin selección vale SEMANAL.
+table 'Periodo RD'
+	lineageTag: 5b01e2a0-6124-5e57-8a9b-b98da9890109
+
+	column Orden
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8c975d1d-a325-5719-8adf-f6fc6060984c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Orden]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Periodo
+		dataType: string
+		lineageTag: c4077090-da14-59dc-ab81-dccb185054d8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Periodo]
+		sortByColumn: Orden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Periodo RD' = calculated
+		mode: import
+		source =
+				DATATABLE(
+				    "Orden", INTEGER, "Periodo", STRING,
+				    {
+				        { 1, "JUE-DOM" },
+				        { 2, "SEMANAL" },
+				        { 3, "MENSUAL" }
+				    }
+				)
+

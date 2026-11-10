@@ -1,0 +1,25 @@
+Nombre,Correo,Cargo,Activo,Area
+Persona Demo 01,persona.demo01@minera-demo.example,Supervisor de Mina,Sí,Mina
+Persona Demo 02,persona.demo02@minera-demo.example,Supervisor de Chancado,Sí,Chancado
+Persona Demo 03,persona.demo03@minera-demo.example,Supervisor de Molienda,Sí,Molienda
+Persona Demo 04,persona.demo04@minera-demo.example,Supervisor de Mantención,Sí,Mantención
+Persona Demo 05,persona.demo05@minera-demo.example,Planificador,Sí,Planificación
+Persona Demo 06,persona.demo06@minera-demo.example,Supervisor de Mina,Sí,Mina
+Persona Demo 07,persona.demo07@minera-demo.example,Supervisor de Chancado,Sí,Chancado
+Persona Demo 08,persona.demo08@minera-demo.example,Supervisor de Molienda,Sí,Molienda
+Persona Demo 09,persona.demo09@minera-demo.example,Supervisor de Mantención,Sí,Mantención
+Persona Demo 10,persona.demo10@minera-demo.example,Planificador,Sí,Planificación
+Persona Demo 11,persona.demo11@minera-demo.example,Supervisor de Mina,Sí,Mina
+Persona Demo 12,persona.demo12@minera-demo.example,Supervisor de Chancado,Sí,Chancado
+Persona Demo 13,persona.demo13@minera-demo.example,Supervisor de Molienda,Sí,Molienda
+Persona Demo 14,persona.demo14@minera-demo.example,Supervisor de Mantención,Sí,Mantención
+Persona Demo 15,persona.demo15@minera-demo.example,Planificador,Sí,Planificación
+Persona Demo 16,persona.demo16@minera-demo.example,Supervisor de Mina,Sí,Mina
+Persona Demo 17,persona.demo17@minera-demo.example,Supervisor de Chancado,Sí,Chancado
+Persona Demo 18,persona.demo18@minera-demo.example,Supervisor de Molienda,Sí,Molienda
+Persona Demo 19,persona.demo19@minera-demo.example,Supervisor de Mantención,Sí,Mantención
+Persona Demo 20,persona.demo20@minera-demo.example,Planificador,Sí,Planificación
+Persona Demo 21,persona.demo21@minera-demo.example,Supervisor de Mina,No,Mina
+Persona Demo 22,persona.demo22@minera-demo.example,Supervisor de Chancado,Sí,Chancado
+Persona Demo 23,persona.demo23@minera-demo.example,Supervisor de Molienda,No,Molienda
+Persona Demo 24,persona.demo24@minera-demo.example,Jefe de Turno,Sí,

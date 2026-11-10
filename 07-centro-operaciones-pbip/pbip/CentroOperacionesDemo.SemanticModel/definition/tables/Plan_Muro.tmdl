@@ -1,0 +1,64 @@
+/// Plan mensual de la flota de Muro (CAEX y pala). Un valor por dia y punto (tag).
+table Plan_Muro
+	lineageTag: cfe44b45-b0ed-44f9-8a93-ff8c3094f5b1
+
+	measure 'Plan Disponibilidad CAEX Muro' = CALCULATE(AVERAGE(Plan_Muro[Valor]), Plan_Muro[Tag] = "PLAN_MURO_CAEX_DISP")
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: 27673069-1413-4e9a-9180-86f915e6c144
+
+	measure 'Plan UEBD CAEX Muro' = CALCULATE(AVERAGE(Plan_Muro[Valor]), Plan_Muro[Tag] = "PLAN_MURO_CAEX_UEBD")
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: bc1180ae-9dfa-4daf-9a5e-6adc0cc108c9
+
+	measure 'Plan Rendimiento CAEX Muro' = CALCULATE(AVERAGE(Plan_Muro[Valor]), Plan_Muro[Tag] = "PLAN_MURO_CAEX_REND")
+		formatString: #,0.0
+		lineageTag: c246b9ef-5ce4-41ed-85d3-ae36d5650fe4
+
+	measure 'Plan Disponibilidad Pala Muro' = CALCULATE(AVERAGE(Plan_Muro[Valor]), Plan_Muro[Tag] = "PLAN_MURO_PALA_DISP")
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: 3d9a2fff-21a8-4b56-8bfc-51750698385e
+
+	measure 'Plan UEBD Pala Muro' = CALCULATE(AVERAGE(Plan_Muro[Valor]), Plan_Muro[Tag] = "PLAN_MURO_PALA_UEBD")
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: c4f99b37-662b-42f1-b773-eb8cf2b850bc
+
+	measure 'Plan Rendimiento Pala Muro' = CALCULATE(AVERAGE(Plan_Muro[Valor]), Plan_Muro[Tag] = "PLAN_MURO_PALA_REND")
+		formatString: #,0.0
+		lineageTag: e9e48773-a5e7-4718-8872-e7fdda6a65c3
+
+	column Tag
+		dataType: string
+		isHidden
+		lineageTag: 07c83a7c-f593-4131-90bd-b15e5f61157f
+		summarizeBy: none
+		sourceColumn: Tag
+
+	column Fecha
+		dataType: dateTime
+		isHidden
+		formatString: Short Date
+		lineageTag: 9cfb38c3-d02f-4a35-ab37-3cf9868f7e31
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Valor
+		dataType: double
+		isHidden
+		lineageTag: 9bceaef7-76f6-4e6a-9be8-45d1cdf54630
+		summarizeBy: none
+		sourceColumn: Valor
+
+	partition Plan_Muro = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "plan_muro.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Tag", type text}, {"Fecha", type date}, {"Valor", type number}}, "en-US"),
+				    // Ventana de historia: solo las filas de los ultimos DiasHistoria dias respecto de FechaReferencia.
+				    Ventana = Table.SelectRows(Tipos, each Date.From([Fecha]) >= Date.AddDays(FechaReferencia, -DiasHistoria))
+				in
+				    Ventana
+

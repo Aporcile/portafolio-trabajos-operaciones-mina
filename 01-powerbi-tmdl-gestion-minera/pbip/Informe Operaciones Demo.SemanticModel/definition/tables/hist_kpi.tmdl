@@ -1,0 +1,51 @@
+table hist_kpi
+	lineageTag: e4d9afe0-4cf1-4eea-9428-3cd2e14ccae2
+
+	column item_id
+		dataType: string
+		lineageTag: b4ec0552-3484-4ef9-9875-5e5f4fcaeefb
+		summarizeBy: none
+		sourceColumn: item_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column timestamp
+		dataType: dateTime
+		formatString: General Date
+		isAvailableInMdx: false
+		lineageTag: e2baddfc-af11-4c4c-b000-b9865a80a348
+		summarizeBy: none
+		sourceColumn: timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column numeric_value
+		dataType: double
+		isAvailableInMdx: false
+		lineageTag: 7483569c-53a0-41f7-b651-10dd20e00ad1
+		summarizeBy: sum
+		sourceColumn: numeric_value
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column nombre_tag
+		dataType: string
+		lineageTag: a84be479-f1b6-47d3-b753-a58ad8053e93
+		summarizeBy: none
+		sourceColumn: nombre_tag
+
+		annotation SummarizationSetBy = Automatic
+
+	partition hist_kpi = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "hist_kpi.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"item_id", type text}, {"timestamp", type datetime}, {"numeric_value", type number}, {"nombre_tag", type text}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table

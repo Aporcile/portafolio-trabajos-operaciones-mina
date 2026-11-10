@@ -1,0 +1,31 @@
+model Model
+	culture: es-ES
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: es-ES
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_ProTooling = ["DevMode"]
+
+annotation PBI_QueryOrder = ["ModoDatos","HistoriadorODataUrl","HistoriadorODataUrlEstado","ZonaHorariaUTC","VentanaDias","RutaDatos","MedicionesCsv","HoraReferencia","MedicionesHistoriadorRaw","MedicionesHistoriador","Tags","Activos","Mediciones","Fuentes","LabCalidad","BalanceDiario","Config","Horas24","Medidas","Actualizacion"]
+
+ref table Medidas
+ref table Mediciones
+ref table Tags
+ref table Activos
+ref table Fuentes
+ref table LabCalidad
+ref table BalanceDiario
+ref table Config
+ref table Horas24
+ref table FiltroEstado
+ref table Actualizacion
+ref table Semaforo
+
+ref cultureInfo es-ES
+

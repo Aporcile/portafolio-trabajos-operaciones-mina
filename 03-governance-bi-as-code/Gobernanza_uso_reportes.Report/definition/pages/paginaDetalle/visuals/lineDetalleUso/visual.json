@@ -1,0 +1,207 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "lineDetalleUso",
+  "position": {
+    "x": 16,
+    "y": 180,
+    "width": 1032,
+    "height": 260,
+    "z": 44,
+    "tabOrder": 4400
+  },
+  "visual": {
+    "visualType": "lineChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Fecha"
+                    }
+                  },
+                  "Property": "Fecha"
+                }
+              },
+              "queryRef": "Dim_Fecha.Fecha",
+              "nativeQueryRef": "Fecha"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Vistas de pagina"
+                }
+              },
+              "queryRef": "_Medidas.Vistas de pagina",
+              "nativeQueryRef": "Vistas de pagina",
+              "displayName": "Vistas de página"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Aperturas"
+                }
+              },
+              "queryRef": "_Medidas.Aperturas",
+              "nativeQueryRef": "Aperturas"
+            }
+          ]
+        },
+        "Tooltips": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Aperturas interno"
+                }
+              },
+              "queryRef": "_Medidas.Aperturas interno",
+              "nativeQueryRef": "Aperturas interno"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Aperturas externo"
+                }
+              },
+              "queryRef": "_Medidas.Aperturas externo",
+              "nativeQueryRef": "Aperturas externo"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Vistas pagina interno"
+                }
+              },
+              "queryRef": "_Medidas.Vistas pagina interno",
+              "nativeQueryRef": "Vistas pagina interno",
+              "displayName": "Vistas de página interno"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Vistas pagina externo"
+                }
+              },
+              "queryRef": "_Medidas.Vistas pagina externo",
+              "nativeQueryRef": "Vistas pagina externo",
+              "displayName": "Vistas de página externo"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "dataPoint": [
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#4F9DDE'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Medidas.Vistas de pagina"
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#7B61C9'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Medidas.Aperturas"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'USO DIARIO DEL REPORTE SELECCIONADO'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Gráfico de líneas con vistas de página y aperturas por día del reporte seleccionado'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

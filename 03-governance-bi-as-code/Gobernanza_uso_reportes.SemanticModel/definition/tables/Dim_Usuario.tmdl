@@ -1,0 +1,27 @@
+table Dim_Usuario
+	lineageTag: 62fe4788-a076-bbf5-df9e-817aff185261
+
+	column usuario
+		dataType: string
+		isKey
+		lineageTag: c322bda9-bdff-d819-054b-8f49fcf4c228
+		sourceColumn: usuario
+
+	column tipo_usuario
+		dataType: string
+		lineageTag: 18f57929-a83b-8f57-ea2a-bb2ae7eb8e2f
+		sourceColumn: tipo_usuario
+
+	partition Dim_Usuario = m
+		mode: import
+		source =
+				// Consulta: Dim_Usuario (un usuario por fila; usuario es la clave)
+				// Es una consulta M y no una tabla calculada: el motor rechaza las relaciones hacia tablas calculadas al crear el modelo desde archivos.
+				// Las cuentas con prefijo "ext." son externas; el resto, internas.
+				let
+				    Usuarios = Table.Distinct(Table.SelectColumns(Fact_Uso, {"usuario"})),
+				    SinVacios = Table.SelectRows(Usuarios, each [usuario] <> null and [usuario] <> ""),
+				    Tipo = Table.AddColumn(SinVacios, "tipo_usuario", each if Text.StartsWith([usuario], "ext.", Comparer.OrdinalIgnoreCase) then "Externo" else "Interno", type text)
+				in
+				    Tipo
+

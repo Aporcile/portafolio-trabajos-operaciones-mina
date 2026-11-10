@@ -1,0 +1,32 @@
+// Plan del factor de carga de los CAEX (t por carga) para los periodos de la app, desde Plan_FactorCarga.
+// Modelo: «OEE CAEX Demo» (pbip/). Solo lectura.
+// El flujo reemplaza @HOY@ por la fecha del día ("aaaa-mm-dd hh:mm"; solo se lee la fecha) y pasa los tres valores a KPI_semanal_caex.dax.
+// Periodos: los mismos de esa consulta (semana de turno miércoles a martes hasta ayer, jueves a domingo y mes a la fecha).
+// Días sin plan: promedio de los días del periodo que sí tienen plan; si el periodo no tiene ninguno, el último plan conocido hasta
+// el fin del periodo. Así siempre hay plan.
+DEFINE
+    VAR _s = "@HOY@"
+    VAR _hoy = DATE(VALUE(LEFT(_s, 4)), VALUE(MID(_s, 6, 2)), VALUE(MID(_s, 9, 2)))
+    VAR _fin = _hoy - 1
+    VAR _ini = _fin - MOD(WEEKDAY(_fin, 2) - 3, 7)
+    VAR _iniMes = DATE(YEAR(_fin), MONTH(_fin), 1)
+    VAR _iniJD = _fin - MOD(WEEKDAY(_fin, 2) - 4, 7)
+    VAR _finJD = MIN(_iniJD + 3, _fin)
+    // Plan de cada día con plan, hasta ayer
+    VAR _dias =
+        FILTER(
+            SELECTCOLUMNS(Plan_FactorCarga, "@f", Plan_FactorCarga[Fecha], "@p", Plan_FactorCarga[Plan]),
+            [@p] > 0 && [@f] <= _fin
+        )
+    VAR _ultSem = MAXX(_dias, [@f])
+    VAR _ultJD = MAXX(FILTER(_dias, [@f] <= _finJD), [@f])
+    VAR _planUltSem = MAXX(FILTER(_dias, [@f] = _ultSem), [@p])
+    VAR _planUltJD = MAXX(FILTER(_dias, [@f] = _ultJD), [@p])
+EVALUATE
+ROW(
+    "PlanSem", COALESCE(AVERAGEX(FILTER(_dias, [@f] >= _ini && [@f] <= _fin), [@p]), _planUltSem),
+    "PlanJD", COALESCE(AVERAGEX(FILTER(_dias, [@f] >= _iniJD && [@f] <= _finJD), [@p]), _planUltJD),
+    "PlanMes", COALESCE(AVERAGEX(FILTER(_dias, [@f] >= _iniMes && [@f] <= _fin), [@p]), _planUltSem),
+    "DiasSem", COUNTROWS(FILTER(_dias, [@f] >= _ini && [@f] <= _fin)),
+    "UltimoPlan", _ultSem
+)

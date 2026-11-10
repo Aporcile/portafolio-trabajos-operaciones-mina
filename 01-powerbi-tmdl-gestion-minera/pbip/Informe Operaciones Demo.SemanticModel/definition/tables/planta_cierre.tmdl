@@ -1,0 +1,43 @@
+table planta_cierre
+	lineageTag: 8e6b9dbf-554d-4917-a81a-691a374cab59
+
+	column Punto
+		dataType: string
+		lineageTag: 752b1610-213b-49f0-819b-009f784911d9
+		summarizeBy: none
+		sourceColumn: Punto
+
+		annotation SummarizationSetBy = Automatic
+
+	column Fecha
+		dataType: dateTime
+		formatString: dd-mm-yyyy
+		lineageTag: 12cf9791-1214-4335-a4d8-9754a5c5e7f0
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Valor
+		dataType: double
+		lineageTag: aa92669e-793d-47dc-a98a-1343743c1b7a
+		summarizeBy: none
+		sourceColumn: Valor
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition planta_cierre = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "planta_cierre.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Punto", type text}, {"Fecha", type date}, {"Valor", type number}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table

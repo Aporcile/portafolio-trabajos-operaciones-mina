@@ -1,0 +1,178 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "tblResumenReportes",
+  "position": {
+    "x": 592,
+    "y": 180,
+    "width": 1312,
+    "height": 884,
+    "z": 12,
+    "tabOrder": 1200
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Area"
+                    }
+                  },
+                  "Property": "Area"
+                }
+              },
+              "queryRef": "Dim_Area.Area",
+              "nativeQueryRef": "Area",
+              "displayName": "Área"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Reporte"
+                    }
+                  },
+                  "Property": "Reporte"
+                }
+              },
+              "queryRef": "Dim_Reporte.Reporte",
+              "nativeQueryRef": "Reporte"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Aperturas"
+                }
+              },
+              "queryRef": "_Medidas.Aperturas",
+              "nativeQueryRef": "Aperturas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Vistas de pagina"
+                }
+              },
+              "queryRef": "_Medidas.Vistas de pagina",
+              "nativeQueryRef": "Vistas de pagina",
+              "displayName": "Vistas de página"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Usuarios unicos"
+                }
+              },
+              "queryRef": "_Medidas.Usuarios unicos",
+              "nativeQueryRef": "Usuarios unicos",
+              "displayName": "Usuarios únicos"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Pags por apertura"
+                }
+              },
+              "queryRef": "_Medidas.Pags por apertura",
+              "nativeQueryRef": "Pags por apertura",
+              "displayName": "Págs. por apertura"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Estado del reporte"
+                }
+              },
+              "queryRef": "_Medidas.Estado del reporte",
+              "nativeQueryRef": "Estado del reporte"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Medidas"
+                  }
+                },
+                "Property": "Vistas de pagina"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": false
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'DETALLE POR REPORTE (MÁS VISTAS PRIMERO)'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Tabla con área, reporte, aperturas, vistas de página, usuarios, páginas por apertura y estado'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

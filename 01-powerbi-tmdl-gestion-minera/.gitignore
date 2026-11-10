@@ -1,0 +1,17 @@
+# Power BI: cachés y configuración local (no versionar)
+**/.pbi/
+**/localSettings.json
+**/cache.abf
+*.pbix
+*.pbit
+
+# Python
+__pycache__/
+*.pyc
+
+# Respaldos
+*.bak
+respaldo_*/
+
+# Si usas generador/configurar_ruta.py, revierte el parámetro antes de subir cambios:
+#   python generador/configurar_ruta.py --restaurar

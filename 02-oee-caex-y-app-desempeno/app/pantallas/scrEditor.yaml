@@ -1,0 +1,2226 @@
+Screens:
+  scrEditor:
+    Properties:
+      Fill: =colFondo
+      OnVisible: |-
+        =If(
+            !varPrepSucia || varPrepFecha <> claveReunion,
+            Set(varPrepFecha, claveReunion);
+            Set(varPrepSucia, false);
+            ClearCollect(colRevision, fxRevision);
+            Clear(colEvid);
+            ClearCollect(colDest, fxDest);
+            ClearCollect(
+                colNuevos,
+                ForAll(
+                    If(IsBlank(fxPrep.nue), Table(ParseJSON("[]")), Table(fxPrep.nue)) As n,
+                    {
+                        Titulo: Text(n.Value.t),
+                        Responsable: Text(n.Value.r),
+                        FechaLimite: DateValue(Text(n.Value.f)),
+                        IdLocal: Text(n.Value.id)
+                    }
+                )
+            );
+            // Sin preparación guardada, la meteorología del plan semanal parte como aviso de precaución.
+            ClearCollect(colAvisos, fxAvisos);
+            If(
+                IsBlank(fxPrepFila) && IsEmpty(colAvisos) && !IsBlank(First(colPlan).Meteorologia),
+                Collect(colAvisos, {Nivel: "Precaución", Texto: First(colPlan).Meteorologia, Orden: 1, IdLocal: Text(GUID()), Rango: 2})
+            );
+            Set(varIndEd, fxIndSeg)
+        );
+        Set(varNivelEd, "Precaución");
+        Set(varBloqueEd, 1);
+        Set(varSubCompEd, 1);
+        Set(varEvidId, 0);
+        Set(varConvEditEd, Blank());
+        Set(varEditNuevoEd, Blank());
+        Set(varBorrarNuevoEd, Blank())
+    Children:
+      - conHeaderEd:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =colPrimario
+            Height: =72
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Width: =Parent.Width
+          Children:
+            - imgLogoEd:
+                Control: Image@2.2.3
+                Properties:
+                  Height: =56
+                  Image: ='logo_minera_demo_blanco'
+                  ImagePosition: =ImagePosition.Fit
+                  Width: =120
+                  X: =12
+                  Y: =8
+            - imgLogoAreaEd:
+                Control: Image@2.2.3
+                Properties:
+                  Height: =44
+                  Image: ="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAE90lEQVR42u3azVEjMRSFUUlFFiYC2JKAiYBciAdCwVHgLRsch1mxowr/dLdbuudEMAP1vvfUM7V0YvOwPRboxGG/qz38Oathh9woVAMPuUGoBh9yQ1ANPeTGoBp8yA1BNfiQG4Jm+KHE/vN3NfiQew00ww+510Az/JAbgWrwIfdJ0Aw/5F4DzfBDbgSa4YfcCDTDD7kRaIYfciPQDD/kRqD5kUGuZvtD7hXQDD/kRqAZfsiNgG8A4BuA7Q+JV0Az/JAbAU8A8ASw/SHxCnABgAvA9ofEK8AFAC4AID4Azn/Iega4AMAFYPtD4hXgAgAXACAAQF4AvP8h8zuACwA8AQABAAQAyFB9AAQXACAAgAAAAgAIACAAgAAAAgAIACAAgAAAAgAIACAALOX788MPAQEABCBy+7sCEABAALz9QQAAAcjZ/i4CBAAQAEAA4j7+eQYgAIAA+Kc/EACRAAEABMBmBwEAAWDY7e9aQAAAAfD2BwEQDhAAQABscQQAAUEAMLwIACAAgAAwyvnvKYEAAALg4x8IgKggABhUBAAQAFwXCAAGFAEABADbHwFAaBAAQACwlREABAcBwDAiAIAA0Mf2d3kIACAAgADgBEcAECEEAIOHAAACwLDb3zUiAIAAAAJA3LntGSAAgABgyy7v6fXND0EAAAEg6kL53f6uAAEwXCAApL79XQECYPv7syIApH75dwUIgO0PAsCo0bLlBQAEQgBsUsONAIBQCIDtP/af31ALAAiGAGCYEQDnv78HAoDt73IQAFsTBICRgjbFBncFCIDtDwKAL/8IAGKCADj/1/t3M7ACAK4AAbD9DSoCgMiJiwBg+yMANiMIAGLnyhAAA+H8RwBAbATA9jeQCADCJzoCgO2PANiCIACsLIC33v6uDwGw/UEASN2+rgABsP39LBAAUreuK0AAAAFw8s7t5f3LD0EAwLNEAGx/2x8BAFeAAGD7IwDOf1wBAoDtjwDY/iAA2P6eAQJg+4MAYPu7AgQAEADnPwgAzn/PAAGw/UEAsP1dAQIACIDz3/Z3BQgAIAC2v+2PAIBngADY/rY/AgCuAAHA9kcAnP+4AgQA2x8BsP1BALD9PQPCA2D74wLA9g9/+ydfAQIALgDnv+1fXAECAAiA7W/7IwDgGSAA2P4IgPMfV4AAYPsjALY/rgABAATA9nf+IwDgGSAA2P4IgPMfV4AAYPsjALY/rgABwPZHAAABcP7b/p4BAgAIgO1v+7sCBAAQANvf9kcAwDNAALD9EQDnP64AAcD2RwBsf1wBAoDtjwAAqQFIP/9tf88AFwCQFwDb3/Z3BVwYgMN+V/0qIc9hv6vN9rf9yb0CfAOAYHe9/wXuH5/9FsEFAFwUAB8CocR9AHQBgAsAEAAgNwC+A0DW+98FAC6Av8sAjL39XQDgAgAEwDMAos5/FwC4AE4rBTDW9ncBgAvgvGIAY2z/fy8AEYBxh98TADwBrisI0Of2P/kCEAEYb/jPegKIAIw1/L4BgG8A85QFWPf2v+gCEAEYY/gvfgKIAPQ//Fd9AxAB6Hv4r/4IKALQ7/BP8q8AIgB9Dn8ppUw6vJuH7dGvBdY/+LP8PwDXAPQz/LP8RyARgD6Gf/IngCcB9DH4i/xXYNcArHuGFhtQ1wCsb3kuvqGFANZzNd/0RBcDuO1TeRVvdCHA4AcHQBAw8AIgChj2hf0AXzRdlxacKo0AAAAASUVORK5CYII="
+                  ImagePosition: =ImagePosition.Fit
+                  Width: =44
+                  X: =138
+                  Y: =14
+            - lblTituloEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(255, 255, 255, 1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =36
+                  Size: =15
+                  Text: ="RD Minera Demo · " & Text(fecReunion, "ddd dd-mm", "es-ES")
+                  Width: =310
+                  Wrap: =false
+                  X: =190
+                  Y: =8
+            - lblEstadoPrepEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =If(varPrepSucia || varEvidId <> 0 || !IsBlank(varEditNuevoEd) || !IsBlank(Trim(txtNuevoQueEd.Text)) || !IsBlank(Trim(txtNuevoRespEd.Text)) || !IsBlank(Trim(txtAvisoEd.Text)), RGBA(255, 204, 128, 1), RGBA(165, 214, 167, 1))
+                  FontWeight: =FontWeight.Semibold
+                  Height: =22
+                  Size: =12
+                  Text: |-
+                    =If(
+                        varPrepGuardando,
+                        "Guardando…",
+                        varPrepSucia || varEvidId <> 0 || !IsBlank(varEditNuevoEd) || !IsBlank(Trim(txtNuevoQueEd.Text)) || !IsBlank(Trim(txtNuevoRespEd.Text)) || !IsBlank(Trim(txtAvisoEd.Text)),
+                        "● Cambios sin guardar",
+                        !IsBlank(fxPrepFila),
+                        // Actualizado viene como «aaaa-mm-dd hh:mm»: se muestra «dd-mm hh:mm», como en el resto de la app.
+                        "✔ Guardado " & With({a: fxPrepFila.Actualizado}, If(Len(a) >= 16, Mid(a, 9, 2) & "-" & Mid(a, 6, 2) & " " & Mid(a, 12, 5), a)),
+                        "Sin preparación guardada"
+                    )
+                  Width: =300
+                  Wrap: =false
+                  X: =190
+                  Y: =44
+            - lblSubEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(200, 211, 227, 1)
+                  Height: =64
+                  PaddingBottom: =2
+                  PaddingTop: =2
+                  Size: =11
+                  Text: |-
+                    ="Modo editor: lo que prepares se muestra en la reunión (visor)."
+                  VerticalAlign: =VerticalAlign.Middle
+                  Width: =Parent.Width - 852
+                  X: =506
+                  Y: =4
+            - btnGuardarPrepEd:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(255, 255, 255, 1)
+                  DisplayMode: =If(varPrepGuardando, DisplayMode.Disabled, DisplayMode.Edit)
+                  Fill: =colAmbar
+                  FontWeight: =FontWeight.Bold
+                  Height: =48
+                  OnSelect: |-
+                    =If(
+                        CountRows(Filter(colRevision, !Revisado)) > 0,
+                        Set(varBloqueEd, 2);
+                        Set(varSubCompEd, 1);
+                        Notify("Para guardar, todos los compromisos deben tener estado. Faltan " & CountRows(Filter(colRevision, !Revisado)) & ".", NotificationType.Warning),
+                        !IsBlank(varEditNuevoEd),
+                        If(!(varBloqueEd = 2 && varSubCompEd = 2), Set(varBloqueEd, 2); Set(varSubCompEd, 2));
+                        Notify("Termina de editar el compromiso nuevo: «Guardar cambios» o «Cancelar».", NotificationType.Warning),
+                        IsBlank(Trim(txtNuevoQueEd.Text)) <> IsBlank(Trim(txtNuevoRespEd.Text)),
+                        If(!(varBloqueEd = 2 && varSubCompEd = 2), Set(varBloqueEd, 2); Set(varSubCompEd, 2));
+                        Notify("Al compromiso nuevo le falta qué se hará o el responsable: complétalo o bórralo.", NotificationType.Warning),
+                        Set(varPrepGuardando, true);
+                        // 0) Lo escrito sin confirmar: evidencia con el panel abierto, aviso sin «+ Agregar aviso» y compromiso nuevo completo.
+                        If(
+                            varEvidId <> 0,
+                            With(
+                                {f: imgEvidPreviaEd.Image, nom: If(     !IsEmpty(attEvidEd.Attachments),     First(attEvidEd.Attachments).Name,     IsBlank(addFotoEvidEd.Media),     LookUp(colEvid, CompromisoId = varEvidId).Nombre,     "" ), nuevo: (!IsEmpty(attEvidEd.Attachments) || !IsBlank(addFotoEvidEd.Media))},
+                                RemoveIf(colEvid, CompromisoId = varEvidId);
+                                If(!IsBlank(f), Collect(colEvid, {CompromisoId: varEvidId, Foto: f, TieneFoto: true, Nombre: nom}));
+                                Patch(
+                                    colRevision,
+                                    LookUp(colRevision, ID = varEvidId),
+                                    {
+                                        Comentario: Trim(txtEvidComentarioEd.Text),
+                                        Url: If(nuevo, "", LookUp(colRevision, ID = varEvidId).Url)
+                                    }
+                                )
+                            );
+                            Set(varEvidId, 0);
+                            Reset(addFotoEvidEd);
+                            Reset(attEvidEd);
+                            Reset(txtEvidComentarioEd)
+                        );
+                        If(!IsBlank(Trim(txtAvisoEd.Text)), Collect(colAvisos, {Nivel: varNivelEd, Texto: Trim(txtAvisoEd.Text), Orden: Coalesce(Max(colAvisos, Orden), 0) + 1, IdLocal: Text(GUID()), Rango: Switch(varNivelEd, "Crítico", 1, "Precaución", 2, "Recordar", 3, 4)}); Reset(txtAvisoEd));
+                        If(
+                            !IsBlank(Trim(txtNuevoQueEd.Text)) && !IsBlank(Trim(txtNuevoRespEd.Text)),
+                            Collect(colNuevos, {Titulo: Trim(txtNuevoQueEd.Text), Responsable: Trim(txtNuevoRespEd.Text), FechaLimite: dpNuevoFechaEd.SelectedDate, IdLocal: Text(GUID())});
+                            Reset(txtNuevoQueEd);
+                            Reset(txtNuevoRespEd);
+                            Reset(dpNuevoFechaEd)
+                        );
+                        // seg: resumen en texto de los avisos (lo usan la sesión y las versiones anteriores del visor).
+                        Set(varSeg, Concat(Sort(colAvisos, Rango * 1000 + Orden), Nivel & ": " & Texto, Char(10)));
+                        // 1) Evidencias nuevas (fotos o archivos) a la carpeta Evidencias (solo con señal). Cada una se sube una vez: al subirla queda su link en Url.
+                        If(
+                            Connection.Connected,
+                            ForAll(
+                                colEvid As e,
+                                If(
+                                    IsBlank(LookUp(colRevision, ID = e.CompromisoId).Url),
+                                    IfError(
+                                        With(
+                                            {u: RDSubirEvidencia.Run("Prep_" & claveReunion & "_C" & e.CompromisoId & "_" & Text(Now(), "hhmmss") & If(IsBlank(e.Nombre), ".jpg", IsBlank(Find(".", e.Nombre)), "", "." & Lower(Last(Split(e.Nombre, ".")).Value)), JSON(e.Foto, JSONFormat.IncludeBinaryData)).url},
+                                            Patch(colRevision, LookUp(colRevision, ID = e.CompromisoId), {Url: u})
+                                        );
+                                        true,
+                                        Notify("No se pudo subir una evidencia: " & FirstError.Message, NotificationType.Error);
+                                        false
+                                    )
+                                )
+                            )
+                        );
+                        // 2) Texto JSON de la preparación: tema de seguridad, estado de cada compromiso, destacados y compromisos nuevos.
+                        Set(
+                            varPrepJson,
+                            JSON(
+                                {
+                                    seg: varSeg,
+                                    avi: ForAll(colAvisos As a, {id: a.IdLocal, n: a.Nivel, x: a.Texto, o: a.Orden}),
+                                    ind: {inc: Value(txtSegIncEd.Text), inca: Value(txtSegIncAntEd.Text), rep: Value(txtSegRepEd.Text), repm: Value(txtSegRepMetaEd.Text), ire: Value(txtSegInsRealEd.Text), ipl: Value(txtSegInsPlanEd.Text)},
+                                    cor: User().Email,
+                                    est: ForAll(colRevision As r, {id: r.ID, estado: r.EstadoNuevo, rev: r.Revisado, com: r.Comentario, url: r.Url}),
+                                    des: ForAll(colDest As d, {id: d.IdLocal, t: d.Tipo, x: d.Texto, o: d.Orden}),
+                                    nue: ForAll(colNuevos As n, {id: n.IdLocal, t: n.Titulo, r: n.Responsable, f: Text(n.FechaLimite, "yyyy-mm-dd")})
+                                },
+                                JSONFormat.Compact
+                            )
+                        );
+                        // 3) Copia local (el visor de este equipo la lee) y subida a Excel (RD_Preparacion).
+                        ClearCollect(colPrepFila, {Clave: claveReunion, Json: varPrepJson, Actualizado: Text(Now(), "yyyy-mm-dd hh:mm"), Autor: User().FullName});
+                        SaveData(colPrepFila, "rd_prepfila");
+                        Set(varPrepErr, "");
+                        // Refresh: la lectura en memoria puede ser vieja; así no se crea una fila repetida si otro equipo ya la creó.
+                        If(Connection.Connected, Refresh(RD_Preparacion));
+                        Set(
+                            varPrepNube,
+                            Connection.Connected &&
+                            IfError(
+                                If(
+                                    IsBlank(LookUp(RD_Preparacion, Clave = claveReunion)),
+                                    Patch(RD_Preparacion, Defaults(RD_Preparacion), First(colPrepFila)),
+                                    Patch(RD_Preparacion, LookUp(RD_Preparacion, Clave = claveReunion), {Json: varPrepJson, Actualizado: First(colPrepFila).Actualizado, Autor: First(colPrepFila).Autor})
+                                );
+                                true,
+                                Set(varPrepErr, FirstError.Message);
+                                false
+                            )
+                        );
+                        If(
+                            varPrepNube,
+                            Clear(colOutPrep);
+                            Notify("Preparación guardada.", NotificationType.Success),
+                            ClearCollect(colOutPrep, First(colPrepFila));
+                            Notify(If(Connection.Connected, "No se pudo guardar en la nube (" & varPrepErr & "). ", "Sin señal: ") & "La preparación quedó en este equipo y se sube sola al sincronizar.", NotificationType.Warning)
+                        );
+                        SaveData(colOutPrep, "rd_out_prep");
+                        Set(varPrepSucia, false);
+                        Set(varPrepGuardando, false)
+                    )
+                  RadiusBottomLeft: =8
+                  RadiusBottomRight: =8
+                  RadiusTopLeft: =8
+                  RadiusTopRight: =8
+                  Size: =14
+                  Text: ="Guardar"
+                  Width: =150
+                  X: =Parent.Width - 318
+                  Y: =12
+            - btnVolverEd:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderColor: =RGBA(255, 255, 255, 1)
+                  BorderThickness: =1
+                  Color: =RGBA(255, 255, 255, 1)
+                  Fill: =RGBA(255, 255, 255, 0.15)
+                  FontWeight: =FontWeight.Bold
+                  Height: =48
+                  OnSelect: |-
+                    =If(
+                        CountRows(Filter(colRevision, !Revisado)) > 0,
+                        Set(varBloqueEd, 2);
+                        Set(varSubCompEd, 1);
+                        Notify("Antes de salir, marca el estado de todos los compromisos. Faltan " & CountRows(Filter(colRevision, !Revisado)) & ".", NotificationType.Warning),
+                        varPrepSucia || varEvidId <> 0 || !IsBlank(varEditNuevoEd) || !IsBlank(Trim(txtNuevoQueEd.Text)) || !IsBlank(Trim(txtNuevoRespEd.Text)) || !IsBlank(Trim(txtAvisoEd.Text)),
+                        Notify("Guarda la preparación antes de salir (botón Guardar).", NotificationType.Warning),
+                        Navigate(scrInicio, ScreenTransition.Fade)
+                    )
+                  RadiusBottomLeft: =8
+                  RadiusBottomRight: =8
+                  RadiusTopLeft: =8
+                  RadiusTopRight: =8
+                  Size: =14
+                  Text: ="← Inicio"
+                  Width: =148
+                  X: =Parent.Width - 160
+                  Y: =12
+      - galBloquesEd:
+          Control: Gallery@2.15.0
+          Variant: BrowseLayout_Vertical_ThreeTextVariant_ver5.0
+          Properties:
+            Height: =2 * 80 + 6
+            Items: |-
+              =Table({N: 1, Nombre: "Seguridad"}, {N: 2, Nombre: "Compromisos"})
+            TemplatePadding: =6
+            TemplateSize: =74
+            Width: =240
+            X: =16
+            Y: =88
+          Children:
+            - btnBloqueEd:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Align: =Align.Left
+                  BorderColor: =colPrimario
+                  BorderThickness: =1
+                  Color: =If(varBloqueEd = ThisItem.N, RGBA(255, 255, 255, 1), colPrimario)
+                  Fill: |-
+                    =If(
+                        varBloqueEd = ThisItem.N,
+                        colPrimario,
+                        RGBA(255, 255, 255, 1)
+                    )
+                  FontWeight: =FontWeight.Semibold
+                  Height: =Parent.TemplateHeight - 6
+                  OnSelect: =Set(varBloqueEd, ThisItem.N)
+                  PaddingLeft: =16
+                  RadiusBottomLeft: =8
+                  RadiusBottomRight: =8
+                  RadiusTopLeft: =8
+                  RadiusTopRight: =8
+                  Size: =15
+                  Text: =ThisItem.N & ". " & ThisItem.Nombre
+                  Width: =Parent.TemplateWidth - 6
+                  X: =0
+                  Y: =0
+      - btnSiguienteEd:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Color: =RGBA(255, 255, 255, 1)
+            DisplayMode: =If(varBloqueEd = 1 || (varBloqueEd = 2 && varSubCompEd = 1), DisplayMode.Edit, DisplayMode.Disabled)
+            Fill: =colPrimario
+            FontWeight: =FontWeight.Bold
+            Height: =64
+            OnSelect: =If(varBloqueEd = 2, Set(varSubCompEd, 2), Set(varBloqueEd, 2); Set(varSubCompEd, 1))
+            RadiusBottomLeft: =8
+            RadiusBottomRight: =8
+            RadiusTopLeft: =8
+            RadiusTopRight: =8
+            Size: =16
+            Text: ="Siguiente ▶"
+            Width: =234
+            X: =16
+            Y: =galBloquesEd.Y + galBloquesEd.Height + 12
+      - btnConvocadosEd:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =colPrimario
+            BorderThickness: =1
+            Color: =If(varBloqueEd = 6, RGBA(255, 255, 255, 1), colPrimario)
+            Fill: =If(varBloqueEd = 6, colPrimario, RGBA(255, 255, 255, 1))
+            FontWeight: =FontWeight.Semibold
+            Height: =40
+            OnSelect: =Set(varBloqueEd, 6)
+            RadiusBottomLeft: =8
+            RadiusBottomRight: =8
+            RadiusTopLeft: =8
+            RadiusTopRight: =8
+            Size: =14
+            Text: ="Convocados (" & CountRows(colParticipantes) & ")"
+            Width: =234
+            X: =16
+            Y: =btnSiguienteEd.Y + btnSiguienteEd.Height + 12
+      - conB1Ed:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(255, 255, 255, 1)
+            Height: =Parent.Height - 104
+            RadiusBottomLeft: =12
+            RadiusBottomRight: =12
+            RadiusTopLeft: =12
+            RadiusTopRight: =12
+            Visible: =varBloqueEd = 1
+            Width: =Parent.Width - 296
+            X: =272
+            Y: =88
+          Children:
+            - lblB1TituloEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colTexto
+                  FontWeight: =FontWeight.Bold
+                  Height: =44
+                  Size: =24
+                  Text: ="Seguridad"
+                  Width: =Parent.Width - 48
+                  X: =24
+                  Y: =14
+            - lblB1AyudaEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =30
+                  PaddingBottom: =2
+                  PaddingTop: =2
+                  Size: =12
+                  Text: ="Cifras de la semana (a mano) y avisos con su nivel. Toca el nivel para cambiarlo."
+                  VerticalAlign: =VerticalAlign.Top
+                  Width: =Parent.Width - 48
+                  X: =24
+                  Y: =56
+            - recSegIncEd:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: =RGBA(244, 246, 251, 1)
+                  Height: =116
+                  Width: =(Parent.Width - 48 - 24) / 3
+                  X: =24 + 0 * ((Parent.Width - 48 - 24) / 3 + 12)
+                  Y: =92
+            - lblSegTitIncEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colPrimario
+                  FontWeight: =FontWeight.Bold
+                  Height: =38
+                  PaddingBottom: =2
+                  PaddingLeft: =8
+                  PaddingRight: =8
+                  PaddingTop: =2
+                  Size: =11
+                  Text: ="Incidentes"
+                  VerticalAlign: =VerticalAlign.Top
+                  Width: =(Parent.Width - 48 - 24) / 3
+                  X: =24 + 0 * ((Parent.Width - 48 - 24) / 3 + 12)
+                  Y: =94
+            - lblSegIncEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =30
+                  Size: =11
+                  Text: ="Semana"
+                  Width: =(Parent.Width - 48 - 24) / 3 - 96
+                  Wrap: =false
+                  X: =24 + 0 * ((Parent.Width - 48 - 24) / 3 + 12) + 8
+                  Y: =134
+            - txtSegIncEd:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  Default: =Text(varIndEd.Inc)
+                  Format: =TextFormat.Number
+                  Height: =30
+                  HintText: =""
+                  OnChange: =Set(varPrepSucia, true)
+                  Size: =13
+                  Width: =76
+                  X: =24 + 0 * ((Parent.Width - 48 - 24) / 3 + 12) + (Parent.Width - 48 - 24) / 3 - 84
+                  Y: =134
+            - lblSegIncAntEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =30
+                  Size: =11
+                  Text: ="Anterior"
+                  Width: =(Parent.Width - 48 - 24) / 3 - 96
+                  Wrap: =false
+                  X: =24 + 0 * ((Parent.Width - 48 - 24) / 3 + 12) + 8
+                  Y: =170
+            - txtSegIncAntEd:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  Default: =Text(varIndEd.IncAnt)
+                  Format: =TextFormat.Number
+                  Height: =30
+                  HintText: =""
+                  OnChange: =Set(varPrepSucia, true)
+                  Size: =13
+                  Width: =76
+                  X: =24 + 0 * ((Parent.Width - 48 - 24) / 3 + 12) + (Parent.Width - 48 - 24) / 3 - 84
+                  Y: =170
+            - recSegRepEd:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: =RGBA(244, 246, 251, 1)
+                  Height: =116
+                  Width: =(Parent.Width - 48 - 24) / 3
+                  X: =24 + 1 * ((Parent.Width - 48 - 24) / 3 + 12)
+                  Y: =92
+            - lblSegTitRepEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colPrimario
+                  FontWeight: =FontWeight.Bold
+                  Height: =38
+                  PaddingBottom: =2
+                  PaddingLeft: =8
+                  PaddingRight: =8
+                  PaddingTop: =2
+                  Size: =11
+                  Text: ="Hipo Hazard"
+                  VerticalAlign: =VerticalAlign.Top
+                  Width: =(Parent.Width - 48 - 24) / 3
+                  X: =24 + 1 * ((Parent.Width - 48 - 24) / 3 + 12)
+                  Y: =94
+            - lblSegRepEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =30
+                  Size: =11
+                  Text: ="Semana"
+                  Width: =(Parent.Width - 48 - 24) / 3 - 96
+                  Wrap: =false
+                  X: =24 + 1 * ((Parent.Width - 48 - 24) / 3 + 12) + 8
+                  Y: =134
+            - txtSegRepEd:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  Default: =Text(varIndEd.Rep)
+                  Format: =TextFormat.Number
+                  Height: =30
+                  HintText: =""
+                  OnChange: =Set(varPrepSucia, true)
+                  Size: =13
+                  Width: =76
+                  X: =24 + 1 * ((Parent.Width - 48 - 24) / 3 + 12) + (Parent.Width - 48 - 24) / 3 - 84
+                  Y: =134
+            - lblSegRepMetaEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =30
+                  Size: =11
+                  Text: ="Meta"
+                  Width: =(Parent.Width - 48 - 24) / 3 - 96
+                  Wrap: =false
+                  X: =24 + 1 * ((Parent.Width - 48 - 24) / 3 + 12) + 8
+                  Y: =170
+            - txtSegRepMetaEd:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  Default: =Text(varIndEd.RepMeta)
+                  Format: =TextFormat.Number
+                  Height: =30
+                  HintText: =""
+                  OnChange: =Set(varPrepSucia, true)
+                  Size: =13
+                  Width: =76
+                  X: =24 + 1 * ((Parent.Width - 48 - 24) / 3 + 12) + (Parent.Width - 48 - 24) / 3 - 84
+                  Y: =170
+            - recSegInsEd:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: =RGBA(244, 246, 251, 1)
+                  Height: =116
+                  Width: =(Parent.Width - 48 - 24) / 3
+                  X: =24 + 2 * ((Parent.Width - 48 - 24) / 3 + 12)
+                  Y: =92
+            - lblSegTitInsEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colPrimario
+                  FontWeight: =FontWeight.Bold
+                  Height: =38
+                  PaddingBottom: =2
+                  PaddingLeft: =8
+                  PaddingRight: =8
+                  PaddingTop: =2
+                  Size: =11
+                  Text: ="Inspecciones"
+                  VerticalAlign: =VerticalAlign.Top
+                  Width: =(Parent.Width - 48 - 24) / 3
+                  X: =24 + 2 * ((Parent.Width - 48 - 24) / 3 + 12)
+                  Y: =94
+            - lblSegInsRealEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =30
+                  Size: =11
+                  Text: ="Hechas"
+                  Width: =(Parent.Width - 48 - 24) / 3 - 96
+                  Wrap: =false
+                  X: =24 + 2 * ((Parent.Width - 48 - 24) / 3 + 12) + 8
+                  Y: =134
+            - txtSegInsRealEd:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  Default: =Text(varIndEd.InsReal)
+                  Format: =TextFormat.Number
+                  Height: =30
+                  HintText: =""
+                  OnChange: =Set(varPrepSucia, true)
+                  Size: =13
+                  Width: =76
+                  X: =24 + 2 * ((Parent.Width - 48 - 24) / 3 + 12) + (Parent.Width - 48 - 24) / 3 - 84
+                  Y: =134
+            - lblSegInsPlanEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =30
+                  Size: =11
+                  Text: ="Plan"
+                  Width: =(Parent.Width - 48 - 24) / 3 - 96
+                  Wrap: =false
+                  X: =24 + 2 * ((Parent.Width - 48 - 24) / 3 + 12) + 8
+                  Y: =170
+            - txtSegInsPlanEd:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  Default: =Text(varIndEd.InsPlan)
+                  Format: =TextFormat.Number
+                  Height: =30
+                  HintText: =""
+                  OnChange: =Set(varPrepSucia, true)
+                  Size: =13
+                  Width: =76
+                  X: =24 + 2 * ((Parent.Width - 48 - 24) / 3 + 12) + (Parent.Width - 48 - 24) / 3 - 84
+                  Y: =170
+            - lblSegAvisosEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colTexto
+                  FontWeight: =FontWeight.Bold
+                  Height: =28
+                  Size: =14
+                  Text: ="Avisos"
+                  Width: =200
+                  X: =24
+                  Y: =216
+            - txtAvisoEd:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  Default: =""
+                  Height: =40
+                  HintText: |-
+                    ="Ej.: tronadura en Fase 2 a las 13:00; evacuación desde las 12:30"
+                  Size: =14
+                  Width: =Parent.Width - 48
+                  X: =24
+                  Y: =248
+            - btnNivel1Ed:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderColor: =colRojo
+                  BorderThickness: =1
+                  Color: =If(varNivelEd = "Crítico", RGBA(255, 255, 255, 1), colRojo)
+                  Fill: =If(varNivelEd = "Crítico", colRojo, RGBA(255, 255, 255, 1))
+                  FontWeight: =FontWeight.Bold
+                  Height: =36
+                  OnSelect: =Set(varNivelEd, "Crítico")
+                  RadiusBottomLeft: =8
+                  RadiusBottomRight: =8
+                  RadiusTopLeft: =8
+                  RadiusTopRight: =8
+                  Size: =12
+                  Text: ="✖ Crítico"
+                  Width: =120
+                  X: =24 + 0 * 128
+                  Y: =296
+            - btnNivel2Ed:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderColor: =colAmbar
+                  BorderThickness: =1
+                  Color: =If(varNivelEd = "Precaución", RGBA(255, 255, 255, 1), colAmbar)
+                  Fill: =If(varNivelEd = "Precaución", colAmbar, RGBA(255, 255, 255, 1))
+                  FontWeight: =FontWeight.Bold
+                  Height: =36
+                  OnSelect: =Set(varNivelEd, "Precaución")
+                  RadiusBottomLeft: =8
+                  RadiusBottomRight: =8
+                  RadiusTopLeft: =8
+                  RadiusTopRight: =8
+                  Size: =12
+                  Text: ="⚠ Precaución"
+                  Width: =120
+                  X: =24 + 1 * 128
+                  Y: =296
+            - btnNivel3Ed:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderColor: =colVerde
+                  BorderThickness: =1
+                  Color: =If(varNivelEd = "Recordar", RGBA(255, 255, 255, 1), colVerde)
+                  Fill: =If(varNivelEd = "Recordar", colVerde, RGBA(255, 255, 255, 1))
+                  FontWeight: =FontWeight.Bold
+                  Height: =36
+                  OnSelect: =Set(varNivelEd, "Recordar")
+                  RadiusBottomLeft: =8
+                  RadiusBottomRight: =8
+                  RadiusTopLeft: =8
+                  RadiusTopRight: =8
+                  Size: =12
+                  Text: ="✔ Recordar"
+                  Width: =120
+                  X: =24 + 2 * 128
+                  Y: =296
+            - btnAgregarAvisoEd:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(255, 255, 255, 1)
+                  DisplayMode: =If(IsBlank(Trim(txtAvisoEd.Text)), DisplayMode.Disabled, DisplayMode.Edit)
+                  Fill: =colPrimario
+                  FontWeight: =FontWeight.Bold
+                  Height: =36
+                  OnSelect: |-
+                    =Collect(colAvisos, {Nivel: varNivelEd, Texto: Trim(txtAvisoEd.Text), Orden: Coalesce(Max(colAvisos, Orden), 0) + 1, IdLocal: Text(GUID()), Rango: Switch(varNivelEd, "Crítico", 1, "Precaución", 2, "Recordar", 3, 4)});
+                    Reset(txtAvisoEd);
+                    Set(varPrepSucia, true)
+                  RadiusBottomLeft: =8
+                  RadiusBottomRight: =8
+                  RadiusTopLeft: =8
+                  RadiusTopRight: =8
+                  Size: =13
+                  Text: ="+ Agregar aviso"
+                  Width: =170
+                  X: =Parent.Width - 24 - 170
+                  Y: =296
+            - lblSinAvisosEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(130, 138, 142, 1)
+                  Height: =40
+                  Size: =13
+                  Text: ="Sin avisos todavía."
+                  Visible: =IsEmpty(colAvisos)
+                  Width: =Parent.Width - 48
+                  X: =24
+                  Y: =344
+            - galAvisosEd:
+                Control: Gallery@2.15.0
+                Variant: BrowseLayout_Vertical_ThreeTextVariant_ver5.0
+                Properties:
+                  Height: =Parent.Height - 356
+                  Items: =Sort(colAvisos, Orden)
+                  TemplatePadding: =0
+                  TemplateSize: =52
+                  Width: =Parent.Width - 48
+                  X: =24
+                  Y: =344
+                Children:
+                  - btnNivelAvisoEd:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        Color: =RGBA(255, 255, 255, 1)
+                        Fill: =Switch(ThisItem.Nivel, "Crítico", colRojo, "Precaución", colAmbar, "Recordar", colVerde, colPrimario)
+                        FontWeight: =FontWeight.Bold
+                        Height: =32
+                        HoverFill: =ColorFade(Self.Fill, -0.15)
+                        OnSelect: |-
+                          =With({n: Switch(ThisItem.Nivel, "Crítico", "Precaución", "Precaución", "Recordar", "Crítico")}, Patch(colAvisos, ThisItem, {Nivel: n, Rango: Switch(n, "Crítico", 1, "Precaución", 2, "Recordar", 3, 4)}));
+                          Set(varPrepSucia, true)
+                        RadiusBottomLeft: =16
+                        RadiusBottomRight: =16
+                        RadiusTopLeft: =16
+                        RadiusTopRight: =16
+                        Size: =11
+                        Text: =Switch(ThisItem.Nivel, "Crítico", "✖ Crítico", "Precaución", "⚠ Precaución", "Recordar", "✔ Recordar", "Aviso")
+                        Tooltip: ="Toca para cambiar el nivel"
+                        Width: =120
+                        X: =0
+                        Y: =(Parent.TemplateHeight - 32) / 2
+                  - lblTextoAvisoEd:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colTexto
+                        Height: =Parent.TemplateHeight
+                        PaddingBottom: =2
+                        PaddingTop: =2
+                        Size: =13
+                        Text: =ThisItem.Texto
+                        Width: =Parent.TemplateWidth - 132 - 48
+                        X: =132
+                        Y: =0
+                  - icoQuitarAvisoEd:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        Color: =RGBA(150, 150, 150, 1)
+                        Height: =32
+                        Icon: =Icon.Cancel
+                        OnSelect: |-
+                          =RemoveIf(colAvisos, IdLocal = ThisItem.IdLocal);
+                          Set(varPrepSucia, true)
+                        Width: =32
+                        X: =Parent.TemplateWidth - 40
+                        Y: =(Parent.TemplateHeight - 32) / 2
+                  - sepAvisoEd:
+                      Control: Rectangle@2.3.0
+                      Properties:
+                        Fill: =RGBA(225, 230, 232, 1)
+                        Height: =1
+                        Width: =Parent.TemplateWidth
+                        X: =0
+                        Y: =Parent.TemplateHeight - 1
+      - conB2Ed:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(255, 255, 255, 1)
+            Height: =Parent.Height - 104
+            RadiusBottomLeft: =12
+            RadiusBottomRight: =12
+            RadiusTopLeft: =12
+            RadiusTopRight: =12
+            Visible: =varBloqueEd = 2 && varSubCompEd = 1
+            Width: =Parent.Width - 296
+            X: =272
+            Y: =88
+          Children:
+            - btnTabSemanaEd:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderColor: =colPrimario
+                  BorderThickness: =1
+                  Color: =If(varSubCompEd = 1, RGBA(255, 255, 255, 1), colPrimario)
+                  Fill: =If(varSubCompEd = 1, colPrimario, RGBA(255, 255, 255, 1))
+                  FontWeight: =FontWeight.Semibold
+                  Height: =40
+                  OnSelect: =Set(varSubCompEd, 1)
+                  RadiusBottomLeft: =20
+                  RadiusBottomRight: =20
+                  RadiusTopLeft: =20
+                  RadiusTopRight: =20
+                  Size: =14
+                  Text: ="Semana pasada"
+                  Width: =180
+                  X: =20
+                  Y: =12
+            - btnTabNuevosEd:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderColor: =colPrimario
+                  BorderThickness: =1
+                  Color: =If(varSubCompEd = 2, RGBA(255, 255, 255, 1), colPrimario)
+                  Fill: =If(varSubCompEd = 2, colPrimario, RGBA(255, 255, 255, 1))
+                  FontWeight: =FontWeight.Semibold
+                  Height: =40
+                  OnSelect: =Set(varSubCompEd, 2)
+                  RadiusBottomLeft: =20
+                  RadiusBottomRight: =20
+                  RadiusTopLeft: =20
+                  RadiusTopRight: =20
+                  Size: =14
+                  Text: ="Nuevos compromisos · " & CountRows(colNuevos)
+                  Width: =244
+                  X: =208
+                  Y: =12
+            - galRevisionEd:
+                Control: Gallery@2.15.0
+                Variant: BrowseLayout_Vertical_ThreeTextVariant_ver5.0
+                Properties:
+                  Height: =Parent.Height - 72
+                  Items: =Sort(colRevision, FechaLimite)
+                  TemplatePadding: =4
+                  TemplateSize: =156
+                  Width: =Parent.Width * 0.65
+                  X: =12
+                  Y: =60
+                Children:
+                  - recRevFaltaEd:
+                      Control: Rectangle@2.3.0
+                      Properties:
+                        Fill: =colNaranja
+                        Height: =Parent.TemplateHeight - 8
+                        Visible: =!ThisItem.Revisado
+                        Width: =4
+                        X: =0
+                        Y: =4
+                  - lblRevTituloEd:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colTexto
+                        FontWeight: =FontWeight.Semibold
+                        Height: =76
+                        PaddingBottom: =2
+                        PaddingTop: =2
+                        Size: =14
+                        Text: =ThisItem.Titulo
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Parent.TemplateWidth - 24 - If(ThisItem.EstadoNuevo = "Cumplido", 144, 0)
+                        X: =12
+                        Y: =4
+                  - btnRevEvidenciaEd:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =colVerde
+                        BorderThickness: =1
+                        Color: =If(!IsBlank(ThisItem.Comentario) || !IsBlank(ThisItem.Url) || ThisItem.ID in colEvid.CompromisoId, RGBA(255, 255, 255, 1), colVerde)
+                        Fill: =If(!IsBlank(ThisItem.Comentario) || !IsBlank(ThisItem.Url) || ThisItem.ID in colEvid.CompromisoId, colVerde, RGBA(255, 255, 255, 1))
+                        Height: =30
+                        OnSelect: |-
+                          =Set(varEvidId, ThisItem.ID);
+                          Reset(txtEvidComentarioEd);
+                          Reset(addFotoEvidEd);
+                          Reset(attEvidEd)
+                        RadiusBottomLeft: =15
+                        RadiusBottomRight: =15
+                        RadiusTopLeft: =15
+                        RadiusTopRight: =15
+                        Size: =11
+                        Text: =If(!IsBlank(ThisItem.Comentario) || !IsBlank(ThisItem.Url) || ThisItem.ID in colEvid.CompromisoId, "Con evidencia", "Evidencia")
+                        Visible: =ThisItem.EstadoNuevo = "Cumplido"
+                        Width: =136
+                        X: =Parent.TemplateWidth - 148
+                        Y: =6
+                  - lblRevDetalleEd:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =If(ThisItem.FechaLimite < Today(), colRojo, RGBA(90, 98, 104, 1))
+                        Height: =26
+                        Size: =12
+                        Text: |-
+                          =ThisItem.ResponsableNombre & " · vence " & Text(ThisItem.FechaLimite, "dd-mm") &
+                          If(ThisItem.FechaLimite < Today(), " · VENCIDO", "") &
+                          " · desde " & Text(ThisItem.FechaCreacion, "dd-mm")
+                        Width: =Parent.TemplateWidth - 24
+                        Wrap: =false
+                        X: =12
+                        Y: =80
+                  - btnRevProgresoEd:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =colPrimario
+                        BorderThickness: =1
+                        Color: =If(ThisItem.Revisado && ThisItem.EstadoNuevo = "En progreso", RGBA(255, 255, 255, 1), colPrimario)
+                        Fill: =If(ThisItem.Revisado && ThisItem.EstadoNuevo = "En progreso", colPrimario, RGBA(255, 255, 255, 1))
+                        Height: =40
+                        OnSelect: |-
+                          =Patch(colRevision, ThisItem, {EstadoNuevo: "En progreso", Revisado: true, Comentario: "", Url: ""});
+                          RemoveIf(colEvid, CompromisoId = ThisItem.ID);
+                          If(varEvidId = ThisItem.ID, Set(varEvidId, 0));
+                          Set(varPrepSucia, true)
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =0
+                        RadiusTopRight: =0
+                        Size: =12
+                        Text: ="En progreso"
+                        Width: =(Parent.TemplateWidth - 24 - 2 * 8) / 3
+                        X: =12 + 0 * ((Parent.TemplateWidth - 24 - 2 * 8) / 3 + 8)
+                        Y: =108
+                  - btnRevCumplidoEd:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =colVerde
+                        BorderThickness: =1
+                        Color: =If(ThisItem.Revisado && ThisItem.EstadoNuevo = "Cumplido", RGBA(255, 255, 255, 1), colVerde)
+                        Fill: =If(ThisItem.Revisado && ThisItem.EstadoNuevo = "Cumplido", colVerde, RGBA(255, 255, 255, 1))
+                        Height: =40
+                        OnSelect: |-
+                          =Patch(colRevision, ThisItem, {EstadoNuevo: "Cumplido", Revisado: true});
+                          Set(varEvidId, ThisItem.ID);
+                          Reset(txtEvidComentarioEd);
+                          Reset(addFotoEvidEd);
+                          Reset(attEvidEd);
+                          Set(varPrepSucia, true)
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =0
+                        RadiusTopRight: =0
+                        Size: =12
+                        Text: ="✔ Cumplido"
+                        Width: =(Parent.TemplateWidth - 24 - 2 * 8) / 3
+                        X: =12 + 1 * ((Parent.TemplateWidth - 24 - 2 * 8) / 3 + 8)
+                        Y: =108
+                  - btnRevAtrasadoEd:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =colAmbar
+                        BorderThickness: =1
+                        Color: =If(ThisItem.Revisado && ThisItem.EstadoNuevo = "Atrasado", RGBA(255, 255, 255, 1), colAmbar)
+                        Fill: =If(ThisItem.Revisado && ThisItem.EstadoNuevo = "Atrasado", colAmbar, RGBA(255, 255, 255, 1))
+                        Height: =40
+                        OnSelect: |-
+                          =Patch(colRevision, ThisItem, {EstadoNuevo: "Atrasado", Revisado: true, Comentario: "", Url: ""});
+                          RemoveIf(colEvid, CompromisoId = ThisItem.ID);
+                          If(varEvidId = ThisItem.ID, Set(varEvidId, 0));
+                          Set(varPrepSucia, true)
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =0
+                        RadiusTopRight: =0
+                        Size: =12
+                        Text: ="⚠ Atrasado"
+                        Width: =(Parent.TemplateWidth - 24 - 2 * 8) / 3
+                        X: =12 + 2 * ((Parent.TemplateWidth - 24 - 2 * 8) / 3 + 8)
+                        Y: =108
+                  - sepRevisionEd:
+                      Control: Rectangle@2.3.0
+                      Properties:
+                        Fill: =RGBA(230, 230, 230, 1)
+                        Height: =1
+                        Width: =Parent.TemplateWidth
+                        X: =0
+                        Y: =Parent.TemplateHeight - 1
+            - conEvidenciaEd:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  Fill: =RGBA(244, 249, 244, 1)
+                  Height: =Parent.Height - 24
+                  RadiusBottomLeft: =10
+                  RadiusBottomRight: =10
+                  RadiusTopLeft: =10
+                  RadiusTopRight: =10
+                  Visible: =varEvidId <> 0
+                  Width: =Parent.Width * 0.35 - 36
+                  X: =Parent.Width * 0.65 + 20
+                  Y: =12
+                Children:
+                  - lblEvidTituloEd:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colVerde
+                        FontWeight: =FontWeight.Bold
+                        Height: =36
+                        Size: =17
+                        Text: ="✔ Evidencia"
+                        Width: =Parent.Width - 24
+                        X: =12
+                        Y: =8
+                  - lblEvidCompromisoEd:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colTexto
+                        FontWeight: =FontWeight.Semibold
+                        Height: =88
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =12
+                        Text: =LookUp(colRevision, ID = varEvidId).Titulo
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Parent.Width - 24
+                        X: =12
+                        Y: =42
+                  - lblEvidAyudaEd:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =RGBA(90, 98, 104, 1)
+                        Height: =22
+                        Size: =11
+                        Text: ="Foto, archivo o comentario"
+                        Width: =Parent.Width - 24
+                        X: =12
+                        Y: =132
+                  - txtEvidComentarioEd:
+                      Control: Classic/TextInput@2.3.2
+                      Properties:
+                        Default: =LookUp(colRevision, ID = varEvidId).Comentario
+                        Height: =64
+                        HintText: |-
+                          ="Ej.: baliza instalada en rampa 3"
+                        Mode: =TextMode.MultiLine
+                        Size: =13
+                        Width: =Parent.Width - 24
+                        X: =12
+                        Y: =156
+                  - lblEvidSubidaEd:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colVerde
+                        Height: =22
+                        Size: =11
+                        Text: |-
+                          =If(
+                              !IsBlank(LookUp(colRevision, ID = varEvidId).Url),
+                              "✔ Evidencia guardada",
+                              IsEmpty(attEvidEd.Attachments) && IsBlank(addFotoEvidEd.Media) && !IsBlank(LookUp(colEvid, CompromisoId = varEvidId).Nombre),
+                              "✔ Archivo adjunto",
+                              ""
+                          )
+                        Width: =Parent.Width - 24
+                        Wrap: =false
+                        X: =12
+                        Y: =224
+                  - imgEvidPreviaEd:
+                      Control: Image@2.2.3
+                      Properties:
+                        BorderColor: =RGBA(200, 200, 200, 1)
+                        BorderThickness: =1
+                        Fill: =RGBA(255, 255, 255, 1)
+                        Height: =Parent.Height - 252 - 72 - 92
+                        Image: |-
+                          =If(
+                              !IsEmpty(attEvidEd.Attachments),
+                              First(attEvidEd.Attachments).Value,
+                              IsBlank(addFotoEvidEd.Media),
+                              LookUp(colEvid, CompromisoId = varEvidId).Foto,
+                              addFotoEvidEd.Media
+                          )
+                        ImagePosition: =ImagePosition.Fit
+                        Width: =Parent.Width - 24
+                        X: =12
+                        Y: =248
+                  - addFotoEvidEd:
+                      Control: AddMedia@2.2.1
+                      Properties:
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        BorderStyle: =BorderStyle.None
+                        Color: =colPrimario
+                        Fill: =RGBA(0, 0, 0, 0)
+                        Height: =imgEvidPreviaEd.Height
+                        HoverColor: =colPrimario
+                        HoverFill: =RGBA(27, 42, 65, 0.08)
+                        PressedFill: =RGBA(27, 42, 65, 0.15)
+                        Size: =15
+                        Text: =If(IsBlank(imgEvidPreviaEd.Image), "Tocar para tomar o elegir foto", "")
+                        Width: =imgEvidPreviaEd.Width
+                        X: =imgEvidPreviaEd.X
+                        Y: =imgEvidPreviaEd.Y
+                  - attEvidEd:
+                      Control: Attachments@2.3.0
+                      Properties:
+                        AddAttachmentText: ="+ Adjuntar archivo"
+                        BorderColor: =RGBA(200, 200, 200, 1)
+                        BorderThickness: =1
+                        DisplayMode: =DisplayMode.Edit
+                        Fill: =RGBA(255, 255, 255, 1)
+                        Height: =84
+                        MaxAttachmentSize: =10
+                        MaxAttachments: =1
+                        NoAttachmentsText: =""
+                        Size: =12
+                        Width: =Parent.Width - 24
+                        X: =12
+                        Y: =Parent.Height - 72 - 88
+                  - btnGuardarEvidEd:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        Color: =RGBA(255, 255, 255, 1)
+                        DisplayMode: =If(IsBlank(Trim(txtEvidComentarioEd.Text)) && IsBlank(imgEvidPreviaEd.Image) && IsEmpty(attEvidEd.Attachments), DisplayMode.Disabled, DisplayMode.Edit)
+                        Fill: =colVerde
+                        FontWeight: =FontWeight.Bold
+                        Height: =52
+                        OnSelect: |-
+                          =With(
+                              {f: imgEvidPreviaEd.Image, nom: If(     !IsEmpty(attEvidEd.Attachments),     First(attEvidEd.Attachments).Name,     IsBlank(addFotoEvidEd.Media),     LookUp(colEvid, CompromisoId = varEvidId).Nombre,     "" ), nuevo: (!IsEmpty(attEvidEd.Attachments) || !IsBlank(addFotoEvidEd.Media))},
+                              RemoveIf(colEvid, CompromisoId = varEvidId);
+                              If(!IsBlank(f), Collect(colEvid, {CompromisoId: varEvidId, Foto: f, TieneFoto: true, Nombre: nom}));
+                              Patch(
+                                  colRevision,
+                                  LookUp(colRevision, ID = varEvidId),
+                                  {
+                                      Comentario: Trim(txtEvidComentarioEd.Text),
+                                      Url: If(nuevo, "", LookUp(colRevision, ID = varEvidId).Url)
+                                  }
+                              )
+                          );
+                          Set(varEvidId, 0);
+                          Reset(addFotoEvidEd);
+                          Reset(attEvidEd);
+                          Reset(txtEvidComentarioEd);
+                          Set(varPrepSucia, true)
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =14
+                        Text: ="Guardar"
+                        Width: =(Parent.Width - 32) / 2
+                        X: =12
+                        Y: =Parent.Height - 64
+                  - btnOmitirEvidEd:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(160, 160, 160, 1)
+                        BorderThickness: =1
+                        Color: =colTexto
+                        Fill: =RGBA(255, 255, 255, 1)
+                        Height: =52
+                        OnSelect: |-
+                          =Set(varEvidId, 0);
+                          Reset(addFotoEvidEd);
+                          Reset(attEvidEd);
+                          Reset(txtEvidComentarioEd)
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =14
+                        Text: ="Ahora no"
+                        Width: =(Parent.Width - 32) / 2
+                        X: =20 + (Parent.Width - 32) / 2
+                        Y: =Parent.Height - 64
+            - lblMarcadosEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =If(CountRows(Filter(colRevision, !Revisado)) = 0, colVerde, colAmbar)
+                  FontWeight: =FontWeight.Bold
+                  Height: =36
+                  Size: =14
+                  Text: |-
+                    =If(IsEmpty(colRevision), "", "Marcados: " & CountRows(Filter(colRevision, Revisado)) & " de " & CountRows(colRevision))
+                  Visible: =varEvidId = 0
+                  Width: =Parent.Width * 0.35 - 44
+                  Wrap: =false
+                  X: =Parent.Width * 0.65 + 24
+                  Y: =16
+            - lblEvidPistaEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =Parent.Height - 80
+                  Size: =12
+                  Text: |-
+                    ="Todos los compromisos deben quedar con estado: si falta alguno, no se puede guardar ni volver a Inicio." & Char(10) & Char(10) & "✔ Cumplido lo cierra: queda en el Excel y no vuelve a aparecer." & Char(10) & Char(10) & "En progreso y ⚠ Atrasado vuelven a aparecer la semana siguiente." & Char(10) & Char(10) & "Con ✔ Cumplido puedes agregar evidencia (foto, archivo o comentario)." & Char(10) & Char(10) & "Lo que marques se muestra en el visor una vez que guardes."
+                  VerticalAlign: =VerticalAlign.Top
+                  Visible: =varEvidId = 0
+                  Width: =Parent.Width * 0.35 - 44
+                  X: =Parent.Width * 0.65 + 24
+                  Y: =64
+      - conB5Ed:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(255, 255, 255, 1)
+            Height: =Parent.Height - 104
+            RadiusBottomLeft: =12
+            RadiusBottomRight: =12
+            RadiusTopLeft: =12
+            RadiusTopRight: =12
+            Visible: =(varBloqueEd = 2 && varSubCompEd = 2)
+            Width: =Parent.Width - 296
+            X: =272
+            Y: =88
+          Children:
+            - btnTabSemana2Ed:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderColor: =colPrimario
+                  BorderThickness: =1
+                  Color: =If(varSubCompEd = 1, RGBA(255, 255, 255, 1), colPrimario)
+                  Fill: =If(varSubCompEd = 1, colPrimario, RGBA(255, 255, 255, 1))
+                  FontWeight: =FontWeight.Semibold
+                  Height: =40
+                  OnSelect: =Set(varSubCompEd, 1)
+                  RadiusBottomLeft: =20
+                  RadiusBottomRight: =20
+                  RadiusTopLeft: =20
+                  RadiusTopRight: =20
+                  Size: =14
+                  Text: ="Semana pasada"
+                  Width: =180
+                  X: =20
+                  Y: =12
+            - btnTabNuevos2Ed:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderColor: =colPrimario
+                  BorderThickness: =1
+                  Color: =If(varSubCompEd = 2, RGBA(255, 255, 255, 1), colPrimario)
+                  Fill: =If(varSubCompEd = 2, colPrimario, RGBA(255, 255, 255, 1))
+                  FontWeight: =FontWeight.Semibold
+                  Height: =40
+                  OnSelect: =Set(varSubCompEd, 2)
+                  RadiusBottomLeft: =20
+                  RadiusBottomRight: =20
+                  RadiusTopLeft: =20
+                  RadiusTopRight: =20
+                  Size: =14
+                  Text: ="Nuevos compromisos · " & CountRows(colNuevos)
+                  Width: =244
+                  X: =208
+                  Y: =12
+            - lblB5AyudaEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =44
+                  PaddingBottom: =2
+                  PaddingTop: =2
+                  Size: =12
+                  Text: ="Los compromisos de esta semana que ya se conocen. En la presentación salen en Compromisos con estado «En progreso» y se suben al Excel al cerrar la reunión."
+                  VerticalAlign: =VerticalAlign.Top
+                  Width: =Parent.Width - 40
+                  X: =20
+                  Y: =52
+            - txtNuevoQueEd:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  Default: =If(IsBlank(varEditNuevoEd), "", LookUp(colNuevos, IdLocal = varEditNuevoEd).Titulo)
+                  Height: =72
+                  HintText: ="¿Qué se hará?"
+                  MaxLength: =100
+                  Mode: =TextMode.MultiLine
+                  OnChange: =If(!IsBlank(Trim(Self.Text)), Set(varPrepSucia, true))
+                  Size: =14
+                  Width: =Parent.Width * 0.38 - 40
+                  X: =20
+                  Y: =104
+            - txtNuevoRespEd:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  Default: =If(IsBlank(varEditNuevoEd), "", LookUp(colNuevos, IdLocal = varEditNuevoEd).Responsable)
+                  Height: =48
+                  HintText: ="Responsable"
+                  OnChange: =If(!IsBlank(Trim(Self.Text)), Set(varPrepSucia, true))
+                  Size: =14
+                  Width: =Parent.Width * 0.38 - 40
+                  X: =20
+                  Y: =184
+            - dpNuevoFechaEd:
+                Control: Classic/DatePicker@2.6.0
+                Properties:
+                  DefaultDate: =If(IsBlank(varEditNuevoEd), DateAdd(Today(), 7, TimeUnit.Days), LookUp(colNuevos, IdLocal = varEditNuevoEd).FechaLimite)
+                  Format: =DateTimeFormat.ShortDate
+                  Height: =48
+                  Size: =14
+                  Width: =Parent.Width * 0.38 - 40
+                  X: =20
+                  Y: =240
+            - btnAgregarCompromisoEd:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(255, 255, 255, 1)
+                  DisplayMode: =If(IsBlank(Trim(txtNuevoQueEd.Text)) || IsBlank(Trim(txtNuevoRespEd.Text)), DisplayMode.Disabled, DisplayMode.Edit)
+                  Fill: =colPrimario
+                  FontWeight: =FontWeight.Bold
+                  Height: =52
+                  OnSelect: |-
+                    =If(
+                        IsBlank(varEditNuevoEd),
+                        Collect(
+                            colNuevos,
+                            {
+                                Titulo: Trim(txtNuevoQueEd.Text),
+                                Responsable: Trim(txtNuevoRespEd.Text),
+                                FechaLimite: dpNuevoFechaEd.SelectedDate,
+                                IdLocal: Text(GUID())
+                            }
+                        ),
+                        Patch(colNuevos, LookUp(colNuevos, IdLocal = varEditNuevoEd), {Titulo: Trim(txtNuevoQueEd.Text), Responsable: Trim(txtNuevoRespEd.Text), FechaLimite: dpNuevoFechaEd.SelectedDate})
+                    );
+                    Set(varEditNuevoEd, Blank());
+                    Reset(txtNuevoQueEd);
+                    Reset(txtNuevoRespEd);
+                    Reset(dpNuevoFechaEd);
+                    Set(varPrepSucia, true)
+                  RadiusBottomLeft: =8
+                  RadiusBottomRight: =8
+                  RadiusTopLeft: =8
+                  RadiusTopRight: =8
+                  Size: =15
+                  Text: =If(IsBlank(varEditNuevoEd), "+ Agregar compromiso", "Guardar cambios")
+                  Width: =Parent.Width * 0.38 - 40
+                  X: =20
+                  Y: =300
+            - lblNuevosTituloEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colTexto
+                  FontWeight: =FontWeight.Semibold
+                  Height: =36
+                  Size: =15
+                  Text: ="Compromisos nuevos · " & CountRows(colNuevos)
+                  Width: =Parent.Width * 0.62 - 40
+                  Wrap: =false
+                  X: =Parent.Width * 0.38 + 8
+                  Y: =104
+            - galNuevosEd:
+                Control: Gallery@2.15.0
+                Variant: BrowseLayout_Vertical_ThreeTextVariant_ver5.0
+                Properties:
+                  BorderColor: =RGBA(230, 230, 230, 1)
+                  BorderThickness: =1
+                  Height: =Parent.Height - 164
+                  Items: =colNuevos
+                  TemplateFill: =If(ThisItem.IdLocal = varEditNuevoEd, RGBA(255, 243, 224, 1), RGBA(255, 255, 255, 0))
+                  TemplatePadding: =2
+                  TemplateSize: =112
+                  Width: =Parent.Width * 0.62 - 32
+                  X: =Parent.Width * 0.38 + 8
+                  Y: =144
+                Children:
+                  - lblNuevoItemEd:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colTexto
+                        Height: =108
+                        PaddingBottom: =2
+                        PaddingTop: =2
+                        Size: =13
+                        Text: =ThisItem.Titulo & Char(10) & ThisItem.Responsable & " · vence " & Text(ThisItem.FechaLimite, "dd-mm")
+                        Width: =Parent.TemplateWidth - 108
+                        X: =8
+                        Y: =0
+                  - btnEditarNuevoEd:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =colPrimario
+                        BorderThickness: =1
+                        Color: =colPrimario
+                        Fill: =RGBA(255, 255, 255, 1)
+                        Height: =32
+                        OnSelect: |-
+                          =Set(varEditNuevoEd, If(ThisItem.IdLocal = varEditNuevoEd, Blank(), ThisItem.IdLocal));
+                          Reset(txtNuevoQueEd);
+                          Reset(txtNuevoRespEd);
+                          Reset(dpNuevoFechaEd)
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =12
+                        Text: =If(ThisItem.IdLocal = varEditNuevoEd, "Cancelar", "Editar")
+                        Width: =88
+                        X: =Parent.TemplateWidth - 96
+                        Y: =4
+                  - btnEliminarNuevoEd:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =colRojo
+                        BorderThickness: =1
+                        Color: =colRojo
+                        Fill: =RGBA(255, 255, 255, 1)
+                        Height: =32
+                        OnSelect: =Set(varBorrarNuevoEd, ThisItem.IdLocal)
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =12
+                        Text: ="Eliminar"
+                        Width: =88
+                        X: =Parent.TemplateWidth - 96
+                        Y: =40
+                  - sepNuevoEd:
+                      Control: Rectangle@2.3.0
+                      Properties:
+                        Fill: =RGBA(230, 230, 230, 1)
+                        Height: =1
+                        Width: =Parent.TemplateWidth
+                        X: =0
+                        Y: =Parent.TemplateHeight - 1
+      - conB6Ed:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(255, 255, 255, 1)
+            Height: =Parent.Height - 104
+            RadiusBottomLeft: =12
+            RadiusBottomRight: =12
+            RadiusTopLeft: =12
+            RadiusTopRight: =12
+            Visible: =varBloqueEd = 6
+            Width: =Parent.Width - 296
+            X: =272
+            Y: =88
+          Children:
+            - lblB6TituloEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colTexto
+                  FontWeight: =FontWeight.Bold
+                  Height: =40
+                  Size: =20
+                  Text: ="Convocados a la reunión"
+                  Width: =Parent.Width - 48
+                  Wrap: =false
+                  X: =24
+                  Y: =12
+            - lblB6AyudaEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =44
+                  PaddingBottom: =2
+                  PaddingTop: =2
+                  Size: =12
+                  Text: |-
+                    =If(
+                        IsBlank(varConvEditEd),
+                        "Reciben la minuta por correo, asistan o no. Escribe el área (o toca una en la lista) y agrega a sus personas. Se guarda solo en RD_Participantes (necesita señal).",
+                        "Corrige los datos y toca «Guardar cambios». Para cambiar de área también puedes tocar una en la lista. Se guarda solo en RD_Participantes (necesita señal)."
+                    )
+                  VerticalAlign: =VerticalAlign.Top
+                  Width: =Parent.Width - 48
+                  X: =24
+                  Y: =52
+            - txtAreaConvEd:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  Default: =varAreaConvEd
+                  Height: =40
+                  HintText: |-
+                    ="Área (ej.: Mina, Planta, Mantención)"
+                  MaxLength: =40
+                  Size: =13
+                  Visible: =IsBlank(varConvEditEd)
+                  Width: =(Parent.Width - 72) / 2
+                  X: =24
+                  Y: =104
+            - txtBuscarConvEd:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  Default: =""
+                  DelayOutput: =true
+                  Height: =40
+                  HintText: |-
+                    ="Buscar en el directorio: nombre o correo"
+                  Size: =13
+                  Visible: =IsBlank(varConvEditEd)
+                  Width: =(Parent.Width - 72) / 2
+                  X: =24
+                  Y: =152
+            - galDirConvEd:
+                Control: Gallery@2.15.0
+                Variant: BrowseLayout_Vertical_ThreeTextVariant_ver5.0
+                Properties:
+                  BorderColor: =RGBA(225, 230, 232, 1)
+                  BorderThickness: =1
+                  Height: =Parent.Height - 200 - 176
+                  Items: |-
+                    =If(Len(Trim(txtBuscarConvEd.Text)) >= 3, UsuariosdeOffice365.SearchUserV2({searchTerm: Trim(txtBuscarConvEd.Text), top: 8}).value)
+                  TemplatePadding: =0
+                  TemplateSize: =72
+                  Visible: =IsBlank(varConvEditEd)
+                  Width: =(Parent.Width - 72) / 2
+                  X: =24
+                  Y: =200
+                Children:
+                  - lblDirNombreEd:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colTexto
+                        FontWeight: =FontWeight.Semibold
+                        Height: =26
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =If(Len(ThisItem.DisplayName) > 24, 11, 13)
+                        Text: =ThisItem.DisplayName
+                        Width: =Parent.TemplateWidth - 8 - 116
+                        Wrap: =false
+                        X: =8
+                        Y: =2
+                  - lblDirDetalleEd:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =RGBA(90, 98, 104, 1)
+                        Height: =42
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =11
+                        Text: =Coalesce(ThisItem.Mail, "sin correo") & If(IsBlank(ThisItem.JobTitle), "", " · " & ThisItem.JobTitle)
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Parent.TemplateWidth - 8 - 116
+                        X: =8
+                        Y: =28
+                  - btnDirAgregarEd:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =If(!IsBlank(LookUp(colParticipantes, Correo = Lower(Trim(ThisItem.Mail)))), colVerde, colPrimario)
+                        BorderThickness: =1
+                        Color: =If(!IsBlank(LookUp(colParticipantes, Correo = Lower(Trim(ThisItem.Mail)))), colVerde, colPrimario)
+                        DisplayMode: =If((!IsBlank(LookUp(colParticipantes, Correo = Lower(Trim(ThisItem.Mail))))) || IsBlank(ThisItem.Mail), DisplayMode.View, DisplayMode.Edit)
+                        Fill: =If(!IsBlank(LookUp(colParticipantes, Correo = Lower(Trim(ThisItem.Mail)))), RGBA(232, 245, 233, 1), RGBA(255, 255, 255, 1))
+                        Height: =34
+                        OnSelect: |-
+                          =If(
+                              !Connection.Connected,
+                              Notify("Sin señal: la lista de convocados se edita con conexión.", NotificationType.Warning),
+                              With(
+                                  {n: ThisItem.DisplayName, c: Lower(Trim(ThisItem.Mail)), g: Coalesce(ThisItem.JobTitle, ""), a: Trim(Coalesce(Trim(txtAreaConvEd.Text), ThisItem.Department, ""))},
+                                  With(
+                                      {x: LookUp(RD_Participantes, Lower(Trim(Correo)) = c)},
+                                      IfError(
+                                          If(
+                                              IsBlank(x),
+                                              Patch(RD_Participantes, Defaults(RD_Participantes), {Nombre: n, Correo: c, Cargo: g, Area: a, Activo: "Sí"}),
+                                              Patch(RD_Participantes, x, {Nombre: n, Cargo: g, Area: Coalesce(a, x.Area, ""), Activo: "Sí"})
+                                          );
+                                          RemoveIf(colParticipantes, Correo = c);
+                                          Collect(colParticipantes, {Nombre: n, Correo: c, Cargo: g, Area: Coalesce(a, x.Area, "")});
+                                          // En el navegador (vista previa, web) SaveData falla: su error no debe anular lo que ya quedó en el Excel.
+                                          IfError(SaveData(colParticipantes, "rd_part"); true, false);
+                                          Notify(n & " quedó en la lista de convocados" & If(IsBlank(Coalesce(a, x.Area)), ".", " · " & Coalesce(a, x.Area) & "."), NotificationType.Success),
+                                          Notify("No se pudo guardar en RD_Participantes: " & FirstError.Message, NotificationType.Error)
+                                      )
+                                  )
+                              )
+                          )
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =12
+                        Text: =If(!IsBlank(LookUp(colParticipantes, Correo = Lower(Trim(ThisItem.Mail)))), "✔ En la lista", "+ Agregar")
+                        Width: =104
+                        X: =Parent.TemplateWidth - 112
+                        Y: =(Parent.TemplateHeight - 34) / 2
+                  - sepDirEd:
+                      Control: Rectangle@2.3.0
+                      Properties:
+                        Fill: =RGBA(230, 230, 230, 1)
+                        Height: =1
+                        Width: =Parent.TemplateWidth
+                        X: =0
+                        Y: =Parent.TemplateHeight - 1
+            - lblDirVacioEd:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =60
+                  Size: =12
+                  Text: |-
+                    =If(
+                        Len(Trim(txtBuscarConvEd.Text)) < 3,
+                        "Escribe al menos 3 letras del nombre o del correo.",
+                        !Connection.Connected,
+                        "Sin señal: el directorio se busca con conexión.",
+                        "Sin resultados en el directorio. Agrégalo a mano abajo."
+                    )
+                  Visible: =IsBlank(varConvEditEd) && (Len(Trim(txtBuscarConvEd.Text)) < 3 || IsEmpty(galDirConvEd.AllItems))
+                  Width: =(Parent.Width - 72) / 2 - 32
+                  X: =40
+                  Y: =212
+            - lblManualEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colTexto
+                  FontWeight: =FontWeight.Semibold
+                  Height: =24
+                  Size: =12
+                  Text: ="¿No aparece? Agrégalo a mano:"
+                  Visible: =IsBlank(varConvEditEd)
+                  Width: =(Parent.Width - 72) / 2
+                  X: =24
+                  Y: =Parent.Height - 164
+            - txtNomConvEd:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  Default: =""
+                  Height: =40
+                  HintText: ="Nombre"
+                  Size: =13
+                  Visible: =IsBlank(varConvEditEd)
+                  Width: =(Parent.Width - 72) / 2 * 0.55
+                  X: =24
+                  Y: =Parent.Height - 136
+            - txtCargoConvEd:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  Default: =""
+                  Height: =40
+                  HintText: ="Cargo"
+                  Size: =13
+                  Visible: =IsBlank(varConvEditEd)
+                  Width: =(Parent.Width - 72) / 2 * 0.45 - 8
+                  X: =24 + (Parent.Width - 72) / 2 * 0.55 + 8
+                  Y: =Parent.Height - 136
+            - txtCorConvEd:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  Default: =""
+                  Height: =40
+                  HintText: ="Correo"
+                  Size: =13
+                  Visible: =IsBlank(varConvEditEd)
+                  Width: =(Parent.Width - 72) / 2 - 128
+                  X: =24
+                  Y: =Parent.Height - 88
+            - btnManualConvEd:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(255, 255, 255, 1)
+                  DisplayMode: =If(!IsBlank(Trim(txtNomConvEd.Text)) && IsMatch(Trim(txtCorConvEd.Text), Match.Email), DisplayMode.Edit, DisplayMode.Disabled)
+                  Fill: =colPrimario
+                  FontWeight: =FontWeight.Bold
+                  Height: =40
+                  OnSelect: |-
+                    =If(
+                        !Connection.Connected,
+                        Notify("Sin señal: la lista de convocados se edita con conexión.", NotificationType.Warning),
+                        With(
+                            {n: Trim(txtNomConvEd.Text), c: Lower(Trim(txtCorConvEd.Text)), g: Trim(txtCargoConvEd.Text), a: Trim(Trim(txtAreaConvEd.Text))},
+                            With(
+                                {x: LookUp(RD_Participantes, Lower(Trim(Correo)) = c)},
+                                IfError(
+                                    If(
+                                        IsBlank(x),
+                                        Patch(RD_Participantes, Defaults(RD_Participantes), {Nombre: n, Correo: c, Cargo: g, Area: a, Activo: "Sí"}),
+                                        Patch(RD_Participantes, x, {Nombre: n, Cargo: g, Area: Coalesce(a, x.Area, ""), Activo: "Sí"})
+                                    );
+                                    RemoveIf(colParticipantes, Correo = c);
+                                    Collect(colParticipantes, {Nombre: n, Correo: c, Cargo: g, Area: Coalesce(a, x.Area, "")});
+                                    // En el navegador (vista previa, web) SaveData falla: su error no debe anular lo que ya quedó en el Excel.
+                                    IfError(SaveData(colParticipantes, "rd_part"); true, false);
+                                    Reset(txtNomConvEd);
+                                    Reset(txtCargoConvEd);
+                                    Reset(txtCorConvEd);
+                                    Notify(n & " quedó en la lista de convocados" & If(IsBlank(Coalesce(a, x.Area)), ".", " · " & Coalesce(a, x.Area) & "."), NotificationType.Success),
+                                    Notify("No se pudo guardar en RD_Participantes: " & FirstError.Message, NotificationType.Error)
+                                )
+                            )
+                        )
+                    )
+                  RadiusBottomLeft: =8
+                  RadiusBottomRight: =8
+                  RadiusTopLeft: =8
+                  RadiusTopRight: =8
+                  Size: =13
+                  Text: ="+ Agregar"
+                  Visible: =IsBlank(varConvEditEd)
+                  Width: =120
+                  X: =24 + (Parent.Width - 72) / 2 - 120
+                  Y: =Parent.Height - 88
+            - lblEditTituloEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colTexto
+                  FontWeight: =FontWeight.Semibold
+                  Height: =36
+                  Size: =15
+                  Text: ="Editar convocado"
+                  Visible: =!IsBlank(varConvEditEd)
+                  Width: =(Parent.Width - 72) / 2
+                  Wrap: =false
+                  X: =24
+                  Y: =104
+            - lblEditNomEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =20
+                  PaddingBottom: =0
+                  PaddingTop: =0
+                  Size: =11
+                  Text: ="Nombre"
+                  Visible: =!IsBlank(varConvEditEd)
+                  Width: =(Parent.Width - 72) / 2
+                  Wrap: =false
+                  X: =24
+                  Y: =144
+            - txtEditNomEd:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  Default: =LookUp(colParticipantes, Correo = varConvEditEd).Nombre
+                  Height: =40
+                  HintText: ="Nombre"
+                  Size: =13
+                  Visible: =!IsBlank(varConvEditEd)
+                  Width: =(Parent.Width - 72) / 2
+                  X: =24
+                  Y: =164
+            - lblEditCorEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =20
+                  PaddingBottom: =0
+                  PaddingTop: =0
+                  Size: =11
+                  Text: ="Correo"
+                  Visible: =!IsBlank(varConvEditEd)
+                  Width: =(Parent.Width - 72) / 2
+                  Wrap: =false
+                  X: =24
+                  Y: =212
+            - txtEditCorEd:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  Default: =varConvEditEd
+                  Height: =40
+                  HintText: ="Correo"
+                  Size: =13
+                  Visible: =!IsBlank(varConvEditEd)
+                  Width: =(Parent.Width - 72) / 2
+                  X: =24
+                  Y: =232
+            - lblEditCargoEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =20
+                  PaddingBottom: =0
+                  PaddingTop: =0
+                  Size: =11
+                  Text: ="Cargo"
+                  Visible: =!IsBlank(varConvEditEd)
+                  Width: =(Parent.Width - 72) / 2
+                  Wrap: =false
+                  X: =24
+                  Y: =280
+            - txtEditCargoEd:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  Default: =LookUp(colParticipantes, Correo = varConvEditEd).Cargo
+                  Height: =40
+                  HintText: ="Cargo"
+                  Size: =13
+                  Visible: =!IsBlank(varConvEditEd)
+                  Width: =(Parent.Width - 72) / 2
+                  X: =24
+                  Y: =300
+            - lblEditAreaEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =20
+                  PaddingBottom: =0
+                  PaddingTop: =0
+                  Size: =11
+                  Text: |-
+                    ="Área (vacía: sin área)"
+                  Visible: =!IsBlank(varConvEditEd)
+                  Width: =(Parent.Width - 72) / 2
+                  Wrap: =false
+                  X: =24
+                  Y: =348
+            - txtEditAreaEd:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  Default: =varAreaEditEd
+                  Height: =40
+                  HintText: |-
+                    ="Área (ej.: Mina, Planta, Mantención)"
+                  MaxLength: =40
+                  Size: =13
+                  Visible: =!IsBlank(varConvEditEd)
+                  Width: =(Parent.Width - 72) / 2
+                  X: =24
+                  Y: =368
+            - btnEditGuardarEd:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(255, 255, 255, 1)
+                  DisplayMode: |-
+                    =If(With(
+                        {p: LookUp(colParticipantes, Correo = varConvEditEd)},
+                        !IsBlank(Trim(txtEditNomEd.Text)) && IsMatch(Trim(txtEditCorEd.Text), Match.Email) && (
+                            Trim(txtEditNomEd.Text) <> p.Nombre ||
+                            Lower(Trim(txtEditCorEd.Text)) <> p.Correo ||
+                            (Trim(txtEditCargoEd.Text) & "") <> (Trim(p.Cargo) & "") ||
+                            (Trim(txtEditAreaEd.Text) & "") <> (p.Area & "")
+                        )
+                    ), DisplayMode.Edit, DisplayMode.Disabled)
+                  Fill: =colPrimario
+                  FontWeight: =FontWeight.Bold
+                  Height: =44
+                  OnSelect: |-
+                    =If(
+                        !Connection.Connected,
+                        Notify("Sin señal: la lista de convocados se edita con conexión.", NotificationType.Warning),
+                        With(
+                            {c0: varConvEditEd, n: Trim(txtEditNomEd.Text), c: Lower(Trim(txtEditCorEd.Text)), g: Trim(txtEditCargoEd.Text), t: Trim(txtEditAreaEd.Text)},
+                            // Con correo nuevo se relee el Excel antes de buscarlo: el conector puede devolver la fila de antes de un Patch
+                            // y aquí importa si ese correo está activo.
+                            If(c <> c0, Refresh(RD_Participantes));
+                            With(
+                                {
+                                    // Si el área ya existe con otras mayúsculas se usa la que está, para no partir el grupo en dos.
+                                    a: Coalesce(LookUp(colParticipantes, Correo <> c0 && !IsBlank(Area) && Lower(Area) = Lower(t)).Area, t),
+                                    // Fila del correo nuevo, si ya estaba en el Excel (convocada o quitada).
+                                    x: If(c <> c0, LookUp(RD_Participantes, Lower(Trim(Correo)) = c))
+                                },
+                                If(
+                                    !IsBlank(x) && Lower(Trim(x.Activo)) in ["sí", "si"],
+                                    Notify("El correo " & c & " ya es de " & x.Nombre & ", que está convocado.", NotificationType.Warning),
+                                    IfError(
+                                        If(
+                                            c = c0,
+                                            Patch(RD_Participantes, LookUp(RD_Participantes, Lower(Trim(Correo)) = c0), {Nombre: n, Cargo: g, Area: a}),
+                                            // Correo es la clave de RD_Participantes en Power Apps y no se cambia en su fila: se crea (o se
+                                            // reactiva) la del correo nuevo y la anterior queda con Activo = No, como al quitar a alguien.
+                                            If(
+                                                IsBlank(x),
+                                                Patch(RD_Participantes, Defaults(RD_Participantes), {Nombre: n, Correo: c, Cargo: g, Area: a, Activo: "Sí"}),
+                                                Patch(RD_Participantes, x, {Nombre: n, Cargo: g, Area: a, Activo: "Sí"})
+                                            );
+                                            Patch(RD_Participantes, LookUp(RD_Participantes, Lower(Trim(Correo)) = c0), {Activo: "No"})
+                                        );
+                                        UpdateIf(colParticipantes, Correo = c0, {Nombre: n, Correo: c, Cargo: g, Area: a});
+                                        IfError(SaveData(colParticipantes, "rd_part"); true, false);
+                                        Set(varConvEditEd, Blank());
+                                        Notify("Cambios guardados: " & n & If(IsBlank(a), " · sin área.", " · " & a & "."), NotificationType.Success),
+                                        Notify("No se pudo guardar el cambio: " & FirstError.Message, NotificationType.Error)
+                                    )
+                                )
+                            )
+                        )
+                    )
+                  RadiusBottomLeft: =8
+                  RadiusBottomRight: =8
+                  RadiusTopLeft: =8
+                  RadiusTopRight: =8
+                  Size: =13
+                  Text: ="Guardar cambios"
+                  Visible: =!IsBlank(varConvEditEd)
+                  Width: =(Parent.Width - 72) / 2 - 136
+                  X: =24
+                  Y: =420
+            - btnEditCancelarEd:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderColor: =colPrimario
+                  BorderThickness: =1
+                  Color: =colPrimario
+                  Fill: =RGBA(255, 255, 255, 1)
+                  Height: =44
+                  OnSelect: =Set(varConvEditEd, Blank())
+                  RadiusBottomLeft: =8
+                  RadiusBottomRight: =8
+                  RadiusTopLeft: =8
+                  RadiusTopRight: =8
+                  Size: =13
+                  Text: ="Cancelar"
+                  Visible: =!IsBlank(varConvEditEd)
+                  Width: =128
+                  X: =24 + (Parent.Width - 72) / 2 - 128
+                  Y: =420
+            - lblEditAvisoEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =44
+                  PaddingBottom: =2
+                  PaddingTop: =2
+                  Size: =11
+                  Text: |-
+                    =If(
+                        IsBlank(Trim(txtEditNomEd.Text)),
+                        "Falta el nombre.",
+                        !IsMatch(Trim(txtEditCorEd.Text), Match.Email),
+                        "El correo no es válido.",
+                        Lower(Trim(txtEditCorEd.Text)) <> varConvEditEd,
+                        "El correo anterior queda en el Excel con Activo = No.",
+                        ""
+                    )
+                  VerticalAlign: =VerticalAlign.Top
+                  Visible: =!IsBlank(varConvEditEd)
+                  Width: =(Parent.Width - 72) / 2
+                  X: =24
+                  Y: =472
+            - lblConvTituloEd:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colTexto
+                  FontWeight: =FontWeight.Semibold
+                  Height: =36
+                  Size: =15
+                  Text: ="Convocados · " & CountRows(colParticipantes)
+                  Width: =(Parent.Width - 72) / 2
+                  Wrap: =false
+                  X: =48 + (Parent.Width - 72) / 2
+                  Y: =104
+            - galConvEd:
+                Control: Gallery@2.15.0
+                Variant: BrowseLayout_Vertical_ThreeTextVariant_ver5.0
+                Properties:
+                  BorderColor: =RGBA(225, 230, 232, 1)
+                  BorderThickness: =1
+                  Height: =Parent.Height - 160
+                  Items: |-
+                    =Sort(
+                        Ungroup(
+                            With(
+                                {areas: Sort(Distinct(colParticipantes, If(IsBlank(Area), "Sin área", Area)), Value)},
+                                ForAll(
+                                    Sequence(CountRows(areas)) As i,
+                                    With(
+                                        {a: Index(areas, i.Value).Value},
+                                        With(
+                                            {o: If(a = "Sin área", 999, i.Value) * 1000, gente: Sort(Filter(colParticipantes, If(IsBlank(Area), "Sin área", Area) = a), Nombre)},
+                                            {
+                                                Filas: ForAll(
+                                                    Sequence(CountRows(gente) + 1, 0) As j,
+                                                    If(
+                                                        j.Value = 0,
+                                                        {Orden: o, Fila: "Area", Area: a, N: CountRows(gente), Nombre: "", Correo: "", Cargo: ""},
+                                                        With(
+                                                            {p: Index(gente, j.Value)},
+                                                            {Orden: o + j.Value, Fila: "Persona", Area: a, N: 0, Nombre: p.Nombre, Correo: p.Correo, Cargo: p.Cargo}
+                                                        )
+                                                    )
+                                                )
+                                            }
+                                        )
+                                    )
+                                )
+                            ),
+                            Filas
+                        ),
+                        Orden
+                    )
+                  TemplateFill: =If(!IsBlank(varConvEditEd) && ThisItem.Correo = varConvEditEd, RGBA(255, 243, 224, 1), RGBA(255, 255, 255, 0))
+                  TemplatePadding: =0
+                  TemplateSize: =72
+                  Width: =(Parent.Width - 72) / 2
+                  X: =48 + (Parent.Width - 72) / 2
+                  Y: =144
+                Children:
+                  - lblConvAreaEd:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colPrimario
+                        FontWeight: =FontWeight.Bold
+                        Height: =Parent.TemplateHeight - 10
+                        OnSelect: |-
+                          =If(
+                              IsBlank(varConvEditEd),
+                              Set(varAreaConvEd, If(ThisItem.Area = "Sin área", "", ThisItem.Area));
+                              Reset(txtAreaConvEd),
+                              Set(varAreaEditEd, If(ThisItem.Area = "Sin área", "", ThisItem.Area));
+                              Reset(txtEditAreaEd)
+                          )
+                        PaddingBottom: =2
+                        PaddingTop: =2
+                        Size: =If(Len(ThisItem.Area) > 24, 11, 13)
+                        Text: =Upper(ThisItem.Area) & "  ·  " & ThisItem.N
+                        Tooltip: =If(IsBlank(varConvEditEd), "Elegir esta área para agregar personas", "Pasar a esta área")
+                        VerticalAlign: =VerticalAlign.Bottom
+                        Visible: =ThisItem.Fila = "Area"
+                        Width: =Parent.TemplateWidth - 16
+                        X: =8
+                        Y: =6
+                  - linConvAreaEd:
+                      Control: Rectangle@2.3.0
+                      Properties:
+                        Fill: =colAzul
+                        Height: =2
+                        Visible: =ThisItem.Fila = "Area"
+                        Width: =Parent.TemplateWidth
+                        X: =0
+                        Y: =Parent.TemplateHeight - 2
+                  - lblConvNombreEd:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colTexto
+                        FontWeight: =FontWeight.Semibold
+                        Height: =26
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =If(Len(ThisItem.Nombre) > 24, 11, 13)
+                        Text: =ThisItem.Nombre
+                        Visible: =ThisItem.Fila = "Persona"
+                        Width: =Parent.TemplateWidth - 8 - 80
+                        Wrap: =false
+                        X: =8
+                        Y: =2
+                  - lblConvDetalleEd:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =RGBA(90, 98, 104, 1)
+                        Height: =42
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =11
+                        Text: =ThisItem.Correo & If(IsBlank(ThisItem.Cargo), "", " · " & ThisItem.Cargo)
+                        VerticalAlign: =VerticalAlign.Top
+                        Visible: =ThisItem.Fila = "Persona"
+                        Width: =Parent.TemplateWidth - 8 - 80
+                        X: =8
+                        Y: =28
+                  - icoEditarConvEd:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Editar a " & ThisItem.Nombre
+                        Color: =colPrimario
+                        Height: =32
+                        Icon: =Icon.Edit
+                        OnSelect: |-
+                          =Set(varConvEditEd, ThisItem.Correo);
+                          Set(varAreaEditEd, If(ThisItem.Area = "Sin área", "", ThisItem.Area));
+                          Reset(txtEditNomEd);
+                          Reset(txtEditCorEd);
+                          Reset(txtEditCargoEd);
+                          Reset(txtEditAreaEd)
+                        PaddingBottom: =6
+                        PaddingLeft: =6
+                        PaddingRight: =6
+                        PaddingTop: =6
+                        Tooltip: ="Editar nombre, correo, cargo o área"
+                        Visible: =ThisItem.Fila = "Persona" && !(!IsBlank(varConvEditEd) && ThisItem.Correo = varConvEditEd)
+                        Width: =32
+                        X: =Parent.TemplateWidth - 76
+                        Y: =(Parent.TemplateHeight - 32) / 2
+                  - icoQuitarConvEd:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Quitar a " & ThisItem.Nombre & " de la lista de convocados"
+                        Color: =colRojo
+                        Height: =32
+                        Icon: =Icon.Cancel
+                        OnSelect: |-
+                          =If(
+                              !Connection.Connected,
+                              Notify("Sin señal: la lista de convocados se edita con conexión.", NotificationType.Warning),
+                              With(
+                                  {c: ThisItem.Correo, n: ThisItem.Nombre},
+                                  IfError(
+                                      Patch(RD_Participantes, LookUp(RD_Participantes, Lower(Trim(Correo)) = c), {Activo: "No"});
+                                      RemoveIf(colParticipantes, Correo = c);
+                                      IfError(SaveData(colParticipantes, "rd_part"); true, false);
+                                      Notify(n & " ya no está convocado (queda en el Excel con Activo = No).", NotificationType.Success),
+                                      Notify("No se pudo quitar: " & FirstError.Message, NotificationType.Error)
+                                  )
+                              )
+                          )
+                        PaddingBottom: =6
+                        PaddingLeft: =6
+                        PaddingRight: =6
+                        PaddingTop: =6
+                        Tooltip: ="Quitar de la lista de convocados"
+                        Visible: =ThisItem.Fila = "Persona" && !(!IsBlank(varConvEditEd) && ThisItem.Correo = varConvEditEd)
+                        Width: =32
+                        X: =Parent.TemplateWidth - 40
+                        Y: =(Parent.TemplateHeight - 32) / 2
+                  - icoCancelarConvEd:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Cancelar la edición de " & ThisItem.Nombre
+                        Color: =RGBA(90, 98, 104, 1)
+                        Height: =32
+                        Icon: =Icon.Undo
+                        OnSelect: =Set(varConvEditEd, Blank())
+                        PaddingBottom: =6
+                        PaddingLeft: =6
+                        PaddingRight: =6
+                        PaddingTop: =6
+                        Tooltip: ="Cancelar la edición"
+                        Visible: =!IsBlank(varConvEditEd) && ThisItem.Correo = varConvEditEd
+                        Width: =32
+                        X: =Parent.TemplateWidth - 76
+                        Y: =(Parent.TemplateHeight - 32) / 2
+                  - sepConvEd:
+                      Control: Rectangle@2.3.0
+                      Properties:
+                        Fill: =RGBA(230, 230, 230, 1)
+                        Height: =1
+                        Visible: =ThisItem.Fila = "Persona"
+                        Width: =Parent.TemplateWidth
+                        X: =0
+                        Y: =Parent.TemplateHeight - 1
+            - lblConvVacioEd:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =60
+                  Size: =12
+                  Text: ="Todavía no hay convocados. Si ya hay en el Excel, toca «Actualizar datos» en Inicio."
+                  Visible: =IsEmpty(colParticipantes)
+                  Width: =(Parent.Width - 72) / 2 - 32
+                  X: =64 + (Parent.Width - 72) / 2
+                  Y: =170
+      - conBorrarNuevoEd:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(0, 0, 0, 0.45)
+            Height: =Parent.Height
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Visible: =!IsBlank(varBorrarNuevoEd)
+            Width: =Parent.Width
+            X: =0
+            Y: =0
+          Children:
+            - conBorrarNuevoEdTarjeta:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  DropShadow: =DropShadow.Bold
+                  Fill: =RGBA(255, 255, 255, 1)
+                  Height: =232
+                  RadiusBottomLeft: =12
+                  RadiusBottomRight: =12
+                  RadiusTopLeft: =12
+                  RadiusTopRight: =12
+                  Width: =480
+                  X: =(Parent.Width - 480) / 2
+                  Y: =(Parent.Height - 232) / 2
+                Children:
+                  - lblBorrarNuevoEdPregunta:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colTexto
+                        FontWeight: =FontWeight.Bold
+                        Height: =56
+                        PaddingBottom: =2
+                        PaddingTop: =2
+                        Size: =15
+                        Text: ="¿Seguro que quieres eliminar este compromiso?"
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =20
+                  - lblBorrarNuevoEdDetalle:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =RGBA(90, 98, 104, 1)
+                        Height: =64
+                        PaddingBottom: =2
+                        PaddingTop: =2
+                        Size: =12
+                        Text: |-
+                          =With(
+                              {n: LookUp(colNuevos, IdLocal = varBorrarNuevoEd)},
+                              If(Len(n.Titulo) > 100, Left(n.Titulo, 97) & "…", n.Titulo) & Char(10) & n.Responsable & " · vence " & Text(n.FechaLimite, "dd-mm")
+                          )
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =80
+                  - btnBorrarNuevoEdSi:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        Color: =RGBA(255, 255, 255, 1)
+                        Fill: =colRojo
+                        FontWeight: =FontWeight.Bold
+                        Height: =48
+                        OnSelect: |-
+                          =RemoveIf(colNuevos, IdLocal = varBorrarNuevoEd);
+                          If(varEditNuevoEd = varBorrarNuevoEd, Set(varEditNuevoEd, Blank()); Reset(txtNuevoQueEd); Reset(txtNuevoRespEd); Reset(dpNuevoFechaEd));
+                          Set(varBorrarNuevoEd, Blank());
+                          Set(varPrepSucia, true)
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =14
+                        Text: ="Eliminar"
+                        Width: =140
+                        X: =Parent.Width - 24 - 280 - 12
+                        Y: =Parent.Height - 72
+                  - btnBorrarNuevoEdNo:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(160, 160, 160, 1)
+                        BorderThickness: =1
+                        Color: =colTexto
+                        Fill: =RGBA(255, 255, 255, 1)
+                        Height: =48
+                        OnSelect: =Set(varBorrarNuevoEd, Blank())
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =14
+                        Text: ="Cancelar"
+                        Width: =140
+                        X: =Parent.Width - 24 - 140
+                        Y: =Parent.Height - 72

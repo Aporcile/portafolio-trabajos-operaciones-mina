@@ -1,0 +1,29 @@
+table hist_contador_ultima
+	lineageTag: 14f21409-0969-4bed-a6c9-a4b276f51521
+
+	column 'ultima_fila.numeric_value'
+		lineageTag: 2d3aa9fb-355f-4535-b154-08cda82bcd39
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [ultima_fila.numeric_value]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ultima_fila.dim_variable.name'
+		lineageTag: 70f68bf7-07b9-4606-94ab-f201c6780cd4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ultima_fila.dim_variable.name]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition hist_contador_ultima = calculated
+		mode: import
+		source =
+				SELECTCOLUMNS (
+				    GENERATE (
+				        CALCULATETABLE ( VALUES ( hist_senales[item_id] ), hist_senales[dim_variable.tipo_variable] = "Contador", NOT ISBLANK ( hist_senales[numeric_value] ) ),
+				        TOPN ( 1, CALCULATETABLE ( SELECTCOLUMNS ( hist_senales, "@ts", hist_senales[timestamp], "@v", hist_senales[numeric_value], "@n", hist_senales[dim_variable.name] ), hist_senales[dim_variable.tipo_variable] = "Contador", NOT ISBLANK ( hist_senales[numeric_value] ) ), [@ts], DESC )
+				    ),
+				    "ultima_fila.numeric_value", [@v], "ultima_fila.dim_variable.name", [@n]
+				)

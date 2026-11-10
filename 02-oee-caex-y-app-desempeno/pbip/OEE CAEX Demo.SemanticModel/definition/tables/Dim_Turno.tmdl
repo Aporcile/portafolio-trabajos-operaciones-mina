@@ -1,0 +1,55 @@
+/// Turnos: A (08:00-20:00) y B (20:00-08:00). Fuente: Dim_Turno.csv.
+table Dim_Turno
+	lineageTag: b04658ff-5e5b-519d-936b-c9a2ab6fc0ca
+
+	column Turno
+		dataType: string
+		isNullable: false
+		lineageTag: 3aebb4b6-fe45-52b9-b63a-9c5404e040cf
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Turno
+
+		annotation SummarizationSetBy = User
+
+	column Nombre
+		dataType: string
+		lineageTag: 790c2609-fe15-5f17-afd4-93ecb7937331
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Nombre
+
+		annotation SummarizationSetBy = User
+
+	column HoraInicio
+		dataType: dateTime
+		formatString: Long Time
+		lineageTag: ec77614e-9709-519e-8fd0-6357c2abee1d
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: HoraInicio
+
+		annotation SummarizationSetBy = User
+
+	column HoraFin
+		dataType: dateTime
+		formatString: Long Time
+		lineageTag: a977d17b-0741-50dd-96dc-a09da9ef9228
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: HoraFin
+
+		annotation SummarizationSetBy = User
+
+	partition Dim_Turno = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "Dim_Turno.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Turno", type text}, {"Nombre", type text}, {"HoraInicio", type datetime}, {"HoraFin", type datetime}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

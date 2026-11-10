@@ -1,0 +1,33 @@
+// OEE de transporte (CAEX) para la minuta de la reunión: una fila por periodo (JUE-DOM, SEMANAL y MENSUAL) con las medidas del
+// informe «OEE CAEX Demo» (pbip/). Solo lectura.
+// Lo ejecuta el flujo RD-OEE-Minuta cuando la app actualiza datos (Inicio › Actualizar datos): así la minuta lleva las mismas
+// cifras que el informe en ese momento.
+// Los periodos (hasta ayer; el lunes, la semana completa; el primer lunes del mes, el mes anterior) los calcula el modelo con la
+// hora de sus datos (Dim_Actualizacion), por eso la consulta no lleva fechas.
+// SELECTCOLUMNS (y no ADDCOLUMNS) para que todas las columnas lleguen como [Nombre] y el flujo les quite los corchetes.
+// Power BI no devuelve las columnas en blanco (por ejemplo, el plan mensual de un mes que todavía no se carga).
+EVALUATE
+SELECTCOLUMNS(
+    'Periodo RD',
+    "Orden", 'Periodo RD'[Orden],
+    "Periodo", 'Periodo RD'[Periodo],
+    "Inicio", FORMAT([Inicio periodo], "yyyy-mm-dd"),
+    "Fin", FORMAT([Fin periodo], "yyyy-mm-dd"),
+    "Datos", [Texto copia],
+    "PlanT", [Producción plan],
+    "RealT", [Producción real],
+    "OEEPlan", [OEE plan],
+    "OEEReal", [OEE real],
+    "DFPlan", [DF plan],
+    "DFReal", [DF real],
+    "UEBDPlan", [UEBD plan],
+    "UEBDReal", [UEBD real],
+    "RendPlan", [Rendimiento plan],
+    "RendReal", [Rendimiento real],
+    "HNPlan", [HN plan],
+    "HNReal", [HN real],
+    "PerdDF", [Pérdida disponibilidad],
+    "PerdUEBD", [Pérdida UEBD],
+    "PerdRend", [Pérdida rendimiento],
+    "PerdHN", [Pérdida horas nominales]
+)

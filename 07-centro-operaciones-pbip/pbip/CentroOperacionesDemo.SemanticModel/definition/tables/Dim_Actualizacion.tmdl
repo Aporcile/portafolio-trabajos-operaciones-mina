@@ -1,0 +1,90 @@
+/// Marca de tiempo del ultimo refresco del dataset, en hora local de la faena. Una sola fila. Alimenta el texto "ULTIMA ACTUALIZACION" del encabezado.
+table Dim_Actualizacion
+	lineageTag: 635e7b27-b29c-4620-9bc5-ea829942b285
+
+	/// Texto del encabezado: la hora del ultimo refresco del dataset, en HH:MM (hora local).
+	measure Ultima_Actualizacion = SELECTEDVALUE(Dim_Actualizacion[Hora_Texto])
+		lineageTag: 874cf044-239d-4235-88ed-795db9e5abb9
+
+	/// Recuadro "ULTIMA ACTUALIZACION" del encabezado, dibujado como SVG (con el valor en blanco). Se muestra con una tabla cuyo unico campo es esta medida (dataCategory ImageUrl).
+	/// Si el refresco no es de hoy, antepone la fecha para que se note que los datos quedaron congelados.
+	/// "Hoy" se calcula desde UTCNOW() con el desfase horario local, porque en el servicio NOW() devuelve UTC.
+	measure SVG_Ultima_Actualizacion = ```
+			
+			VAR _t = MAX(Dim_Actualizacion[Marca])
+			VAR _utc = UTCNOW()
+			VAR _a = YEAR(_utc)
+			VAR _sep = DATE(_a, 9, 7) - WEEKDAY(DATE(_a, 9, 7), 1) + 1
+			VAR _abr = DATE(_a, 4, 7) - WEEKDAY(DATE(_a, 4, 7), 1) + 1
+			VAR _ahora = _utc + IF(_utc >= _sep || _utc < _abr, -3, -4) / 24
+			VAR _viejo = NOT ISBLANK(_t) && INT(_t) < INT(_ahora)
+			VAR _txt =
+			    IF(
+			        ISBLANK(_t),
+			        "sin actualizar",
+			        IF(_viejo, FORMAT(_t, "dd-mm-yyyy") & " · ", "") & FORMAT(_t, "hh:nn")
+			    )
+			VAR _svg =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='240' height='44' viewBox='0 0 240 44'>"
+			        & "<text x='120' y='15' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='12' font-weight='700' fill='#8EC5F2' letter-spacing='0.5'>ÚLTIMA ACTUALIZACIÓN</text>"
+			        & "<text x='120' y='38' text-anchor='middle' font-family='Segoe UI Semibold, Segoe UI' font-size='20' font-weight='700' fill='#FFFFFF'>" & _txt & "</text>"
+			        & "</svg>"
+			RETURN
+			    "data:image/svg+xml;utf8," & SUBSTITUTE(SUBSTITUTE(_svg, "%", "%25"), "#", "%23")
+			
+			```
+		lineageTag: 58549f92-4ae1-48e6-bd9a-fe45994bb17a
+		dataCategory: ImageUrl
+
+	/// Fecha y hora exactas del ultimo refresco del dataset (hora local).
+	column Marca
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 89ed7548-fccc-4933-b4fe-896046694004
+		summarizeBy: none
+		sourceColumn: Marca
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Hora del ultimo refresco en formato HH:MM (hora local). Es el valor que se muestra en el encabezado.
+	column Hora_Texto
+		dataType: string
+		lineageTag: 39a29730-45aa-4c18-996b-c419ff952914
+		summarizeBy: none
+		sourceColumn: Hora_Texto
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Actualizacion = m
+		mode: import
+		source =
+				/*==============================================================================
+				  DIM_ACTUALIZACION
+				  Una sola fila con el instante del ultimo refresco del dataset. Sirve para que la pantalla
+				  24/7 muestre cuando se actualizaron los datos: si el refresco se detiene, la hora queda
+				  congelada y el operador lo nota.
+
+				  No se resuelve con NOW() en DAX: en un modelo Import se evaluaria al consultar y daria la
+				  hora actual aunque el dataset lleve horas sin refrescarse. Capturado aqui en Power Query,
+				  el valor se congela en el refresco.
+
+				  Con los datos sinteticos fijos, el instante se deriva de FechaReferencia (01:10 del dia
+				  siguiente), de modo que el encabezado muestra la fecha completa: es el aviso de dato antiguo.
+				==============================================================================*/
+				let
+				    UltimoRefresco = DateTime.From(FechaReferencia) + #duration(1, 1, 10, 0),
+
+				    Tabla = Table.FromRecords(
+				        {[
+				            Marca      = UltimoRefresco,
+				            Hora_Texto = Time.ToText(DateTime.Time(UltimoRefresco), [Format = "HH:mm", Culture = "es-ES"])
+				        ]},
+				        type table [Marca = datetime, Hora_Texto = text]
+				    )
+				in
+				    Tabla
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

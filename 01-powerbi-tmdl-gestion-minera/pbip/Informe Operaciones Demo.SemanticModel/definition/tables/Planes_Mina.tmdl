@@ -1,0 +1,344 @@
+table Planes_Mina
+	lineageTag: 2e8ec463-6e3c-4163-ba54-0fa64e6a63bf
+
+	/// Plan mensual de movimiento total (propiedad Total Toneladas); si falta, extracción más chancado desde stock.
+	measure 'PlanMensual Movimiento mina' =
+			SUMX (
+			    VALUES ( Planes_Mina[start_date] ),
+			    VAR _tot =
+			        CALCULATE (
+			            SUM ( Planes_Mina[value] ),
+			            Planes_Mina[plan_type] = "Mensual",
+			            Planes_Mina[property_name] = "Total Toneladas"
+			        )
+			    RETURN
+			        IF ( ISBLANK ( _tot ), [PlanMensual Ampliacion] + [PlanMensual Total Toneladas Chancado desde stock], _tot )
+			)
+		lineageTag: aa7571c9-a389-4bfa-a9b7-235ff71c451c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Plan semanal de movimiento total de la flota CAEX (propiedad Total Toneladas SEM).
+	measure 'PlanSemanal Movimiento mina CAEX' =
+			SUMX (
+			    VALUES ( Planes_Mina[start_date] ),
+			    VAR _tot =
+			        CALCULATE (
+			            SUM ( Planes_Mina[value] ),
+			            Planes_Mina[plan_type] = "Semanal",
+			            Planes_Mina[property_name] = "Total Toneladas SEM"
+			        )
+			    RETURN
+			        IF ( ISBLANK ( _tot ), [PlanSemanal Ampliacion] + [PlanSemanal Total Toneladas Chancado desde stock], _tot )
+			)
+		lineageTag: 480868c5-e6ed-4a17-98d7-06a87110fdf4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Plan mensual de toneladas a chancado con origen en mina.
+	measure 'PlanMensual Total Toneladas Chancado desde Mina' = CALCULATE( sum(Planes_Mina[value]), Planes_Mina[plan_type]="Mensual", Planes_Mina[property_name]="Total Toneladas Chancado")
+		lineageTag: 53487e43-8512-4e94-bcdc-543378d801ee
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Plan mensual de toneladas a dump leach.
+	measure 'PlanMensual Total Toneladas Dump' = CALCULATE( sum(Planes_Mina[value]), Planes_Mina[plan_type]="Mensual", Planes_Mina[property_name]="Total Toneladas Dump")
+		lineageTag: e945ccb8-f0e9-4ca6-b4f1-8f67262e1ed0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Plan mensual de toneladas a botadero (estéril).
+	measure 'PlanMensual Total Toneladas Esteril' = CALCULATE( sum(Planes_Mina[value]), Planes_Mina[plan_type]="Mensual", Planes_Mina[property_name]="Total Toneladas Esteril")
+		lineageTag: f8e299c0-1e5d-41bd-8778-97c1f20068f7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Plan mensual de toneladas a stock de sulfuro.
+	measure 'PlanMensual Total Toneladas Stock Sulfuro' = CALCULATE( sum(Planes_Mina[value]), Planes_Mina[plan_type]="Mensual", Planes_Mina[property_name]="Total Toneladas Stock Sulfuro")
+		lineageTag: 75ed2e37-3a27-4fc5-98df-7f62b46a85a3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Plan mensual de extracción de mina: chancado desde mina + dump + estéril + stock de sulfuro.
+	measure 'PlanMensual Ampliacion' = [PlanMensual Total Toneladas Chancado desde Mina]+ [PlanMensual Total Toneladas Dump]+ [PlanMensual Total Toneladas Esteril]+[PlanMensual Total Toneladas Stock Sulfuro]
+		lineageTag: c7489ecf-0289-4b7b-aded-444d88e1aaa9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Plan semanal de toneladas a stock de sulfuro.
+	measure 'PlanSemanal Total Toneladas Stock Sulfuro' = CALCULATE( sum(Planes_Mina[value]), Planes_Mina[plan_type]="Semanal", Planes_Mina[property_name]="Total Toneladas Stock Sulfuro SEM")
+		lineageTag: 4a134fbb-f123-41f6-aca6-e3bcfa19691e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Plan semanal de toneladas a botadero (estéril).
+	measure 'PlanSemanal Total Toneladas Esteril' = CALCULATE( sum(Planes_Mina[value]), Planes_Mina[plan_type]="Semanal", Planes_Mina[property_name]="Total Toneladas Esteril SEM")
+		lineageTag: 46a75333-9312-4387-83df-0e30b102b63e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Plan semanal de toneladas a dump leach.
+	measure 'PlanSemanal Total Toneladas Dump' = CALCULATE( sum(Planes_Mina[value]), Planes_Mina[plan_type]="Semanal", Planes_Mina[property_name]="Total Toneladas Dump SEM")
+		lineageTag: 994ef4ab-490d-4102-bddf-18462c9e5733
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Plan semanal de toneladas a chancado con origen en mina.
+	measure 'PlanSemanal Total Toneladas Chancado desde Mina' = CALCULATE( sum(Planes_Mina[value]), Planes_Mina[plan_type]="Semanal", Planes_Mina[property_name]="Total Toneladas Chancado SEM")
+		lineageTag: de51df63-d329-4428-ae70-f46eaf0de6e3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Plan semanal de extracción de mina: chancado desde mina + dump + estéril + stock de sulfuro.
+	measure 'PlanSemanal Ampliacion' = Planes_Mina[PlanSemanal Total Toneladas Chancado desde Mina]+ Planes_Mina[PlanSemanal Total Toneladas Dump]+ Planes_Mina[PlanSemanal Total Toneladas Esteril]+[PlanSemanal Total Toneladas Stock Sulfuro]
+		lineageTag: ed7ce558-0440-4a3a-84c5-ef063329b174
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Plan semanal de remanejo: toneladas a chancado desde stock.
+	measure 'PlanSemanal Remanejo' = ( [PlanSemanal Ampliacion] + [PlanSemanal Total Toneladas Chancado desde stock] ) - [PlanSemanal Ampliacion]
+		lineageTag: ae91da67-193d-412b-86c6-4fd6634081bb
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Plan mensual de toneladas totales a chancado (mina más stock).
+	measure 'PlanMensual Total Toneladas Chancado' = CALCULATE( sum(Planes_Mina[value]), Planes_Mina[plan_type]="Mensual", Planes_Mina[property_name]="Total Toneladas Chancador")
+		lineageTag: 0df0db4c-4c13-40b8-b98d-f588a7e49d69
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Plan mensual de toneladas a chancado desde stock (remanejo).
+	measure 'PlanMensual Total Toneladas Chancado desde stock' = [PlanMensual Total Toneladas Chancado] - [PlanMensual Total Toneladas Chancado desde Mina]
+		lineageTag: 1b98313b-0cc2-4bc1-83a1-ba27a4d35e08
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Plan semanal de toneladas totales a chancado (mina más stock).
+	measure 'PlanSemanal Total Toneladas Chancado' = CALCULATE( sum(Planes_Mina[value]), Planes_Mina[plan_type]="Semanal", Planes_Mina[property_name]="Total Toneladas Chancador SEM")
+		lineageTag: d7cb3117-ec0a-4648-b5ff-0128dc62e673
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Plan semanal de toneladas a chancado desde stock (remanejo).
+	measure 'PlanSemanal Total Toneladas Chancado desde stock' = [PlanSemanal Total Toneladas Chancado] - [PlanSemanal Total Toneladas Chancado desde Mina]
+		lineageTag: 464e3b1b-6169-44d3-a725-26be5c7b287b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Horas nominales del plan semanal de CAEX; lee el formato clásico y el alternativo del plan.
+	measure 'PlanSemanal - Horas Nominales CAEX' =
+			SUMX (
+			    VALUES ( Planes_Mina[start_date] ),
+			    VAR _nom = CALCULATE ( SUM ( Planes_Mina[value] ), Planes_Mina[plan_type] = "Semanal", Planes_Mina[property_name] = "Horas Nominales CAEX SEM" )
+			    VAR _ope = CALCULATE ( SUM ( Planes_Mina[value] ), Planes_Mina[plan_type] = "Semanal", Planes_Mina[property_name] = "Horas Operativas CAEX SEM" )
+			    VAR _ren = CALCULATE ( SUM ( Planes_Mina[value] ), Planes_Mina[plan_type] = "Semanal", Planes_Mina[property_name] = "Total Toneladas CAEX SEM" )
+			    VAR _alt = _nom > 0 && _nom < 100 && ABS ( _ope - 24 * _nom ) < 0.5 && _ren > 0 && _ren < 5000
+			    RETURN IF ( _alt, _ope, _nom )
+			)
+		lineageTag: c6731fcd-de91-43fb-80c6-dc7ebd1a8b87
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Horas disponibles del plan semanal de CAEX; lee el formato clásico y el alternativo del plan.
+	measure 'PlanSemanal - Horas Disponible CAEX' =
+			SUMX (
+			    VALUES ( Planes_Mina[start_date] ),
+			    VAR _nom = CALCULATE ( SUM ( Planes_Mina[value] ), Planes_Mina[plan_type] = "Semanal", Planes_Mina[property_name] = "Horas Nominales CAEX SEM" )
+			    VAR _ope = CALCULATE ( SUM ( Planes_Mina[value] ), Planes_Mina[plan_type] = "Semanal", Planes_Mina[property_name] = "Horas Operativas CAEX SEM" )
+			    VAR _ren = CALCULATE ( SUM ( Planes_Mina[value] ), Planes_Mina[plan_type] = "Semanal", Planes_Mina[property_name] = "Total Toneladas CAEX SEM" )
+			    VAR _alt = _nom > 0 && _nom < 100 && ABS ( _ope - 24 * _nom ) < 0.5 && _ren > 0 && _ren < 5000
+			    RETURN
+			        IF (
+			            _alt,
+			            CALCULATE ( SUM ( Planes_Mina[value] ), Planes_Mina[plan_type] = "Semanal", Planes_Mina[property_name] = "Horas Efectivas CAEX SEM" ),
+			            CALCULATE ( SUM ( Planes_Mina[value] ), Planes_Mina[plan_type] = "Semanal", Planes_Mina[property_name] = "Horas Disponibles CAEX SEM" )
+			        )
+			)
+		lineageTag: f31796f7-0001-464b-b81c-2f5e2209f1df
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Horas efectivas del plan semanal de CAEX; en el formato alternativo = movimiento del plan / rendimiento.
+	measure 'PlanSemanal - Horas efectivas CAEX' =
+			SUMX (
+			    VALUES ( Planes_Mina[start_date] ),
+			    VAR _nom = CALCULATE ( SUM ( Planes_Mina[value] ), Planes_Mina[plan_type] = "Semanal", Planes_Mina[property_name] = "Horas Nominales CAEX SEM" )
+			    VAR _ope = CALCULATE ( SUM ( Planes_Mina[value] ), Planes_Mina[plan_type] = "Semanal", Planes_Mina[property_name] = "Horas Operativas CAEX SEM" )
+			    VAR _ren = CALCULATE ( SUM ( Planes_Mina[value] ), Planes_Mina[plan_type] = "Semanal", Planes_Mina[property_name] = "Total Toneladas CAEX SEM" )
+			    VAR _alt = _nom > 0 && _nom < 100 && ABS ( _ope - 24 * _nom ) < 0.5 && _ren > 0 && _ren < 5000
+			    RETURN
+			        IF (
+			            _alt,
+			            DIVIDE ( [PlanSemanal Movimiento mina CAEX], _ren ),
+			            CALCULATE ( SUM ( Planes_Mina[value] ), Planes_Mina[plan_type] = "Semanal", Planes_Mina[property_name] = "Horas Efectivas CAEX SEM" )
+			        )
+			)
+		lineageTag: 233874fa-2e06-4bec-9bb9-34b04b61e3b2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// DF del plan de CAEX: horas disponibles sobre horas nominales.
+	measure 'PlanSemanal - Disponibilidad CAEX' = [PlanSemanal - Horas Disponible CAEX]/ [PlanSemanal - Horas Nominales CAEX]
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 6a813c7b-448a-4abe-b6cc-65002ef86906
+
+	/// UEBD del plan de CAEX: horas efectivas sobre horas disponibles.
+	measure 'PlanSemanal - UEBD CAEX' = [PlanSemanal - Horas efectivas CAEX]/ [PlanSemanal - Horas Disponible CAEX]
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 97a340af-5838-4d7b-b604-df70ab7ddad4
+
+	/// Rendimiento del plan de CAEX: movimiento del plan por hora efectiva.
+	measure 'PlanSemanal - Rendimiento CAEX' = [PlanSemanal Movimiento mina CAEX]/ [PlanSemanal - Horas efectivas CAEX]
+		lineageTag: a3e25146-1849-481c-8a6c-dba654ea1b5e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Movimiento del plan reconstruido: nominales x DF x UEBD x rendimiento.
+	measure 'PlanSemanal - movimiento calculado CAEX' = [PlanSemanal - Horas Nominales CAEX]*[PlanSemanal - Disponibilidad CAEX]*[PlanSemanal - UEBD CAEX]*[PlanSemanal - Rendimiento CAEX]
+		lineageTag: 258ee76b-4433-49e6-adf1-d188b9595085
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Paso de la cascada por rendimiento (t por hora efectiva), en t.
+	measure 'Waterfall - Plansemanal dif rendimiento' =
+			var plan =  [Disponibilidad CAEX]*[UEBD CAEX]*[PlanSemanal - Rendimiento CAEX] *[PlanSemanal - Horas Nominales CAEX]
+			var real = [Disponibilidad CAEX]*[UEBD CAEX]*[TPH efectivo CAEX REV]*[PlanSemanal - Horas Nominales CAEX]
+			RETURN (real-plan)
+		lineageTag: 778144f4-a8a2-4b35-b7de-112dfbee0114
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Paso de la cascada por UEBD: real menos plan con disponibilidad real y rendimiento en plan, en t.
+	measure 'Waterfall - Plansemanal dif UEBD' =
+			var plan =   [Disponibilidad CAEX]*[PlanSemanal - UEBD CAEX]*[PlanSemanal - Rendimiento CAEX] *[PlanSemanal - Horas Nominales CAEX]
+			var real =   [Disponibilidad CAEX]*[UEBD CAEX]*[PlanSemanal - Rendimiento CAEX] *[PlanSemanal - Horas Nominales CAEX]
+			RETURN (real-plan)
+		lineageTag: 6c497d10-6610-4c15-b981-3c7689e8abeb
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Paso de la cascada por disponibilidad: real menos plan con los demás factores en plan, en t.
+	measure 'Waterfall - Plansemanal dif Disponibilidad' =
+			var plan =  [PlanSemanal - Disponibilidad CAEX]*[PlanSemanal - UEBD CAEX]*[PlanSemanal - Rendimiento CAEX] *[PlanSemanal - Horas Nominales CAEX]
+			var real =  [Disponibilidad CAEX]*[PlanSemanal - UEBD CAEX]*[PlanSemanal - Rendimiento CAEX] *[PlanSemanal - Horas Nominales CAEX]
+			RETURN (real-plan)
+		lineageTag: ba29bc62-466a-4f0d-a0ce-25b919cd0bd5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Paso de la cascada por horas nominales: horas reales contra horas del plan, en t.
+	measure 'Waterfall - Plansemanal dif hrs nominales' =
+			var plan =   [Disponibilidad CAEX]*[UEBD CAEX]*[TPH efectivo CAEX REV]*[PlanSemanal - Horas Nominales CAEX]
+			var real = [Disponibilidad CAEX]*[UEBD CAEX]*[TPH efectivo CAEX REV]*[Hr nominales]
+			RETURN (real-plan)
+		lineageTag: 867696f3-8732-4742-87c3-d2c97a8bb7a3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Suma de horas disponibles del plan semanal de los 5 equipos de carguío.
+	measure 'PlanSemanal - Horas Disponible PALAS' =
+			CALCULATE (
+			    SUM ( Planes_Mina[value] ),
+			    Planes_Mina[property_name] IN {
+			        "Horas Disponibles Cargador CARG-01 SEM", "Horas Disponibles Cargador CARG-02 SEM",
+			        "Horas Disponibles Pala PALA-01 SEM", "Horas Disponibles Pala PALA-02 SEM", "Horas Disponibles Pala PALA-03 SEM"
+			    },
+			    Planes_Mina[plan_type] = "Semanal"
+			)
+		lineageTag: 98c0ea3a-c162-44b1-8aef-4ee301cd8849
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Suma de horas efectivas del plan semanal de los 5 equipos de carguío.
+	measure 'PlanSemanal - Horas Efectivas PALAS' =
+			CALCULATE (
+			    SUM ( Planes_Mina[value] ),
+			    Planes_Mina[property_name] IN {
+			        "Horas Efectivas Cargador CARG-01 SEM", "Horas Efectivas Cargador CARG-02 SEM",
+			        "Horas Efectivas Pala PALA-01 SEM", "Horas Efectivas Pala PALA-02 SEM", "Horas Efectivas Pala PALA-03 SEM"
+			    },
+			    Planes_Mina[plan_type] = "Semanal"
+			)
+		lineageTag: ea9b6b03-58d6-4789-a25f-27dd6d8b213a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Suma de horas nominales del plan semanal de los 5 equipos de carguío.
+	measure 'PlanSemanal - Horas Nominales PALAS' =
+			CALCULATE (
+			    SUM ( Planes_Mina[value] ),
+			    Planes_Mina[property_name] IN {
+			        "Horas Nominales Cargador CARG-01 SEM", "Horas Nominales Cargador CARG-02 SEM",
+			        "Horas Nominales Pala PALA-01 SEM", "Horas Nominales Pala PALA-02 SEM", "Horas Nominales Pala PALA-03 SEM"
+			    },
+			    Planes_Mina[plan_type] = "Semanal"
+			)
+		lineageTag: b987fe4c-6999-4d09-b73f-a7ee33564d09
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// DF del plan de carguío: horas disponibles sobre horas nominales.
+	measure 'PlanSemanal - Disponibilidad PALAS' = [PlanSemanal - Horas Disponible PALAS]/ [PlanSemanal - Horas Nominales PALAS]
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 65bc819a-a060-4cb7-bdf6-d0ea741a2b04
+
+	/// UEBD del plan de carguío: horas efectivas sobre horas disponibles.
+	measure 'PlanSemanal - UEBD PALAS' = [PlanSemanal - Horas efectivas PALAS]/ [PlanSemanal - Horas Disponible PALAS]
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 3498ad19-32bc-4694-9538-47aa58b4b566
+
+	/// Rendimiento del plan de carguío: movimiento del plan por hora efectiva de palas.
+	measure 'PlanSemanal - Rendimiento Palas' = [PlanSemanal - movimiento calculado CAEX]/ [PlanSemanal - Horas Efectivas Palas]
+		lineageTag: 67cf6909-2f87-473a-a94e-0b401f36dcc9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column start_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 39481bd7-1960-45a8-abbd-a6e48845ad94
+		summarizeBy: none
+		sourceColumn: start_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column property_name
+		dataType: string
+		lineageTag: ed8352eb-a7f8-4414-8b81-a44091575147
+		summarizeBy: none
+		sourceColumn: property_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column value
+		dataType: double
+		isAvailableInMdx: false
+		lineageTag: 46e826ad-fac2-41a2-9c7e-90c6bcbdc31c
+		summarizeBy: sum
+		sourceColumn: value
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column plan_type
+		dataType: string
+		lineageTag: 40a60dac-7e1e-4398-93ab-f1720e5e5022
+		summarizeBy: none
+		sourceColumn: plan_type
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Planes_Mina = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "planes_mina.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"start_date", type date}, {"property_name", type text}, {"value", type number}, {"plan_type", type text}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table

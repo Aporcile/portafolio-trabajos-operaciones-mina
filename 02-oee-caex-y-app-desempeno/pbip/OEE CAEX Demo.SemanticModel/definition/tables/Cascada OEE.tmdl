@@ -1,0 +1,40 @@
+/// Barras de la cascada del OEE, en su orden: plan, las cuatro palancas y real.
+table 'Cascada OEE'
+	lineageTag: bea9073d-75f7-5ca0-a2a8-338f2390a234
+
+	column Orden
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b7eb6d06-7dde-5751-a896-ea7039a24a32
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Orden]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Paso
+		dataType: string
+		lineageTag: f7d35d09-10ea-5696-9322-434c13b4fe25
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Paso]
+		sortByColumn: Orden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Cascada OEE' = calculated
+		mode: import
+		source =
+				DATATABLE(
+				    "Orden", INTEGER, "Paso", STRING,
+				    {
+				        { 1, "Movimiento Total - Plan" },
+				        { 2, "Pérdida CAEX Disponibilidad" },
+				        { 3, "Pérdida CAEX UEBD" },
+				        { 4, "Pérdida CAEX Rendimiento Efectivo" },
+				        { 5, "Pérdida CAEX Horas Nominales" },
+				        { 6, "Movimiento Total - Real" }
+				    }
+				)
+

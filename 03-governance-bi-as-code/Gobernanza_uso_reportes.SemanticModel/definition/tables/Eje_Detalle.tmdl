@@ -1,0 +1,39 @@
+/// Eje del gráfico de aperturas de la página Detalle: áreas y reportes, sin relaciones (ver la medida Aperturas por area o reporte).
+table Eje_Detalle
+	lineageTag: 86bb7584-7ecb-e2ac-7935-51b7cf3c8a96
+
+	column Nivel
+		dataType: string
+		isHidden
+		lineageTag: 420e6e51-9057-5faa-43c3-81a00b276558
+		isNameInferred
+		sourceColumn: [Nivel]
+
+	column Etiqueta
+		dataType: string
+		lineageTag: e5984a7a-8d00-9d7b-8e56-5f0106358434
+		isNameInferred
+		sourceColumn: [Etiqueta]
+
+	column AreaEje
+		dataType: string
+		isHidden
+		lineageTag: e1f69e62-f275-2530-431e-d17eedb09bab
+		isNameInferred
+		sourceColumn: [AreaEje]
+
+	column ClaveReporte
+		dataType: string
+		isHidden
+		lineageTag: 2efedb0d-ca43-919a-bbcc-3834944b1c9e
+		isNameInferred
+		sourceColumn: [ClaveReporte]
+
+	partition Eje_Detalle = calculated
+		mode: import
+		source =
+				UNION (
+				    SELECTCOLUMNS ( DISTINCT ( Dim_Area[Area] ), "Nivel", "Area", "Etiqueta", Dim_Area[Area], "AreaEje", Dim_Area[Area], "ClaveReporte", "" ),
+				    SELECTCOLUMNS ( Dim_Reporte, "Nivel", "Reporte", "Etiqueta", Dim_Reporte[Reporte], "AreaEje", Dim_Reporte[Area], "ClaveReporte", Dim_Reporte[report_id] )
+				)
+

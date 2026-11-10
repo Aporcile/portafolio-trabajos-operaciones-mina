@@ -1,0 +1,89 @@
+// KPI de la flota CAEX para la app (bloque Indicadores): semana de turno, jueves a domingo y mes a la fecha, real y plan.
+// Modelo: «OEE CAEX Demo» (pbip/). Solo lectura.
+// El flujo reemplaza @HOY@ por la fecha del día ("aaaa-mm-dd hh:mm"; solo se lee la fecha) y @FC@ por las tres variables del plan del
+// factor de carga que entrega plan_factor_carga.dax:  VAR _fcSem = … VAR _fcJD = … VAR _fcMes = …
+// Para probarla a mano, reemplazar @FC@ por  VAR _fcSem = 275 VAR _fcJD = 275 VAR _fcMes = 275  y @HOY@ por una fecha.
+// Ventanas (el día operacional va de 08:00 a 08:00):
+//   - semana de turno 7x7 (miércoles a martes): del miércoles en que empezó el turno hasta ayer;
+//   - jueves a domingo: el último hasta ayer, sin pasar de ayer;
+//   - mes a la fecha: del día 1 del mes de ayer hasta ayer. El plan mensual sale de plan_mensual_caex.dax.
+// Los % salen como fracción (0,85); la app los multiplica por 100.
+// La numeración de los indicadores sigue el catálogo (docs/catalogo_indicadores.md); aquí solo los que el modelo calcula.
+// Fact_HorasEquipo contiene solo CAEX (Truck).
+DEFINE
+    VAR _s = "@HOY@"
+    @FC@
+    VAR _hoy = DATE(VALUE(LEFT(_s, 4)), VALUE(MID(_s, 6, 2)), VALUE(MID(_s, 9, 2)))
+    VAR _fin = _hoy - 1
+    // Miércoles en que empezó el turno que incluye a ayer (WEEKDAY tipo 2: lunes = 1, miércoles = 3).
+    VAR _ini = _fin - MOD(WEEKDAY(_fin, 2) - 3, 7)
+    // Semana de turno anterior, completa.
+    VAR _ini0 = _ini - 7
+    VAR _fin0 = _ini - 1
+    VAR _iniMes = DATE(YEAR(_fin), MONTH(_fin), 1)
+    // Jueves a domingo (WEEKDAY tipo 2 = 4 para el jueves).
+    VAR _iniJD = _fin - MOD(WEEKDAY(_fin, 2) - 4, 7)
+    VAR _finJD = MIN(_iniJD + 3, _fin)
+    MEASURE Fact_HorasEquipo[_Extraccion] = SUM(Fact_HorasEquipo[Movimiento Total])
+    MEASURE Fact_HorasEquipo[_DF] = DIVIDE(SUM(Fact_HorasEquipo[Horas Disponibles]), SUM(Fact_HorasEquipo[Horas Nominales]))
+    MEASURE Fact_HorasEquipo[_UEBD] = DIVIDE(SUM(Fact_HorasEquipo[Horas Efectivas]), SUM(Fact_HorasEquipo[Horas Disponibles]))
+    MEASURE Fact_HorasEquipo[_Rendimiento] = DIVIDE(SUM(Fact_HorasEquipo[Movimiento Total]), SUM(Fact_HorasEquipo[Horas Efectivas]))
+    MEASURE Fact_HorasEquipo[_FactorCarga] =
+        CALCULATE(AVERAGE(Fact_Ciclos[payload]), Fact_Ciclos[payload] > 200, Fact_Ciclos[payload] < 330)
+    MEASURE Fact_HorasEquipo[_ExtraccionPlan] = SUM(Plan_CAEX[Toneladas Plan])
+    MEASURE Fact_HorasEquipo[_DFPlan] = DIVIDE(SUM(Plan_CAEX[Horas Disponibles Plan]), SUM(Plan_CAEX[Horas Nominales Plan]))
+    MEASURE Fact_HorasEquipo[_UEBDPlan] = DIVIDE(SUM(Plan_CAEX[Horas Efectivas Plan]), SUM(Plan_CAEX[Horas Disponibles Plan]))
+    MEASURE Fact_HorasEquipo[_RendimientoPlan] = DIVIDE(SUM(Plan_CAEX[Toneladas Plan]), SUM(Plan_CAEX[Horas Efectivas Plan]))
+EVALUATE
+VAR Ind =
+    DATATABLE(
+        "Orden", INTEGER, "Area", STRING, "Indicador", STRING, "Unidad", STRING,
+        {
+            { 1, "Mina", "Extracción total mina", "t" },
+            { 2, "CAEX", "DF", "%" },
+            { 3, "CAEX", "UEBD", "%" },
+            { 4, "CAEX", "Rendimiento", "t/h" },
+            { 6, "CAEX", "Factor de carga", "t/carga" }
+        }
+    )
+VAR Sem = DATESBETWEEN(Dim_Tiempo[Fecha], _ini, _fin)
+VAR Sem0 = DATESBETWEEN(Dim_Tiempo[Fecha], _ini0, _fin0)
+VAR Mes = DATESBETWEEN(Dim_Tiempo[Fecha], _iniMes, _fin)
+VAR JD = DATESBETWEEN(Dim_Tiempo[Fecha], _iniJD, _finJD)
+RETURN
+    ADDCOLUMNS(
+        Ind,
+        "Real",
+            VAR o = [Orden]
+            RETURN
+                CALCULATE(SWITCH(o, 1, [_Extraccion], 2, [_DF], 3, [_UEBD], 4, [_Rendimiento], 6, [_FactorCarga]), Sem),
+        "Plan",
+            VAR o = [Orden]
+            RETURN
+                CALCULATE(SWITCH(o, 1, [_ExtraccionPlan], 2, [_DFPlan], 3, [_UEBDPlan], 4, [_RendimientoPlan], 6, _fcSem), Sem),
+        "RealSemAnt",
+            VAR o = [Orden]
+            RETURN
+                CALCULATE(SWITCH(o, 1, [_Extraccion], 2, [_DF], 3, [_UEBD], 4, [_Rendimiento], 6, [_FactorCarga]), Sem0),
+        "RealMes",
+            VAR o = [Orden]
+            RETURN
+                CALCULATE(SWITCH(o, 1, [_Extraccion], 2, [_DF], 3, [_UEBD], 4, [_Rendimiento], 6, [_FactorCarga]), Mes),
+        // Solo el factor de carga trae aquí su plan del mes; los demás los toma la app de plan_mensual_caex.dax.
+        "PlanMes", IF([Orden] = 6, _fcMes),
+        "RealJD",
+            VAR o = [Orden]
+            RETURN
+                CALCULATE(SWITCH(o, 1, [_Extraccion], 2, [_DF], 3, [_UEBD], 4, [_Rendimiento], 6, [_FactorCarga]), JD),
+        "PlanJD",
+            VAR o = [Orden]
+            RETURN
+                CALCULATE(SWITCH(o, 1, [_ExtraccionPlan], 2, [_DFPlan], 3, [_UEBDPlan], 4, [_RendimientoPlan], 6, _fcJD), JD),
+        "JDInicio", _iniJD,
+        "JDFin", _finJD,
+        "MesInicio", _iniMes,
+        "DiasConDatos", CALCULATE(DISTINCTCOUNT(Fact_HorasEquipo[Fecha]), Sem),
+        "UltimoDato", CALCULATE(MAX(Fact_HorasEquipo[Fecha]), ALL(Fact_HorasEquipo)),
+        "SemanaInicio", _ini,
+        "SemanaFin", _fin
+    )

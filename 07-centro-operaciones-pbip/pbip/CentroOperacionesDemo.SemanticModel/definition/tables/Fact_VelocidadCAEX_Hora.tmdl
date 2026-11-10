@@ -1,0 +1,141 @@
+/// Velocidad GPS de los CAEX de Mina por hora y camion (todas las lecturas, ya sumadas). Base de la tarjeta VELOCIDAD PROM. CAEX TURNO. Fact_GPS no sirve para esto porque solo trae 0-5 km/h.
+table Fact_VelocidadCAEX_Hora
+	lineageTag: 61b5eee7-41ec-4fcf-ab33-1d3645ecc8ee
+
+	/// Promedio de la velocidad GPS de los CAEX de Mina mientras se mueven (lecturas mayores a 0 km/h), en el contexto de filtros actual.
+	measure 'Velocidad CAEX en Contexto' = DIVIDE ( SUM ( Fact_VelocidadCAEX_Hora[Suma_Velocidad_Movimiento] ), SUM ( Fact_VelocidadCAEX_Hora[Lecturas_Movimiento] ) )
+		formatString: 0.0
+		isHidden
+		lineageTag: 0ed726dd-2728-48e1-8149-ab7f52d33a00
+
+	/// Velocidad promedio de los CAEX de Mina durante el turno, en km/h. Sin turno ni hora elegidos muestra el ultimo turno con datos del dia elegido (hoy = el turno en curso); si se hace clic en un turno u hora del grafico, muestra ese. Promedia solo las lecturas en movimiento (mayor a 0 km/h).
+	measure 'Velocidad Promedio CAEX Turno' =
+			VAR HayHoraOTurnoElegido =
+			    ISCROSSFILTERED ( Dim_Hora_Operacional[Orden_Hora_Dia] )
+			        || ISCROSSFILTERED ( Dim_Turno[Turno] )
+			-- Ultima fecha con datos entre las que deja elegidas el selector de fecha
+			-- (REMOVEFILTERS sobre las dimensiones de hora/turno, NO sobre la tabla de hechos: ALL(hechos) tambien borraria la fecha)
+			VAR UltimaFecha =
+			    CALCULATE (
+			        MAX ( Fact_VelocidadCAEX_Hora[Fecha] ),
+			        REMOVEFILTERS ( Dim_Hora_Operacional ),
+			        REMOVEFILTERS ( Dim_Turno )
+			    )
+			-- Ultima hora con datos de esa fecha: 1-12 = turno A, 13-24 = turno B (hoy = el turno en curso)
+			VAR UltimaHora =
+			    CALCULATE (
+			        MAX ( Fact_VelocidadCAEX_Hora[Orden_Hora_Dia] ),
+			        REMOVEFILTERS ( Dim_Hora_Operacional ),
+			        REMOVEFILTERS ( Dim_Turno ),
+			        Fact_VelocidadCAEX_Hora[Fecha] = UltimaFecha
+			    )
+			VAR UltimoTurno = IF ( UltimaHora > 12, "B", "A" )
+			RETURN
+			    IF (
+			        HayHoraOTurnoElegido,
+			        [Velocidad CAEX en Contexto],
+			        CALCULATE (
+			            [Velocidad CAEX en Contexto],
+			            Fact_VelocidadCAEX_Hora[Fecha] = UltimaFecha,
+			            Fact_VelocidadCAEX_Hora[Turno] = UltimoTurno
+			        )
+			    )
+		formatString: 0.0
+		lineageTag: 6af346f3-2f6d-4efb-89b7-fd3d8808fbce
+
+	/// Velocidad promedio (km/h) de los CAEX de Mina en el turno A del dia elegido, solo lecturas en movimiento. Devuelve texto: un guion cuando ese turno aun no tiene datos (por ejemplo el turno B de hoy antes de las 20:00). Si se elige una hora o turno en el grafico de tonelaje, solo muestra valor el turno que corresponde.
+	measure 'Velocidad CAEX Turno A' =
+			VAR Velocidad =
+			    CALCULATE (
+			        [Velocidad CAEX en Contexto],
+			        Fact_VelocidadCAEX_Hora[Turno] = "A"
+			    )
+			RETURN
+			    IF ( ISBLANK ( Velocidad ), UNICHAR ( 8211 ), FORMAT ( Velocidad, "0.0" ) )
+		lineageTag: 4fcfb5cb-1f93-451f-b2e9-86894a80f2f3
+
+	/// Velocidad promedio (km/h) de los CAEX de Mina en el turno B del dia elegido, solo lecturas en movimiento. Devuelve texto: un guion cuando ese turno aun no tiene datos (por ejemplo el turno B de hoy antes de las 20:00). Si se elige una hora o turno en el grafico de tonelaje, solo muestra valor el turno que corresponde.
+	measure 'Velocidad CAEX Turno B' =
+			VAR Velocidad =
+			    CALCULATE (
+			        [Velocidad CAEX en Contexto],
+			        Fact_VelocidadCAEX_Hora[Turno] = "B"
+			    )
+			RETURN
+			    IF ( ISBLANK ( Velocidad ), UNICHAR ( 8211 ), FORMAT ( Velocidad, "0.0" ) )
+		lineageTag: 9e4c937f-77ec-4798-a0fa-a1b8870858d4
+
+	column Fecha
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: 3f6ab6b1-f702-4358-bb12-ad66b1f00a6b
+		summarizeBy: none
+		sourceColumn: Fecha
+
+	column Turno
+		dataType: string
+		isHidden
+		lineageTag: 8e090f48-9a21-4cc3-8d3c-223b24231dfc
+		summarizeBy: none
+		sourceColumn: Turno
+
+	column Orden_Hora_Dia
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 59203d40-81f0-45fe-bfa7-a32f96b8a2da
+		summarizeBy: none
+		sourceColumn: Orden_Hora_Dia
+
+	column Equipo
+		dataType: string
+		isHidden
+		lineageTag: 54aa2321-4218-4182-b08c-d9bbc570d341
+		summarizeBy: none
+		sourceColumn: Equipo
+
+	column Lecturas
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 27e4bfd3-fa86-4c8e-b4c3-b8834b04a409
+		summarizeBy: none
+		sourceColumn: Lecturas
+
+	column Suma_Velocidad
+		dataType: double
+		isHidden
+		formatString: #,0.0
+		lineageTag: a5dbef8c-f098-441c-9baf-aade82364566
+		summarizeBy: none
+		sourceColumn: Suma_Velocidad
+
+	column Lecturas_Movimiento
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3720d9be-59c6-4bc9-a218-48df82ea0785
+		summarizeBy: none
+		sourceColumn: Lecturas_Movimiento
+
+	column Suma_Velocidad_Movimiento
+		dataType: double
+		isHidden
+		formatString: #,0.0
+		lineageTag: 9148551e-447e-46a9-8f58-2f86453f71b8
+		summarizeBy: none
+		sourceColumn: Suma_Velocidad_Movimiento
+
+	partition Fact_VelocidadCAEX_Hora = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "fact_velocidad_caex_hora.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Fecha", type datetime}, {"Turno", type text}, {"Orden_Hora_Dia", Int64.Type}, {"Equipo", type text}, {"Lecturas", Int64.Type}, {"Suma_Velocidad", type number}, {"Lecturas_Movimiento", Int64.Type}, {"Suma_Velocidad_Movimiento", type number}}, "en-US"),
+				    // Ventana de historia: solo las filas de los ultimos DiasHistoriaGPS dias respecto de FechaReferencia.
+				    Ventana = Table.SelectRows(Tipos, each Date.From([Fecha]) >= Date.AddDays(FechaReferencia, -DiasHistoriaGPS))
+				in
+				    Ventana
+

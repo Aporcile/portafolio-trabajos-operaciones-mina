@@ -1,0 +1,47 @@
+model Model
+	culture: es-ES
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: es-ES
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["RutaDatos", "Produccion Palas Turno", "Horas CAEX", "Produccion Mina", "Calendario Turno Pala", "Horas Palas Turno", "Produccion Palas Hora", "Planes_Mina", "Calendario Turno Pala Hora", "hist_senales", "hist_kpi", "equipos_df_ue", "planta_cierre", "planta_plan_spi", "planta_plan_puntos", "equipos_ciclones", "Rd Actualizacion", "planta_cierre_ejec", "Rd Pulso", "hist_potencia", "planta_plan_fase"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref expression RutaDatos
+ref table Calendario
+ref table 'Produccion Palas Turno'
+ref table 'Horas CAEX'
+ref table 'Produccion Mina'
+ref table 'Calendario Turno Pala'
+ref table 'Horas Palas Turno'
+ref table 'Produccion Palas Hora'
+ref table Planes_Mina
+ref table 'Calendario Turno Pala Hora'
+ref table hist_senales
+ref table hist_onoff_ultima
+ref table hist_contador_ultima
+ref table hist_kpi
+ref table hist_kpi_ultima
+ref table dax_kpi_tabla
+ref table equipos_df_ue
+ref table 'Dim Destino'
+ref table 'Dim Fase'
+ref table dax_planta_dia
+ref table planta_cierre
+ref table 'Rd Planta Parámetros'
+ref table planta_plan_spi
+ref table planta_plan_puntos
+ref table equipos_ciclones
+ref table 'Rd Actualizacion'
+ref table planta_cierre_ejec
+ref table 'Rd Pulso'
+ref table hist_potencia
+ref table planta_plan_fase
+
+ref cultureInfo es-ES

@@ -1,0 +1,2379 @@
+/// Medidas del tablero.
+table Medidas
+	lineageTag: 726570b2-6904-4f58-b1f3-01ec4dbd5e85
+
+	measure 'Desfase UTC' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "Desfase UTC (h)" )
+		formatString: 0
+		displayFolder: 0 Parámetros
+		lineageTag: 55a50953-96e0-4cf8-aac9-7a9429c67806
+
+	measure 'Umbral horas sin dato' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "Horas sin dato" )
+		formatString: 0
+		displayFolder: 0 Parámetros
+		lineageTag: debfcc96-c9b2-458c-b963-18d6f20a06c5
+
+	measure 'Caudal minimo bombeo' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "Caudal minimo bombeo (L/s)" )
+		formatString: 0.00
+		displayFolder: 0 Parámetros
+		lineageTag: 104b7fd0-86f2-47fa-9c07-96a5a587a344
+
+	measure 'Cupo captacion' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "Cupo captacion (L/s)" )
+		formatString: #,0.0
+		displayFolder: 0 Parámetros
+		lineageTag: d7b2a287-da5e-4f79-9736-37d7a53db9c0
+
+	measure 'Meta recuperacion Norte' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "Meta recuperacion Norte (L/s)" )
+		formatString: 0
+		displayFolder: 0 Parámetros
+		lineageTag: 3fd1694c-8140-417e-ae1f-7c176c06d8a3
+
+	measure 'Meta recuperacion Sur' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "Meta recuperacion Sur (L/s)" )
+		formatString: 0
+		displayFolder: 0 Parámetros
+		lineageTag: fca153f6-9ca6-44f0-8ab9-bd5693c87349
+
+	measure 'pH minimo' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "pH minimo" )
+		formatString: 0.0
+		displayFolder: 0 Parámetros
+		lineageTag: 3a3e359d-f24e-4ceb-a823-4e0680f3fb91
+
+	measure 'pH maximo' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "pH maximo" )
+		formatString: 0.0
+		displayFolder: 0 Parámetros
+		lineageTag: 6efb2508-cca3-4926-b9bc-0b932ebbd1af
+
+	measure 'HI por defecto' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "HI por defecto (%)" )
+		formatString: 0
+		displayFolder: 0 Parámetros
+		lineageTag: bb5dc7f2-ebe0-4986-854e-eba37607fe38
+
+	measure 'HH por defecto' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "HH por defecto (%)" )
+		formatString: 0
+		displayFolder: 0 Parámetros
+		lineageTag: b7b3d644-1746-4a9a-8121-b9ae3c9c6f6d
+
+	measure 'Descenso piezometro fuerte' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "Descenso piezometro fuerte (m)" )
+		formatString: 0.00
+		displayFolder: 0 Parámetros
+		lineageTag: c5726060-18d3-4c57-9b0e-817f4540a0b5
+
+	measure 'Descenso piezometro leve' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "Descenso piezometro leve (m)" )
+		formatString: 0.00
+		displayFolder: 0 Parámetros
+		lineageTag: d5c3c5ac-0e0a-4ba1-b86a-b1d87ec864a7
+
+	measure 'Modo historiador' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "Modo historiador" )
+		formatString: 0
+		displayFolder: 0 Parámetros
+		lineageTag: e071ec6d-660d-4264-8311-4f14d7043a0f
+
+	/// Reloj del modelo: hora actual con el historiador; hora de referencia de los datos con el CSV sintético.
+	measure Ahora = IF ( [Modo historiador] = 1, UTCNOW () + [Desfase UTC] / 24, MAX ( Actualizacion[HoraReferencia] ) )
+		formatString: dd-mm-yyyy HH:mm
+		displayFolder: 0 Parámetros
+		lineageTag: 5e1b4eda-beb1-4b1e-a624-eee4ec3b4193
+
+	measure 'Gauge minimo' = 0
+		formatString: 0
+		displayFolder: 0 Parámetros
+		lineageTag: 7c3f8a83-b9ad-468f-b2d1-995bff7251fd
+
+	measure 'Gauge maximo' = 100
+		formatString: 0
+		displayFolder: 0 Parámetros
+		lineageTag: 56cd4aea-682a-4449-9b71-76b9aa0f9797
+
+	/// Hora de la última muestra: por señal, la de la señal; por activo o grupo, la de sus mediciones de proceso (no cuenta cálculos, baterías ni parámetros).
+	measure 'Ultima marca' =
+			VAR todas = MAX ( Mediciones[FechaHora] )
+			RETURN
+			    IF ( HASONEVALUE ( Tags[Tag] ), todas, COALESCE ( [Ultima marca comunicacion], todas ) )
+		formatString: dd-mm-yyyy HH:mm
+		displayFolder: 1 Base
+		lineageTag: 751cd501-92b4-4890-b9e0-363d6d77c362
+
+	/// Último valor de cada señal del contexto, sumado.
+	measure 'Valor actual' =
+			SUMX (
+			    VALUES ( Tags[Tag] ),
+			    VAR t = CALCULATE ( MAX ( Mediciones[FechaHora] ) )
+			    RETURN
+			        CALCULATE ( MAX ( Mediciones[Valor] ), Mediciones[FechaHora] = t )
+			)
+		formatString: #,0.0
+		displayFolder: 1 Base
+		lineageTag: 554e8d53-3d5d-42e5-8fbb-d040286a2ee3
+
+	measure 'Minutos sin dato' =
+			VAR u = [Ultima marca]
+			VAR a = [Ahora]
+			RETURN
+			    IF ( NOT ISBLANK ( u ), IF ( u > a, 0, DATEDIFF ( u, a, MINUTE ) ) )
+		formatString: #,0
+		displayFolder: 1 Base
+		lineageTag: b543134a-b599-4b48-b6e5-49c5b203b265
+
+	measure 'Ultimo dato texto' =
+			VAR u = [Ultima marca]
+			RETURN
+			    IF (
+			        ISBLANK ( u ),
+			        "—",
+			        IF ( INT ( u ) = INT ( [Ahora] ), FORMAT ( u, "HH:mm" ), FORMAT ( u, "dd-mm HH:mm" ) )
+			    )
+		displayFolder: 1 Base
+		lineageTag: 8c643362-975a-46eb-bc1d-a801d263a302
+
+	measure 'Tiempo sin dato texto' =
+			VAR m = [Minutos sin dato]
+			RETURN
+			    IF (
+			        ISBLANK ( m ),
+			        BLANK (),
+			        IF ( m >= 60, FORMAT ( INT ( m / 60 ), "0" ) & " h " & FORMAT ( MOD ( m, 60 ), "00" ) & " min", FORMAT ( m, "0" ) & " min" )
+			    )
+		displayFolder: 1 Base
+		lineageTag: 3481454d-ea79-4f33-8fad-38f6b699d015
+
+	measure 'Delta 24 h' =
+			SUMX (
+			    VALUES ( Tags[Tag] ),
+			    VAR t1 = CALCULATE ( MAX ( Mediciones[FechaHora] ) )
+			    VAR v1 = CALCULATE ( MAX ( Mediciones[Valor] ), Mediciones[FechaHora] = t1 )
+			    VAR t0 = CALCULATE ( MAX ( Mediciones[FechaHora] ), Mediciones[FechaHora] <= t1 - 1 )
+			    VAR v0 = CALCULATE ( MAX ( Mediciones[Valor] ), Mediciones[FechaHora] = t0 )
+			    RETURN
+			        IF ( NOT ISBLANK ( t0 ), v1 - v0 )
+			)
+		formatString: +0.00;-0.00;0.00
+		displayFolder: 1 Base
+		lineageTag: a9993499-9e19-4b55-9039-3f7a99277c48
+
+	measure 'Delta 7 d' =
+			SUMX (
+			    VALUES ( Tags[Tag] ),
+			    VAR t1 = CALCULATE ( MAX ( Mediciones[FechaHora] ) )
+			    VAR v1 = CALCULATE ( MAX ( Mediciones[Valor] ), Mediciones[FechaHora] = t1 )
+			    VAR t0 = CALCULATE ( MAX ( Mediciones[FechaHora] ), Mediciones[FechaHora] <= t1 - 7 )
+			    VAR v0 = CALCULATE ( MAX ( Mediciones[Valor] ), Mediciones[FechaHora] = t0 )
+			    RETURN
+			        IF ( NOT ISBLANK ( t0 ), v1 - v0 )
+			)
+		formatString: +0.00;-0.00;0.00
+		displayFolder: 1 Base
+		lineageTag: 6f348566-a5ce-4516-84da-b2df0dbd83cb
+
+	/// Promedio de las muestras de las últimas 24 h (para gráficos).
+	measure 'Serie 24 h' = CALCULATE ( AVERAGE ( Mediciones[Valor] ), Mediciones[HorasAtras] <= 24 )
+		formatString: #,0.0
+		displayFolder: 1 Base
+		lineageTag: 1d479557-062e-477d-8942-e448f90e4367
+
+	/// Promedio de las muestras de las últimas 72 h (para gráficos).
+	measure 'Serie 72 h' = CALCULATE ( AVERAGE ( Mediciones[Valor] ), Mediciones[HorasAtras] <= 72 )
+		formatString: #,0.0
+		displayFolder: 1 Base
+		lineageTag: e9a127d5-3dd6-4bfa-b986-de35e9c4af4a
+
+	/// Promedio de las muestras de las últimas 168 h (para gráficos).
+	measure 'Serie 7 d' = CALCULATE ( AVERAGE ( Mediciones[Valor] ), Mediciones[HorasAtras] <= 168 )
+		formatString: #,0.0
+		displayFolder: 1 Base
+		lineageTag: d17d30bb-1e95-4764-831f-ee63aa664da2
+
+	/// Igual que 'Serie 24 h' pero convierte m³/h a L/s (para los gráficos de caudal).
+	measure 'Serie 24 h (L/s)' = DIVIDE ( [Serie 24 h], 3.6 )
+		formatString: #,0.0
+		displayFolder: 1 Base
+		lineageTag: 789bd0c2-137d-4c56-885b-23c46d76512d
+
+	/// Igual que 'Serie 7 d' pero convierte m³/h a L/s (para los gráficos de caudal).
+	measure 'Serie 7 d (L/s)' = DIVIDE ( [Serie 7 d], 3.6 )
+		formatString: #,0.0
+		displayFolder: 1 Base
+		lineageTag: b80c5c5a-d3a5-44c4-8092-1edcf3ff5725
+
+	measure 'Ultima actualizacion' = "Última muestra " & FORMAT ( CALCULATE ( MAX ( Mediciones[FechaHora] ), REMOVEFILTERS () ), "dd-mm-yyyy HH:mm" )
+		displayFolder: 1 Base
+		lineageTag: 4de5f565-f197-4c5e-b48e-a4a528fb9fd3
+
+	measure 'Modo datos texto' = IF ( [Modo historiador] = 1, "Historiador", "CSV sintético" )
+		displayFolder: 1 Base
+		lineageTag: 9dacdd4a-8444-43a0-be87-76901ca45d22
+
+	measure 'Color modo' = IF ( [Modo historiador] = 1, "#4F9DDE", "#7B61C9" )
+		displayFolder: 1 Base
+		lineageTag: f8ad92fd-3a25-4d4f-866c-0e5797762ea4
+
+	/// Caudal instantáneo del pozo en L/s (la señal viene en m³/h; 1 L/s = 3,6 m³/h).
+	measure 'Caudal actual' = DIVIDE ( CALCULATE ( [Valor actual], Tags[Medicion] = "Caudal" ), 3.6 )
+		formatString: #,0.0
+		displayFolder: 2 Recuperación
+		lineageTag: fbb97f62-5f2b-4e87-be47-d824e21ad7cf
+
+	measure 'Corriente actual' = CALCULATE ( [Valor actual], Tags[Medicion] = "Corriente" )
+		formatString: #,0.0
+		displayFolder: 2 Recuperación
+		lineageTag: df51c306-d856-4c62-8282-bc646b3f0d41
+
+	measure 'RUN actual' = CALCULATE ( [Valor actual], Tags[Medicion] = "RUN" )
+		formatString: 0
+		displayFolder: 2 Recuperación
+		lineageTag: a74a8b1d-56d3-4d86-bc2a-43fdc4cf36dd
+
+	/// 1 bombeando · 3 detenido · 4 sin dato · 5 caudal congelado (regla configurable en la tabla Config).
+	measure 'Estado pozo cod' =
+			VAR m = [Minutos sin comunicacion]
+			VAR run = [RUN actual]
+			VAR qq = [Caudal actual]
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( m ), BLANK (),
+			        m > [Umbral horas sin dato] * 60, 4,
+			        ISBLANK ( run ) && [Caudal congelado] > 0, 5,
+			        ( NOT ISBLANK ( run ) && run = 0 ) || ( NOT ISBLANK ( qq ) && qq < [Caudal minimo bombeo] ), 3,
+			        1
+			    )
+		formatString: 0
+		displayFolder: 2 Recuperación
+		lineageTag: cb6ea541-aa6f-453e-a104-98fa2bc4c8b1
+
+	measure 'Estado pozo' = SWITCH ( [Estado pozo cod], 1, "● Bombeando", 3, "■ Detenido", 4, "◌ Sin dato", 5, "◇ Caudal congelado" )
+		displayFolder: 2 Recuperación
+		lineageTag: 6b8a3bd5-f9c1-467d-b05b-7f71fd40f5ff
+
+	measure 'Color estado pozo' = SWITCH ( [Estado pozo cod], 1, "#4F9DDE", 3, "#D64550", 4, "#A9B6C4", 5, "#F2A03D" )
+		displayFolder: 2 Recuperación
+		lineageTag: 0d004956-a83d-416e-a313-61e3f5f83ef8
+
+	measure 'Pozos bombeando' = COUNTROWS ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Pozo recuperacion" ), [Estado pozo cod] = 1 ) ) + 0
+		formatString: 0
+		displayFolder: 2 Recuperación
+		lineageTag: c540ba13-8ed5-4487-9eda-e53899613736
+
+	measure 'Pozos detenidos' = COUNTROWS ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Pozo recuperacion" ), [Estado pozo cod] = 3 ) ) + 0
+		formatString: 0
+		displayFolder: 2 Recuperación
+		lineageTag: 13349335-0e6e-42ad-8aa4-669c4e45ae21
+
+	measure 'Pozos sin dato' = COUNTROWS ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Pozo recuperacion" ), [Estado pozo cod] = 4 ) ) + 0
+		formatString: 0
+		displayFolder: 2 Recuperación
+		lineageTag: ac3d6691-eba9-48b1-860e-7e2180009811
+
+	measure 'Pozos recuperacion' = CALCULATE ( COUNTROWS ( Activos ), Activos[Tipo] = "Pozo recuperacion" ) + 0
+		formatString: 0
+		displayFolder: 2 Recuperación
+		lineageTag: 8747e858-76d9-43c8-8311-3c1933ec612f
+
+	measure 'KPI recuperacion' = FORMAT ( [Pozos bombeando], "0" ) & " / " & FORMAT ( [Pozos recuperacion], "0" )
+		displayFolder: 2 Recuperación
+		lineageTag: f184fff6-b8cc-43e3-a085-6bb3d32abecd
+
+	measure 'KPI recuperacion detalle' = FORMAT ( [Pozos detenidos], "0" ) & " detenido · " & FORMAT ( [Pozos sin dato], "0" ) & " sin dato" & IF ( [Pozos congelados] > 0, " · " & FORMAT ( [Pozos congelados], "0" ) & " congelado", "" )
+		displayFolder: 2 Recuperación
+		lineageTag: 11fa6793-8b3c-4fe7-8299-51d83dd3c31d
+
+	measure 'Caudal recuperacion (L/s)' = CALCULATE ( [Caudal actual], Activos[Tipo] = "Pozo recuperacion" )
+		formatString: #,0.0
+		displayFolder: 2 Recuperación
+		lineageTag: 3e0f8722-39af-4ce2-82ea-15bfe6744110
+
+	measure 'Caudal Norte (L/s)' = CALCULATE ( [Caudal recuperacion (L/s)], Activos[Circuito] = "Circuito Norte" )
+		formatString: #,0.0
+		displayFolder: 2 Recuperación
+		lineageTag: bf10c47d-fcee-4f37-a6ad-405baf1f6e6d
+
+	measure 'Caudal Sur (L/s)' = CALCULATE ( [Caudal recuperacion (L/s)], Activos[Circuito] = "Circuito Sur" )
+		formatString: #,0.0
+		displayFolder: 2 Recuperación
+		lineageTag: c9018621-ee6c-4c12-a66e-a1a42bd12a08
+
+	measure 'KPI Norte' = FORMAT ( [Caudal Norte (L/s)], "#,0.0" ) & " L/s"
+		displayFolder: 2 Recuperación
+		lineageTag: 26fad5a0-7269-4729-8ca3-f719da004930
+
+	measure 'KPI Norte detalle' = "Meta " & FORMAT ( [Meta recuperacion Norte], "0" ) & " L/s · " & FORMAT ( DIVIDE ( [Caudal Norte (L/s)], [Meta recuperacion Norte] ), "0 %" ) & " de la meta"
+		displayFolder: 2 Recuperación
+		lineageTag: b27f9dc0-46f7-4d01-9d33-8b9b6d987554
+
+	measure 'KPI Sur' = FORMAT ( [Caudal Sur (L/s)], "#,0.0" ) & " L/s"
+		displayFolder: 2 Recuperación
+		lineageTag: 49abd266-a0b3-48e4-91a7-93146a01a9ed
+
+	measure 'KPI Sur detalle' = "Meta " & FORMAT ( [Meta recuperacion Sur], "0" ) & " L/s · " & FORMAT ( DIVIDE ( [Caudal Sur (L/s)], [Meta recuperacion Sur] ), "0 %" ) & " de la meta"
+		displayFolder: 2 Recuperación
+		lineageTag: 6a730b1f-74ec-477d-98d1-ebb22ec3ab59
+
+	/// Estado del pozo en cada hora de las últimas 24 h (matriz).
+	measure 'Estado hora cod' =
+			VAR h = SELECTEDVALUE ( Horas24[HorasAtras] )
+			VAR a = [Ahora]
+			VAR t1 = a - h / 24
+			VAR t0 = a - ( h + 1 ) / 24
+			VAR n = CALCULATE ( COUNTROWS ( Mediciones ), KEEPFILTERS ( Tags[Medicion] IN { "RUN", "Caudal", "Corriente" } ), Mediciones[FechaHora] > t0, Mediciones[FechaHora] <= t1 )
+			VAR runMin = CALCULATE ( MIN ( Mediciones[Valor] ), Tags[Medicion] = "RUN", Mediciones[FechaHora] > t0, Mediciones[FechaHora] <= t1 )
+			VAR qMin = DIVIDE ( CALCULATE ( MIN ( Mediciones[Valor] ), Tags[Medicion] = "Caudal", Mediciones[FechaHora] > t0, Mediciones[FechaHora] <= t1 ), 3.6 )
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( h ), BLANK (),
+			        COUNTROWS ( Tags ) = 0, BLANK (),
+			        n = 0, 4,
+			        ( NOT ISBLANK ( runMin ) && runMin = 0 ) || ( NOT ISBLANK ( qMin ) && qMin < [Caudal minimo bombeo] ), 3,
+			        1
+			    )
+		formatString: 0
+		displayFolder: 2 Recuperación
+		lineageTag: ba0a5fad-9d08-46fa-9f77-77ef6fd9d888
+
+	measure 'Color estado hora' = SWITCH ( [Estado hora cod], 1, "#4F9DDE", 3, "#D64550", 4, "#E6ECF2" )
+		displayFolder: 2 Recuperación
+		lineageTag: 34c2ce08-df13-4a7c-b2b6-ccb9b48ecd85
+
+	measure 'Pozo seleccionado' = IF ( HASONEVALUE ( Activos[Activo] ), VALUES ( Activos[Activo] ), "Seleccione un pozo en la tabla" )
+		displayFolder: 2 Recuperación
+		lineageTag: 41f13bf8-d4d8-4dae-bd75-6d3e8581aa0d
+
+	measure 'Tags del activo' = IF ( HASONEVALUE ( Activos[ActivoID] ), CONCATENATEX ( Tags, Tags[Tag], " · ", Tags[Tag], ASC ), "—" )
+		displayFolder: 2 Recuperación
+		lineageTag: ce4c5412-2519-4b2e-bd29-4a09bd3719d9
+
+	measure 'Desde detenido' =
+			VAR ultUno = CALCULATE ( MAX ( Mediciones[FechaHora] ), Tags[Medicion] = "RUN", Mediciones[Valor] = 1 )
+			RETURN
+			    CALCULATE ( MIN ( Mediciones[FechaHora] ), Tags[Medicion] = "RUN", Mediciones[FechaHora] > ultUno )
+		formatString: dd-mm HH:mm
+		displayFolder: 2 Recuperación
+		lineageTag: 5031d7f4-3d2a-45fd-90fc-01444cb67c0a
+
+	/// Nivel del sensor principal del estanque (%).
+	measure 'Nivel estanque' = AVERAGEX ( CALCULATETABLE ( VALUES ( Tags[Tag] ), Tags[Medicion] = "Nivel estanque", Tags[Principal] = "Si" ), [Valor actual] )
+		formatString: 0.0
+		displayFolder: 3 Estanques
+		lineageTag: 7256e279-dd6b-4ec7-b525-bf16e6a8bc38
+
+	measure 'HI estanque' =
+			VAR v = CALCULATE ( [Valor actual], Tags[Medicion] = "Limite HI" )
+			RETURN
+			    IF ( ISBLANK ( v ), [HI por defecto], v )
+		formatString: 0
+		displayFolder: 3 Estanques
+		lineageTag: 9d5a4872-9b18-47b7-acfa-8ddc02a93271
+
+	measure 'HH estanque' =
+			VAR v = CALCULATE ( [Valor actual], Tags[Medicion] = "Limite HH" )
+			RETURN
+			    IF ( ISBLANK ( v ), [HH por defecto], v )
+		formatString: 0
+		displayFolder: 3 Estanques
+		lineageTag: 1ee5ae41-b48e-43bb-b4e5-220b55fe793c
+
+	measure 'Origen limites' = IF ( ISBLANK ( CALCULATE ( [Valor actual], Tags[Medicion] = "Limite HI" ) ), "Por defecto (sin señal)", "Historiador" )
+		displayFolder: 3 Estanques
+		lineageTag: 453ed876-1800-4a5a-bc58-eabaf806c351
+
+	/// Umbral de aviso de ejemplo.
+	measure 'Umbral aviso ejemplo' = "(ejemplo)"
+		displayFolder: 3 Estanques
+		lineageTag: dd05a72b-183c-40d3-abe9-86e3d559c104
+
+	measure 'Tasa estanque (%/h)' =
+			AVERAGEX (
+			    CALCULATETABLE ( VALUES ( Tags[Tag] ), Tags[Medicion] = "Nivel estanque", Tags[Principal] = "Si" ),
+			    VAR t1 = CALCULATE ( MAX ( Mediciones[FechaHora] ) )
+			    VAR v1 = CALCULATE ( MAX ( Mediciones[Valor] ), Mediciones[FechaHora] = t1 )
+			    VAR t0 = CALCULATE ( MAX ( Mediciones[FechaHora] ), Mediciones[FechaHora] <= t1 - 3 / 24 )
+			    VAR v0 = CALCULATE ( MAX ( Mediciones[Valor] ), Mediciones[FechaHora] = t0 )
+			    VAR horas = DATEDIFF ( t0, t1, MINUTE ) / 60
+			    RETURN
+			        IF ( NOT ISBLANK ( t0 ), DIVIDE ( v1 - v0, horas ) )
+			)
+		formatString: +0.0;-0.0;0.0
+		displayFolder: 3 Estanques
+		lineageTag: dcb2c92f-f27a-4b19-a99f-9dc68b2b973d
+
+	measure 'Margen a HH' = [HH estanque] - [Nivel estanque]
+		formatString: 0.0
+		displayFolder: 3 Estanques
+		lineageTag: d900b4cb-d250-4992-b65b-8dd5271c78bf
+
+	measure 'Horas a HH' =
+			VAR n = [Nivel estanque]
+			VAR hh = [HH estanque]
+			VAR r = [Tasa estanque (%/h)]
+			RETURN
+			    IF ( r > 0.05 && n < hh, DIVIDE ( hh - n, r ) )
+		formatString: 0.0
+		displayFolder: 3 Estanques
+		lineageTag: 44fac52d-ef5d-4b03-a72b-4b4e74a7d141
+
+	measure 'Llega a HH texto' =
+			VAR h = [Horas a HH]
+			RETURN
+			    IF (
+			        ISBLANK ( h ),
+			        "Sin riesgo a la tasa actual",
+			        "~" & FORMAT ( INT ( h ), "0" ) & " h " & FORMAT ( ( h - INT ( h ) ) * 60, "00" ) & " min"
+			    )
+		displayFolder: 3 Estanques
+		lineageTag: 2dc06e6c-1ce4-4680-b225-ba44028a75f3
+
+	measure 'Bombas en servicio' = CALCULATE ( [RUN actual], Activos[Tipo] = "Estanque" ) + 0
+		formatString: 0
+		displayFolder: 3 Estanques
+		lineageTag: d4f43a46-db20-40c2-b733-e7afbe5a470c
+
+	measure 'Bombas estanque' = CALCULATE ( COUNTROWS ( Tags ), Tags[Medicion] = "RUN", Activos[Tipo] = "Estanque" ) + 0
+		formatString: 0
+		displayFolder: 3 Estanques
+		lineageTag: 96536758-5312-465a-83d1-ad5946fe3ae9
+
+	measure 'Bombas estanque texto' = FORMAT ( [Bombas en servicio], "0" ) & " / " & FORMAT ( [Bombas estanque], "0" )
+		displayFolder: 3 Estanques
+		lineageTag: 25c3dbb7-f476-4fd9-8ead-c28a79e5a0c1
+
+	/// 1 normal · 2 sobre HI · 3 sobre HH · 4 sin dato · 5 sensor congelado.
+	measure 'Estado estanque cod' =
+			VAR n = [Nivel estanque]
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( n ), BLANK (),
+			        [Minutos sin comunicacion] > [Umbral horas sin dato] * 60, 4,
+			        [Nivel estanque congelado] > 0, 5,
+			        n >= [HH estanque], 3,
+			        n >= [HI estanque], 2,
+			        1
+			    )
+		formatString: 0
+		displayFolder: 3 Estanques
+		lineageTag: 51b36c06-5c10-42f7-b5b3-9c913aa2c50b
+
+	measure 'Estado estanque' = SWITCH ( [Estado estanque cod], 1, "● Normal", 2, "▲ Sobre HI", 3, "■ Sobre HH", 4, "◌ Sin dato", 5, "◇ Sensor congelado" )
+		displayFolder: 3 Estanques
+		lineageTag: ff82d554-cc9f-4f20-a298-3bb362498074
+
+	measure 'Color estado estanque' = SWITCH ( [Estado estanque cod], 1, "#4F9DDE", 2, "#F2A03D", 3, "#D64550", 4, "#A9B6C4", 5, "#F2A03D" )
+		displayFolder: 3 Estanques
+		lineageTag: 857a50b6-aba2-4901-954b-17e07209a88e
+
+	measure 'Estanques total' = CALCULATE ( COUNTROWS ( Activos ), Activos[Tipo] = "Estanque" ) + 0
+		formatString: 0
+		displayFolder: 3 Estanques
+		lineageTag: b8d84990-f39b-42a7-a3c3-8db3d7d9dec2
+
+	measure 'Estanques sobre HI' = COUNTROWS ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Estanque" ), [Estado estanque cod] = 2 || [Estado estanque cod] = 3 ) ) + 0
+		formatString: 0
+		displayFolder: 3 Estanques
+		lineageTag: 0d57dca6-220e-400c-bb9c-2b794afac4d2
+
+	measure 'Estanques sobre HH' = COUNTROWS ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Estanque" ), [Estado estanque cod] = 3 ) ) + 0
+		formatString: 0
+		displayFolder: 3 Estanques
+		lineageTag: 1424e914-584e-476f-8a4e-3daee06d9d3d
+
+	measure 'KPI estanques' = FORMAT ( [Estanques sobre HI], "0" ) & " / " & FORMAT ( [Estanques total], "0" )
+		displayFolder: 3 Estanques
+		lineageTag: 937fd188-ad43-4316-806b-ec5e341f7def
+
+	measure 'KPI estanques detalle' =
+			VAR mx = TOPN ( 1, FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Estanque" ), NOT ISBLANK ( [Nivel estanque] ) ), [Nivel estanque], DESC )
+			RETURN
+			    "Máx. " & CONCATENATEX ( mx, Activos[Activo] & " " & FORMAT ( [Nivel estanque], "0" ) & " %", ", " )
+		displayFolder: 3 Estanques
+		lineageTag: 2fcfbed5-0810-4f01-b38c-b660c1ad233b
+
+	measure 'Menor margen a HH' = MINX ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Estanque" ), NOT ISBLANK ( [Nivel estanque] ) ), [Margen a HH] )
+		formatString: 0.0
+		displayFolder: 3 Estanques
+		lineageTag: 39b8d432-28c6-428b-8816-311a347425b9
+
+	measure 'KPI margen texto' = FORMAT ( [Menor margen a HH], "0" ) & " pts"
+		displayFolder: 3 Estanques
+		lineageTag: 709df802-e474-4503-b50c-4826097c2a2b
+
+	measure 'KPI margen detalle' =
+			VAR mn = TOPN ( 1, FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Estanque" ), NOT ISBLANK ( [Nivel estanque] ) ), [Margen a HH], ASC )
+			RETURN
+			    CONCATENATEX ( mn, Activos[Activo] & " · llega a HH " & [Llega a HH texto], ", " )
+		displayFolder: 3 Estanques
+		lineageTag: 28c51fbb-422e-4ce3-a0ef-370ba5c59812
+
+	measure 'KPI bombas detalle' = "Bombas de estanque con RUN = 1"
+		displayFolder: 3 Estanques
+		lineageTag: b76d9509-0ca6-4e16-bf26-4454c0ec28a1
+
+	/// Captación total de agua fresca en L/s (la señal viene en m³/h).
+	measure 'Caudal agua fresca total' = DIVIDE ( CALCULATE ( [Valor actual], Tags[Medicion] = "Caudal total" ), 3.6 )
+		formatString: #,0.0
+		displayFolder: 4 Agua fresca
+		lineageTag: 96a043db-fa7f-42cc-bb06-457193ef8279
+
+	measure '% cupo captacion' = DIVIDE ( [Caudal agua fresca total], [Cupo captacion] )
+		formatString: 0 %
+		displayFolder: 4 Agua fresca
+		lineageTag: 012c9ff1-1dd1-44c6-bc6e-5448eeaa0ac9
+
+	/// Caudal en L/s. Medido; en los pozos sin caudal instantáneo se calcula con la diferencia del totalizador (m³ por hora ÷ 3,6).
+	measure 'Caudal pozo' =
+			VAR directo = CALCULATE ( [Valor actual], Tags[Medicion] = "Caudal" )
+			VAR desdeTot =
+			    SUMX (
+			        CALCULATETABLE ( VALUES ( Tags[Tag] ), Tags[Medicion] = "Totalizador" ),
+			        VAR t1 = CALCULATE ( MAX ( Mediciones[FechaHora] ) )
+			        VAR v1 = CALCULATE ( MAX ( Mediciones[Valor] ), Mediciones[FechaHora] = t1 )
+			        VAR t0 = CALCULATE ( MAX ( Mediciones[FechaHora] ), Mediciones[FechaHora] <= t1 - 1 / 24 )
+			        VAR v0 = CALCULATE ( MAX ( Mediciones[Valor] ), Mediciones[FechaHora] = t0 )
+			        RETURN
+			            IF ( NOT ISBLANK ( t0 ), DIVIDE ( v1 - v0, DATEDIFF ( t0, t1, MINUTE ) / 60 ) )
+			    )
+			RETURN
+			    DIVIDE ( IF ( NOT ISBLANK ( directo ), directo, desdeTot ), 3.6 )
+		formatString: #,0.0
+		displayFolder: 4 Agua fresca
+		lineageTag: 90a85e73-38ab-4d9e-aa06-e3fd12a079ac
+
+	measure 'Origen caudal' =
+			SWITCH (
+			    TRUE (),
+			    CALCULATE ( COUNTROWS ( Tags ), Tags[Medicion] = "Caudal" ) > 0, "Medido",
+			    CALCULATE ( COUNTROWS ( Tags ), Tags[Medicion] = "Totalizador" ) > 0, "Calculado (totalizador)",
+			    "—"
+			)
+		displayFolder: 4 Agua fresca
+		lineageTag: eda15d34-f3db-4745-bd08-f268306d9fd2
+
+	measure 'Pozos AF total' = CALCULATE ( COUNTROWS ( Activos ), Activos[Tipo] = "Pozo agua fresca" ) + 0
+		formatString: 0
+		displayFolder: 4 Agua fresca
+		lineageTag: 13b9f023-e119-41ad-8361-42c5c59aeb77
+
+	measure 'Pozos AF operando' = COUNTROWS ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Pozo agua fresca" ), [Caudal pozo] > [Caudal minimo bombeo] ) ) + 0
+		formatString: 0
+		displayFolder: 4 Agua fresca
+		lineageTag: c1191d56-b309-4e84-87ab-316a3f0a1e21
+
+	measure 'KPI pozos AF' = FORMAT ( [Pozos AF operando], "0" ) & " / " & FORMAT ( [Pozos AF total], "0" )
+		displayFolder: 4 Agua fresca
+		lineageTag: 35fe14d5-7d44-4239-ba97-bdada7ec2384
+
+	measure 'KPI agua fresca detalle' = FORMAT ( [% cupo captacion], "0 %" ) & " del cupo (" & FORMAT ( [Cupo captacion], "#,0.0" ) & " L/s) · " & [KPI pozos AF] & " pozos"
+		displayFolder: 4 Agua fresca
+		lineageTag: 6ae9be99-c22e-4b51-9029-74ebaed4b5cc
+
+	measure 'Cupo mes pozo' = CALCULATE ( [Valor actual], Tags[Medicion] = "Cupo mes" )
+		formatString: #,0
+		displayFolder: 4 Agua fresca
+		lineageTag: 649fed48-01f6-4511-a180-db531a05d6e9
+
+	/// Proyección al cierre del mes frente al cupo mensual (volumen del mes + ritmo de 24 h); sin señal de volumen mensual usa el caudal actual.
+	measure '% cupo pozo' =
+			VAR p = [% proyeccion cupo]
+			VAR qq = [Caudal pozo]
+			VAR d = [Cupo mes pozo]
+			VAR diasMes = DAY ( EOMONTH ( [Ahora], 0 ) )
+			RETURN
+			    IF ( NOT ISBLANK ( p ), p, IF ( NOT ISBLANK ( d ) && d > 0, DIVIDE ( qq * 3.6 * 24 * diasMes, d ) ) )
+		formatString: 0 %
+		displayFolder: 4 Agua fresca
+		lineageTag: c1a0a970-1e86-4402-b7e1-d465b290d092
+
+	measure 'Color % cupo' = SWITCH ( TRUE (), [% cupo pozo] > 1, "#D64550", [% cupo pozo] > 0.9, "#F2A03D", "#4F9DDE" )
+		displayFolder: 4 Agua fresca
+		lineageTag: e2a0a5f4-189c-405f-9b9e-969291cf9a6e
+
+	measure 'Pozos sobre cupo' = COUNTROWS ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Pozo agua fresca" ), [% cupo pozo] > 1 ) ) + 0
+		formatString: 0
+		displayFolder: 4 Agua fresca
+		lineageTag: a476210c-5e5d-4c18-a35d-d7a3090f0923
+
+	/// Volumen captado en el mes frente a la suma de cupos mensuales.
+	measure '% mes vs cupo' =
+			VAR a = [Ahora]
+			VAR inicioMes = DATE ( YEAR ( a ), MONTH ( a ), 1 )
+			VAR horasMes = DATEDIFF ( inicioMes, a, MINUTE ) / 60
+			VAR qProm = CALCULATE ( AVERAGE ( Mediciones[Valor] ), Tags[Medicion] = "Caudal total", Mediciones[FechaHora] >= inicioMes )
+			VAR cupo = CALCULATE ( [Valor actual], Tags[Medicion] = "Cupo mes", Activos[Tipo] = "Pozo agua fresca" )
+			RETURN
+			    DIVIDE ( qProm * horasMes, cupo )
+		formatString: 0 %
+		displayFolder: 4 Agua fresca
+		lineageTag: a4766486-0e6d-4890-ba9c-8fc813e8ce7e
+
+	measure 'Nivel pozo' = CALCULATE ( [Valor actual], Tags[Medicion] = "Nivel pozo" )
+		formatString: 0.0
+		displayFolder: 4 Agua fresca
+		lineageTag: 2e808742-7507-4190-90ab-4ad1297797fb
+
+	measure 'Delta 24 h nivel pozo' = CALCULATE ( [Delta 24 h], Tags[Medicion] = "Nivel pozo" )
+		formatString: +0.00;-0.00;0.00
+		displayFolder: 4 Agua fresca
+		lineageTag: b2f9721f-97e3-41f1-a80e-6661603bccb4
+
+	measure 'Profundidad piezometro' = CALCULATE ( [Valor actual], Tags[Medicion] = "Profundidad" )
+		formatString: 0.00
+		displayFolder: 4 Agua fresca
+		lineageTag: 682e2cee-efed-4412-b171-9fd9249294f3
+
+	/// Cambio de profundidad en 7 días (positivo = el nivel baja).
+	measure 'Delta 7 d piezometro' = CALCULATE ( [Delta 7 d], Tags[Medicion] = "Profundidad" )
+		formatString: +0.00;-0.00;0.00
+		displayFolder: 4 Agua fresca
+		lineageTag: 9cd2dace-e0ac-4b75-b356-1697b61d6dd7
+
+	measure 'Color piezometro' =
+			VAR d = [Delta 7 d piezometro]
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( d ), "#A9B6C4",
+			        d > [Descenso piezometro fuerte], "#D64550",
+			        d > [Descenso piezometro leve], "#F2A03D",
+			        d < - [Descenso piezometro leve], "#4F9DDE",
+			        "#8FA3B8"
+			    )
+		displayFolder: 4 Agua fresca
+		lineageTag: a3fbdd04-067e-469e-a38a-733a1c0de69e
+
+	measure 'Piezometros total' = CALCULATE ( COUNTROWS ( Activos ), Activos[Tipo] = "Piezometro" ) + 0
+		formatString: 0
+		displayFolder: 4 Agua fresca
+		lineageTag: 8d43be76-c2e0-44a0-a3e5-16a713387e5a
+
+	measure 'Piezometros con dato' = COUNTROWS ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Piezometro" ), NOT ISBLANK ( [Profundidad piezometro] ) ) ) + 0
+		formatString: 0
+		displayFolder: 4 Agua fresca
+		lineageTag: ec09f9fd-0d37-4df0-a4ac-ab77b33d4dbf
+
+	measure 'Piezometros descenso fuerte' = COUNTROWS ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Piezometro" ), [Delta 7 d piezometro] > [Descenso piezometro fuerte] ) ) + 0
+		formatString: 0
+		displayFolder: 4 Agua fresca
+		lineageTag: a8fb1f0f-41fe-47f2-bf3b-c14b232da76d
+
+	measure 'KPI piezometros detalle' = FORMAT ( [Piezometros con dato], "0" ) & " / " & FORMAT ( [Piezometros total], "0" ) & " piezómetros con dato · umbral " & FORMAT ( [Descenso piezometro fuerte], "0.0" ) & " m (ejemplo)"
+		displayFolder: 4 Agua fresca
+		lineageTag: 7887a6a1-b1b6-494e-a392-f43d12e31ce9
+
+	measure 'KPI cupo detalle' = FORMAT ( [Pozos sobre cupo], "0" ) & " pozo(s) proyectan superar su cupo al cierre del mes · " & FORMAT ( [Pozos cerca cupo], "0" ) & " sobre el 90 %"
+		displayFolder: 4 Agua fresca
+		lineageTag: 3c5c2028-f453-470a-a367-4ec27c6741ef
+
+	measure 'pH actual' = CALCULATE ( [Valor actual], Tags[Medicion] = "pH" )
+		formatString: 0.0
+		displayFolder: 5 Calidad
+		lineageTag: ecbd8a14-cfe4-483b-a27f-57e03c80a063
+
+	measure 'CE actual' = CALCULATE ( [Valor actual], Tags[Medicion] = "CE" )
+		formatString: #,0
+		displayFolder: 5 Calidad
+		lineageTag: fe4cf3e0-672c-45fb-90f6-40a6b7979a5b
+
+	measure 'Estado calidad cod' =
+			VAR p = [pH actual]
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( p ), BLANK (),
+			        [Minutos sin comunicacion] > [Umbral horas sin dato] * 60, 4,
+			        [pH congelado] > 0, 5,
+			        p < [pH minimo] || p > [pH maximo] || [Turbidez actual] > [Limite turbidez], 2,
+			        1
+			    )
+		formatString: 0
+		displayFolder: 5 Calidad
+		lineageTag: 5084eab9-1bbb-4aae-a5ed-60ecc2c53d20
+
+	measure 'Estado calidad' = SWITCH ( [Estado calidad cod], 1, "● En banda", 2, "▲ Fuera de banda", 4, "◌ Sin dato", 5, "◇ pH congelado" )
+		displayFolder: 5 Calidad
+		lineageTag: 699de298-5f6d-462e-948e-dbd3f8b4d2f4
+
+	measure 'Color calidad' = SWITCH ( [Estado calidad cod], 1, "#4F9DDE", 2, "#F2A03D", 4, "#A9B6C4", 5, "#F2A03D" )
+		displayFolder: 5 Calidad
+		lineageTag: c5a948b2-83fa-4a59-9a48-f06ec7313700
+
+	measure 'Estaciones calidad total' = CALCULATE ( COUNTROWS ( Activos ), Activos[Tipo] = "Estacion calidad" ) + 0
+		formatString: 0
+		displayFolder: 5 Calidad
+		lineageTag: d6aa2b0b-870a-4c7e-9076-59863bbb301a
+
+	measure 'Estaciones calidad en banda' = COUNTROWS ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Estacion calidad" ), [Estado calidad cod] = 1 ) ) + 0
+		formatString: 0
+		displayFolder: 5 Calidad
+		lineageTag: e9fe1dc8-dadd-4dd9-94fb-50ba8f17b1e9
+
+	measure 'Estaciones calidad con dato' = COUNTROWS ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Estacion calidad" ), [Estado calidad cod] = 1 || [Estado calidad cod] = 2 ) ) + 0
+		formatString: 0
+		displayFolder: 5 Calidad
+		lineageTag: b54d1177-c01d-4bbc-8e74-03fd78cc3920
+
+	measure 'KPI pH' = FORMAT ( [Estaciones calidad en banda], "0" ) & " / " & FORMAT ( [Estaciones calidad total], "0" )
+		displayFolder: 5 Calidad
+		lineageTag: 67494afd-d993-4222-a54f-070930c6183b
+
+	measure 'KPI pH detalle' =
+			VAR fuera = FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Estacion calidad" ), [Estado calidad cod] = 2 )
+			RETURN
+			    IF (
+			        ISEMPTY ( fuera ),
+			        "Todas en banda " & FORMAT ( [pH minimo], "0.0" ) & "–" & FORMAT ( [pH maximo], "0.0" ),
+			        "Fuera: " & CONCATENATEX ( fuera, Activos[Activo] & " pH " & FORMAT ( [pH actual], "0.0" ), ", " )
+			    )
+		displayFolder: 5 Calidad
+		lineageTag: e1e2e987-fbaa-4e01-b61b-d4195591a5da
+
+	measure 'KPI estaciones calidad con dato' = FORMAT ( [Estaciones calidad con dato], "0" ) & " / " & FORMAT ( [Estaciones calidad total], "0" )
+		displayFolder: 5 Calidad
+		lineageTag: d7ab6986-6a51-428b-b586-57bfc85d03d1
+
+	measure 'CE maxima' = MAXX ( CALCULATETABLE ( Activos, Activos[Tipo] = "Estacion calidad" ), [CE actual] )
+		formatString: #,0
+		displayFolder: 5 Calidad
+		lineageTag: ac640ed2-6d6d-486c-99c3-849fd6989e66
+
+	measure 'KPI CE detalle' =
+			VAR mx = TOPN ( 1, FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Estacion calidad" ), NOT ISBLANK ( [CE actual] ) ), [CE actual], DESC )
+			RETURN
+			    CONCATENATEX ( mx, Activos[Activo], ", " ) & " · µS/cm"
+		displayFolder: 5 Calidad
+		lineageTag: b9fee9d0-0d21-4899-a24b-3189bcad2c81
+
+	measure 'SST ultimo' =
+			VAR f = MAX ( LabCalidad[Fecha] )
+			RETURN
+			    CALCULATE ( MAX ( LabCalidad[SST] ), LabCalidad[Fecha] = f )
+		formatString: #,0
+		displayFolder: 5 Calidad
+		lineageTag: 8430986e-f20d-456b-a9dd-a20a16455b91
+
+	measure 'Fecha SST' = MAX ( LabCalidad[Fecha] )
+		formatString: dd-mm-yyyy
+		displayFolder: 5 Calidad
+		lineageTag: 38e34283-a218-472c-a164-d90d0fa590cf
+
+	measure 'Limite aviso SST' =
+			VAR f = MAX ( LabCalidad[Fecha] )
+			RETURN
+			    CALCULATE ( MAX ( LabCalidad[LimiteAviso] ), LabCalidad[Fecha] = f )
+		formatString: #,0
+		displayFolder: 5 Calidad
+		lineageTag: 86cd8b36-a9fd-4175-ace2-17c85415a96b
+
+	measure 'Limite alerta SST' =
+			VAR f = MAX ( LabCalidad[Fecha] )
+			RETURN
+			    CALCULATE ( MAX ( LabCalidad[LimiteAlerta] ), LabCalidad[Fecha] = f )
+		formatString: #,0
+		displayFolder: 5 Calidad
+		lineageTag: a8c89b0e-ba12-45cd-af92-259e8a8fcc17
+
+	measure 'Estado SST cod' =
+			VAR v = [SST ultimo]
+			RETURN
+			    SWITCH ( TRUE (), ISBLANK ( v ), BLANK (), v >= [Limite alerta SST], 3, v >= [Limite aviso SST], 2, 1 )
+		formatString: 0
+		displayFolder: 5 Calidad
+		lineageTag: 40d24f0e-49f7-4d39-acca-9573f51963dc
+
+	measure 'Estado SST' = SWITCH ( [Estado SST cod], 1, "● Bajo aviso", 2, "▲ Sobre aviso", 3, "■ Sobre alerta" )
+		displayFolder: 5 Calidad
+		lineageTag: f3aef0e8-f13c-4452-9c5c-df16b20f52f8
+
+	measure 'Color SST' = SWITCH ( [Estado SST cod], 1, "#4F9DDE", 2, "#F2A03D", 3, "#D64550" )
+		displayFolder: 5 Calidad
+		lineageTag: 60331d91-306d-480c-86f5-7949ca5a6895
+
+	measure 'Puntos SST sobre limite alerta' = COUNTROWS ( FILTER ( VALUES ( LabCalidad[Punto] ), [Estado SST cod] = 3 ) ) + 0
+		formatString: 0
+		displayFolder: 5 Calidad
+		lineageTag: 5f9159da-e2e1-4df4-9427-99c08f50705d
+
+	measure 'Puntos SST' = DISTINCTCOUNT ( LabCalidad[Punto] ) + 0
+		formatString: 0
+		displayFolder: 5 Calidad
+		lineageTag: d52743dc-4ba4-4380-b8f4-cc2a2fe06e82
+
+	measure 'KPI SST' = FORMAT ( [Puntos SST sobre limite alerta], "0" ) & " / " & FORMAT ( [Puntos SST], "0" )
+		displayFolder: 5 Calidad
+		lineageTag: 19f64bf9-761e-4545-a25d-66d1fcaa04d1
+
+	measure 'KPI SST detalle' = "Laboratorio · último muestreo " & FORMAT ( MAX ( LabCalidad[Fecha] ), "dd-mm" )
+		displayFolder: 5 Calidad
+		lineageTag: 704278ba-1c25-4d70-a97d-f2b4476e14d4
+
+	measure 'SST serie' = AVERAGE ( LabCalidad[SST] )
+		formatString: #,0
+		displayFolder: 5 Calidad
+		lineageTag: 6a6efaff-7290-45a5-af93-525613f0db96
+
+	measure 'Tags fuente' = COUNTROWS ( Tags ) + 0
+		formatString: 0
+		displayFolder: 6 Datos
+		lineageTag: eeda993c-be50-42b8-81bf-55071bf9a9bf
+
+	measure 'Tags con dato reciente' =
+			VAR lim = [Umbral horas sin dato] * 60
+			RETURN
+			    COUNTROWS (
+			        FILTER (
+			            Tags,
+			            VAR m = [Minutos sin dato]
+			            RETURN
+			                NOT ISBLANK ( m ) && m <= lim
+			        )
+			    ) + 0
+		formatString: 0
+		displayFolder: 6 Datos
+		lineageTag: b5af471c-57c9-416a-9972-4810de2b05e4
+
+	measure 'Tags sin dato reciente' = [Tags fuente] - [Tags con dato reciente]
+		formatString: 0
+		displayFolder: 6 Datos
+		lineageTag: a99a5055-e20a-456a-b44f-1a86e9abc539
+
+	measure '% tags con dato' = DIVIDE ( [Tags con dato reciente], [Tags fuente] )
+		formatString: 0 %
+		displayFolder: 6 Datos
+		lineageTag: c6551dd3-4a04-4233-ba07-4a7723138535
+
+	/// 1 OK · 2 parcial · 3 sin datos · 5 sin señal.
+	measure 'Estado fuente cod' =
+			VAR tipo = SELECTEDVALUE ( Fuentes[Tipo] )
+			VAR tot = [Tags fuente]
+			VAR ok = [Tags con dato reciente]
+			VAR minGlobal = CALCULATE ( [Minutos sin dato], REMOVEFILTERS ( Fuentes ), REMOVEFILTERS ( Tags ) )
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        tipo = "Sin tag", 5,
+			        tipo = "Servidor", IF ( minGlobal <= 30, 1, 3 ),
+			        tot = 0, 5,
+			        ok = tot, 1,
+			        ok >= 0.8 * tot, 2,
+			        3
+			    )
+		formatString: 0
+		displayFolder: 6 Datos
+		lineageTag: 2b059084-63d5-4aa3-8683-ed2282771132
+
+	measure 'Estado fuente' = SWITCH ( [Estado fuente cod], 1, "● OK", 2, "▲ Parcial", 3, "■ Sin datos", 5, "◌ Sin señal en el historiador" )
+		displayFolder: 6 Datos
+		lineageTag: e1be0dd9-51d4-47fd-8a74-9a66f79b9238
+
+	measure 'Color estado fuente' = SWITCH ( [Estado fuente cod], 1, "#4F9DDE", 2, "#F2A03D", 3, "#D64550", 5, "#E6ECF2" )
+		displayFolder: 6 Datos
+		lineageTag: 053b20a4-0e47-4c39-b793-eb0e8edaf6a9
+
+	measure 'Detalle fuente' =
+			VAR tipo = SELECTEDVALUE ( Fuentes[Tipo] )
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        tipo = "Sin tag", SELECTEDVALUE ( Fuentes[Nota] ),
+			        tipo = "Servidor", "Última muestra " & FORMAT ( CALCULATE ( [Ultima marca], REMOVEFILTERS ( Fuentes ), REMOVEFILTERS ( Tags ) ), "HH:mm" ),
+			        FORMAT ( [Tags con dato reciente], "0" ) & " / " & FORMAT ( [Tags fuente], "0" ) & " tags con dato < " & FORMAT ( [Umbral horas sin dato], "0" ) & " h"
+			    )
+		displayFolder: 6 Datos
+		lineageTag: e021fbbb-992c-44db-8930-cb663bdd67ed
+
+	measure 'Fuentes OK' = COUNTROWS ( FILTER ( CALCULATETABLE ( Fuentes, Fuentes[Tipo] = "Area" ), [Estado fuente cod] = 1 ) ) + 0
+		formatString: 0
+		displayFolder: 6 Datos
+		lineageTag: 866a7e1f-796f-4cd0-ba05-6ef97e13afb6
+
+	measure 'Fuentes con tag' = CALCULATE ( COUNTROWS ( Fuentes ), Fuentes[Tipo] = "Area" ) + 0
+		formatString: 0
+		displayFolder: 6 Datos
+		lineageTag: 0f1b1d48-60c0-4674-b359-024a53afadc7
+
+	measure 'KPI fuentes' = FORMAT ( [Fuentes OK], "0" ) & " / " & FORMAT ( [Fuentes con tag], "0" )
+		displayFolder: 6 Datos
+		lineageTag: c9baf87d-3249-4e0c-a5ef-46ddc9327203
+
+	measure 'KPI fuentes detalle' =
+			VAR malas = FILTER ( CALCULATETABLE ( Fuentes, Fuentes[Tipo] = "Area" ), [Estado fuente cod] > 1 )
+			RETURN
+			    IF ( ISEMPTY ( malas ), "Todas al día", CONCATENATEX ( malas, Fuentes[FuenteCorta], ", " ) & " con atraso" ) & " · meteorología y evaporación sin señal"
+		displayFolder: 6 Datos
+		lineageTag: 21c71d56-e57e-46fc-a008-4f5e8a8d86d1
+
+	/// 1 con dato · 2 congelado · 3 atrasado · 4 sin muestras.
+	measure 'Estado dato cod' =
+			VAR m = [Minutos sin dato]
+			RETURN
+			    SWITCH ( TRUE (), ISBLANK ( m ), 4, m > [Umbral horas sin dato] * 60, 3, [Tag congelado] > 0, 2, 1 )
+		formatString: 0
+		displayFolder: 6 Datos
+		lineageTag: 3eab96d3-ce7e-4d09-a55f-6d12896d11c9
+
+	measure 'Estado dato' = SWITCH ( [Estado dato cod], 1, "● Con dato", 2, "◇ Congelado", 3, "■ Atrasado", 4, "◌ Sin muestras" )
+		displayFolder: 6 Datos
+		lineageTag: e6fd1399-f062-42eb-b033-ec32e4115fb4
+
+	measure 'Color estado dato' = SWITCH ( [Estado dato cod], 1, "#4F9DDE", 2, "#F2A03D", 3, "#D64550", 4, "#A9B6C4" )
+		displayFolder: 6 Datos
+		lineageTag: 653ea094-fd0e-42a6-8a83-282891937753
+
+	/// 3 crítica · 2 alerta · 1 aviso. Si toda una estación perdió comunicación queda una sola alarma (la del primer activo).
+	measure 'Alarma severidad' =
+			VAR tipo = SELECTEDVALUE ( Activos[Tipo] )
+			VAR est = SELECTEDVALUE ( Activos[Estacion] )
+			VAR nEst = IF ( NOT ISBLANK ( est ), CALCULATE ( COUNTROWS ( Activos ), REMOVEFILTERS ( Activos ), Activos[Estacion] = est ) )
+			VAR caida = IF ( nEst >= 2, CALCULATE ( [Estacion sin comunicacion], REMOVEFILTERS ( Activos ), Activos[Estacion] = est ), 0 )
+			VAR esRepr = CALCULATE ( MIN ( Activos[Orden] ), REMOVEFILTERS ( Activos ), Activos[Estacion] = est ) = SELECTEDVALUE ( Activos[Orden] )
+			VAR base =
+			    SWITCH (
+			        tipo,
+			        "Pozo recuperacion", SWITCH ( [Estado pozo cod], 3, 3, 4, 3, 5, 2 ),
+			        "Estanque", SWITCH ( [Estado estanque cod], 3, 3, 2, 2, 4, 3, 5, 2 ),
+			        "Tranque", SWITCH ( [Estado tranque cod], 3, 3, 2, 2, 4, 2, 5, 2 ),
+			        "Estacion calidad", SWITCH ( [Estado calidad cod], 2, 2, 4, 2, 5, 2 ),
+			        "Pozo agua fresca", IF ( [% cupo pozo] > 1, 2, IF ( [% cupo pozo] > 0.9, 1 ) ),
+			        "Piezometro", IF ( [Minutos sin comunicacion] > [Umbral horas sin dato] * 60 || [Profundidad congelada] > 0, 1 ),
+			        "Pozo monitoreo", SWITCH ( [Estado aguas abajo cod], 3, 2, 2, 1, 4, 1, 5, 1 ),
+			        "Sala electrica", SWITCH ( [Estado UPS cod], 3, 2, 2, 1 ),
+			        BLANK ()
+			    )
+			RETURN
+			    IF ( caida = 1, IF ( esRepr, 3, BLANK () ), base )
+		formatString: 0
+		displayFolder: 7 Alarmas
+		lineageTag: 3b4a861e-d34a-44c8-b986-ee9c5153a216
+
+	/// Prioridad estilo ISA-18.2 (1 = más urgente).
+	measure Prio = IF ( NOT ISBLANK ( [Alarma severidad] ), 4 - [Alarma severidad] )
+		formatString: 0
+		displayFolder: 7 Alarmas
+		lineageTag: e14e0203-db9f-4ffc-9bd1-e1bcf4ac727d
+
+	measure 'Alarma nivel' = SWITCH ( [Alarma severidad], 3, "✖ Crítica", 2, "▲ Alerta", 1, "◆ Aviso" )
+		displayFolder: 7 Alarmas
+		lineageTag: a23b803e-025e-4ff1-b845-75201fdf4e9a
+
+	measure 'Color alarma' = SWITCH ( [Alarma severidad], 3, "#D64550", 2, "#F2A03D", 1, "#9CC7EC" )
+		displayFolder: 7 Alarmas
+		lineageTag: 6cc0fd19-c5c4-4a40-9467-78a2300a86d6
+
+	measure 'Alarma condicion' =
+			VAR tipo = SELECTEDVALUE ( Activos[Tipo] )
+			VAR est = SELECTEDVALUE ( Activos[Estacion] )
+			VAR nEst = IF ( NOT ISBLANK ( est ), CALCULATE ( COUNTROWS ( Activos ), REMOVEFILTERS ( Activos ), Activos[Estacion] = est ) )
+			VAR caida = IF ( nEst >= 2, CALCULATE ( [Estacion sin comunicacion], REMOVEFILTERS ( Activos ), Activos[Estacion] = est ), 0 )
+			VAR ultEst = CALCULATE ( [Ultima marca comunicacion], REMOVEFILTERS ( Activos ), Activos[Estacion] = est )
+			VAR hc = FORMAT ( [Horas para congelado], "0" )
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( [Alarma severidad] ), BLANK (),
+			        caida = 1,
+			            "Estación " & est & " sin comunicación: " & FORMAT ( nEst, "0" ) & " activos sin dato nuevo desde " & FORMAT ( ultEst, "dd-mm HH:mm" )
+			                & IF ( [Posible corte estacion] = 1, " · posible corte de energía", "" ),
+			        tipo = "Pozo recuperacion" && [Estado pozo cod] = 4, "Sin dato nuevo en el historiador desde " & FORMAT ( [Ultima marca comunicacion], "dd-mm HH:mm" ) & " · posible falla de comunicación",
+			        tipo = "Pozo recuperacion" && [Estado pozo cod] = 5, "Caudal congelado: el mismo valor hace más de " & hc & " h (revisar instrumento o comunicación)",
+			        tipo = "Pozo recuperacion",
+			            "Pozo detenido (RUN = 0 o caudal bajo el mínimo) · caudal " & FORMAT ( [Caudal actual], "0.0" ) & " L/s"
+			                & IF ( [Posible corte estacion] = 1, " · posible corte de energía en la estación", "" ),
+			        tipo = "Estanque" && [Estado estanque cod] = 4, "Nivel sin dato nuevo en el historiador",
+			        tipo = "Estanque" && [Estado estanque cod] = 5, "Sensor de nivel congelado en " & FORMAT ( [Nivel estanque], "0.0" ) & " % (mismo valor hace más de " & hc & " h)",
+			        tipo = "Estanque",
+			            "Nivel " & FORMAT ( [Nivel estanque], "0" ) & " % sobre "
+			                & IF ( [Estado estanque cod] = 3, "HH (" & FORMAT ( [HH estanque], "0" ) & " %)", "HI (" & FORMAT ( [HI estanque], "0" ) & " %)" )
+			                & " · tendencia " & FORMAT ( [Tasa estanque (%/h)], "+0.0;-0.0;0.0" ) & " %/h · " & [Rebalse texto],
+			        tipo = "Tranque" && [Estado tranque cod] = 4, "Nivel del tranque sin dato nuevo",
+			        tipo = "Tranque" && [Estado tranque cod] = 5, "Sensor de nivel congelado en " & [Nivel tranque texto] & " (mismo valor hace más de " & hc & " h)",
+			        tipo = "Tranque" && [Fuga tranque] >= 1, "Detector de fuga activo · nivel " & [Nivel tranque texto],
+			        tipo = "Tranque", "Nivel " & [Nivel tranque texto] & IF ( [Alarma nivel alto tranque] >= 1, " · alarma de nivel alto", "" ) & " · " & [Rebalse texto],
+			        tipo = "Estacion calidad" && [Estado calidad cod] = 4, "Sin dato nuevo de pH/CE",
+			        tipo = "Estacion calidad" && [Estado calidad cod] = 5, "pH congelado en " & FORMAT ( [pH actual], "0.00" ) & " (mismo valor hace más de " & hc & " h)",
+			        tipo = "Estacion calidad", "pH " & FORMAT ( [pH actual], "0.0" ) & " · turbidez " & FORMAT ( [Turbidez actual], "0.0" ) & " NTU · fuera de la banda " & FORMAT ( [pH minimo], "0.0" ) & "–" & FORMAT ( [pH maximo], "0.0" ) & " (límite de ejemplo)",
+			        tipo = "Pozo agua fresca",
+			            "Proyección al cierre del mes: " & FORMAT ( [% cupo pozo], "0 %" ) & " del cupo mensual"
+			                & IF ( NOT ISBLANK ( [Proyeccion mes (m3)] ), " (" & FORMAT ( [Proyeccion mes (m3)], "#,0" ) & " de " & FORMAT ( [Cupo mes pozo], "#,0" ) & " m³)", "" ),
+			        tipo = "Piezometro",
+			            IF ( [Profundidad congelada] > 0, "Profundidad congelada (mismo valor hace más de " & hc & " h)", "Estación sin dato nuevo desde " & FORMAT ( [Ultima marca comunicacion], "dd-mm HH:mm" ) ),
+			        tipo = "Pozo monitoreo" && [Estado aguas abajo cod] = 4, "Pozo de monitoreo sin dato nuevo",
+			        tipo = "Pozo monitoreo" && [Estado aguas abajo cod] = 5, "Profundidad congelada (mismo valor hace más de " & hc & " h)",
+			        tipo = "Pozo monitoreo",
+			            "Nivel freático sube " & FORMAT ( [Ascenso 7 d (m)], "0.00" ) & " m en 7 días · circuito asociado: " & SELECTEDVALUE ( Activos[CircuitoAsociado] ),
+			        tipo = "Sala electrica", "UPS: " & [UPS texto],
+			        BLANK ()
+			    )
+		displayFolder: 7 Alarmas
+		lineageTag: 73cca27f-762f-431b-a568-37ee5b7c0d1c
+
+	measure 'Alarma desde' =
+			VAR tipo = SELECTEDVALUE ( Activos[Tipo] )
+			VAR est = SELECTEDVALUE ( Activos[Estacion] )
+			VAR nEst = IF ( NOT ISBLANK ( est ), CALCULATE ( COUNTROWS ( Activos ), REMOVEFILTERS ( Activos ), Activos[Estacion] = est ) )
+			VAR caida = IF ( nEst >= 2, CALCULATE ( [Estacion sin comunicacion], REMOVEFILTERS ( Activos ), Activos[Estacion] = est ), 0 )
+			VAR hi = [HI estanque]
+			VAR pmin = [pH minimo]
+			VAR pmax = [pH maximo]
+			VAR ultBajo = CALCULATE ( MAX ( Mediciones[FechaHora] ), Tags[Medicion] = "Nivel estanque", Tags[Principal] = "Si", Mediciones[Valor] < hi )
+			VAR cruceEstanque = CALCULATE ( MIN ( Mediciones[FechaHora] ), Tags[Medicion] = "Nivel estanque", Tags[Principal] = "Si", Mediciones[FechaHora] > ultBajo )
+			VAR hiP = [HI tranque]
+			VAR ultBajoP = CALCULATE ( MAX ( Mediciones[FechaHora] ), Tags[Medicion] = "Nivel tranque", Tags[Principal] = "Si", Mediciones[Valor] < hiP )
+			VAR cruceTranque = CALCULATE ( MIN ( Mediciones[FechaHora] ), Tags[Medicion] = "Nivel tranque", Tags[Principal] = "Si", Mediciones[FechaHora] > ultBajoP )
+			VAR ultOk = CALCULATE ( MAX ( Mediciones[FechaHora] ), Tags[Medicion] = "pH", Mediciones[Valor] >= pmin, Mediciones[Valor] <= pmax )
+			VAR crucePH = CALCULATE ( MIN ( Mediciones[FechaHora] ), Tags[Medicion] = "pH", Mediciones[FechaHora] > ultOk )
+			VAR hDet = [Horas detenido real]
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( [Alarma severidad] ), BLANK (),
+			        caida = 1, CALCULATE ( [Ultima marca comunicacion], REMOVEFILTERS ( Activos ), Activos[Estacion] = est ),
+			        tipo = "Pozo recuperacion" && [Estado pozo cod] = 4, [Ultima marca comunicacion],
+			        tipo = "Pozo recuperacion" && [Estado pozo cod] = 5, BLANK (),
+			        tipo = "Pozo recuperacion" && hDet > 0, [Ahora] - hDet / 24,
+			        tipo = "Pozo recuperacion", [Inicio detencion],
+			        tipo = "Estanque", cruceEstanque,
+			        tipo = "Tranque" && NOT ISBLANK ( hiP ), cruceTranque,
+			        tipo = "Estacion calidad", crucePH,
+			        tipo IN { "Piezometro", "Pozo monitoreo" } && [Minutos sin comunicacion] > [Umbral horas sin dato] * 60, [Ultima marca comunicacion],
+			        BLANK ()
+			    )
+		formatString: dd-mm HH:mm
+		displayFolder: 7 Alarmas
+		lineageTag: 3a4c39f0-3aa9-4cc0-b5e2-086b010f57f9
+
+	measure 'Alarma desde texto' =
+			VAR d = [Alarma desde]
+			RETURN
+			    IF ( ISBLANK ( d ), "—", IF ( INT ( d ) = INT ( [Ahora] ), FORMAT ( d, "HH:mm" ), FORMAT ( d, "dd-mm HH:mm" ) ) )
+		displayFolder: 7 Alarmas
+		lineageTag: bb5bf025-3884-4754-9384-d3d544d6d9b8
+
+	measure 'Alarma duracion' =
+			VAR d = [Alarma desde]
+			VAR m = IF ( NOT ISBLANK ( d ), DATEDIFF ( d, [Ahora], MINUTE ) )
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( m ), "—",
+			        m >= 2880, FORMAT ( INT ( m / 1440 ), "0" ) & " d " & FORMAT ( INT ( MOD ( m, 1440 ) / 60 ), "0" ) & " h",
+			        m >= 60, FORMAT ( INT ( m / 60 ), "0" ) & " h " & FORMAT ( MOD ( m, 60 ), "00" ) & " min",
+			        FORMAT ( m, "0" ) & " min"
+			    )
+		displayFolder: 7 Alarmas
+		lineageTag: a1355722-527b-4c0a-9376-d1ea35d32359
+
+	measure 'Ir a' =
+			SWITCH (
+			    SELECTEDVALUE ( Activos[Tipo] ),
+			    "Pozo recuperacion", "Recuperación ›",
+			    "Estanque", "Estanques ›",
+			    "Tranque", "Tranques ›",
+			    "Estacion calidad", "Calidad ›",
+			    "Pozo agua fresca", "Agua fresca ›",
+			    "Piezometro", "Agua fresca ›",
+			    "Pozo monitoreo", "Aguas abajo ›",
+			    "Sala electrica", "Energía y reporte ›"
+			)
+		displayFolder: 7 Alarmas
+		lineageTag: 8f64f824-55f0-494b-bb5c-f04024ed026f
+
+	measure 'Alarmas criticas' = COUNTROWS ( FILTER ( Activos, [Alarma severidad] = 3 ) ) + 0
+		formatString: 0
+		displayFolder: 7 Alarmas
+		lineageTag: df076b8e-f349-4e51-92bf-81268e9a312a
+
+	measure 'Alarmas alerta' = COUNTROWS ( FILTER ( Activos, [Alarma severidad] = 2 ) ) + 0
+		formatString: 0
+		displayFolder: 7 Alarmas
+		lineageTag: 7c1c477d-4d8d-4c2f-b278-1dd26cc2a1db
+
+	measure Avisos = COUNTROWS ( FILTER ( Activos, [Alarma severidad] = 1 ) ) + 0
+		formatString: 0
+		displayFolder: 7 Alarmas
+		lineageTag: ceba936e-62e3-4158-af0b-0f57999c9efa
+
+	/// Críticas + alertas (sin avisos).
+	measure 'Alarmas activas' = [Alarmas criticas] + [Alarmas alerta]
+		formatString: 0
+		displayFolder: 7 Alarmas
+		lineageTag: e84fd774-45c0-4505-86f5-e8df4efd8347
+
+	measure 'KPI alarmas detalle' = FORMAT ( [Alarmas criticas], "0" ) & " críticas · " & FORMAT ( [Alarmas alerta], "0" ) & " alertas · " & FORMAT ( [Avisos], "0" ) & " avisos"
+		displayFolder: 7 Alarmas
+		lineageTag: 630640f0-6c2d-44c4-ac80-203fa0cce8af
+
+	/// 1 si la fila pasa el filtro de estado (segmentador FiltroEstado); sin selección pasan todas.
+	measure 'Pasa filtro estado' = IF ( ISFILTERED ( FiltroEstado[Estado] ), IF ( [Estado dato cod] IN VALUES ( FiltroEstado[Cod] ), 1, 0 ), 1 )
+		formatString: 0
+		isHidden
+		displayFolder: 6 Datos
+		lineageTag: 3fb3a69a-4378-4179-bc9b-b6eade4fa5ef
+
+	measure 'Horas para congelado' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "Horas para congelado" )
+		formatString: 0
+		displayFolder: 0 Parámetros
+		lineageTag: 496f7892-27ed-4bd3-96c9-261da5902f3d
+
+	measure 'Horas datos atrasados' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "Horas datos atrasados" )
+		formatString: 0
+		displayFolder: 0 Parámetros
+		lineageTag: d29c301b-67ed-4730-9410-0c07e7069098
+
+	measure 'Ascenso alerta' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "Ascenso freatico alerta (m)" )
+		formatString: 0.00
+		displayFolder: 0 Parámetros
+		lineageTag: 6fcc0e6b-912a-45a0-a072-bace01ab3b9a
+
+	measure 'Ascenso aviso' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "Ascenso freatico aviso (m)" )
+		formatString: 0.00
+		displayFolder: 0 Parámetros
+		lineageTag: 585dbe1f-c0e1-4d7e-80c2-2d3b6bbbcfd5
+
+	measure 'Bateria baja 12V' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "Bateria baja 12 V (V)" )
+		formatString: 0.0
+		displayFolder: 0 Parámetros
+		lineageTag: cee9368c-6ed2-4192-972d-82007fde616e
+
+	measure 'Bateria baja 3V' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "Bateria baja 3,6 V (V)" )
+		formatString: 0.0
+		displayFolder: 0 Parámetros
+		lineageTag: 74a86d20-d85d-47ae-a414-0c6405ba3352
+
+	measure 'Limite horas sin envio A' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "Horas sin envio A" )
+		formatString: 0
+		displayFolder: 0 Parámetros
+		lineageTag: 4ebd1fe7-b5a5-4aa9-880c-5ae9634da375
+
+	measure 'Limite errores envio B' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "Errores envio B 12 h" )
+		formatString: 0
+		displayFolder: 0 Parámetros
+		lineageTag: 17621a04-36ed-4ea7-8549-078377f81932
+
+	measure 'Minutos simultaneidad corte' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "Minutos simultaneidad corte" )
+		formatString: 0
+		displayFolder: 0 Parámetros
+		lineageTag: d6d316e2-65b5-40ab-ae28-91ece40240d0
+
+	/// Horas que representa cada muestra (1 h con el CSV sintético; 15 min con el historiador).
+	measure 'Horas por muestra' = IF ( [Modo historiador] = 1, 0.25, 1 )
+		formatString: 0.00
+		displayFolder: 0 Parámetros
+		lineageTag: 898aec02-3a2d-40c8-aa06-be2abc3aa253
+
+	/// Hora de la última muestra de proceso (no cuenta los cálculos del historiador, que siempre tienen valor).
+	measure 'Datos al' = CALCULATE ( [Ultima marca comunicacion], REMOVEFILTERS () )
+		formatString: dd-mm-yyyy HH:mm
+		displayFolder: 1 Base
+		lineageTag: bdf51029-95bf-496f-9cae-e24c6c63caa5
+
+	measure 'Horas desde datos' =
+			VAR d = [Datos al]
+			RETURN
+			    IF ( NOT ISBLANK ( d ), IF ( d > [Ahora], 0, DATEDIFF ( d, [Ahora], MINUTE ) / 60 ) )
+		formatString: 0.0
+		displayFolder: 1 Base
+		lineageTag: 6cf76689-add7-47d2-bc94-cff3de08e2a2
+
+	/// Hora en que Power BI actualizó el modelo.
+	measure 'Actualizado' = MAX ( Actualizacion[FechaActualizacion] )
+		formatString: dd-mm-yyyy HH:mm
+		displayFolder: 1 Base
+		lineageTag: 0416850f-b57d-42e1-a033-d035837a2ec1
+
+	/// 1 si la última muestra es más antigua que Horas datos atrasados (actualización caída).
+	measure 'Datos atrasados' = IF ( ISBLANK ( [Datos al] ) || [Horas desde datos] > [Horas datos atrasados], 1, 0 )
+		formatString: 0
+		displayFolder: 1 Base
+		lineageTag: 611095d5-b6b6-4ad5-8b7c-453a8ce35243
+
+	/// Encabezado de todas las páginas: hora del último dato y aviso si la actualización está detenida.
+	measure 'Datos al texto' =
+			VAR d = [Datos al]
+			VAR h = [Horas desde datos]
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( d ), "⚠ SIN DATOS CARGADOS",
+			        h > [Horas datos atrasados], "⚠ DATOS AL " & FORMAT ( d, "dd-mm HH:mm" ) & " · SIN ACTUALIZAR HACE " & FORMAT ( INT ( h ), "0" ) & " H",
+			        "DATOS AL " & FORMAT ( d, "dd-mm HH:mm" )
+			    )
+		displayFolder: 1 Base
+		lineageTag: 5ab9ebd7-20ec-42f6-a173-642af7e2b282
+
+	measure 'Color datos al' = IF ( [Datos atrasados] = 1, "#D64550", "#4F9DDE" )
+		displayFolder: 1 Base
+		lineageTag: c2069704-8a2e-46d3-8e81-a96a38647ab1
+
+	measure 'Actualizado texto' = "Power BI actualizado " & FORMAT ( [Actualizado], "dd-mm HH:mm" ) & " · datos al " & FORMAT ( [Datos al], "dd-mm HH:mm" )
+		displayFolder: 1 Base
+		lineageTag: a51138e4-9031-461a-8f93-abf2de3d2072
+
+	/// Señales analógicas sin ningún cambio en las últimas Horas para congelado (no cuenta las que están en cero).
+	measure 'Tag congelado' =
+			SUMX (
+			    CALCULATETABLE ( VALUES ( Tags[Tag] ), KEEPFILTERS ( Tags[Medicion] IN { "Caudal", "Caudal total", "Nivel pozo", "Profundidad", "pH", "CE", "Nivel estanque", "Corriente", "Nivel tranque", "Caudal aforador", "pH tranque", "Bateria" } ) ),
+			    VAR t1 = CALCULATE ( MAX ( Mediciones[FechaHora] ) )
+			    VAR t0 = t1 - [Horas para congelado] / 24
+			    VAR tmin = CALCULATE ( MIN ( Mediciones[FechaHora] ) )
+			    VAR v1 = CALCULATE ( MAX ( Mediciones[Valor] ), Mediciones[FechaHora] = t1 )
+			    VAR mx = CALCULATE ( MAX ( Mediciones[Valor] ), Mediciones[FechaHora] >= t0 )
+			    VAR mn = CALCULATE ( MIN ( Mediciones[Valor] ), Mediciones[FechaHora] >= t0 )
+			    VAR n = CALCULATE ( COUNTROWS ( Mediciones ), Mediciones[FechaHora] >= t0 )
+			    RETURN
+			        IF ( NOT ISBLANK ( t1 ) && tmin <= t0 && n >= 8 && ABS ( v1 ) > 0.01 && mx - mn <= 0.000001, 1, 0 )
+			)
+		formatString: 0
+		displayFolder: 6 Datos
+		lineageTag: c49d8d5d-ba6e-42b9-bf3d-876650c6dae9
+
+	measure 'Tags congelados' = [Tag congelado] + 0
+		formatString: 0
+		displayFolder: 6 Datos
+		lineageTag: f823cdd1-3b83-4ab5-8aaa-cc808b2bcdcb
+
+	measure 'Nivel estanque congelado' = CALCULATE ( [Tag congelado], KEEPFILTERS ( Tags[Medicion] = "Nivel estanque" ), KEEPFILTERS ( Tags[Principal] = "Si" ) )
+		formatString: 0
+		displayFolder: 3 Estanques
+		lineageTag: 15ec9fac-248d-47a4-8b02-34ec509d95f0
+
+	measure 'Nivel tranque congelado' = CALCULATE ( [Tag congelado], KEEPFILTERS ( Tags[Medicion] = "Nivel tranque" ), KEEPFILTERS ( Tags[Principal] = "Si" ) )
+		formatString: 0
+		displayFolder: 8 Tranques
+		lineageTag: 8570cad5-f908-4dfb-9f24-99f28f6c158d
+
+	measure 'Caudal congelado' = CALCULATE ( [Tag congelado], KEEPFILTERS ( Tags[Medicion] = "Caudal" ) )
+		formatString: 0
+		displayFolder: 2 Recuperación
+		lineageTag: 6ae5509f-df09-42da-9bec-14c4402165f5
+
+	measure 'pH congelado' = CALCULATE ( [Tag congelado], KEEPFILTERS ( Tags[Medicion] = "pH" ) )
+		formatString: 0
+		displayFolder: 5 Calidad
+		lineageTag: c6a0fa61-95ff-477f-b2d3-6b8e69068cb1
+
+	measure 'Profundidad congelada' = CALCULATE ( [Tag congelado], KEEPFILTERS ( Tags[Medicion] = "Profundidad" ) )
+		formatString: 0
+		displayFolder: 9 Aguas abajo
+		lineageTag: 730a3f97-d58e-4f34-9917-99fd9a11889f
+
+	/// Última muestra de medición de proceso (sin parámetros, cálculos ni baterías).
+	measure 'Ultima marca comunicacion' =
+			CALCULATE (
+			    MAX ( Mediciones[FechaHora] ),
+			    KEEPFILTERS ( Tags[Medicion] IN { "RUN", "Corriente", "Caudal", "Caudal total", "Totalizador", "Nivel pozo", "Profundidad", "pH", "CE", "Nivel estanque", "Nivel tranque", "Caudal aforador", "pH tranque", "Alarma alto nivel", "Detector fuga", "Modo auto", "Estado enlace" } )
+			)
+		formatString: dd-mm-yyyy HH:mm
+		displayFolder: 10 Energía y reporte
+		lineageTag: 1a5232e7-ea20-44d9-8e4d-819ce1f80932
+
+	measure 'Minutos sin comunicacion' =
+			VAR u = [Ultima marca comunicacion]
+			RETURN
+			    IF ( NOT ISBLANK ( u ), IF ( u > [Ahora], 0, DATEDIFF ( u, [Ahora], MINUTE ) ) )
+		formatString: #,0
+		displayFolder: 10 Energía y reporte
+		lineageTag: ec1123a6-7658-4dca-8186-a91e644e03b0
+
+	/// 1 si ninguna señal de proceso de la estación (o del activo) tiene dato reciente.
+	measure 'Estacion sin comunicacion' = IF ( [Minutos sin comunicacion] > [Umbral horas sin dato] * 60, 1, 0 )
+		formatString: 0
+		displayFolder: 10 Energía y reporte
+		lineageTag: 73297d9d-e203-4026-bcce-f3277b36888f
+
+	measure 'Estaciones sin comunicacion' = COUNTROWS ( FILTER ( CALCULATETABLE ( VALUES ( Activos[Estacion] ), KEEPFILTERS ( NOT Activos[Tipo] IN { "Sala electrica", "Reporte externo", "Punto laboratorio" } ) ), NOT ISBLANK ( Activos[Estacion] ) && [Estacion sin comunicacion] = 1 ) ) + 0
+		formatString: 0
+		displayFolder: 10 Energía y reporte
+		lineageTag: 0d631330-2176-43d4-b336-d9e5752e02dc
+
+	measure 'Estaciones sin comunicacion lista' =
+			VAR t = FILTER ( CALCULATETABLE ( VALUES ( Activos[Estacion] ), KEEPFILTERS ( NOT Activos[Tipo] IN { "Sala electrica", "Reporte externo", "Punto laboratorio" } ) ), NOT ISBLANK ( Activos[Estacion] ) && [Estacion sin comunicacion] = 1 )
+			VAR n = COUNTROWS ( t )
+			RETURN
+			    IF (
+			        ISEMPTY ( t ),
+			        "Todas las estaciones comunicando",
+			        CONCATENATEX ( TOPN ( 4, t, Activos[Estacion], ASC ), Activos[Estacion], ", ", Activos[Estacion], ASC )
+			            & IF ( n > 4, " y " & FORMAT ( n - 4, "0" ) & " más", "" )
+			    )
+		displayFolder: 10 Energía y reporte
+		lineageTag: 93877fe8-46ff-45e3-883d-041b82f7458d
+
+	measure 'Estado estacion cod' =
+			SWITCH (
+			    TRUE (),
+			    ISBLANK ( [Ultima marca comunicacion] ), BLANK (),
+			    [Estacion sin comunicacion] = 1, 3,
+			    [Posible corte energia] = 1, 2,
+			    1
+			)
+		formatString: 0
+		displayFolder: 10 Energía y reporte
+		lineageTag: 7be9f5c2-e022-4591-a3ad-35ac3eea2751
+
+	measure 'Estado estacion' = SWITCH ( [Estado estacion cod], 1, "● Comunicando", 2, "▲ Posible corte de energía", 3, "■ Sin comunicación" )
+		displayFolder: 10 Energía y reporte
+		lineageTag: e0bc02cb-b66e-464c-a89e-b27ee46d3926
+
+	measure 'Color estado estacion' = SWITCH ( [Estado estacion cod], 1, "#4F9DDE", 2, "#F2A03D", 3, "#D64550" )
+		displayFolder: 10 Energía y reporte
+		lineageTag: 0bf3ada8-38a2-42a8-b773-acc39e0400c6
+
+	measure 'Ultima comunicacion texto' =
+			VAR u = [Ultima marca comunicacion]
+			RETURN
+			    IF ( ISBLANK ( u ), "—", IF ( INT ( u ) = INT ( [Ahora] ), FORMAT ( u, "HH:mm" ), FORMAT ( u, "dd-mm HH:mm" ) ) )
+		displayFolder: 10 Energía y reporte
+		lineageTag: 9337b6a9-5e8a-4e3a-a7ce-702a1099c569
+
+	measure 'Activos en estacion' = COUNTROWS ( Activos ) + 0
+		formatString: 0
+		displayFolder: 10 Energía y reporte
+		lineageTag: bc5c6adc-796d-4b6b-a2cd-a92625e399ff
+
+	/// Primer registro detenido después del último registro en marcha (RUN o, si no hay RUN, caudal).
+	measure 'Inicio detencion' =
+			VAR hayRun = CALCULATE ( COUNTROWS ( Tags ), Tags[Medicion] = "RUN" ) > 0
+			VAR qmin = [Caudal minimo bombeo] * 3.6
+			VAR ultRun = CALCULATE ( MAX ( Mediciones[FechaHora] ), Tags[Medicion] = "RUN", Mediciones[Valor] = 1 )
+			VAR ultQ = CALCULATE ( MAX ( Mediciones[FechaHora] ), Tags[Medicion] = "Caudal", Mediciones[Valor] >= qmin )
+			RETURN
+			    IF (
+			        hayRun,
+			        CALCULATE ( MIN ( Mediciones[FechaHora] ), Tags[Medicion] = "RUN", Mediciones[FechaHora] > ultRun ),
+			        CALCULATE ( MIN ( Mediciones[FechaHora] ), Tags[Medicion] = "Caudal", Mediciones[FechaHora] > ultQ )
+			    )
+		formatString: dd-mm HH:mm
+		displayFolder: 2 Recuperación
+		lineageTag: 39328a47-1082-4a2a-a05d-db0b5cdcbb68
+
+	/// 1 si todos los pozos o bombas de la estación quedaron detenidos (y sin corriente) dentro de Minutos simultaneidad corte.
+	measure 'Posible corte energia' =
+			VAR pozos = CALCULATETABLE ( VALUES ( Activos[ActivoID] ), KEEPFILTERS ( Activos[Tipo] IN { "Pozo recuperacion", "Bomba recuperacion" } ) )
+			VAR n = COUNTROWS ( pozos )
+			VAR ini = ADDCOLUMNS ( pozos, "@e", [Estado pozo cod], "@i", [Inicio detencion], "@c", [Corriente actual] )
+			VAR nDet = COUNTROWS ( FILTER ( ini, [@e] = 3 ) )
+			VAR iMin = MINX ( ini, [@i] )
+			VAR iMax = MAXX ( ini, [@i] )
+			VAR inicioVentana = CALCULATE ( MIN ( Mediciones[FechaHora] ), REMOVEFILTERS () )
+			VAR corriente = SUMX ( ini, [@c] )
+			RETURN
+			    IF (
+			        n >= 2 && nDet = n && NOT ISBLANK ( iMin ) && iMin > inicioVentana + 1 / 24
+			            && ( iMax - iMin ) * 1440 <= [Minutos simultaneidad corte]
+			            && ( ISBLANK ( corriente ) || corriente < 1 ),
+			        1,
+			        0
+			    )
+		formatString: 0
+		displayFolder: 10 Energía y reporte
+		lineageTag: 8ad075fd-8ba9-4808-a632-c3c9cf58b627
+
+	measure 'Estaciones con posible corte' = COUNTROWS ( FILTER ( VALUES ( Activos[Estacion] ), NOT ISBLANK ( Activos[Estacion] ) && [Posible corte energia] = 1 ) ) + 0
+		formatString: 0
+		displayFolder: 10 Energía y reporte
+		lineageTag: c4adddc1-5e0f-4bb3-b5da-f2ea06e6caa8
+
+	measure 'Posible corte estacion' =
+			VAR est = SELECTEDVALUE ( Activos[Estacion] )
+			RETURN
+			    IF ( ISBLANK ( est ), 0, CALCULATE ( [Posible corte energia], REMOVEFILTERS ( Activos ), Activos[Estacion] = est ) )
+		formatString: 0
+		displayFolder: 10 Energía y reporte
+		lineageTag: c2058502-46c0-4aaa-9b5c-e91140d15589
+
+	measure 'Pozos congelados' = COUNTROWS ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Pozo recuperacion" ), [Estado pozo cod] = 5 ) ) + 0
+		formatString: 0
+		displayFolder: 2 Recuperación
+		lineageTag: c09deca1-e574-4b88-aec3-7e20a542235a
+
+	/// Horas que lleva detenido el pozo según el cálculo del historiador (sin el corte de la ventana de días).
+	measure 'Horas detenido real' = CALCULATE ( [Valor actual], Tags[Medicion] = "Horas detenido" )
+		formatString: #,0.0
+		displayFolder: 2 Recuperación
+		lineageTag: efa3a1dd-ce22-43f1-abdb-5d3995ebf12c
+
+	/// Duración real de la detención actual (cálculo del historiador; si no hay, la de la ventana de datos).
+	measure 'Detenido hace' =
+			VAR e = [Estado pozo cod]
+			VAR h = [Horas detenido real]
+			VAR ini = [Inicio detencion]
+			VAR inicioVentana = CALCULATE ( MIN ( Mediciones[FechaHora] ), REMOVEFILTERS () )
+			VAR hv = IF ( h > 0, h, IF ( NOT ISBLANK ( ini ), DATEDIFF ( ini, [Ahora], MINUTE ) / 60 ) )
+			VAR pref = IF ( NOT ( h > 0 ) && NOT ISBLANK ( ini ) && ini <= inicioVentana + 1 / 24, "≥ ", "" )
+			RETURN
+			    IF (
+			        e <> 3 || ISBLANK ( hv ),
+			        BLANK (),
+			        pref
+			            & IF (
+			                hv >= 48,
+			                FORMAT ( INT ( hv / 24 ), "0" ) & " d " & FORMAT ( MOD ( INT ( hv ), 24 ), "0" ) & " h",
+			                FORMAT ( INT ( hv ), "0" ) & " h " & FORMAT ( MOD ( INT ( hv * 60 ), 60 ), "00" ) & " min"
+			            )
+			    )
+		displayFolder: 2 Recuperación
+		lineageTag: f9fd898a-2f6e-4f40-b39d-b087c6675a40
+
+	/// Horas detenidas en los últimos 7 días (muestras con RUN = 0 o caudal bajo el mínimo).
+	measure 'Horas detenidas 7 d' =
+			VAR t0 = [Ahora] - 7
+			VAR qmin = [Caudal minimo bombeo] * 3.6
+			VAR hayRun = CALCULATE ( COUNTROWS ( Tags ), Tags[Medicion] = "RUN" ) > 0
+			VAR nRun = CALCULATE ( COUNTROWS ( Mediciones ), Tags[Medicion] = "RUN", Mediciones[Valor] < 0.5, Mediciones[FechaHora] > t0 )
+			VAR nQ = CALCULATE ( COUNTROWS ( Mediciones ), Tags[Medicion] = "Caudal", Mediciones[Valor] < qmin, Mediciones[FechaHora] > t0 )
+			RETURN
+			    IF ( hayRun, nRun, nQ ) * [Horas por muestra]
+		formatString: #,0
+		displayFolder: 2 Recuperación
+		lineageTag: f38f5a4b-b08b-464f-8ffc-ff0aadb368b7
+
+	measure 'Horas detenidas 7 d texto' = IF ( ISBLANK ( [Horas detenidas 7 d] ), "0 h", FORMAT ( [Horas detenidas 7 d], "0" ) & " h" )
+		displayFolder: 2 Recuperación
+		lineageTag: 958e2ace-207a-4691-93bc-0c38977fe5ff
+
+	measure 'Horas detenidas 7 d recuperacion' = SUMX ( CALCULATETABLE ( VALUES ( Activos[ActivoID] ), KEEPFILTERS ( Activos[Tipo] = "Pozo recuperacion" ) ), [Horas detenidas 7 d] )
+		formatString: #,0
+		displayFolder: 2 Recuperación
+		lineageTag: 7ff8a93a-0349-42ab-a0c7-fa046aa77ab6
+
+	measure '% tiempo detenido 7 d' = DIVIDE ( [Horas detenidas 7 d recuperacion], CALCULATE ( COUNTROWS ( Activos ), KEEPFILTERS ( Activos[Tipo] = "Pozo recuperacion" ) ) * 168 )
+		formatString: 0 %
+		displayFolder: 2 Recuperación
+		lineageTag: eaab3f97-7a76-46f8-9b6c-5fec3ab0f900
+
+	measure 'KPI detenido 7 d Norte' = CALCULATE ( FORMAT ( [Horas detenidas 7 d recuperacion], "#,0" ) & " h·pozo detenidas en 7 d (" & FORMAT ( [% tiempo detenido 7 d], "0 %" ) & " del tiempo)", Activos[Circuito] = "Circuito Norte" )
+		displayFolder: 2 Recuperación
+		lineageTag: 371d28b8-0bda-4b74-8364-bf96d4b6cf1d
+
+	measure 'KPI detenido 7 d Sur' = CALCULATE ( FORMAT ( [Horas detenidas 7 d recuperacion], "#,0" ) & " h·pozo detenidas en 7 d (" & FORMAT ( [% tiempo detenido 7 d], "0 %" ) & " del tiempo)", Activos[Circuito] = "Circuito Sur" )
+		displayFolder: 2 Recuperación
+		lineageTag: 51544f40-e53e-4bfa-89c3-2b522ee2927e
+
+	measure 'Detencion mas larga texto' =
+			VAR t = TOPN ( 1, FILTER ( CALCULATETABLE ( Activos, KEEPFILTERS ( Activos[Tipo] = "Pozo recuperacion" ) ), [Estado pozo cod] = 3 ), [Horas detenido real], DESC )
+			RETURN
+			    IF ( ISEMPTY ( t ), "Sin pozos detenidos", "Detención más larga: " & CONCATENATEX ( t, Activos[Activo] & " · " & [Detenido hace], ", " ) )
+		displayFolder: 2 Recuperación
+		lineageTag: a3cdc152-907e-4231-adbf-f6eb79354445
+
+	measure 'Estanques congelados' = COUNTROWS ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Estanque" ), [Estado estanque cod] = 5 ) ) + 0
+		formatString: 0
+		displayFolder: 3 Estanques
+		lineageTag: c74ac2e7-1c7b-4610-97f1-a72abf326046
+
+	/// Nivel del sensor principal del tranque.
+	measure 'Nivel tranque' = AVERAGEX ( CALCULATETABLE ( VALUES ( Tags[Tag] ), Tags[Medicion] = "Nivel tranque", Tags[Principal] = "Si" ), [Valor actual] )
+		formatString: 0.0
+		displayFolder: 8 Tranques
+		lineageTag: 530856d9-1f91-4dda-b8c6-92a74a37a90e
+
+	measure 'Unidad nivel tranque' = CALCULATE ( MAX ( Tags[Unidad] ), Tags[Medicion] = "Nivel tranque", Tags[Principal] = "Si" )
+		displayFolder: 8 Tranques
+		lineageTag: 3929608a-87ac-4b54-991d-3b3d476a0c2e
+
+	measure 'Nivel tranque texto' = IF ( ISBLANK ( [Nivel tranque] ), "—", FORMAT ( [Nivel tranque], "0.0" ) & " " & [Unidad nivel tranque] )
+		displayFolder: 8 Tranques
+		lineageTag: 67ef5a0a-239e-4c46-89b8-f3c01733509f
+
+	/// Umbral HI del tranque (tabla Activos, límite de ejemplo).
+	measure 'HI tranque' = MAX ( Activos[HI] )
+		formatString: 0
+		displayFolder: 8 Tranques
+		lineageTag: 245b414b-f301-4d1b-ac23-46f8791991b1
+
+	/// Umbral HH del tranque (tabla Activos, límite de ejemplo).
+	measure 'HH tranque' = MAX ( Activos[HH] )
+		formatString: 0
+		displayFolder: 8 Tranques
+		lineageTag: 578f8bad-037d-46bf-a8d5-aadfa69c6274
+
+	measure 'Tasa tranque (%/h)' =
+			AVERAGEX (
+			    CALCULATETABLE ( VALUES ( Tags[Tag] ), Tags[Medicion] = "Nivel tranque", Tags[Principal] = "Si" ),
+			    VAR t1 = CALCULATE ( MAX ( Mediciones[FechaHora] ) )
+			    VAR v1 = CALCULATE ( MAX ( Mediciones[Valor] ), Mediciones[FechaHora] = t1 )
+			    VAR t0 = CALCULATE ( MAX ( Mediciones[FechaHora] ), Mediciones[FechaHora] <= t1 - 3 / 24 )
+			    VAR v0 = CALCULATE ( MAX ( Mediciones[Valor] ), Mediciones[FechaHora] = t0 )
+			    VAR horas = DATEDIFF ( t0, t1, MINUTE ) / 60
+			    RETURN
+			        IF ( NOT ISBLANK ( t0 ), DIVIDE ( v1 - v0, horas ) )
+			)
+		formatString: +0.0;-0.0;0.0
+		displayFolder: 8 Tranques
+		lineageTag: 330a3df6-36eb-4395-90bc-93adb3063e95
+
+	measure 'Horas a HH tranque' =
+			VAR n = [Nivel tranque]
+			VAR hh = [HH tranque]
+			VAR r = [Tasa tranque (%/h)]
+			RETURN
+			    IF ( NOT ISBLANK ( hh ) && r > 0.05 && n < hh, DIVIDE ( hh - n, r ) )
+		formatString: 0.0
+		displayFolder: 8 Tranques
+		lineageTag: 810ce339-b507-4292-b181-7156559f92e0
+
+	measure 'Alarma nivel alto tranque' = CALCULATE ( [Valor actual], Tags[Medicion] = "Alarma alto nivel" )
+		formatString: 0
+		displayFolder: 8 Tranques
+		lineageTag: 16ad71f3-c77e-409b-9733-5d2f1d8e15b3
+
+	measure 'Fuga tranque' = CALCULATE ( [Valor actual], Tags[Medicion] = "Detector fuga" )
+		formatString: 0
+		displayFolder: 8 Tranques
+		lineageTag: 9848640d-c367-423d-87aa-a9bd49fc9521
+
+	measure 'Bombas tranque texto' =
+			VAR run = CALCULATE ( [Valor actual], Tags[Medicion] = "RUN" )
+			VAR modo = CALCULATE ( [Valor actual], Tags[Medicion] = "Modo auto" )
+			RETURN
+			    IF (
+			        ISBLANK ( run ) && ISBLANK ( modo ),
+			        "—",
+			        IF ( NOT ISBLANK ( run ), "Bomba A " & IF ( run >= 1, "en marcha", "detenida" ), "" )
+			            & IF ( NOT ISBLANK ( modo ), " · Bomba B " & IF ( modo >= 1, "en automático", "en manual" ), "" )
+			    )
+		displayFolder: 8 Tranques
+		lineageTag: 0a249997-09b3-4f55-af64-cda0b26d8b6f
+
+	/// 1 normal · 2 nivel alto (sobre HI o alarma de nivel alto) · 3 sobre HH o fuga · 4 sin dato · 5 sensor congelado.
+	measure 'Estado tranque cod' =
+			VAR n = [Nivel tranque]
+			VAR hi = [HI tranque]
+			VAR hh = [HH tranque]
+			VAR mins = CALCULATE ( [Minutos sin comunicacion], KEEPFILTERS ( Tags[Medicion] = "Nivel tranque" ) )
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( n ), BLANK (),
+			        mins > [Umbral horas sin dato] * 60, 4,
+			        [Nivel tranque congelado] > 0, 5,
+			        [Fuga tranque] >= 1, 3,
+			        NOT ISBLANK ( hh ) && n >= hh, 3,
+			        ( NOT ISBLANK ( hi ) && n >= hi ) || [Alarma nivel alto tranque] >= 1, 2,
+			        1
+			    )
+		formatString: 0
+		displayFolder: 8 Tranques
+		lineageTag: 7e446f22-6b54-4d7e-9d51-fee1ac225969
+
+	measure 'Estado tranque' = SWITCH ( [Estado tranque cod], 1, "● Normal", 2, "▲ Nivel alto", 3, IF ( [Fuga tranque] >= 1, "■ Fuga detectada", "■ Sobre HH" ), 4, "◌ Sin dato", 5, "◇ Sensor congelado" )
+		displayFolder: 8 Tranques
+		lineageTag: 3fcb258c-ff0f-4633-ae32-cfc28380db57
+
+	measure 'Color estado tranque' = SWITCH ( [Estado tranque cod], 1, "#4F9DDE", 2, "#F2A03D", 3, "#D64550", 4, "#A9B6C4", 5, "#F2A03D" )
+		displayFolder: 8 Tranques
+		lineageTag: 6287706c-f537-4f76-953f-00e5a1d088f5
+
+	measure 'Tranques total' = CALCULATE ( COUNTROWS ( Activos ), Activos[Tipo] = "Tranque" ) + 0
+		formatString: 0
+		displayFolder: 8 Tranques
+		lineageTag: f0a5921a-437e-4c13-8628-ba28672a85c6
+
+	measure 'Tranques en alerta' = COUNTROWS ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Tranque" ), [Estado tranque cod] IN { 2, 3, 5 } ) ) + 0
+		formatString: 0
+		displayFolder: 8 Tranques
+		lineageTag: 7676f3c9-1287-4542-987d-6bc32bf7de23
+
+	measure 'Tranques criticas' = COUNTROWS ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Tranque" ), [Estado tranque cod] = 3 ) ) + 0
+		formatString: 0
+		displayFolder: 8 Tranques
+		lineageTag: 6ac7fa18-a7f8-4b02-9494-5f3a63c8edc7
+
+	measure 'KPI tranques' = FORMAT ( [Tranques en alerta], "0" ) & " / " & FORMAT ( [Tranques total], "0" )
+		displayFolder: 8 Tranques
+		lineageTag: 13a6559d-a25b-45a4-8a69-f00f2e376faa
+
+	measure 'KPI tranques detalle' =
+			VAR t = FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Tranque" ), [Estado tranque cod] IN { 2, 3, 5 } )
+			RETURN
+			    IF ( ISEMPTY ( t ), "Todas en rango", CONCATENATEX ( t, Activos[Activo] & " " & [Nivel tranque texto], " · ", Activos[Orden], ASC ) )
+		displayFolder: 8 Tranques
+		lineageTag: 2cf438cf-2eb3-4afd-9f3f-cbb8f6b907dc
+
+	measure 'Poza emergencia texto' =
+			VAR n = CALCULATE ( [Nivel tranque], Activos[ActivoID] = "TRQ-EMER" )
+			RETURN
+			    IF ( ISBLANK ( n ), "—", FORMAT ( n, "0" ) & " %" )
+		displayFolder: 8 Tranques
+		lineageTag: 52e516af-bae4-4aad-8593-b518c69361ff
+
+	measure 'Poza emergencia detalle' = CALCULATE ( [Bombas tranque texto] & IF ( [Fuga tranque] >= 1, " · FUGA DETECTADA", " · sin fuga" ), Activos[ActivoID] = "TRQ-EMER" )
+		displayFolder: 8 Tranques
+		lineageTag: 0b28b8fb-1508-4c47-8459-570ce34ef4ce
+
+	measure 'Tranques alarma nivel alto' = COUNTROWS ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Tranque" ), [Alarma nivel alto tranque] >= 1 ) ) + 0
+		formatString: 0
+		displayFolder: 8 Tranques
+		lineageTag: b8802639-f598-4a03-a1b7-bcdbf93723ad
+
+	measure 'Alarmas nivel alto tranques texto' =
+			VAR t = FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Tranque" ), [Alarma nivel alto tranque] >= 1 )
+			RETURN
+			    IF ( ISEMPTY ( t ), "Sin alarmas de nivel alto en tranques y pozas", "Alarma de nivel alto en " & CONCATENATEX ( t, Activos[Activo], ", " ) )
+		displayFolder: 8 Tranques
+		lineageTag: aeb72df5-2f9b-43aa-84dd-95df7ac3e5e4
+
+	measure 'Horas a HH activo' = SWITCH ( SELECTEDVALUE ( Activos[Tipo] ), "Estanque", [Horas a HH], "Tranque", [Horas a HH tranque] )
+		formatString: 0.0
+		displayFolder: 8 Tranques
+		lineageTag: 80fcbeea-43b3-4f4b-a3c5-7210a66fbbb1
+
+	/// Tiempo estimado al rebalse: (HH − nivel) / velocidad de subida de las últimas 3 h.
+	measure 'Rebalse texto' =
+			VAR tipo = SELECTEDVALUE ( Activos[Tipo] )
+			VAR h = [Horas a HH activo]
+			VAR n = IF ( tipo = "Estanque", [Nivel estanque], [Nivel tranque] )
+			VAR hh = IF ( tipo = "Estanque", [HH estanque], [HH tranque] )
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( n ) || ISBLANK ( hh ), "—",
+			        n >= hh, "Sobre HH",
+			        ISBLANK ( h ), "Estable o bajando",
+			        h < 1, "Llega a HH en menos de 1 h",
+			        h < 48, "Llega a HH en ~" & FORMAT ( INT ( h ), "0" ) & " h",
+			        "Llega a HH en ~" & FORMAT ( INT ( h / 24 ), "0" ) & " d"
+			    )
+		displayFolder: 8 Tranques
+		lineageTag: aea38d04-40b3-4f5d-a490-c4850a3e7481
+
+	measure 'Menor horas a HH' = MINX ( FILTER ( CALCULATETABLE ( Activos, KEEPFILTERS ( Activos[Tipo] IN { "Estanque", "Tranque" } ) ), NOT ISBLANK ( [Horas a HH activo] ) ), [Horas a HH activo] )
+		formatString: 0.0
+		displayFolder: 8 Tranques
+		lineageTag: e67f3e86-3e11-42fe-ac91-b3d3b7bf163b
+
+	measure 'Rebalse proximo texto' =
+			VAR t = TOPN ( 1, FILTER ( CALCULATETABLE ( Activos, KEEPFILTERS ( Activos[Tipo] IN { "Estanque", "Tranque" } ) ), NOT ISBLANK ( [Horas a HH activo] ) ), [Horas a HH activo], ASC )
+			RETURN
+			    IF ( ISEMPTY ( t ), "Ningún estanque ni tranque sube hacia HH", CONCATENATEX ( t, Activos[Activo] & " · " & [Rebalse texto], ", " ) )
+		displayFolder: 8 Tranques
+		lineageTag: 8072755d-6031-413a-9d31-9fe7a4733439
+
+	measure 'Profundidad actual' = CALCULATE ( [Valor actual], Tags[Medicion] = "Profundidad" )
+		formatString: 0.00
+		displayFolder: 9 Aguas abajo
+		lineageTag: 29ae4839-1205-4e09-95dd-2378be3dce73
+
+	measure 'Profundidad texto' = IF ( ISBLANK ( [Profundidad actual] ), "—", FORMAT ( [Profundidad actual], "0.00" ) & " m" )
+		displayFolder: 9 Aguas abajo
+		lineageTag: 1359f143-3694-4dfb-995c-c7943232382b
+
+	/// Subida del nivel freático en 7 días (positivo = el agua sube, la profundidad disminuye).
+	measure 'Ascenso 7 d (m)' =
+			VAR d = CALCULATE ( [Delta 7 d], Tags[Medicion] = "Profundidad" )
+			RETURN
+			    IF ( NOT ISBLANK ( d ), - d )
+		formatString: +0.00;-0.00;0.00
+		displayFolder: 9 Aguas abajo
+		lineageTag: 59f67858-9da1-4c06-b422-3911d1e866b9
+
+	measure 'Ascenso texto' =
+			VAR a = [Ascenso 7 d (m)]
+			RETURN
+			    IF ( ISBLANK ( a ), "—", FORMAT ( a, "+0.00;-0.00;0.00" ) & " m" )
+		displayFolder: 9 Aguas abajo
+		lineageTag: c28deacb-28d0-4e63-bee2-956c8af67cb4
+
+	measure 'Estado aguas abajo cod' =
+			VAR p = [Profundidad actual]
+			VAR a = [Ascenso 7 d (m)]
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( p ), BLANK (),
+			        CALCULATE ( [Minutos sin comunicacion], KEEPFILTERS ( Tags[Medicion] = "Profundidad" ) ) > [Umbral horas sin dato] * 60, 4,
+			        [Profundidad congelada] > 0, 5,
+			        a >= [Ascenso alerta], 3,
+			        a >= [Ascenso aviso], 2,
+			        1
+			    )
+		formatString: 0
+		displayFolder: 9 Aguas abajo
+		lineageTag: 0ec2aaeb-bf76-4a30-bb8d-29d9ab8a7c6a
+
+	measure 'Estado aguas abajo' = SWITCH ( [Estado aguas abajo cod], 1, "● Estable o bajando", 2, "▲ Subiendo", 3, "■ Sube fuerte", 4, "◌ Sin dato", 5, "◇ Sensor congelado" )
+		displayFolder: 9 Aguas abajo
+		lineageTag: 2cf0eafd-7746-47a9-b1d4-90f09b3764d8
+
+	measure 'Color estado aguas abajo' = SWITCH ( [Estado aguas abajo cod], 1, "#4F9DDE", 2, "#F2A03D", 3, "#D64550", 4, "#A9B6C4", 5, "#F2A03D" )
+		displayFolder: 9 Aguas abajo
+		lineageTag: 44c699a4-b85b-406d-bf1f-2f011334ee5c
+
+	measure 'Pozos aguas abajo' = CALCULATE ( COUNTROWS ( Activos ), Activos[Tipo] = "Pozo monitoreo" ) + 0
+		formatString: 0
+		displayFolder: 9 Aguas abajo
+		lineageTag: 5c309748-c568-4014-97c9-40e65694c2a4
+
+	measure 'Pozos aguas abajo subiendo' = COUNTROWS ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Pozo monitoreo" ), [Estado aguas abajo cod] IN { 2, 3 } ) ) + 0
+		formatString: 0
+		displayFolder: 9 Aguas abajo
+		lineageTag: b0a9e690-1118-4981-9afb-befce4a3b76d
+
+	measure 'KPI aguas abajo Norte' = CALCULATE ( FORMAT ( [Pozos aguas abajo subiendo], "0" ) & " / " & FORMAT ( [Pozos aguas abajo], "0" ), Activos[CircuitoAsociado] = "Circuito Norte" )
+		displayFolder: 9 Aguas abajo
+		lineageTag: 820784b6-962a-4864-acd9-316abe703b3a
+
+	measure 'KPI aguas abajo Sur' = CALCULATE ( FORMAT ( [Pozos aguas abajo subiendo], "0" ) & " / " & FORMAT ( [Pozos aguas abajo], "0" ), Activos[CircuitoAsociado] = "Circuito Sur" )
+		displayFolder: 9 Aguas abajo
+		lineageTag: 6f93f41e-b5da-4be0-994b-e33c6d88fa62
+
+	measure 'KPI aguas abajo sin asignar' = CALCULATE ( FORMAT ( [Pozos aguas abajo subiendo], "0" ) & " / " & FORMAT ( [Pozos aguas abajo], "0" ), Activos[CircuitoAsociado] = "Por asignar" )
+		displayFolder: 9 Aguas abajo
+		lineageTag: d4f117c9-7bb4-4ce6-b70e-40f1a84a9ff9
+
+	measure 'KPI aguas abajo detalle' = "Aviso si sube " & FORMAT ( [Ascenso aviso], "0.0" ) & " m en 7 d · alerta desde " & FORMAT ( [Ascenso alerta], "0.0" ) & " m (límites de ejemplo)"
+		displayFolder: 9 Aguas abajo
+		lineageTag: 6df46dc3-6b1a-46f4-a968-ed30778b9897
+
+	/// Volumen acumulado del mes (señal de volumen mensual).
+	measure 'Volumen mes' = CALCULATE ( [Valor actual], Tags[Medicion] = "Volumen mes" )
+		formatString: #,0
+		displayFolder: 4 Agua fresca
+		lineageTag: 2d73e929-72ed-474a-99da-8886a08700e3
+
+	measure 'Volumen mes texto' = IF ( ISBLANK ( [Volumen mes] ), "—", FORMAT ( [Volumen mes], "#,0" ) & " m³" )
+		displayFolder: 4 Agua fresca
+		lineageTag: 285a7214-bce1-46a2-8805-6a591cfe10d8
+
+	/// Volumen extraído en las últimas 24 h (o promedio del mes si el mes recién empieza).
+	measure 'Ritmo diario mes (m3/d)' =
+			VAR t1 = CALCULATE ( MAX ( Mediciones[FechaHora] ), Tags[Medicion] = "Volumen mes" )
+			VAR v1 = [Volumen mes]
+			VAR t0 = CALCULATE ( MAX ( Mediciones[FechaHora] ), Tags[Medicion] = "Volumen mes", Mediciones[FechaHora] <= t1 - 1 )
+			VAR v0 = CALCULATE ( SUM ( Mediciones[Valor] ), Tags[Medicion] = "Volumen mes", Mediciones[FechaHora] = t0 )
+			VAR inicioMes = DATE ( YEAR ( t1 ), MONTH ( t1 ), 1 )
+			VAR dias = DATEDIFF ( inicioMes, t1, MINUTE ) / 1440
+			RETURN
+			    IF (
+			        ISBLANK ( t1 ),
+			        BLANK (),
+			        IF ( NOT ISBLANK ( t0 ) && t0 >= inicioMes && v1 >= v0, v1 - v0, DIVIDE ( v1, dias ) )
+			    )
+		formatString: #,0
+		displayFolder: 4 Agua fresca
+		lineageTag: 53e3cbe8-a945-421f-9602-a455cdb3ae0a
+
+	/// Volumen al cierre del mes si el pozo sigue al ritmo de las últimas 24 h.
+	measure 'Proyeccion mes (m3)' =
+			VAR t1 = CALCULATE ( MAX ( Mediciones[FechaHora] ), Tags[Medicion] = "Volumen mes" )
+			VAR v1 = [Volumen mes]
+			VAR finMes = EOMONTH ( t1, 0 ) + 1
+			VAR diasRest = DATEDIFF ( t1, finMes, MINUTE ) / 1440
+			RETURN
+			    IF ( NOT ISBLANK ( v1 ) && NOT ISBLANK ( t1 ), v1 + [Ritmo diario mes (m3/d)] * diasRest )
+		formatString: #,0
+		displayFolder: 4 Agua fresca
+		lineageTag: bcffbd09-cb7f-48ef-a652-d27078ff77ac
+
+	measure 'Proyeccion texto' =
+			VAR p = [Proyeccion mes (m3)]
+			RETURN
+			    IF ( ISBLANK ( p ), "—", FORMAT ( p, "#,0" ) & " m³" )
+		displayFolder: 4 Agua fresca
+		lineageTag: 4c122a0f-4a7a-4f6b-84e0-84fb54d5a9bc
+
+	measure '% proyeccion cupo' =
+			VAR d = [Cupo mes pozo]
+			VAR p = [Proyeccion mes (m3)]
+			RETURN
+			    IF ( d > 0 && NOT ISBLANK ( p ), DIVIDE ( p, d ) )
+		formatString: 0 %
+		displayFolder: 4 Agua fresca
+		lineageTag: 41433971-7df2-44ca-8b18-feb921ee5cb8
+
+	measure 'Pozos cerca cupo' = COUNTROWS ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Pozo agua fresca" ), [% cupo pozo] > 0.9 && [% cupo pozo] <= 1 ) ) + 0
+		formatString: 0
+		displayFolder: 4 Agua fresca
+		lineageTag: d421e6e1-5b82-4126-a6f8-801cee00f3fc
+
+	/// Código de la UPS: +8 sin alimentación, +4 falla, +2 bypass, +1 batería.
+	measure 'UPS codigo' =
+			VAR c = CALCULATE ( [Valor actual], Tags[Medicion] = "UPS estado" )
+			RETURN
+			    IF ( NOT ISBLANK ( c ), ROUND ( c, 0 ) )
+		formatString: 0
+		displayFolder: 10 Energía y reporte
+		lineageTag: 1e81ee5d-f68f-4692-bea0-7f1f4fe5428b
+
+	measure 'UPS texto' =
+			VAR c = [UPS codigo]
+			VAR s =
+			    IF ( c >= 8, "Sin alimentación · ", "" )
+			        & IF ( MOD ( INT ( c / 4 ), 2 ) = 1, "Falla · ", "" )
+			        & IF ( MOD ( INT ( c / 2 ), 2 ) = 1, "Bypass · ", "" )
+			        & IF ( MOD ( c, 2 ) = 1, "Batería · ", "" )
+			RETURN
+			    SWITCH ( TRUE (), ISBLANK ( c ), "—", c = 0, "Normal", LEFT ( s, LEN ( s ) - 3 ) )
+		displayFolder: 10 Energía y reporte
+		lineageTag: e14d7cad-8e06-49c5-8f74-5cbbfcd7febf
+
+	measure 'Estado UPS cod' =
+			VAR c = [UPS codigo]
+			RETURN
+			    SWITCH ( TRUE (), ISBLANK ( c ), BLANK (), c >= 8, 3, c > 0, 2, 1 )
+		formatString: 0
+		displayFolder: 10 Energía y reporte
+		lineageTag: 744d57a6-7b28-45c8-9030-3cb9e26cc392
+
+	measure 'Estado UPS' = SWITCH ( [Estado UPS cod], 1, "● Normal", 2, "▲ Alarma", 3, "■ Sin alimentación" )
+		displayFolder: 10 Energía y reporte
+		lineageTag: 4e8e7320-8ca4-4b60-9ff1-ec1cc203510a
+
+	measure 'Color estado UPS' = SWITCH ( [Estado UPS cod], 1, "#4F9DDE", 2, "#F2A03D", 3, "#D64550" )
+		displayFolder: 10 Energía y reporte
+		lineageTag: d2718f74-bb49-4e1d-a188-1e142a2b0ae4
+
+	measure 'Salas UPS' = CALCULATE ( COUNTROWS ( Activos ), Activos[Tipo] = "Sala electrica" ) + 0
+		formatString: 0
+		displayFolder: 10 Energía y reporte
+		lineageTag: 2fbbea1f-6cd8-478e-bcd7-fab0126058b7
+
+	measure 'Salas UPS en alarma' = COUNTROWS ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Sala electrica" ), [Estado UPS cod] >= 2 ) ) + 0
+		formatString: 0
+		displayFolder: 10 Energía y reporte
+		lineageTag: c03df186-1022-47cc-bf75-228074d24bb4
+
+	measure 'Salas UPS sin alimentacion' = COUNTROWS ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Sala electrica" ), [Estado UPS cod] = 3 ) ) + 0
+		formatString: 0
+		displayFolder: 10 Energía y reporte
+		lineageTag: a2443a9a-597d-490d-b0e7-5f4f939ae3c3
+
+	measure 'KPI UPS' = FORMAT ( [Salas UPS en alarma], "0" ) & " / " & FORMAT ( [Salas UPS], "0" )
+		displayFolder: 10 Energía y reporte
+		lineageTag: cb85dbde-7eea-4952-9033-10efc2472958
+
+	measure 'KPI UPS detalle' = FORMAT ( [Salas UPS sin alimentacion], "0" ) & " sin alimentación"
+		displayFolder: 10 Energía y reporte
+		lineageTag: b8c1b390-05f6-4f5c-b53d-91dfe2e79412
+
+	measure 'Bateria' = CALCULATE ( [Valor actual], Tags[Medicion] = "Bateria" )
+		formatString: 0.00
+		displayFolder: 10 Energía y reporte
+		lineageTag: 2c556528-883b-40a7-abb9-5cd74a7f9c2a
+
+	measure 'Bateria texto' = IF ( ISBLANK ( [Bateria] ), "—", FORMAT ( [Bateria], "0.00" ) & " V" )
+		displayFolder: 10 Energía y reporte
+		lineageTag: 7ba3ea40-1fd6-4fce-8274-34ed8dc4ace2
+
+	measure 'Bateria baja' =
+			VAR v = [Bateria]
+			RETURN
+			    IF ( NOT ISBLANK ( v ), IF ( IF ( v > 6, v < [Bateria baja 12V], v < [Bateria baja 3V] ), 1, 0 ) )
+		formatString: 0
+		displayFolder: 10 Energía y reporte
+		lineageTag: 079231a1-953d-4aaf-b551-e56dcacbaa35
+
+	measure 'Color bateria' = IF ( [Bateria baja] = 1, "#D64550", "#4F9DDE" )
+		displayFolder: 10 Energía y reporte
+		lineageTag: 4eaf8871-529c-4ead-8475-474db0839146
+
+	measure 'Estaciones bateria baja' = COUNTROWS ( FILTER ( Activos, [Bateria baja] = 1 ) ) + 0
+		formatString: 0
+		displayFolder: 10 Energía y reporte
+		lineageTag: 9cf89bbd-a07d-4458-8480-0c51bbf7227b
+
+	/// Pozos de captación en falla de comunicación según el sistema de control.
+	measure 'Pozos AF sin comunicacion' = CALCULATE ( [Valor actual], Tags[Medicion] = "Pozos sin comunicacion" )
+		formatString: 0
+		displayFolder: 10 Energía y reporte
+		lineageTag: e820219d-616b-4d3b-a728-3d23f8508ff3
+
+	measure 'Falla enlace' = CALCULATE ( [Valor actual], Tags[Medicion] = "Falla comunicacion" )
+		formatString: 0
+		displayFolder: 10 Energía y reporte
+		lineageTag: 6446e796-6aeb-4986-a674-c1fbd8f2fcfb
+
+	measure 'Puntos reporte B' = CALCULATE ( COUNTROWS ( Tags ), Tags[Medicion] = "Errores envio B 12 h" ) + 0
+		formatString: 0
+		displayFolder: 10 Energía y reporte
+		lineageTag: 0872d560-be05-4a27-a02c-f9235c7b1594
+
+	measure 'Puntos reporte B con errores' = COUNTROWS ( FILTER ( CALCULATETABLE ( VALUES ( Tags[Tag] ), Tags[Medicion] = "Errores envio B 12 h" ), [Valor actual] >= [Limite errores envio B] ) ) + 0
+		formatString: 0
+		displayFolder: 10 Energía y reporte
+		lineageTag: 80176e87-9a08-4398-8f3c-9a0e36dc8e31
+
+	measure 'Pozos reporte A' = CALCULATE ( COUNTROWS ( Tags ), Tags[Medicion] = "Horas sin envio A" ) + 0
+		formatString: 0
+		displayFolder: 10 Energía y reporte
+		lineageTag: ec4d3e5a-1ee7-4a23-88bd-cdd78f254012
+
+	measure 'Pozos reporte A atrasados' = COUNTROWS ( FILTER ( CALCULATETABLE ( VALUES ( Tags[Tag] ), Tags[Medicion] = "Horas sin envio A" ), [Valor actual] > [Limite horas sin envio A] ) ) + 0
+		formatString: 0
+		displayFolder: 10 Energía y reporte
+		lineageTag: 1f408b66-81e2-4aaa-9dda-a6724517c971
+
+	measure 'Pozos reporte A sin envio 24 h' = COUNTROWS ( FILTER ( CALCULATETABLE ( VALUES ( Tags[Tag] ), Tags[Medicion] = "Horas sin envio A" ), [Valor actual] > 24 ) ) + 0
+		formatString: 0
+		displayFolder: 10 Energía y reporte
+		lineageTag: 2c8df2ab-f6f1-494b-bba9-f8c8fc265ba8
+
+	measure 'Reporte A atrasados lista' =
+			VAR t = FILTER ( CALCULATETABLE ( VALUES ( Tags[Tag] ), Tags[Medicion] = "Horas sin envio A" ), [Valor actual] > [Limite horas sin envio A] )
+			RETURN
+			    IF (
+			        ISEMPTY ( t ),
+			        "Todos los pozos enviando al portal A",
+			        CONCATENATEX ( TOPN ( 6, t, [Valor actual], DESC ), SUBSTITUTE ( Tags[Tag], "Horas sin envio A · ", "" ) & " (" & FORMAT ( [Valor actual], "0" ) & " h)", ", ", [Valor actual], DESC )
+			    )
+		displayFolder: 10 Energía y reporte
+		lineageTag: bfe7556b-0702-4d8c-b179-ea590a542afb
+
+	measure 'Estado envio cod' =
+			VAR med = SELECTEDVALUE ( Tags[Medicion] )
+			VAR v = [Valor actual]
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        NOT med IN { "Horas sin envio A", "Errores envio B 12 h" }, BLANK (),
+			        ISBLANK ( v ), 4,
+			        med = "Horas sin envio A" && v > 24, 3,
+			        med = "Horas sin envio A" && v > [Limite horas sin envio A], 2,
+			        med = "Errores envio B 12 h" && v >= [Limite errores envio B], 2,
+			        1
+			    )
+		formatString: 0
+		displayFolder: 10 Energía y reporte
+		lineageTag: 03b2f060-7199-4a98-9fb2-43043921b697
+
+	measure 'Estado envio' = SWITCH ( [Estado envio cod], 1, "● Al día", 2, "▲ Atrasado o con errores", 3, "■ Sin envío > 24 h", 4, "◌ Sin dato" )
+		displayFolder: 10 Energía y reporte
+		lineageTag: 7fea053c-bce8-4e81-b08e-0a7274470534
+
+	measure 'Color estado envio' = SWITCH ( [Estado envio cod], 1, "#4F9DDE", 2, "#F2A03D", 3, "#D64550", 4, "#A9B6C4" )
+		displayFolder: 10 Energía y reporte
+		lineageTag: d2631e06-bd71-48fa-b2a1-59b2dab93e69
+
+	measure 'Envio texto' =
+			VAR med = SELECTEDVALUE ( Tags[Medicion] )
+			VAR v = [Valor actual]
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( v ), "—",
+			        med = "Horas sin envio A", "Último mensaje hace " & IF ( v < 1, FORMAT ( v * 60, "0" ) & " min", FORMAT ( v, "0.0" ) & " h" ),
+			        med = "Errores envio B 12 h", FORMAT ( v, "0" ) & " errores en 12 h",
+			        BLANK ()
+			    )
+		displayFolder: 10 Energía y reporte
+		lineageTag: 934fba2e-17c1-44de-a189-72ac2ad6a4a6
+
+	measure 'Sem Recuperacion Norte cod' =
+			VAR sev = MAXX ( CALCULATETABLE ( Activos, Activos[Circuito] = "Circuito Norte", Activos[Tipo] IN { "Pozo recuperacion", "Canal colector" } ), [Alarma severidad] )
+			VAR corte = CALCULATE ( [Estaciones con posible corte], Activos[Circuito] = "Circuito Norte" )
+			RETURN
+			    IF ( corte > 0 || sev = 3, 3, IF ( sev >= 1, 2, 1 ) )
+		formatString: 0
+		displayFolder: 11 Semáforos
+		lineageTag: 05a54865-a955-4c44-a8ad-8282a45e2d4f
+
+	measure 'Sem Recuperacion Sur cod' =
+			VAR sev = MAXX ( CALCULATETABLE ( Activos, Activos[Circuito] = "Circuito Sur", Activos[Tipo] IN { "Pozo recuperacion", "Canal colector" } ), [Alarma severidad] )
+			VAR corte = CALCULATE ( [Estaciones con posible corte], Activos[Circuito] = "Circuito Sur" )
+			RETURN
+			    IF ( corte > 0 || sev = 3, 3, IF ( sev >= 1, 2, 1 ) )
+		formatString: 0
+		displayFolder: 11 Semáforos
+		lineageTag: 8a691637-e089-4e7e-8905-6e1acfe5b695
+
+	measure 'Sem Recuperacion Norte detalle' =
+			CALCULATE (
+			    FORMAT ( [Pozos bombeando], "0" ) & " de " & FORMAT ( [Pozos recuperacion], "0" ) & " pozos bombeando · " & FORMAT ( [Caudal recuperacion (L/s)], "0.0" ) & " L/s"
+			        & IF ( [Estaciones con posible corte] > 0, " · posible corte de energía", "" )
+			        & IF ( [Estaciones sin comunicacion] > 0, " · " & FORMAT ( [Estaciones sin comunicacion], "0" ) & " estación sin comunicación", "" ),
+			    Activos[Circuito] = "Circuito Norte"
+			)
+		displayFolder: 11 Semáforos
+		lineageTag: 3f2e2596-66fd-435f-8907-1f79a472609b
+
+	measure 'Sem Recuperacion Sur detalle' =
+			CALCULATE (
+			    FORMAT ( [Pozos bombeando], "0" ) & " de " & FORMAT ( [Pozos recuperacion], "0" ) & " pozos bombeando · " & FORMAT ( [Caudal recuperacion (L/s)], "0.0" ) & " L/s"
+			        & IF ( [Estaciones con posible corte] > 0, " · posible corte de energía", "" )
+			        & IF ( [Estaciones sin comunicacion] > 0, " · " & FORMAT ( [Estaciones sin comunicacion], "0" ) & " estación sin comunicación", "" ),
+			    Activos[Circuito] = "Circuito Sur"
+			)
+		displayFolder: 11 Semáforos
+		lineageTag: 32d2f766-caa1-47d7-bb30-711fd1f00655
+
+	measure 'Sem Estanques cod' =
+			VAR sev = MAXX ( CALCULATETABLE ( Activos, Activos[Tipo] = "Estanque" ), [Alarma severidad] )
+			RETURN
+			    IF ( sev = 3, 3, IF ( sev >= 1, 2, 1 ) )
+		formatString: 0
+		displayFolder: 11 Semáforos
+		lineageTag: 7aa85b05-75de-4589-8fc4-3705974d60eb
+
+	measure 'Sem Estanques detalle' = FORMAT ( [Estanques sobre HI], "0" ) & " de " & FORMAT ( [Estanques total], "0" ) & " sobre HI · " & [KPI margen detalle]
+		displayFolder: 11 Semáforos
+		lineageTag: 0a1a8d77-cef2-492c-b0f3-53b294ea6f60
+
+	measure 'Sem Tranques cod' =
+			VAR sev = MAXX ( CALCULATETABLE ( Activos, Activos[Tipo] = "Tranque" ), [Alarma severidad] )
+			RETURN
+			    IF ( sev = 3, 3, IF ( sev >= 1, 2, 1 ) )
+		formatString: 0
+		displayFolder: 11 Semáforos
+		lineageTag: 98c3185d-304d-4323-ade6-d1f4aab3ce36
+
+	measure 'Sem Tranques detalle' = FORMAT ( [Tranques en alerta], "0" ) & " de " & FORMAT ( [Tranques total], "0" ) & " en alerta · emergencia " & [Poza emergencia texto] & " · " & [Alarmas nivel alto tranques texto]
+		displayFolder: 11 Semáforos
+		lineageTag: 7f0f2f1a-8362-4d9d-a892-aa7f16532872
+
+	measure 'Sem Aguas abajo cod' =
+			VAR a = COUNTROWS ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Pozo monitoreo" ), [Estado aguas abajo cod] = 3 ) )
+			VAR b = COUNTROWS ( FILTER ( CALCULATETABLE ( Activos, Activos[Tipo] = "Pozo monitoreo" ), [Estado aguas abajo cod] IN { 2, 4, 5 } ) )
+			RETURN
+			    IF ( a > 0, 3, IF ( b > 0, 2, 1 ) )
+		formatString: 0
+		displayFolder: 11 Semáforos
+		lineageTag: c942811f-47fe-40fe-9914-ab581eebb73b
+
+	measure 'Sem Aguas abajo detalle' = FORMAT ( [Pozos aguas abajo subiendo], "0" ) & " de " & FORMAT ( [Pozos aguas abajo], "0" ) & " pozos de monitoreo con el nivel subiendo en 7 d · asociación a circuitos por validar"
+		displayFolder: 11 Semáforos
+		lineageTag: bd33234e-e6f8-4298-bd31-f672968ecfa4
+
+	measure 'Sem Agua fresca cod' =
+			VAR sev = MAXX ( CALCULATETABLE ( Activos, Activos[Tipo] = "Pozo agua fresca" ), [Alarma severidad] )
+			VAR pcupo = [% cupo captacion]
+			RETURN
+			    IF ( pcupo > 1 || sev = 3, 3, IF ( sev >= 1 || COALESCE ( [Pozos AF sin comunicacion], 0 ) > 0, 2, 1 ) )
+		formatString: 0
+		displayFolder: 11 Semáforos
+		lineageTag: b313cea0-1a2a-4a7b-b010-466d45bad443
+
+	measure 'Sem Agua fresca detalle' = FORMAT ( [Caudal agua fresca total], "0.0" ) & " L/s (" & FORMAT ( [% cupo captacion], "0 %" ) & " del cupo) · " & FORMAT ( [Pozos sobre cupo], "0" ) & " pozo(s) sobre su cupo al cierre · " & FORMAT ( COALESCE ( [Pozos AF sin comunicacion], 0 ), "0" ) & " sin comunicación"
+		displayFolder: 11 Semáforos
+		lineageTag: 9af0ef62-32b0-4d29-900f-c220335a194f
+
+	measure 'Sem Calidad cod' =
+			VAR sev = MAXX ( CALCULATETABLE ( Activos, Activos[Tipo] = "Estacion calidad" ), [Alarma severidad] )
+			RETURN
+			    IF ( sev = 3, 3, IF ( sev >= 1, 2, 1 ) )
+		formatString: 0
+		displayFolder: 11 Semáforos
+		lineageTag: 50583626-2851-4d38-9cd7-fdcd40be7574
+
+	measure 'Sem Calidad detalle' = [KPI pH] & " estaciones en banda de pH · " & [KPI pH detalle]
+		displayFolder: 11 Semáforos
+		lineageTag: 66a16115-fc5b-4b09-863e-96dc58e1e3c1
+
+	measure 'Sem Energia cod' =
+			VAR caidas = [Estaciones sin comunicacion]
+			VAR cortes = [Estaciones con posible corte]
+			RETURN
+			    IF (
+			        caidas > 0 || cortes > 0,
+			        3,
+			        IF ( [Salas UPS en alarma] > 0 || [Estaciones bateria baja] > 0 || COALESCE ( [Pozos AF sin comunicacion], 0 ) > 0 || COALESCE ( [Falla enlace], 0 ) >= 1, 2, 1 )
+			    )
+		formatString: 0
+		displayFolder: 11 Semáforos
+		lineageTag: e573b474-6522-4a8c-bdb9-ce7d5aeaf377
+
+	measure 'Sem Energia detalle' = FORMAT ( [Estaciones sin comunicacion], "0" ) & " estación(es) sin comunicación · " & FORMAT ( [Estaciones con posible corte], "0" ) & " posible corte · " & FORMAT ( [Salas UPS en alarma], "0" ) & " UPS en alarma · " & FORMAT ( [Estaciones bateria baja], "0" ) & " baterías bajas"
+		displayFolder: 11 Semáforos
+		lineageTag: c3763405-edd3-4407-aa47-c51074ed5d66
+
+	measure 'Sem Reporte cod' = IF ( [Pozos reporte A sin envio 24 h] > 0, 3, IF ( [Pozos reporte A atrasados] > 0 || [Puntos reporte B con errores] > 0, 2, 1 ) )
+		formatString: 0
+		displayFolder: 11 Semáforos
+		lineageTag: 5a32af4b-b3b5-4d17-8379-f698b79c9e2a
+
+	measure 'Sem Reporte detalle' = "Portal A: " & FORMAT ( [Pozos reporte A atrasados], "0" ) & " de " & FORMAT ( [Pozos reporte A], "0" ) & " pozos atrasados · Portal B: " & FORMAT ( [Puntos reporte B con errores], "0" ) & " de " & FORMAT ( [Puntos reporte B], "0" ) & " envíos con errores"
+		displayFolder: 11 Semáforos
+		lineageTag: db1a73e3-837a-4daf-901f-3ba062c9accb
+
+	measure 'Sem Datos cod' = IF ( [Datos atrasados] = 1, 3, IF ( [% tags con dato] < 0.9 || [Tags congelados] > 0, 2, 1 ) )
+		formatString: 0
+		displayFolder: 11 Semáforos
+		lineageTag: f1e648b3-7e4d-488e-9235-24ad51d9cb12
+
+	measure 'Sem Datos detalle' = "Datos al " & FORMAT ( [Datos al], "dd-mm HH:mm" ) & " · " & FORMAT ( [% tags con dato], "0 %" ) & " de los tags con dato · " & FORMAT ( [Tags congelados], "0" ) & " congelados"
+		displayFolder: 11 Semáforos
+		lineageTag: 4cf22fdc-dd8a-4936-b91d-aa793a68fd89
+
+	/// 3 crítico · 2 alerta · 1 normal, según el sistema filtrado en Semaforo[Sistema].
+	measure 'Sem cod' =
+			SWITCH (
+			    SELECTEDVALUE ( Semaforo[Sistema] ),
+			    "Recuperación Norte", [Sem Recuperacion Norte cod],
+			    "Recuperación Sur", [Sem Recuperacion Sur cod],
+			    "Estanques", [Sem Estanques cod],
+			    "Tranques y pozas", [Sem Tranques cod],
+			    "Aguas abajo", [Sem Aguas abajo cod],
+			    "Agua fresca", [Sem Agua fresca cod],
+			    "Calidad de agua", [Sem Calidad cod],
+			    "Energía y comunicaciones", [Sem Energia cod],
+			    "Reporte externo", [Sem Reporte cod],
+			    "Actualización de datos", [Sem Datos cod]
+			)
+		formatString: 0
+		displayFolder: 11 Semáforos
+		lineageTag: 2e30e77c-5f12-46f8-a8d4-f325c86569ea
+
+	measure 'Sem estado' = SWITCH ( [Sem cod], 3, "CRÍTICO", 2, "ALERTA", 1, "NORMAL", "SIN DATO" )
+		displayFolder: 11 Semáforos
+		lineageTag: bcf10f36-d21b-4e4b-9ae9-889af0b62c72
+
+	measure 'Sem color' = SWITCH ( [Sem cod], 3, "#D64550", 2, "#F2A03D", 1, "#2E9E6B", "#A9B6C4" )
+		displayFolder: 11 Semáforos
+		lineageTag: b1ed64da-ec62-4ab0-8522-cbd39c8be044
+
+	measure 'Sem color texto' = IF ( [Sem cod] = 2, "#1B2A41", "#FFFFFF" )
+		displayFolder: 11 Semáforos
+		lineageTag: 68058034-626f-4bbc-89ba-2de252f586c9
+
+	measure 'Sem detalle' =
+			SWITCH (
+			    SELECTEDVALUE ( Semaforo[Sistema] ),
+			    "Recuperación Norte", [Sem Recuperacion Norte detalle],
+			    "Recuperación Sur", [Sem Recuperacion Sur detalle],
+			    "Estanques", [Sem Estanques detalle],
+			    "Tranques y pozas", [Sem Tranques detalle],
+			    "Aguas abajo", [Sem Aguas abajo detalle],
+			    "Agua fresca", [Sem Agua fresca detalle],
+			    "Calidad de agua", [Sem Calidad detalle],
+			    "Energía y comunicaciones", [Sem Energia detalle],
+			    "Reporte externo", [Sem Reporte detalle],
+			    "Actualización de datos", [Sem Datos detalle]
+			)
+		displayFolder: 11 Semáforos
+		lineageTag: 0121df73-e677-4c1f-bbd1-6f159ca2b166
+
+	measure 'Sem titulo' = UPPER ( SELECTEDVALUE ( Semaforo[Sistema] ) )
+		displayFolder: 11 Semáforos
+		lineageTag: 2609dc1a-512f-42e3-b47a-015e75bd8da3
+
+	measure 'Limite turbidez' = CALCULATE ( MAX ( Config[Valor] ), Config[Parametro] = "Turbidez maxima (NTU)" )
+		formatString: 0
+		displayFolder: 0 Parámetros
+		lineageTag: d78c9d46-4465-4c3d-a2cb-01c30d6375b3
+
+	measure 'Turbidez actual' = CALCULATE ( [Valor actual], Tags[Medicion] = "Turbidez" )
+		formatString: 0.0
+		displayFolder: 5 Calidad
+		lineageTag: cfd448ca-49f7-4b21-aaed-ae9365299c3d
+
+	/// Caudal total de agua recuperada y recirculada en L/s (la señal viene en m³/h).
+	measure 'Caudal recuperada total' = DIVIDE ( CALCULATE ( [Valor actual], Tags[Medicion] = "Caudal recuperada total" ), 3.6 )
+		formatString: #,0.0
+		displayFolder: 2 Recuperación
+		lineageTag: 29fbab2e-ea11-4ac3-b7cb-110b70633011
+
+	/// Último día con balance diario.
+	measure 'Fecha corte balance' = CALCULATE ( MAX ( BalanceDiario[Fecha] ), REMOVEFILTERS () )
+		formatString: dd-mm-yyyy
+		displayFolder: 12 Balance
+		lineageTag: 0d354d45-7c26-4bf8-b1d0-8aaa73fc0944
+
+	/// Volumen diario (m³) del concepto «Captación» en el contexto de filtro.
+	measure 'Vol captacion' = CALCULATE ( SUM ( BalanceDiario[Volumen_m3] ), BalanceDiario[Concepto] = "Captación" )
+		formatString: #,0
+		displayFolder: 12 Balance
+		lineageTag: 39be26f6-84de-43a7-bf40-56e760e81ad3
+
+	/// Volumen diario (m³) del concepto «Pérdida de conducción» en el contexto de filtro.
+	measure 'Vol perdida conduccion' = CALCULATE ( SUM ( BalanceDiario[Volumen_m3] ), BalanceDiario[Concepto] = "Pérdida de conducción" )
+		formatString: #,0
+		displayFolder: 12 Balance
+		lineageTag: 236a6ecb-ca73-4c67-b129-be2427bf9d73
+
+	/// Volumen diario (m³) del concepto «Agua fresca» en el contexto de filtro.
+	measure 'Vol agua fresca' = CALCULATE ( SUM ( BalanceDiario[Volumen_m3] ), BalanceDiario[Concepto] = "Agua fresca" )
+		formatString: #,0
+		displayFolder: 12 Balance
+		lineageTag: 7788d6d4-9bd3-4f25-9fd9-e0ae2615ab8e
+
+	/// Volumen diario (m³) del concepto «Agua recuperada» en el contexto de filtro.
+	measure 'Vol agua recuperada' = CALCULATE ( SUM ( BalanceDiario[Volumen_m3] ), BalanceDiario[Concepto] = "Agua recuperada" )
+		formatString: #,0
+		displayFolder: 12 Balance
+		lineageTag: ab0c35c9-32fd-4c2b-aab8-2ab427ec3e45
+
+	/// Volumen diario (m³) del concepto «Consumo» en el contexto de filtro.
+	measure 'Vol consumo' = CALCULATE ( SUM ( BalanceDiario[Volumen_m3] ), BalanceDiario[Concepto] = "Consumo" )
+		formatString: #,0
+		displayFolder: 12 Balance
+		lineageTag: 944a25a5-4c0f-4db5-8c0e-eb0ed28f88dc
+
+	/// Volumen diario (m³) del concepto «Variación de almacenamiento» en el contexto de filtro.
+	measure 'Vol variacion almacenamiento' = CALCULATE ( SUM ( BalanceDiario[Volumen_m3] ), BalanceDiario[Concepto] = "Variación de almacenamiento" )
+		formatString: #,0
+		displayFolder: 12 Balance
+		lineageTag: 2afdc4f8-0f2d-4b2c-8b3c-89fd68a48764
+
+	/// Agua total de proceso = agua fresca (reposición) + agua recuperada.
+	measure 'Vol agua total' = [Vol agua fresca] + [Vol agua recuperada]
+		formatString: #,0
+		displayFolder: 12 Balance
+		lineageTag: ccbf915f-18d7-41ae-b8f1-eec38e625a36
+
+	/// Parte del agua de proceso que proviene de la recuperación.
+	measure 'Recirculacion %' = DIVIDE ( [Vol agua recuperada], [Vol agua total] )
+		formatString: 0.0 %
+		displayFolder: 12 Balance
+		lineageTag: 17b3807f-87ea-4076-90ec-23c8bb43e4b4
+
+	/// Agua total - consumo - variación de almacenamiento.
+	measure 'Error balance (m3)' = [Vol agua total] - [Vol consumo] - [Vol variacion almacenamiento]
+		formatString: #,0
+		displayFolder: 12 Balance
+		lineageTag: 01ec6fda-37d2-4021-861f-9947fde8c950
+
+	/// 100 % = el balance cierra sin residuo.
+	measure 'Cierre balance %' = 1 - DIVIDE ( ABS ( [Error balance (m3)] ), [Vol agua total] )
+		formatString: 0.0 %
+		displayFolder: 12 Balance
+		lineageTag: 577df4eb-5498-43bf-a8ed-76c4ee9be2d2
+
+	/// Agua fresca de los últimos 7 días con balance.
+	measure 'Agua fresca 7 d (m3)' =
+			VAR f = [Fecha corte balance]
+			RETURN
+			    CALCULATE ( [Vol agua fresca], FILTER ( ALL ( BalanceDiario[Fecha] ), BalanceDiario[Fecha] > f - 7 ) )
+		formatString: #,0
+		displayFolder: 12 Balance
+		lineageTag: 7fd23852-0532-4cdc-94bf-6cab4bb6dcdf
+
+	/// Agua recuperada de los últimos 7 días con balance.
+	measure 'Agua recuperada 7 d (m3)' =
+			VAR f = [Fecha corte balance]
+			RETURN
+			    CALCULATE ( [Vol agua recuperada], FILTER ( ALL ( BalanceDiario[Fecha] ), BalanceDiario[Fecha] > f - 7 ) )
+		formatString: #,0
+		displayFolder: 12 Balance
+		lineageTag: 1a137417-d6fa-499f-82e5-b4c492aee9e4
+
+	/// Consumo de los últimos 7 días con balance.
+	measure 'Consumo 7 d (m3)' =
+			VAR f = [Fecha corte balance]
+			RETURN
+			    CALCULATE ( [Vol consumo], FILTER ( ALL ( BalanceDiario[Fecha] ), BalanceDiario[Fecha] > f - 7 ) )
+		formatString: #,0
+		displayFolder: 12 Balance
+		lineageTag: b1339744-97cd-4aaf-ab43-0db8e8bbc71f
+
+	/// Captación de los últimos 7 días con balance.
+	measure 'Captacion 7 d (m3)' =
+			VAR f = [Fecha corte balance]
+			RETURN
+			    CALCULATE ( [Vol captacion], FILTER ( ALL ( BalanceDiario[Fecha] ), BalanceDiario[Fecha] > f - 7 ) )
+		formatString: #,0
+		displayFolder: 12 Balance
+		lineageTag: fd303eca-97b9-4993-839f-2805173e6e1a
+
+	measure 'Recirculacion 7 d %' =
+			VAR f = [Fecha corte balance]
+			RETURN
+			    CALCULATE ( [Recirculacion %], FILTER ( ALL ( BalanceDiario[Fecha] ), BalanceDiario[Fecha] > f - 7 ) )
+		formatString: 0.0 %
+		displayFolder: 12 Balance
+		lineageTag: cf15f486-e781-4e12-a32f-94c62a8ebeb9
+
+	measure 'Cierre balance 7 d %' =
+			VAR f = [Fecha corte balance]
+			RETURN
+			    CALCULATE ( [Cierre balance %], FILTER ( ALL ( BalanceDiario[Fecha] ), BalanceDiario[Fecha] > f - 7 ) )
+		formatString: 0.0 %
+		displayFolder: 12 Balance
+		lineageTag: f0e28b23-578b-491b-aed7-c56ef162d1cf
+
+	/// Agua fresca de los últimos 30 días con balance.
+	measure 'Agua fresca 30 d (m3)' =
+			VAR f = [Fecha corte balance]
+			RETURN
+			    CALCULATE ( [Vol agua fresca], FILTER ( ALL ( BalanceDiario[Fecha] ), BalanceDiario[Fecha] > f - 30 ) )
+		formatString: #,0
+		displayFolder: 12 Balance
+		lineageTag: eda7a0e6-a975-4eca-aec5-c797ae291ce2
+
+	/// Agua recuperada de los últimos 30 días con balance.
+	measure 'Agua recuperada 30 d (m3)' =
+			VAR f = [Fecha corte balance]
+			RETURN
+			    CALCULATE ( [Vol agua recuperada], FILTER ( ALL ( BalanceDiario[Fecha] ), BalanceDiario[Fecha] > f - 30 ) )
+		formatString: #,0
+		displayFolder: 12 Balance
+		lineageTag: 11543da8-2da4-404d-bfe0-94a04369921d
+
+	/// Consumo de los últimos 30 días con balance.
+	measure 'Consumo 30 d (m3)' =
+			VAR f = [Fecha corte balance]
+			RETURN
+			    CALCULATE ( [Vol consumo], FILTER ( ALL ( BalanceDiario[Fecha] ), BalanceDiario[Fecha] > f - 30 ) )
+		formatString: #,0
+		displayFolder: 12 Balance
+		lineageTag: 1de6a74a-4143-4666-aebc-2619ffa560bd
+
+	/// Captación de los últimos 30 días con balance.
+	measure 'Captacion 30 d (m3)' =
+			VAR f = [Fecha corte balance]
+			RETURN
+			    CALCULATE ( [Vol captacion], FILTER ( ALL ( BalanceDiario[Fecha] ), BalanceDiario[Fecha] > f - 30 ) )
+		formatString: #,0
+		displayFolder: 12 Balance
+		lineageTag: 112631a6-e005-4ae0-9de4-022a045e04b3
+
+	measure 'Recirculacion 30 d %' =
+			VAR f = [Fecha corte balance]
+			RETURN
+			    CALCULATE ( [Recirculacion %], FILTER ( ALL ( BalanceDiario[Fecha] ), BalanceDiario[Fecha] > f - 30 ) )
+		formatString: 0.0 %
+		displayFolder: 12 Balance
+		lineageTag: addd3432-fa0d-4139-9b9e-78a1011f14e6
+
+	measure 'Cierre balance 30 d %' =
+			VAR f = [Fecha corte balance]
+			RETURN
+			    CALCULATE ( [Cierre balance %], FILTER ( ALL ( BalanceDiario[Fecha] ), BalanceDiario[Fecha] > f - 30 ) )
+		formatString: 0.0 %
+		displayFolder: 12 Balance
+		lineageTag: ab9a6e95-b9cc-4d05-a83f-e3b81a66bbcc
+
+	/// Participación del área en el consumo de los últimos 30 días.
+	measure '% consumo 30 d' = DIVIDE ( [Consumo 30 d (m3)], CALCULATE ( [Consumo 30 d (m3)], REMOVEFILTERS ( BalanceDiario[Area] ) ) )
+		formatString: 0.0 %
+		displayFolder: 12 Balance
+		lineageTag: ab3b092d-91df-4d6b-a48d-54ebb638dfb0
+
+	measure 'Fresca promedio diaria 7 d (m3)' = DIVIDE ( [Agua fresca 7 d (m3)], 7 )
+		formatString: #,0
+		displayFolder: 12 Balance
+		lineageTag: e1aa8b75-fb4c-4ca8-8bf3-4147477b3faa
+
+	measure 'KPI agua fresca 7 d detalle' = "Promedio " & FORMAT ( [Fresca promedio diaria 7 d (m3)], "#,0" ) & " m³/día · reposición"
+		displayFolder: 12 Balance
+		lineageTag: 1a81ec4f-0c49-42ef-951a-d851e329335a
+
+	measure 'KPI agua recuperada 7 d detalle' = "Pozos de recuperación + retorno del Tranque Demo"
+		displayFolder: 12 Balance
+		lineageTag: 2e8b240b-0d5b-4096-954b-adb68e1b0614
+
+	measure 'KPI consumo 7 d detalle' = "Chancado, molienda, flotación, mina y servicios"
+		displayFolder: 12 Balance
+		lineageTag: 198d614f-4710-4e08-adba-e06d5c86713c
+
+	measure 'KPI recirculacion detalle' = "Recuperada / (fresca + recuperada) · 7 días"
+		displayFolder: 12 Balance
+		lineageTag: ca80266c-ad13-4636-9d13-769204b7c953
+
+	measure 'KPI cierre detalle' = "Error 7 d: " & FORMAT ( CALCULATE ( [Error balance (m3)], FILTER ( ALL ( BalanceDiario[Fecha] ), BalanceDiario[Fecha] > [Fecha corte balance] - 7 ) ), "#,0" ) & " m³"
+		displayFolder: 12 Balance
+		lineageTag: 576ebea2-c981-474a-a66f-afbb27c4b0cb
+
+	column Columna
+		dataType: string
+		isHidden
+		lineageTag: 3c22e57b-7b99-4bd3-a22f-cf15b11dd505
+		summarizeBy: none
+		sourceColumn: Columna
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Medidas = m
+		mode: import
+		source =
+				let
+				    Origen = #table(type table [Columna = text], {})
+				in
+				    Origen
+
+	annotation PBI_ResultType = Table
+

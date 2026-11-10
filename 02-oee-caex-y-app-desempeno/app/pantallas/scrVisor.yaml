@@ -1,0 +1,2876 @@
+Screens:
+  scrVisor:
+    Properties:
+      Fill: =colFondo
+      OnVisible: |-
+        =If(
+            !varReunionEnCurso,
+            Set(varReunionEnCurso, true);
+            Set(gblSesionId, Text(GUID()));
+            Set(varInicio, Now());
+            Set(varAhora, Now());
+            Set(varBloque, 0);
+            Set(varFiltroEstado, "");
+            Set(varBloqueInicio, Now());
+            Clear(colTiempos);
+            // Compromisos de esta semana preparados en el editor: salen en Compromisos con estado En progreso.
+            // El Cierre (colNuevos) parte vacío: es para los que surgen en la reunión.
+            ClearCollect(
+                colNuevosPrep,
+                ForAll(
+                    If(IsBlank(fxPrep.nue), Table(ParseJSON("[]")), Table(fxPrep.nue)) As n,
+                    {
+                        Titulo: Text(n.Value.t),
+                        Responsable: Text(n.Value.r),
+                        FechaLimite: DateValue(Text(n.Value.f)),
+                        IdLocal: Text(n.Value.id)
+                    }
+                )
+            );
+            Clear(colNuevos);
+            // Asistencia: parte con todos los convocados presentes (lista de RD_Participantes).
+            ClearCollect(
+                colAsis,
+                ForAll(
+                    colParticipantes As p,
+                    {Nombre: p.Nombre, Correo: p.Correo, Cargo: p.Cargo, Area: If(IsBlank(p.Area), "Sin área", p.Area), Tipo: "Convocado", Presente: true, IdLocal: Text(GUID())}
+                )
+            );
+            Clear(colAsisQuitados)
+        );
+        // Si la reunión empezó antes de que llegara la preparación, se vuelven a tomar los compromisos preparados.
+        If(IsEmpty(colNuevosPrep) && IsEmpty(colNuevos), ClearCollect(
+                colNuevosPrep,
+                ForAll(
+                    If(IsBlank(fxPrep.nue), Table(ParseJSON("[]")), Table(fxPrep.nue)) As n,
+                    {
+                        Titulo: Text(n.Value.t),
+                        Responsable: Text(n.Value.r),
+                        FechaLimite: DateValue(Text(n.Value.f)),
+                        IdLocal: Text(n.Value.id)
+                    }
+                )
+            ));
+        Set(varVerAsistencia, false);
+        Set(varEvidVerId, 0);
+        Set(varConfSalir, false);
+        Set(varEditNuevo, Blank());
+        Set(varBorrarNuevo, Blank())
+    Children:
+      - conHeaderReunion:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =colPrimario
+            Height: =72
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Width: =Parent.Width
+          Children:
+            - imgLogoReunion:
+                Control: Image@2.2.3
+                Properties:
+                  Height: =56
+                  Image: ='logo_minera_demo_blanco'
+                  ImagePosition: =ImagePosition.Fit
+                  Width: =120
+                  X: =12
+                  Y: =8
+            - imgLogoAreaReunion:
+                Control: Image@2.2.3
+                Properties:
+                  Height: =44
+                  Image: ="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAE90lEQVR42u3azVEjMRSFUUlFFiYC2JKAiYBciAdCwVHgLRsch1mxowr/dLdbuudEMAP1vvfUM7V0YvOwPRboxGG/qz38Oathh9woVAMPuUGoBh9yQ1ANPeTGoBp8yA1BNfiQG4Jm+KHE/vN3NfiQew00ww+510Az/JAbgWrwIfdJ0Aw/5F4DzfBDbgSa4YfcCDTDD7kRaIYfciPQDD/kRqD5kUGuZvtD7hXQDD/kRqAZfsiNgG8A4BuA7Q+JV0Az/JAbAU8A8ASw/SHxCnABgAvA9ofEK8AFAC4AID4Azn/Iega4AMAFYPtD4hXgAgAXACAAQF4AvP8h8zuACwA8AQABAAQAyFB9AAQXACAAgAAAAgAIACAAgAAAAgAIACAAgAAAAgAIACAALOX788MPAQEABCBy+7sCEABAALz9QQAAAcjZ/i4CBAAQAEAA4j7+eQYgAIAA+Kc/EACRAAEABMBmBwEAAWDY7e9aQAAAAfD2BwEQDhAAQABscQQAAUEAMLwIACAAgAAwyvnvKYEAAALg4x8IgKggABhUBAAQAFwXCAAGFAEABADbHwFAaBAAQACwlREABAcBwDAiAIAA0Mf2d3kIACAAgADgBEcAECEEAIOHAAACwLDb3zUiAIAAAAJA3LntGSAAgABgyy7v6fXND0EAAAEg6kL53f6uAAEwXCAApL79XQECYPv7syIApH75dwUIgO0PAsCo0bLlBQAEQgBsUsONAIBQCIDtP/af31ALAAiGAGCYEQDnv78HAoDt73IQAFsTBICRgjbFBncFCIDtDwKAL/8IAGKCADj/1/t3M7ACAK4AAbD9DSoCgMiJiwBg+yMANiMIAGLnyhAAA+H8RwBAbATA9jeQCADCJzoCgO2PANiCIACsLIC33v6uDwGw/UEASN2+rgABsP39LBAAUreuK0AAAAFw8s7t5f3LD0EAwLNEAGx/2x8BAFeAAGD7IwDOf1wBAoDtjwDY/iAA2P6eAQJg+4MAYPu7AgQAEADnPwgAzn/PAAGw/UEAsP1dAQIACIDz3/Z3BQgAIAC2v+2PAIBngADY/rY/AgCuAAHA9kcAnP+4AgQA2x8BsP1BALD9PQPCA2D74wLA9g9/+ydfAQIALgDnv+1fXAECAAiA7W/7IwDgGSAA2P4IgPMfV4AAYPsjALY/rgABAATA9nf+IwDgGSAA2P4IgPMfV4AAYPsjALY/rgABwPZHAAABcP7b/p4BAgAIgO1v+7sCBAAQANvf9kcAwDNAALD9EQDnP64AAcD2RwBsf1wBAoDtjwAAqQFIP/9tf88AFwCQFwDb3/Z3BVwYgMN+V/0qIc9hv6vN9rf9yb0CfAOAYHe9/wXuH5/9FsEFAFwUAB8CocR9AHQBgAsAEAAgNwC+A0DW+98FAC6Av8sAjL39XQDgAgAEwDMAos5/FwC4AE4rBTDW9ncBgAvgvGIAY2z/fy8AEYBxh98TADwBrisI0Of2P/kCEAEYb/jPegKIAIw1/L4BgG8A85QFWPf2v+gCEAEYY/gvfgKIAPQ//Fd9AxAB6Hv4r/4IKALQ7/BP8q8AIgB9Dn8ppUw6vJuH7dGvBdY/+LP8PwDXAPQz/LP8RyARgD6Gf/IngCcB9DH4i/xXYNcArHuGFhtQ1wCsb3kuvqGFANZzNd/0RBcDuO1TeRVvdCHA4AcHQBAw8AIgChj2hf0AXzRdlxacKo0AAAAASUVORK5CYII="
+                  ImagePosition: =ImagePosition.Fit
+                  Width: =44
+                  X: =138
+                  Y: =14
+            - lblTituloReunion:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(255, 255, 255, 1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =44
+                  Size: =If(Self.Width >= 300, 15, Self.Width >= 226, 13, 12)
+                  Text: ="RD Minera Demo · " & Text(Today(), If(Self.Width >= 260, "ddd dd-mm", "dd-mm"), "es-ES")
+                  Width: =btnCronoTotal.X - 198
+                  Wrap: =false
+                  X: =190
+                  Y: =6
+            - lblPrepInfo:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(200, 211, 227, 1)
+                  Height: =20
+                  Size: =11
+                  Text: |-
+                    =With({f: fxPrepFila}, If(IsBlank(f), "Sin preparación guardada", "Preparación guardada " & IfError(Text(DateTimeValue(f.Actualizado), "dd-mm hh:mm"), f.Actualizado)))
+                  Width: =242
+                  Wrap: =false
+                  X: =190
+                  Y: =46
+            - btnCronoTotal:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(255, 255, 255, 1)
+                  DisplayMode: =DisplayMode.View
+                  Fill: =If(DateDiff(varInicio, varAhora, TimeUnit.Seconds) > nMinutosMeta * 60, colRojo, RGBA(255, 255, 255, 0.14))
+                  FontWeight: =FontWeight.Bold
+                  Height: =46
+                  OnSelect: =false
+                  RadiusBottomLeft: =23
+                  RadiusBottomRight: =23
+                  RadiusTopLeft: =23
+                  RadiusTopRight: =23
+                  Size: =If(Len(Self.Text) > 13, 14, 18)
+                  Text: |-
+                    =With(
+                        {s: DateDiff(varInicio, varAhora, TimeUnit.Seconds), m: nMinutosMeta * 60},
+                        RoundDown(s / 60, 0) & ":" & Text(Mod(s, 60), "00") & " / " & nMinutosMeta & ":00" &
+                        If(s > m, " +" & RoundDown((s - m) / 60, 0) & ":" & Text(Mod(s - m, 60), "00"), "")
+                    )
+                  Width: =190
+                  X: =Min(Max((Parent.Width - 190) / 2, 460), Parent.Width - 592)
+                  Y: =13
+            - btnCronoBloque:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(255, 255, 255, 1)
+                  DisplayMode: =DisplayMode.View
+                  Fill: =If(varBloque > 0 && DateDiff(varBloqueInicio, varAhora, TimeUnit.Seconds) > LookUp(tblBloques, N = varBloque).Min * 60, colRojo, RGBA(255, 255, 255, 0.14))
+                  FontWeight: =FontWeight.Semibold
+                  Height: =46
+                  OnSelect: =false
+                  RadiusBottomLeft: =23
+                  RadiusBottomRight: =23
+                  RadiusTopLeft: =23
+                  RadiusTopRight: =23
+                  Size: =12
+                  Text: |-
+                    =If(
+                        varBloque = 0,
+                        "Agenda de la reunión",
+                        With(
+                            {r: LookUp(tblBloques, N = varBloque).Min * 60 - DateDiff(varBloqueInicio, varAhora, TimeUnit.Seconds)},
+                            LookUp(tblBloques, N = varBloque).Bloque & ": " &
+                            If(r >= 0, "quedan " & RoundDown(r / 60, 0) & ":" & Text(Mod(r, 60), "00"), "excedido " & RoundDown(-r / 60, 0) & ":" & Text(Mod(-r, 60), "00"))
+                        )
+                    )
+                  Width: =224
+                  X: =Parent.Width - 394
+                  Y: =13
+            - btnCerrarReunion:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(255, 255, 255, 1)
+                  Fill: =colAmbar
+                  FontWeight: =FontWeight.Bold
+                  Height: =48
+                  OnSelect: |-
+                    =Clear(colAsisVista);
+                    With(
+                        {areas: Sort(Distinct(colAsis, Area), Value)},
+                        ForAll(
+                            Sequence(CountRows(areas)) As i,
+                            With(
+                                {a: Index(areas, i.Value).Value},
+                                With(
+                                    {o: If(a = "Invitados", 999, a = "Sin área", 998, i.Value) * 1000, gente: Sort(Filter(colAsis, Area = a), Nombre)},
+                                    Collect(
+                                        colAsisVista,
+                                        {Orden: o, Fila: "Area", Area: a, IdLocal: "", Nombre: "", Correo: "", Cargo: "", Tipo: "", Presente: true},
+                                        {Orden: o + 1, Fila: "AreaFin", Area: a, IdLocal: "", Nombre: "", Correo: "", Cargo: "", Tipo: "", Presente: true}
+                                    );
+                                    ForAll(
+                                        Sequence(CountRows(gente)) As j,
+                                        With(
+                                            {p: Index(gente, j.Value)},
+                                            Collect(
+                                                colAsisVista,
+                                                {Orden: o + 1 + j.Value, Fila: "Persona", Area: a, IdLocal: p.IdLocal, Nombre: p.Nombre, Correo: p.Correo, Cargo: p.Cargo, Tipo: p.Tipo, Presente: p.Presente}
+                                            )
+                                        )
+                                    );
+                                    If(
+                                        Mod(CountRows(gente), 2) = 1,
+                                        Collect(colAsisVista, {Orden: o + 999, Fila: "Vacio", Area: a, IdLocal: "", Nombre: "", Correo: "", Cargo: "", Tipo: "", Presente: true})
+                                    )
+                                )
+                            )
+                        )
+                    );
+                    Set(varVerAsistencia, true)
+                  RadiusBottomLeft: =8
+                  RadiusBottomRight: =8
+                  RadiusTopLeft: =8
+                  RadiusTopRight: =8
+                  Size: =14
+                  Text: ="Finalizar"
+                  Width: =150
+                  X: =Parent.Width - 162
+                  Y: =12
+      - tmrReunion:
+          Control: Timer@2.1.0
+          Properties:
+            AutoStart: =true
+            Duration: =1000
+            OnTimerEnd: =Set(varAhora, Now())
+            Repeat: =true
+            Visible: =false
+      - galBloques:
+          Control: Gallery@2.15.0
+          Variant: BrowseLayout_Vertical_ThreeTextVariant_ver5.0
+          Properties:
+            Height: =CountRows(tblPaginasVisor) * 64 + 6
+            Items: =tblPaginasVisor
+            ShowScrollbar: =false
+            TemplatePadding: =6
+            TemplateSize: =58
+            Width: =266
+            X: =10
+            Y: =88
+          Children:
+            - btnBloque:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Align: =Align.Left
+                  BorderColor: =colPrimario
+                  BorderThickness: =1
+                  Color: =If(varBloque = ThisItem.N, RGBA(255, 255, 255, 1), colPrimario)
+                  Fill: |-
+                    =If(
+                        varBloque = ThisItem.N,
+                        colPrimario,
+                        ThisItem.N in colTiempos.Bloque,
+                        colPrimarioClaro,
+                        RGBA(255, 255, 255, 1)
+                    )
+                  FontWeight: =FontWeight.Semibold
+                  Height: =Parent.TemplateHeight - 6
+                  OnSelect: |-
+                    =If(
+                        varBloque <> ThisItem.N,
+                        Collect(colTiempos, {Bloque: varBloque, Seg: DateDiff(varBloqueInicio, Now(), TimeUnit.Seconds)});
+                        Set(varBloque, ThisItem.N);
+                        Set(varBloqueInicio, Now())
+                    )
+                  PaddingLeft: =12
+                  RadiusBottomLeft: =8
+                  RadiusBottomRight: =8
+                  RadiusTopLeft: =8
+                  RadiusTopRight: =8
+                  Size: =13
+                  Text: =If(ThisItem.N = 0, ThisItem.Bloque, ThisItem.N & ". " & ThisItem.Bloque)
+                  Width: =Parent.TemplateWidth - 6
+                  X: =0
+                  Y: =0
+            - btnBloqueTiempo:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =If(ThisItem.Min > 0 && LookUp(fxTiemposBloques, N = ThisItem.N).Seg > ThisItem.Min * 60, RGBA(255, 255, 255, 1), colPrimario)
+                  Fill: =If(ThisItem.Min > 0 && LookUp(fxTiemposBloques, N = ThisItem.N).Seg > ThisItem.Min * 60, colRojo, varBloque = ThisItem.N, RGBA(255, 255, 255, 1), colPrimarioClaro)
+                  FontWeight: =FontWeight.Bold
+                  Height: =26
+                  OnSelect: |-
+                    =If(
+                        varBloque <> ThisItem.N,
+                        Collect(colTiempos, {Bloque: varBloque, Seg: DateDiff(varBloqueInicio, Now(), TimeUnit.Seconds)});
+                        Set(varBloque, ThisItem.N);
+                        Set(varBloqueInicio, Now())
+                    )
+                  RadiusBottomLeft: =13
+                  RadiusBottomRight: =13
+                  RadiusTopLeft: =13
+                  RadiusTopRight: =13
+                  Size: =11
+                  Text: |-
+                    =With({u: LookUp(fxTiemposBloques, N = ThisItem.N).Seg}, If(ThisItem.Min = 0, RoundDown(u / 60, 0) & ":" & Text(Mod(u, 60), "00"), If(u = 0 && varBloque <> ThisItem.N, ThisItem.Min & "'", RoundDown(u / 60, 0) & ":" & Text(Mod(u, 60), "00") & "/" & ThisItem.Min & "'")))
+                  Width: =88
+                  X: =Parent.TemplateWidth - 6 - 94
+                  Y: =(Parent.TemplateHeight - 6 - 26) / 2
+      - btnSiguienteBloque:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Color: =RGBA(255, 255, 255, 1)
+            DisplayMode: =If(varBloque < CountRows(tblBloques), DisplayMode.Edit, DisplayMode.Disabled)
+            Fill: =colPrimario
+            FontWeight: =FontWeight.Bold
+            Height: =56
+            OnSelect: |-
+              =Collect(colTiempos, {Bloque: varBloque, Seg: DateDiff(varBloqueInicio, Now(), TimeUnit.Seconds)});
+              Set(varBloque, varBloque + 1);
+              Set(varBloqueInicio, Now())
+            RadiusBottomLeft: =8
+            RadiusBottomRight: =8
+            RadiusTopLeft: =8
+            RadiusTopRight: =8
+            Size: =16
+            Text: ="Siguiente ▶"
+            Width: =260
+            X: =10
+            Y: =galBloques.Y + galBloques.Height + 10
+      - btnSalirSinCerrar:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =colPrimario
+            BorderThickness: =1
+            Color: =colPrimario
+            Fill: =RGBA(255, 255, 255, 1)
+            Height: =44
+            OnSelect: =Set(varConfSalir, true)
+            RadiusBottomLeft: =8
+            RadiusBottomRight: =8
+            RadiusTopLeft: =8
+            RadiusTopRight: =8
+            Size: =14
+            Text: ="← Salir sin cerrar"
+            Width: =260
+            X: =10
+            Y: =btnSiguienteBloque.Y + btnSiguienteBloque.Height + 10
+      - conB0Agenda:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(255, 255, 255, 1)
+            Height: =Parent.Height - 104
+            RadiusBottomLeft: =12
+            RadiusBottomRight: =12
+            RadiusTopLeft: =12
+            RadiusTopRight: =12
+            Visible: =varBloque = 0
+            Width: =Parent.Width - 296
+            X: =284
+            Y: =88
+          Children:
+            - lblAgTitulo:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colPrimario
+                  FontWeight: =FontWeight.Bold
+                  Height: =50
+                  Size: =32
+                  Text: ="Estandar"
+                  Width: =300
+                  X: =20
+                  Y: =4
+            - recAgChip:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: =colPrimario
+                  Height: =26
+                  Width: =280
+                  X: =Parent.Width - 300
+                  Y: =8
+            - lblAgChip:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  Color: =RGBA(255, 255, 255, 1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =26
+                  Size: =13
+                  Text: ="Semanal (" & nMinutosMeta & " min)"
+                  Width: =280
+                  X: =Parent.Width - 300
+                  Y: =8
+            - lblAgFecha:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  Color: =colPrimario
+                  Fill: =colPrimarioClaro
+                  Height: =22
+                  Size: =11
+                  Text: =Text(Today(), "dddd dd-mm", "es-ES") & " · inicio de turno"
+                  Width: =280
+                  X: =Parent.Width - 300
+                  Y: =34
+            - recAgAsistCab:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: =colPrimario
+                  Height: =24
+                  Width: =(Parent.Width - 64) / 3
+                  X: =20 + 0 * ((Parent.Width - 64) / 3 + 12)
+                  Y: =62
+            - lblAgAsistCab:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  Color: =RGBA(255, 255, 255, 1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =24
+                  Size: =13
+                  Text: ="Asistentes"
+                  Width: =(Parent.Width - 64) / 3
+                  X: =20 + 0 * ((Parent.Width - 64) / 3 + 12)
+                  Y: =62
+            - lblAgAsistCuerpo:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colTexto
+                  Fill: =RGBA(240, 243, 249, 1)
+                  Height: =114
+                  PaddingBottom: =3
+                  PaddingLeft: =10
+                  PaddingRight: =10
+                  PaddingTop: =3
+                  Size: =11
+                  Text: |-
+                    ="Líder · " & User().FullName & Char(10) & "Convocados · " & If(IsEmpty(Filter(colAsis, Tipo = "Convocado")), "supervisores de turno", With({n: CountRows(Filter(colAsis, Tipo = "Convocado"))}, n & If(n = 1, " supervisor", " supervisores"))) & If(IsBlank(fxPrepFila), "", Char(10) & "Preparó · " & fxPrepFila.Autor)
+                  VerticalAlign: =VerticalAlign.Top
+                  Width: =(Parent.Width - 64) / 3
+                  X: =20 + 0 * ((Parent.Width - 64) / 3 + 12)
+                  Y: =86
+            - recAgDecCab:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: =colPrimario
+                  Height: =24
+                  Width: =(Parent.Width - 64) / 3
+                  X: =20 + 1 * ((Parent.Width - 64) / 3 + 12)
+                  Y: =62
+            - lblAgDecCab:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  Color: =RGBA(255, 255, 255, 1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =24
+                  Size: =13
+                  Text: ="Decisiones a tomar"
+                  Width: =(Parent.Width - 64) / 3
+                  X: =20 + 1 * ((Parent.Width - 64) / 3 + 12)
+                  Y: =62
+            - lblAgDecCuerpo:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colTexto
+                  Fill: =RGBA(240, 243, 249, 1)
+                  Height: =114
+                  PaddingBottom: =3
+                  PaddingLeft: =10
+                  PaddingRight: =10
+                  PaddingTop: =3
+                  Size: =11
+                  Text: |-
+                    =With(
+                        {nAtr: CountRows(Filter(fxRevision, EstadoNuevo = "Atrasado"))},
+                        // A 1024 px el recuadro deja ~26 caracteres por línea: quedan hasta dos puntos.
+                        If(nAtr > 0, "• Acciones para " & nAtr & If(nAtr = 1, " compromiso atrasado.", " compromisos atrasados.") & Char(10), "") &
+                        "• Acordar compromisos nuevos."
+                    )
+                  VerticalAlign: =VerticalAlign.Top
+                  Width: =(Parent.Width - 64) / 3
+                  X: =20 + 1 * ((Parent.Width - 64) / 3 + 12)
+                  Y: =86
+            - recAgIndCab:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: =colPrimario
+                  Height: =24
+                  Width: =(Parent.Width - 64) / 3
+                  X: =20 + 2 * ((Parent.Width - 64) / 3 + 12)
+                  Y: =62
+            - lblAgIndCab:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  Color: =RGBA(255, 255, 255, 1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =24
+                  Size: =13
+                  Text: ="Indicadores"
+                  Width: =(Parent.Width - 64) / 3
+                  X: =20 + 2 * ((Parent.Width - 64) / 3 + 12)
+                  Y: =62
+            - lblAgIndCuerpo:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colTexto
+                  Fill: =RGBA(240, 243, 249, 1)
+                  Height: =114
+                  PaddingBottom: =3
+                  PaddingLeft: =10
+                  PaddingRight: =10
+                  PaddingTop: =3
+                  Size: =11
+                  Text: |-
+                    ="• OEE de transporte (CAEX), del plan al real" & Char(10) &
+                    "• Foco en las palancas bajo plan" & Char(10) &
+                    "• Periodos hasta ayer; el lunes, la semana completa"
+                  VerticalAlign: =VerticalAlign.Top
+                  Width: =(Parent.Width - 64) / 3
+                  X: =20 + 2 * ((Parent.Width - 64) / 3 + 12)
+                  Y: =86
+            - recAgBarra:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: =colAzul
+                  Height: =24
+                  Width: =(Parent.Width - 40)
+                  X: =20
+                  Y: =204
+            - lblAgBarra:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  Color: =RGBA(255, 255, 255, 1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =24
+                  Size: =14
+                  Text: ="Agenda"
+                  Width: =(Parent.Width - 40)
+                  X: =20
+                  Y: =204
+            - lblAgHSeccion:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colPrimario
+                  Fill: =colPrimarioClaro
+                  FontWeight: =FontWeight.Bold
+                  Height: =22
+                  PaddingBottom: =4
+                  PaddingLeft: =8
+                  PaddingRight: =8
+                  PaddingTop: =4
+                  Size: =11
+                  Text: ="Sección"
+                  Width: =(Parent.Width - 40) * 0.25
+                  Wrap: =false
+                  X: =20 + (Parent.Width - 40) * 0
+                  Y: =228
+            - lblAgHPuntos:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colPrimario
+                  Fill: =colPrimarioClaro
+                  FontWeight: =FontWeight.Bold
+                  Height: =22
+                  PaddingBottom: =4
+                  PaddingLeft: =8
+                  PaddingRight: =8
+                  PaddingTop: =4
+                  Size: =11
+                  Text: ="Puntos de discusión"
+                  Width: =(Parent.Width - 40) * 0.61
+                  Wrap: =false
+                  X: =20 + (Parent.Width - 40) * 0.25
+                  Y: =228
+            - lblAgHTiempo:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  Color: =colPrimario
+                  Fill: =colPrimarioClaro
+                  FontWeight: =FontWeight.Bold
+                  Height: =22
+                  Size: =11
+                  Text: ="Tiempo"
+                  Width: =(Parent.Width - 40) * 0.14
+                  Wrap: =false
+                  X: =20 + (Parent.Width - 40) * 0.86
+                  Y: =228
+            - galAgenda:
+                Control: Gallery@2.15.0
+                Variant: BrowseLayout_Vertical_ThreeTextVariant_ver5.0
+                Properties:
+                  Height: =Parent.Height - 314
+                  Items: =tblBloques
+                  TemplatePadding: =0
+                  TemplateSize: =Max(44, (Parent.Height - 314) / 5)
+                  Width: =(Parent.Width - 40)
+                  X: =20
+                  Y: =250
+                Children:
+                  - recAgFila:
+                      Control: Rectangle@2.3.0
+                      Properties:
+                        Fill: =If(varBloque = ThisItem.N, RGBA(255, 243, 224, 1), RGBA(255, 255, 255, 1))
+                        Height: =Parent.TemplateHeight
+                        Width: =Parent.TemplateWidth
+                        X: =0
+                        Y: =0
+                  - recAgLinea:
+                      Control: Rectangle@2.3.0
+                      Properties:
+                        Fill: =RGBA(225, 230, 232, 1)
+                        Height: =1
+                        Width: =Parent.TemplateWidth
+                        X: =0
+                        Y: =Parent.TemplateHeight - 1
+                  - recAgNum:
+                      Control: Rectangle@2.3.0
+                      Properties:
+                        Fill: =colPrimario
+                        Height: =30
+                        Width: =30
+                        X: =6
+                        Y: =(Parent.TemplateHeight - 30) / 2
+                  - lblAgNum:
+                      Control: Label@2.5.1
+                      Properties:
+                        Align: =Align.Center
+                        Color: =RGBA(255, 255, 255, 1)
+                        FontWeight: =FontWeight.Bold
+                        Height: =30
+                        Size: =15
+                        Text: =Text(ThisItem.N)
+                        Width: =30
+                        X: =6
+                        Y: =(Parent.TemplateHeight - 30) / 2
+                  - lblAgSeccion:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colPrimario
+                        FontWeight: =FontWeight.Bold
+                        Height: =Parent.TemplateHeight
+                        Size: =12
+                        Text: =ThisItem.Bloque
+                        Width: =Parent.TemplateWidth * 0.25 - 42
+                        Wrap: =false
+                        X: =42
+                        Y: =0
+                  - lblAgPuntos:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colTexto
+                        Height: =Parent.TemplateHeight
+                        PaddingBottom: =2
+                        PaddingTop: =2
+                        Size: =11
+                        Text: |-
+                          =Switch(
+                              ThisItem.N,
+                              1,
+                              // Cuántos avisos hay y el más grave. La fila mide 44 px: caben 2 líneas de 11 px.
+                              // El tope sale del ancho de la etiqueta (~7,2 px por carácter, en dos líneas): a 1024 px son ~100 caracteres y en
+                              // pantallas más anchas casi todo el aviso.
+                              With(
+                                  {n: CountRows(fxAvisos), c: CountRows(Filter(fxAvisos, Nivel = "Crítico"))},
+                                  If(
+                                      n = 0,
+                                      "Aún no hay avisos de seguridad cargados en el editor.",
+                                      With(
+                                          {
+                                              p: n & If(n = 1, " aviso", " avisos") & If(c > 0, " (✖ " & c & If(c = 1, " crítico", " críticos") & ")", "") & ": ",
+                                              t: First(Sort(fxAvisos, Rango * 1000 + Orden)).Texto,
+                                              tope: Max(40, Int((Self.Width - 10) / 7.2) * 2 - 8)
+                                          },
+                                          p & If(Len(p) + Len(t) > tope, Left(t, Max(0, tope - 3 - Len(p))) & "…", t)
+                                      )
+                                  )
+                              ),
+                              2,
+                              With({n: CountRows(fxRevision) + CountRows(colNuevosPrep)}, n & If(n = 1, " abierto", " abiertos")) & " · " &
+                              With({n: CountRows(Filter(fxRevision, EstadoNuevo = "Cumplido"))}, n & If(n = 1, " cumplido", " cumplidos")) & " · " &
+                              With({n: CountRows(Filter(fxRevision, EstadoNuevo = "Atrasado"))}, n & If(n = 1, " atrasado", " atrasados")),
+                              3,
+                              // La página 3 es el informe OEE de Power BI.
+                              "OEE de transporte (CAEX): del plan al real por palanca; se revisa el detalle de lo que quedó bajo plan.",
+                              4,
+                              "Compromisos nuevos con responsable y fecha límite. Cierre de la reunión.",
+                              ""
+                          )
+                        Width: =Parent.TemplateWidth * 0.61 - 8
+                        X: =Parent.TemplateWidth * 0.25
+                        Y: =0
+                  - btnAgTiempo:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        Color: =If(LookUp(fxTiemposBloques, N = ThisItem.N).Seg > ThisItem.Min * 60, RGBA(255, 255, 255, 1), colPrimario)
+                        DisplayMode: =DisplayMode.View
+                        Fill: =If(LookUp(fxTiemposBloques, N = ThisItem.N).Seg > ThisItem.Min * 60, colRojo, RGBA(255, 236, 204, 1))
+                        FontWeight: =FontWeight.Bold
+                        Height: =30
+                        OnSelect: =false
+                        RadiusBottomLeft: =6
+                        RadiusBottomRight: =6
+                        RadiusTopLeft: =6
+                        RadiusTopRight: =6
+                        Size: =11
+                        Text: |-
+                          =With({u: LookUp(fxTiemposBloques, N = ThisItem.N).Seg}, If(u = 0 && varBloque <> ThisItem.N, ThisItem.Min & " min", RoundDown(u / 60, 0) & ":" & Text(Mod(u, 60), "00") & " / " & ThisItem.Min & "'"))
+                        Width: =Parent.TemplateWidth * 0.14 - 8
+                        X: =Parent.TemplateWidth * 0.86 + 4
+                        Y: =(Parent.TemplateHeight - 30) / 2
+            - recAgPie:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: =colPrimario
+                  Height: =50
+                  Width: =(Parent.Width - 40)
+                  X: =20
+                  Y: =Parent.Height - 58
+            - imgAgLogo:
+                Control: Image@2.2.3
+                Properties:
+                  Height: =40
+                  Image: ='logo_minera_demo_blanco'
+                  ImagePosition: =ImagePosition.Fit
+                  Width: =100
+                  X: =Parent.Width - 130
+                  Y: =Parent.Height - 53
+      - conB1Seguridad:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(255, 255, 255, 1)
+            Height: =Parent.Height - 104
+            RadiusBottomLeft: =12
+            RadiusBottomRight: =12
+            RadiusTopLeft: =12
+            RadiusTopRight: =12
+            Visible: =varBloque = 1
+            Width: =Parent.Width - 296
+            X: =284
+            Y: =88
+          Children:
+            - lblB1Titulo:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colPrimario
+                  FontWeight: =FontWeight.Bold
+                  Height: =48
+                  Size: =28
+                  Text: ="Seguridad"
+                  Width: =Parent.Width - 48
+                  X: =24
+                  Y: =12
+            - lblB1Sub:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =26
+                  Size: =14
+                  Text: ="Indicadores y avisos de seguridad de la semana"
+                  Width: =Parent.Width - 48
+                  X: =24
+                  Y: =62
+            - recB1Inc:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: =RGBA(244, 246, 251, 1)
+                  Height: =118
+                  Width: =(Parent.Width - 48 - 24) / 3
+                  X: =24 + 0 * ((Parent.Width - 48 - 24) / 3 + 12)
+                  Y: =96
+            - recB1IncBarra:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: |-
+                    =With({v: fxIndSeg.Inc, a: fxIndSeg.IncAnt}, If(IsBlank(v), RGBA(200, 205, 208, 1), v = 0 || (!IsBlank(a) && v < a), colVerde, colAmbar))
+                  Height: =5
+                  Width: =(Parent.Width - 48 - 24) / 3
+                  X: =24 + 0 * ((Parent.Width - 48 - 24) / 3 + 12)
+                  Y: =96
+            - lblB1IncValor:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colPrimario
+                  FontWeight: =FontWeight.Bold
+                  Height: =42
+                  PaddingBottom: =0
+                  PaddingLeft: =10
+                  PaddingRight: =10
+                  PaddingTop: =0
+                  Size: =28
+                  Text: =If(IsBlank(fxIndSeg.Inc), "—", Text(fxIndSeg.Inc))
+                  Width: =(Parent.Width - 48 - 24) / 3
+                  Wrap: =false
+                  X: =24 + 0 * ((Parent.Width - 48 - 24) / 3 + 12)
+                  Y: =104
+            - lblB1IncTexto:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =36
+                  PaddingBottom: =0
+                  PaddingLeft: =10
+                  PaddingRight: =10
+                  PaddingTop: =0
+                  Size: =11
+                  Text: ="incidentes de la semana"
+                  VerticalAlign: =VerticalAlign.Top
+                  Width: =(Parent.Width - 48 - 24) / 3
+                  X: =24 + 0 * ((Parent.Width - 48 - 24) / 3 + 12)
+                  Y: =146
+            - lblB1IncEstado:
+                Control: Label@2.5.1
+                Properties:
+                  Color: |-
+                    =With({v: fxIndSeg.Inc, a: fxIndSeg.IncAnt}, If(IsBlank(v), RGBA(200, 205, 208, 1), v = 0 || (!IsBlank(a) && v < a), colVerde, colAmbar))
+                  FontWeight: =FontWeight.Semibold
+                  Height: =24
+                  PaddingBottom: =0
+                  PaddingLeft: =10
+                  PaddingRight: =10
+                  PaddingTop: =0
+                  Size: =11
+                  Text: |-
+                    =With(
+                        {v: fxIndSeg.Inc, a: fxIndSeg.IncAnt},
+                        If(
+                            IsBlank(v), "sin dato",
+                            v = 0, "✔ sin incidentes",
+                            IsBlank(a), "⚠ revisar causas",
+                            v > a, "⚠ +" & (v - a) & " vs. anterior",
+                            v < a, "✔ " & (v - a) & " vs. anterior",
+                            "⚠ igual a anterior"
+                        )
+                    )
+                  Width: =(Parent.Width - 48 - 24) / 3
+                  Wrap: =false
+                  X: =24 + 0 * ((Parent.Width - 48 - 24) / 3 + 12)
+                  Y: =184
+            - recB1Rep:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: =RGBA(244, 246, 251, 1)
+                  Height: =118
+                  Width: =(Parent.Width - 48 - 24) / 3
+                  X: =24 + 1 * ((Parent.Width - 48 - 24) / 3 + 12)
+                  Y: =96
+            - recB1RepBarra:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: |-
+                    =With({v: fxIndSeg.Rep, m: fxIndSeg.RepMeta}, If(IsBlank(v), RGBA(200, 205, 208, 1), IsBlank(m), colPrimario, v >= m, colVerde, colAmbar))
+                  Height: =5
+                  Width: =(Parent.Width - 48 - 24) / 3
+                  X: =24 + 1 * ((Parent.Width - 48 - 24) / 3 + 12)
+                  Y: =96
+            - lblB1RepValor:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colPrimario
+                  FontWeight: =FontWeight.Bold
+                  Height: =42
+                  PaddingBottom: =0
+                  PaddingLeft: =10
+                  PaddingRight: =10
+                  PaddingTop: =0
+                  Size: =28
+                  Text: =If(IsBlank(fxIndSeg.Rep), "—", Text(fxIndSeg.Rep))
+                  Width: =(Parent.Width - 48 - 24) / 3
+                  Wrap: =false
+                  X: =24 + 1 * ((Parent.Width - 48 - 24) / 3 + 12)
+                  Y: =104
+            - lblB1RepTexto:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =36
+                  PaddingBottom: =0
+                  PaddingLeft: =10
+                  PaddingRight: =10
+                  PaddingTop: =0
+                  Size: =11
+                  Text: ="Hipo Hazard"
+                  VerticalAlign: =VerticalAlign.Top
+                  Width: =(Parent.Width - 48 - 24) / 3
+                  X: =24 + 1 * ((Parent.Width - 48 - 24) / 3 + 12)
+                  Y: =146
+            - lblB1RepEstado:
+                Control: Label@2.5.1
+                Properties:
+                  Color: |-
+                    =With({v: fxIndSeg.Rep, m: fxIndSeg.RepMeta}, If(IsBlank(v), RGBA(200, 205, 208, 1), IsBlank(m), colPrimario, v >= m, colVerde, colAmbar))
+                  FontWeight: =FontWeight.Semibold
+                  Height: =24
+                  PaddingBottom: =0
+                  PaddingLeft: =10
+                  PaddingRight: =10
+                  PaddingTop: =0
+                  Size: =11
+                  Text: |-
+                    =With({v: fxIndSeg.Rep, m: fxIndSeg.RepMeta}, If(IsBlank(v), "sin dato", IsBlank(m), "", v >= m, "✔ meta " & m, "⚠ meta " & m & ", faltan " & (m - v)))
+                  Width: =(Parent.Width - 48 - 24) / 3
+                  Wrap: =false
+                  X: =24 + 1 * ((Parent.Width - 48 - 24) / 3 + 12)
+                  Y: =184
+            - recB1Ins:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: =RGBA(244, 246, 251, 1)
+                  Height: =118
+                  Width: =(Parent.Width - 48 - 24) / 3
+                  X: =24 + 2 * ((Parent.Width - 48 - 24) / 3 + 12)
+                  Y: =96
+            - recB1InsBarra:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: |-
+                    =With({r: fxIndSeg.InsReal, p: fxIndSeg.InsPlan}, If(IsBlank(r), RGBA(200, 205, 208, 1), IsBlank(p), colPrimario, r >= p, colVerde, colRojo))
+                  Height: =5
+                  Width: =(Parent.Width - 48 - 24) / 3
+                  X: =24 + 2 * ((Parent.Width - 48 - 24) / 3 + 12)
+                  Y: =96
+            - lblB1InsValor:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colPrimario
+                  FontWeight: =FontWeight.Bold
+                  Height: =42
+                  PaddingBottom: =0
+                  PaddingLeft: =10
+                  PaddingRight: =10
+                  PaddingTop: =0
+                  Size: =28
+                  Text: |-
+                    =With({r: fxIndSeg.InsReal, p: fxIndSeg.InsPlan}, If(IsBlank(r), "—", IsBlank(p), Text(r), r & "/" & p))
+                  Width: =(Parent.Width - 48 - 24) / 3
+                  Wrap: =false
+                  X: =24 + 2 * ((Parent.Width - 48 - 24) / 3 + 12)
+                  Y: =104
+            - lblB1InsTexto:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =36
+                  PaddingBottom: =0
+                  PaddingLeft: =10
+                  PaddingRight: =10
+                  PaddingTop: =0
+                  Size: =11
+                  Text: ="inspecciones hechas / planificadas"
+                  VerticalAlign: =VerticalAlign.Top
+                  Width: =(Parent.Width - 48 - 24) / 3
+                  X: =24 + 2 * ((Parent.Width - 48 - 24) / 3 + 12)
+                  Y: =146
+            - lblB1InsEstado:
+                Control: Label@2.5.1
+                Properties:
+                  Color: |-
+                    =With({r: fxIndSeg.InsReal, p: fxIndSeg.InsPlan}, If(IsBlank(r), RGBA(200, 205, 208, 1), IsBlank(p), colPrimario, r >= p, colVerde, colRojo))
+                  FontWeight: =FontWeight.Semibold
+                  Height: =24
+                  PaddingBottom: =0
+                  PaddingLeft: =10
+                  PaddingRight: =10
+                  PaddingTop: =0
+                  Size: =11
+                  Text: |-
+                    =With({r: fxIndSeg.InsReal, p: fxIndSeg.InsPlan}, If(IsBlank(r), "sin dato", IsBlank(p), "", r >= p, "✔ completas", "✖ faltan " & (p - r)))
+                  Width: =(Parent.Width - 48 - 24) / 3
+                  Wrap: =false
+                  X: =24 + 2 * ((Parent.Width - 48 - 24) / 3 + 12)
+                  Y: =184
+            - lblB1Avisos:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colPrimario
+                  FontWeight: =FontWeight.Bold
+                  Height: =28
+                  Size: =15
+                  Text: ="Avisos"
+                  Width: =120
+                  X: =24
+                  Y: =224
+            - lblB1Conteo:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Right
+                  Color: =RGBA(90, 98, 104, 1)
+                  FontWeight: =FontWeight.Semibold
+                  Height: =28
+                  Size: =12
+                  Text: |-
+                    =With(
+                        {
+                            c: CountRows(Filter(fxAvisos, Nivel = "Crítico")),
+                            p: CountRows(Filter(fxAvisos, Nivel = "Precaución")),
+                            r: CountRows(Filter(fxAvisos, Nivel = "Recordar")),
+                            o: CountRows(Filter(fxAvisos, Rango = 4))
+                        },
+                        Mid(
+                            If(c > 0, " · ✖ " & c & If(c = 1, " crítico", " críticos"), "") &
+                            If(p > 0, " · ⚠ " & p & If(p = 1, " precaución", " precauciones"), "") &
+                            If(r > 0, " · ✔ " & r & If(r = 1, " recordatorio", " recordatorios"), "") &
+                            If(o > 0, " · " & o & If(o = 1, " aviso", " avisos"), ""),
+                            4
+                        )
+                    )
+                  Width: =Parent.Width - 168
+                  Wrap: =false
+                  X: =144
+                  Y: =224
+            - recB1Linea:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: =colAzul
+                  Height: =2
+                  Width: =Parent.Width - 48
+                  X: =24
+                  Y: =254
+            - lblB1SinAvisos:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(130, 138, 142, 1)
+                  Height: =60
+                  Size: =16
+                  Text: ="Aún no hay avisos de seguridad cargados para esta reunión. Se escriben en el editor."
+                  Visible: =IsEmpty(fxAvisos)
+                  Width: =Parent.Width - 48
+                  X: =24
+                  Y: =264
+            - galB1Avisos:
+                Control: Gallery@2.15.0
+                Variant: BrowseLayout_Vertical_ThreeTextVariant_ver5.0
+                Properties:
+                  Height: =Parent.Height - 266
+                  Items: =Sort(fxAvisos, Rango * 1000 + Orden)
+                  TemplatePadding: =0
+                  TemplateSize: =Max(64, Min(96, (Parent.Height - 266) / Max(1, CountRows(fxAvisos))))
+                  Width: =Parent.Width - 48
+                  X: =24
+                  Y: =258
+                Children:
+                  - btnB1Nivel:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        Color: =RGBA(255, 255, 255, 1)
+                        DisplayMode: =DisplayMode.View
+                        Fill: =Switch(ThisItem.Nivel, "Crítico", colRojo, "Precaución", colAmbar, "Recordar", colVerde, colPrimario)
+                        FontWeight: =FontWeight.Bold
+                        Height: =40
+                        OnSelect: =false
+                        RadiusBottomLeft: =20
+                        RadiusBottomRight: =20
+                        RadiusTopLeft: =20
+                        RadiusTopRight: =20
+                        Size: =12
+                        Text: =Switch(ThisItem.Nivel, "Crítico", "✖ CRÍTICO", "Precaución", "⚠ PRECAUCIÓN", "Recordar", "✔ RECORDAR", "AVISO")
+                        Width: =150
+                        X: =0
+                        Y: =(Parent.TemplateHeight - 40) / 2
+                  - lblB1AvisoTexto:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colTexto
+                        Height: =Parent.TemplateHeight
+                        PaddingBottom: =4
+                        PaddingTop: =4
+                        Size: =17
+                        Text: =ThisItem.Texto
+                        Width: =Parent.TemplateWidth - 166
+                        X: =166
+                        Y: =0
+                  - recB1AvisoSep:
+                      Control: Rectangle@2.3.0
+                      Properties:
+                        Fill: =RGBA(225, 230, 232, 1)
+                        Height: =1
+                        Width: =Parent.TemplateWidth
+                        X: =0
+                        Y: =Parent.TemplateHeight - 1
+      - conB2Compromisos:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(255, 255, 255, 1)
+            Height: =Parent.Height - 104
+            RadiusBottomLeft: =12
+            RadiusBottomRight: =12
+            RadiusTopLeft: =12
+            RadiusTopRight: =12
+            Visible: =varBloque = 2
+            Width: =Parent.Width - 296
+            X: =284
+            Y: =88
+          Children:
+            - lblB2Titulo:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colTexto
+                  FontWeight: =FontWeight.Bold
+                  Height: =44
+                  Size: =26
+                  Text: ="Compromisos de la semana"
+                  Width: =Parent.Width - 40
+                  X: =20
+                  Y: =10
+            - lblB2Resumen:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =44
+                  Size: =12
+                  Text: |-
+                    =With({n: CountRows(fxRevision) + CountRows(colNuevosPrep)}, n & If(n = 1, " abierto", " abiertos")) & " · ✔ " & With({n: CountRows(Filter(fxRevision, EstadoNuevo = "Cumplido"))}, n & If(n = 1, " cumplido", " cumplidos")) & " · ⚠ " & With({n: CountRows(Filter(fxRevision, EstadoNuevo = "Atrasado"))}, n & If(n = 1, " atrasado", " atrasados")) & " · " & (CountRows(Filter(fxRevision, !(EstadoNuevo in ["Cumplido", "Atrasado"]))) + CountRows(colNuevosPrep)) & " en progreso" & If(CountRows(colNuevosPrep) = 0, "", " (" & With({n: CountRows(colNuevosPrep)}, n & If(n = 1, " nuevo de esta semana", " nuevos de esta semana")) & ")")
+                  VerticalAlign: =VerticalAlign.Top
+                  Width: =Parent.Width - 40
+                  X: =20
+                  Y: =52
+            - btnFiltroB2_0:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderColor: =colPrimario
+                  BorderThickness: =1
+                  Color: =If(IsBlank(varFiltroEstado), RGBA(255, 255, 255, 1), colPrimario)
+                  Fill: =If(IsBlank(varFiltroEstado), colPrimario, RGBA(255, 255, 255, 1))
+                  Height: =34
+                  OnSelect: =Set(varFiltroEstado, "")
+                  RadiusBottomLeft: =17
+                  RadiusBottomRight: =17
+                  RadiusTopLeft: =17
+                  RadiusTopRight: =17
+                  Size: =12
+                  Text: ="Todos (" & CountRows(fxRevision) + CountRows(colNuevosPrep) & ")"
+                  Width: =150
+                  X: =20 + 0 * 158
+                  Y: =98
+            - btnFiltroB2_1:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderColor: =colVerde
+                  BorderThickness: =1
+                  Color: =If(varFiltroEstado = "Cumplido", RGBA(255, 255, 255, 1), colVerde)
+                  Fill: =If(varFiltroEstado = "Cumplido", colVerde, RGBA(255, 255, 255, 1))
+                  Height: =34
+                  OnSelect: =Set(varFiltroEstado, "Cumplido")
+                  RadiusBottomLeft: =17
+                  RadiusBottomRight: =17
+                  RadiusTopLeft: =17
+                  RadiusTopRight: =17
+                  Size: =12
+                  Text: ="✔ Cumplido (" & CountRows(Filter(fxRevision, Switch(EstadoNuevo, "Cumplido", "Cumplido", "Atrasado", "Atrasado", "En progreso") = "Cumplido")) & ")"
+                  Width: =150
+                  X: =20 + 1 * 158
+                  Y: =98
+            - btnFiltroB2_2:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderColor: =colPrimario
+                  BorderThickness: =1
+                  Color: =If(varFiltroEstado = "En progreso", RGBA(255, 255, 255, 1), colPrimario)
+                  Fill: =If(varFiltroEstado = "En progreso", colPrimario, RGBA(255, 255, 255, 1))
+                  Height: =34
+                  OnSelect: =Set(varFiltroEstado, "En progreso")
+                  RadiusBottomLeft: =17
+                  RadiusBottomRight: =17
+                  RadiusTopLeft: =17
+                  RadiusTopRight: =17
+                  Size: =12
+                  Text: ="En progreso (" & CountRows(Filter(fxRevision, Switch(EstadoNuevo, "Cumplido", "Cumplido", "Atrasado", "Atrasado", "En progreso") = "En progreso")) + CountRows(colNuevosPrep) & ")"
+                  Width: =150
+                  X: =20 + 2 * 158
+                  Y: =98
+            - btnFiltroB2_3:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderColor: =colAmbar
+                  BorderThickness: =1
+                  Color: =If(varFiltroEstado = "Atrasado", RGBA(255, 255, 255, 1), colAmbar)
+                  Fill: =If(varFiltroEstado = "Atrasado", colAmbar, RGBA(255, 255, 255, 1))
+                  Height: =34
+                  OnSelect: =Set(varFiltroEstado, "Atrasado")
+                  RadiusBottomLeft: =17
+                  RadiusBottomRight: =17
+                  RadiusTopLeft: =17
+                  RadiusTopRight: =17
+                  Size: =12
+                  Text: ="⚠ Atrasado (" & CountRows(Filter(fxRevision, Switch(EstadoNuevo, "Cumplido", "Cumplido", "Atrasado", "Atrasado", "En progreso") = "Atrasado")) & ")"
+                  Width: =150
+                  X: =20 + 3 * 158
+                  Y: =98
+            - recRevCab:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: =colPrimarioClaro
+                  Height: =24
+                  Width: =galRevision.Width
+                  X: =galRevision.X
+                  Y: =140
+            - lblRevCabComp:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colPrimario
+                  FontWeight: =FontWeight.Bold
+                  Height: =24
+                  Size: =11
+                  Text: ="Compromiso"
+                  Width: =galRevision.TemplateWidth - 248 - Min(180, Max(116, galRevision.TemplateWidth * 0.18)) - 20
+                  Wrap: =false
+                  X: =galRevision.X + 12
+                  Y: =140
+            - lblRevCabResp:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colPrimario
+                  FontWeight: =FontWeight.Bold
+                  Height: =24
+                  Size: =11
+                  Text: ="Responsable"
+                  Width: =Min(180, Max(116, galRevision.TemplateWidth * 0.18)) - 8
+                  Wrap: =false
+                  X: =galRevision.X + galRevision.TemplateWidth - 248 - Min(180, Max(116, galRevision.TemplateWidth * 0.18))
+                  Y: =140
+            - lblRevCabFecha:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colPrimario
+                  FontWeight: =FontWeight.Bold
+                  Height: =24
+                  Size: =11
+                  Text: ="Fecha límite"
+                  Width: =96
+                  Wrap: =false
+                  X: =galRevision.X + galRevision.TemplateWidth - 248
+                  Y: =140
+            - lblRevCabEstado:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  Color: =colPrimario
+                  FontWeight: =FontWeight.Bold
+                  Height: =24
+                  Size: =11
+                  Text: ="Estado"
+                  Width: =140
+                  Wrap: =false
+                  X: =galRevision.X + galRevision.TemplateWidth - 152
+                  Y: =140
+            - galRevision:
+                Control: Gallery@2.15.0
+                Variant: BrowseLayout_Vertical_ThreeTextVariant_ver5.0
+                Properties:
+                  Height: =Parent.Height - 178
+                  Items: |-
+                    =Sort(Filter(Ungroup(
+                        Table(
+                            {Filas: fxRevision},
+                            {
+                                Filas: ForAll(
+                                    colNuevosPrep As n,
+                                    {ID: 0, Titulo: n.Titulo, ResponsableNombre: n.Responsable, FechaLimite: n.FechaLimite, FechaCreacion: Today(), EstadoAnterior: "En progreso", EstadoNuevo: "En progreso", Revisado: true, Comentario: "", Url: ""}
+                                )
+                            }
+                        ),
+                        Filas
+                    ), !IsBlank(Titulo) && (IsBlank(varFiltroEstado) || Switch(EstadoNuevo, "Cumplido", "Cumplido", "Atrasado", "Atrasado", "En progreso") = varFiltroEstado)), Switch(EstadoNuevo, "Cumplido", 1, "Atrasado", 3, 2) * 100000 + DateDiff(Date(2020, 1, 1), FechaLimite))
+                  TemplatePadding: =0
+                  TemplateSize: =112
+                  Width: =Parent.Width - 24
+                  X: =12
+                  Y: =166
+                Children:
+                  - lblRevTitulo:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colTexto
+                        FontWeight: =FontWeight.Semibold
+                        Height: =Parent.TemplateHeight - 34
+                        PaddingBottom: =2
+                        PaddingTop: =2
+                        Size: =If(Len(ThisItem.Titulo) > Int((Self.Width - 10) / 8.7) * 2.7, 12, 14)
+                        Text: =ThisItem.Titulo
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Parent.TemplateWidth - 248 - Min(180, Max(116, Parent.TemplateWidth * 0.18)) - 20
+                        X: =12
+                        Y: =4
+                  - lblRevResp:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colTexto
+                        Height: =Parent.TemplateHeight - 34
+                        PaddingBottom: =2
+                        PaddingTop: =2
+                        Size: =13
+                        Text: =ThisItem.ResponsableNombre
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Min(180, Max(116, Parent.TemplateWidth * 0.18)) - 8
+                        X: =Parent.TemplateWidth - 248 - Min(180, Max(116, Parent.TemplateWidth * 0.18))
+                        Y: =4
+                  - lblRevFecha:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =If(ThisItem.FechaLimite < Today(), colRojo, colTexto)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =30
+                        PaddingBottom: =2
+                        PaddingTop: =2
+                        Size: =14
+                        Text: =Text(ThisItem.FechaLimite, "dd-mm")
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =88
+                        Wrap: =false
+                        X: =Parent.TemplateWidth - 248
+                        Y: =4
+                  - lblRevVencido:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colRojo
+                        FontWeight: =FontWeight.Bold
+                        Height: =24
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =11
+                        Text: =If(ThisItem.FechaLimite < Today(), "VENCIDO", "")
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =88
+                        Wrap: =false
+                        X: =Parent.TemplateWidth - 248
+                        Y: =34
+                  - lblRevEvid:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colVerde
+                        Height: =26
+                        Size: =12
+                        Text: |-
+                          =If(
+                              !IsBlank(ThisItem.Comentario),
+                              "Evidencia: " & ThisItem.Comentario,
+                              !IsBlank(ThisItem.Url),
+                              "Con evidencia (archivo)",
+                              ""
+                          )
+                        Width: =Parent.TemplateWidth - 152 - 20
+                        Wrap: =false
+                        X: =12
+                        Y: =Parent.TemplateHeight - 30
+                  - btnRevEstado:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        Color: =RGBA(255, 255, 255, 1)
+                        DisplayMode: =DisplayMode.View
+                        Fill: |-
+                          =Switch(
+                              ThisItem.EstadoNuevo,
+                              "Cumplido",
+                              colVerde,
+                              "Atrasado",
+                              colAmbar,
+                              colPrimario
+                          )
+                        FontWeight: =FontWeight.Bold
+                        Height: =38
+                        OnSelect: =false
+                        RadiusBottomLeft: =19
+                        RadiusBottomRight: =19
+                        RadiusTopLeft: =19
+                        RadiusTopRight: =19
+                        Size: =13
+                        Text: =Switch(ThisItem.EstadoNuevo, "Cumplido", "✔ Cumplido", "Atrasado", "⚠ Atrasado", "En progreso")
+                        Width: =140
+                        X: =Parent.TemplateWidth - 152
+                        Y: =10
+                  - btnRevVerEvid:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =colVerde
+                        BorderThickness: =1
+                        Color: =colVerde
+                        Fill: =RGBA(255, 255, 255, 1)
+                        Height: =28
+                        OnSelect: |-
+                          =With(
+                              {loc: LookUp(colEvid, CompromisoId = ThisItem.ID), u: ThisItem.Url},
+                              If(
+                                  If(IsBlank(loc), Lower(Last(Split(u, ".")).Value) in ["jpg", "jpeg", "png", "gif", "bmp", "webp", "heic"], IsBlank(loc.Nombre) || Lower(Last(Split(loc.Nombre, ".")).Value) in ["jpg", "jpeg", "png", "gif", "bmp", "webp", "heic"]),
+                                  Set(varEvidVerId, ThisItem.ID),
+                                  !IsBlank(u),
+                                  Launch(u),
+                                  Notify("Este archivo todavía no se sube a SharePoint: se puede abrir en el equipo donde se preparó.", NotificationType.Information)
+                              )
+                          )
+                        RadiusBottomLeft: =14
+                        RadiusBottomRight: =14
+                        RadiusTopLeft: =14
+                        RadiusTopRight: =14
+                        Size: =12
+                        Text: ="Ver evidencia"
+                        Visible: =!IsBlank(ThisItem.Url) || ThisItem.ID in colEvid.CompromisoId
+                        Width: =140
+                        X: =Parent.TemplateWidth - 152
+                        Y: =56
+                  - sepRevision:
+                      Control: Rectangle@2.3.0
+                      Properties:
+                        Fill: =RGBA(230, 230, 230, 1)
+                        Height: =1
+                        Width: =Parent.TemplateWidth
+                        X: =0
+                        Y: =Parent.TemplateHeight - 1
+            - lblB2Vacio:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =60
+                  Size: =16
+                  Text: =If(IsEmpty(fxRevision) && IsEmpty(colNuevosPrep), "No hay compromisos abiertos.", "No hay compromisos con ese estado.")
+                  Visible: =IsEmpty(galRevision.AllItems)
+                  Width: =Parent.Width - 40
+                  X: =20
+                  Y: =194
+      - conB3Indicadores:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(255, 255, 255, 1)
+            Height: =Parent.Height - 104
+            RadiusBottomLeft: =12
+            RadiusBottomRight: =12
+            RadiusTopLeft: =12
+            RadiusTopRight: =12
+            Visible: =varBloque = 3
+            Width: =Parent.Width - 296
+            X: =284
+            Y: =88
+          Children:
+            - lblB3Titulo:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colTexto
+                  FontWeight: =FontWeight.Bold
+                  Height: =40
+                  Size: =20
+                  Text: ="Indicadores · OEE de transporte (CAEX)"
+                  Width: =Parent.Width - 40
+                  Wrap: =false
+                  X: =20
+                  Y: =10
+            - lblB3Periodo:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =26
+                  Size: =12
+                  Text: ="«Ver detalle» bajo cada barra abre su porqué. El periodo se elige en el informe."
+                  Width: =Parent.Width - 40
+                  Wrap: =false
+                  X: =20
+                  Y: =50
+            - lblB3Cargando:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =140
+                  Size: =13
+                  Text: |-
+                    ="Cargando el informe de Power BI…" & Char(10) & Char(10) &
+                    "Si no aparece: el informe se ve en Power Apps desde el navegador (no en la app móvil) y hace falta permiso de lectura sobre el informe en Power BI."
+                  Width: =Parent.Width - 80
+                  X: =40
+                  Y: =140
+            - pbiOEE:
+                Control: PowerBI@2.4.0
+                Properties:
+                  AllowNewAPI: =true
+                  Height: =Parent.Height - 88
+                  LoadPowerBIContent: =varBloque = 3
+                  PowerBIInteractions: =true
+                  TileUrl: ="https://" & "app.powerbi.com/reportEmbed?reportId=00000000-0000-0000-0000-000000000001&groupId=00000000-0000-0000-0000-000000000002&autoAuth=true&ctid=00000000-0000-0000-0000-000000000000&navContentPaneEnabled=false&filterPaneEnabled=false&pageName=83b1eaa13fad9412b69e"
+                  Width: =Parent.Width - 24
+                  X: =12
+                  Y: =80
+      - conB5Cierre:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(255, 255, 255, 1)
+            Height: =Parent.Height - 104
+            RadiusBottomLeft: =12
+            RadiusBottomRight: =12
+            RadiusTopLeft: =12
+            RadiusTopRight: =12
+            Visible: =varBloque = 4
+            Width: =Parent.Width - 296
+            X: =284
+            Y: =88
+          Children:
+            - lblB5Titulo:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colTexto
+                  FontWeight: =FontWeight.Bold
+                  Height: =44
+                  Size: =20
+                  Text: ="Cierre · compromisos para la próxima semana"
+                  Width: =Parent.Width - 40
+                  X: =20
+                  Y: =12
+            - txtNuevoQue:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  Default: =If(IsBlank(varEditNuevo), "", LookUp(colNuevos, IdLocal = varEditNuevo).Titulo)
+                  Height: =72
+                  HintText: ="¿Qué se hará?"
+                  MaxLength: =100
+                  Mode: =TextMode.MultiLine
+                  Size: =14
+                  Width: =Parent.Width * 0.38 - 40
+                  X: =20
+                  Y: =64
+            - txtNuevoResp:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  Default: =If(IsBlank(varEditNuevo), "", LookUp(colNuevos, IdLocal = varEditNuevo).Responsable)
+                  Height: =48
+                  HintText: ="Responsable"
+                  Size: =14
+                  Width: =Parent.Width * 0.38 - 40
+                  X: =20
+                  Y: =144
+            - dpNuevoFecha:
+                Control: Classic/DatePicker@2.6.0
+                Properties:
+                  DefaultDate: =If(IsBlank(varEditNuevo), DateAdd(Today(), 7, TimeUnit.Days), LookUp(colNuevos, IdLocal = varEditNuevo).FechaLimite)
+                  Format: =DateTimeFormat.ShortDate
+                  Height: =48
+                  Size: =14
+                  Width: =Parent.Width * 0.38 - 40
+                  X: =20
+                  Y: =200
+            - btnAgregarCompromiso:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(255, 255, 255, 1)
+                  DisplayMode: =If(IsBlank(Trim(txtNuevoQue.Text)) || IsBlank(Trim(txtNuevoResp.Text)), DisplayMode.Disabled, DisplayMode.Edit)
+                  Fill: =colPrimario
+                  FontWeight: =FontWeight.Bold
+                  Height: =52
+                  OnSelect: |-
+                    =If(
+                        IsBlank(varEditNuevo),
+                        Collect(
+                            colNuevos,
+                            {
+                                Titulo: Trim(txtNuevoQue.Text),
+                                Responsable: Trim(txtNuevoResp.Text),
+                                FechaLimite: dpNuevoFecha.SelectedDate,
+                                IdLocal: Text(GUID())
+                            }
+                        ),
+                        Patch(colNuevos, LookUp(colNuevos, IdLocal = varEditNuevo), {Titulo: Trim(txtNuevoQue.Text), Responsable: Trim(txtNuevoResp.Text), FechaLimite: dpNuevoFecha.SelectedDate})
+                    );
+                    Set(varEditNuevo, Blank());
+                    Reset(txtNuevoQue);
+                    Reset(txtNuevoResp);
+                    Reset(dpNuevoFecha)
+                  RadiusBottomLeft: =8
+                  RadiusBottomRight: =8
+                  RadiusTopLeft: =8
+                  RadiusTopRight: =8
+                  Size: =15
+                  Text: =If(IsBlank(varEditNuevo), "+ Agregar compromiso", "Guardar cambios")
+                  Width: =Parent.Width * 0.38 - 40
+                  X: =20
+                  Y: =260
+            - lblNuevosTitulo:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colTexto
+                  FontWeight: =FontWeight.Semibold
+                  Height: =36
+                  Size: =15
+                  Text: ="Compromisos nuevos de esta reunión · " & CountRows(colNuevos)
+                  Width: =Parent.Width * 0.62 - 40
+                  X: =Parent.Width * 0.38 + 8
+                  Y: =64
+            - galNuevos:
+                Control: Gallery@2.15.0
+                Variant: BrowseLayout_Vertical_ThreeTextVariant_ver5.0
+                Properties:
+                  BorderColor: =RGBA(230, 230, 230, 1)
+                  BorderThickness: =1
+                  Height: =Parent.Height - 196
+                  Items: =colNuevos
+                  TemplateFill: =If(ThisItem.IdLocal = varEditNuevo, RGBA(255, 243, 224, 1), RGBA(255, 255, 255, 0))
+                  TemplatePadding: =2
+                  TemplateSize: =112
+                  Width: =Parent.Width * 0.62 - 32
+                  X: =Parent.Width * 0.38 + 8
+                  Y: =104
+                Children:
+                  - lblNuevoItem:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colTexto
+                        Height: =108
+                        PaddingBottom: =2
+                        PaddingTop: =2
+                        Size: =13
+                        Text: =ThisItem.Titulo & Char(10) & ThisItem.Responsable & " · vence " & Text(ThisItem.FechaLimite, "dd-mm")
+                        Width: =Parent.TemplateWidth - 108
+                        X: =8
+                        Y: =0
+                  - btnEditarNuevo:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =colPrimario
+                        BorderThickness: =1
+                        Color: =colPrimario
+                        Fill: =RGBA(255, 255, 255, 1)
+                        Height: =32
+                        OnSelect: |-
+                          =Set(varEditNuevo, If(ThisItem.IdLocal = varEditNuevo, Blank(), ThisItem.IdLocal));
+                          Reset(txtNuevoQue);
+                          Reset(txtNuevoResp);
+                          Reset(dpNuevoFecha)
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =12
+                        Text: =If(ThisItem.IdLocal = varEditNuevo, "Cancelar", "Editar")
+                        Width: =88
+                        X: =Parent.TemplateWidth - 96
+                        Y: =4
+                  - btnEliminarNuevo:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =colRojo
+                        BorderThickness: =1
+                        Color: =colRojo
+                        Fill: =RGBA(255, 255, 255, 1)
+                        Height: =32
+                        OnSelect: =Set(varBorrarNuevo, ThisItem.IdLocal)
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =12
+                        Text: ="Eliminar"
+                        Width: =88
+                        X: =Parent.TemplateWidth - 96
+                        Y: =40
+                  - sepNuevo:
+                      Control: Rectangle@2.3.0
+                      Properties:
+                        Fill: =RGBA(230, 230, 230, 1)
+                        Height: =1
+                        Width: =Parent.TemplateWidth
+                        X: =0
+                        Y: =Parent.TemplateHeight - 1
+            - lblResumenCierre:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =100
+                  Size: =12
+                  Text: |-
+                    ="Compromisos de la semana: " & (CountRows(fxRevision) + CountRows(colNuevosPrep)) & Char(10) &
+                    "Cumplidos: " & CountRows(Filter(fxRevision, EstadoNuevo = "Cumplido")) & Char(10) &
+                    "Con evidencia: " & CountRows(Filter(fxRevision, !IsBlank(Comentario) || !IsBlank(Url))) & Char(10) &
+                    "Nuevos: " & CountRows(colNuevos)
+                  VerticalAlign: =VerticalAlign.Top
+                  Width: =Parent.Width * 0.38 - 40
+                  X: =20
+                  Y: =Parent.Height - 188
+            - btnCerrarDesdeCierre:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(255, 255, 255, 1)
+                  Fill: =colAmbar
+                  FontWeight: =FontWeight.Bold
+                  Height: =64
+                  OnSelect: =Select(btnCerrarReunion)
+                  RadiusBottomLeft: =8
+                  RadiusBottomRight: =8
+                  RadiusTopLeft: =8
+                  RadiusTopRight: =8
+                  Size: =17
+                  Text: ="Finalizar reunión"
+                  Width: =Parent.Width * 0.38 - 40
+                  X: =20
+                  Y: =Parent.Height - 80
+      - conAsistencia:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(0, 0, 0, 0.45)
+            Height: =Parent.Height
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Visible: =varVerAsistencia
+            Width: =Parent.Width
+            X: =0
+            Y: =0
+          Children:
+            - conAsTarjeta:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  DropShadow: =DropShadow.Bold
+                  Fill: =RGBA(255, 255, 255, 1)
+                  Height: =Parent.Height - 48
+                  RadiusBottomLeft: =12
+                  RadiusBottomRight: =12
+                  RadiusTopLeft: =12
+                  RadiusTopRight: =12
+                  Width: =Min(Parent.Width - 48, 960)
+                  X: =(Parent.Width - Self.Width) / 2
+                  Y: =24
+                Children:
+                  - lblAsTitulo:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colPrimario
+                        FontWeight: =FontWeight.Bold
+                        Height: =40
+                        Size: =20
+                        Text: ="Asistencia · confirma antes de cerrar"
+                        Width: =Parent.Width - 48 - 208
+                        Wrap: =false
+                        X: =24
+                        Y: =14
+                  - btnAsRestaurar:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =colPrimario
+                        BorderThickness: =1
+                        Color: =colPrimario
+                        Fill: =RGBA(255, 255, 255, 1)
+                        Height: =36
+                        OnSelect: |-
+                          =Collect(colAsis, colAsisQuitados);
+                          Clear(colAsisQuitados);
+                          Clear(colAsisVista);
+                          With(
+                              {areas: Sort(Distinct(colAsis, Area), Value)},
+                              ForAll(
+                                  Sequence(CountRows(areas)) As i,
+                                  With(
+                                      {a: Index(areas, i.Value).Value},
+                                      With(
+                                          {o: If(a = "Invitados", 999, a = "Sin área", 998, i.Value) * 1000, gente: Sort(Filter(colAsis, Area = a), Nombre)},
+                                          Collect(
+                                              colAsisVista,
+                                              {Orden: o, Fila: "Area", Area: a, IdLocal: "", Nombre: "", Correo: "", Cargo: "", Tipo: "", Presente: true},
+                                              {Orden: o + 1, Fila: "AreaFin", Area: a, IdLocal: "", Nombre: "", Correo: "", Cargo: "", Tipo: "", Presente: true}
+                                          );
+                                          ForAll(
+                                              Sequence(CountRows(gente)) As j,
+                                              With(
+                                                  {p: Index(gente, j.Value)},
+                                                  Collect(
+                                                      colAsisVista,
+                                                      {Orden: o + 1 + j.Value, Fila: "Persona", Area: a, IdLocal: p.IdLocal, Nombre: p.Nombre, Correo: p.Correo, Cargo: p.Cargo, Tipo: p.Tipo, Presente: p.Presente}
+                                                  )
+                                              )
+                                          );
+                                          If(
+                                              Mod(CountRows(gente), 2) = 1,
+                                              Collect(colAsisVista, {Orden: o + 999, Fila: "Vacio", Area: a, IdLocal: "", Nombre: "", Correo: "", Cargo: "", Tipo: "", Presente: true})
+                                          )
+                                      )
+                                  )
+                              )
+                          )
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =12
+                        Text: ="Restaurar quitados (" & CountRows(colAsisQuitados) & ")"
+                        Visible: =!IsEmpty(colAsisQuitados)
+                        Width: =196
+                        X: =Parent.Width - 24 - 196
+                        Y: =16
+                  - lblAsSub:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =RGBA(90, 98, 104, 1)
+                        Height: =46
+                        PaddingBottom: =2
+                        PaddingTop: =2
+                        Size: =12
+                        Text: |-
+                          ="Toca a quien no vino: igual recibe la minuta, con un aviso. Con la × de la derecha lo quitas de esta reunión: no queda en la asistencia ni le llega la minuta."
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =54
+                  - galAsis:
+                      Control: Gallery@2.15.0
+                      Variant: BrowseLayout_Vertical_ThreeTextVariant_ver5.0
+                      Properties:
+                        BorderColor: =RGBA(225, 230, 232, 1)
+                        BorderThickness: =1
+                        Height: =Parent.Height - 104 - 156 - If(IsEmpty(Filter(colAsis, Tipo = "Convocado")), 60, 0)
+                        Items: =Sort(colAsisVista, Orden)
+                        TemplatePadding: =4
+                        TemplateSize: =56
+                        Width: =Parent.Width - 32
+                        WrapCount: =2
+                        X: =16
+                        Y: =104 + If(IsEmpty(Filter(colAsis, Tipo = "Convocado")), 60, 0)
+                      Children:
+                        - lblAsArea:
+                            Control: Label@2.5.1
+                            Properties:
+                              Color: =colPrimario
+                              FontWeight: =FontWeight.Bold
+                              Height: =32
+                              Size: =If(Len(ThisItem.Area) > 34, 11, 13)
+                              Text: =Upper(ThisItem.Area)
+                              Visible: =ThisItem.Fila = "Area"
+                              Width: =Parent.TemplateWidth - 10
+                              Wrap: =false
+                              X: =10
+                              Y: =18
+                        - lblAsAreaConteo:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Right
+                              Color: =RGBA(90, 98, 104, 1)
+                              Height: =32
+                              Size: =12
+                              Text: |-
+                                =With(
+                                    {g: Filter(colAsis, Area = ThisItem.Area)},
+                                    If(
+                                        ThisItem.Area = "Invitados",
+                                        CountRows(g) & If(CountRows(g) = 1, " invitado", " invitados"),
+                                        CountRows(Filter(g, Presente)) & " de " & CountRows(g) & If(CountRows(g) = 1, " presente", " presentes")
+                                    )
+                                )
+                              Visible: =ThisItem.Fila = "AreaFin"
+                              Width: =Parent.TemplateWidth - 10
+                              Wrap: =false
+                              X: =0
+                              Y: =18
+                        - linAsArea:
+                            Control: Rectangle@2.3.0
+                            Properties:
+                              Fill: =colAzul
+                              Height: =2
+                              Visible: =ThisItem.Fila in ["Area", "AreaFin"]
+                              Width: =Parent.TemplateWidth
+                              X: =0
+                              Y: =Parent.TemplateHeight - 2
+                        - recAsFila:
+                            Control: Rectangle@2.3.0
+                            Properties:
+                              Fill: =If(ThisItem.Presente, RGBA(255, 255, 255, 1), RGBA(253, 236, 234, 1))
+                              Height: =Parent.TemplateHeight
+                              Visible: =ThisItem.Fila = "Persona"
+                              Width: =Parent.TemplateWidth
+                              X: =0
+                              Y: =0
+                        - lblAsNombre:
+                            Control: Label@2.5.1
+                            Properties:
+                              Color: =colTexto
+                              FontWeight: =FontWeight.Semibold
+                              Height: =26
+                              Size: =If(Len(ThisItem.Nombre) > 34, 11, 13)
+                              Text: =ThisItem.Nombre
+                              Visible: =ThisItem.Fila = "Persona"
+                              Width: =Parent.TemplateWidth - 10 - 160
+                              Wrap: =false
+                              X: =10
+                              Y: =4
+                        - lblAsCargo:
+                            Control: Label@2.5.1
+                            Properties:
+                              Color: =RGBA(90, 98, 104, 1)
+                              Height: =22
+                              Size: =If(Len(Self.Text) > 40, 10, 11)
+                              Text: |-
+                                =If(
+                                    // El encabezado ya dice INVITADOS: aquí va solo el correo.
+                                    ThisItem.Tipo = "Invitado",
+                                    If(IsBlank(ThisItem.Correo), "sin correo", ThisItem.Correo),
+                                    ThisItem.Cargo
+                                )
+                              Visible: =ThisItem.Fila = "Persona"
+                              Width: =Parent.TemplateWidth - 10 - 160
+                              Wrap: =false
+                              X: =10
+                              Y: =28
+                        - btnAsEstado:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              BorderColor: =RGBA(255, 255, 255, 0)
+                              BorderThickness: =1
+                              Color: =RGBA(255, 255, 255, 1)
+                              DisabledColor: =Self.Color
+                              DisabledFill: =Self.Fill
+                              DisplayMode: =If(ThisItem.Tipo = "Invitado", DisplayMode.View, DisplayMode.Edit)
+                              Fill: =If(ThisItem.Presente, colVerde, colRojo)
+                              FontWeight: =FontWeight.Bold
+                              Height: =34
+                              HoverFill: =ColorFade(Self.Fill, -15%)
+                              OnSelect: |-
+                                =UpdateIf(colAsis, IdLocal = ThisItem.IdLocal, {Presente: !ThisItem.Presente});
+                                UpdateIf(colAsisVista, IdLocal = ThisItem.IdLocal, {Presente: !ThisItem.Presente})
+                              PressedFill: =ColorFade(Self.Fill, -25%)
+                              RadiusBottomLeft: =17
+                              RadiusBottomRight: =17
+                              RadiusTopLeft: =17
+                              RadiusTopRight: =17
+                              Size: =12
+                              Text: =If(ThisItem.Presente, "✔ Presente", "✖ Ausente")
+                              Visible: =ThisItem.Fila = "Persona"
+                              Width: =108
+                              X: =Parent.TemplateWidth - 150
+                              Y: =(Parent.TemplateHeight - 34) / 2
+                        - icoAsQuitar:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              AccessibleLabel: ="Quitar a " & ThisItem.Nombre & " de esta reunión"
+                              Color: =RGBA(120, 128, 133, 1)
+                              Height: =32
+                              Icon: =Icon.Cancel
+                              OnSelect: |-
+                                =Collect(colAsisQuitados, LookUp(colAsis, IdLocal = ThisItem.IdLocal));
+                                RemoveIf(colAsis, IdLocal = ThisItem.IdLocal);
+                                Clear(colAsisVista);
+                                With(
+                                    {areas: Sort(Distinct(colAsis, Area), Value)},
+                                    ForAll(
+                                        Sequence(CountRows(areas)) As i,
+                                        With(
+                                            {a: Index(areas, i.Value).Value},
+                                            With(
+                                                {o: If(a = "Invitados", 999, a = "Sin área", 998, i.Value) * 1000, gente: Sort(Filter(colAsis, Area = a), Nombre)},
+                                                Collect(
+                                                    colAsisVista,
+                                                    {Orden: o, Fila: "Area", Area: a, IdLocal: "", Nombre: "", Correo: "", Cargo: "", Tipo: "", Presente: true},
+                                                    {Orden: o + 1, Fila: "AreaFin", Area: a, IdLocal: "", Nombre: "", Correo: "", Cargo: "", Tipo: "", Presente: true}
+                                                );
+                                                ForAll(
+                                                    Sequence(CountRows(gente)) As j,
+                                                    With(
+                                                        {p: Index(gente, j.Value)},
+                                                        Collect(
+                                                            colAsisVista,
+                                                            {Orden: o + 1 + j.Value, Fila: "Persona", Area: a, IdLocal: p.IdLocal, Nombre: p.Nombre, Correo: p.Correo, Cargo: p.Cargo, Tipo: p.Tipo, Presente: p.Presente}
+                                                        )
+                                                    )
+                                                );
+                                                If(
+                                                    Mod(CountRows(gente), 2) = 1,
+                                                    Collect(colAsisVista, {Orden: o + 999, Fila: "Vacio", Area: a, IdLocal: "", Nombre: "", Correo: "", Cargo: "", Tipo: "", Presente: true})
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                              PaddingBottom: =6
+                              PaddingLeft: =6
+                              PaddingRight: =6
+                              PaddingTop: =6
+                              Tooltip: ="Quitar de esta reunión"
+                              Visible: =ThisItem.Fila = "Persona"
+                              Width: =32
+                              X: =Parent.TemplateWidth - 38
+                              Y: =(Parent.TemplateHeight - 32) / 2
+                        - sepAsFila:
+                            Control: Rectangle@2.3.0
+                            Properties:
+                              Fill: =RGBA(225, 230, 232, 1)
+                              Height: =1
+                              Visible: =ThisItem.Fila = "Persona"
+                              Width: =Parent.TemplateWidth
+                              X: =0
+                              Y: =Parent.TemplateHeight - 1
+                  - lblAsVacio:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =RGBA(90, 98, 104, 1)
+                        Fill: =RGBA(244, 246, 247, 1)
+                        Height: =52
+                        PaddingBottom: =4
+                        PaddingLeft: =12
+                        PaddingRight: =12
+                        PaddingTop: =4
+                        Size: =12
+                        Text: |-
+                          =If(
+                              IsEmpty(Filter(colAsisQuitados, Tipo = "Convocado")),
+                              "No hay lista de convocados en este equipo: se carga desde RD_Participantes con «Actualizar datos» en Inicio.",
+                              "Quitaste a todos los convocados de esta reunión: «Restaurar quitados» los devuelve."
+                          ) & Char(10) & "Si cierras así, la minuta llega solo a ti y a los invitados con correo."
+                        VerticalAlign: =VerticalAlign.Middle
+                        Visible: =IsEmpty(Filter(colAsis, Tipo = "Convocado"))
+                        Width: =Parent.Width - 32
+                        X: =16
+                        Y: =104
+                  - lblAsInvitado:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colTexto
+                        FontWeight: =FontWeight.Semibold
+                        Height: =44
+                        Size: =13
+                        Text: ="Invitado"
+                        Width: =80
+                        X: =24
+                        Y: =Parent.Height - 140
+                  - txtInvNombre:
+                      Control: Classic/TextInput@2.3.2
+                      Properties:
+                        Default: =""
+                        Height: =44
+                        HintText: ="Nombre"
+                        Size: =13
+                        Width: =(Parent.Width - 104 - 24 - 24 - 150) / 2
+                        X: =104
+                        Y: =Parent.Height - 140
+                  - txtInvCorreo:
+                      Control: Classic/TextInput@2.3.2
+                      Properties:
+                        Default: =""
+                        Height: =44
+                        HintText: ="Correo (opcional)"
+                        Size: =13
+                        Width: =(Parent.Width - 104 - 24 - 24 - 150) / 2
+                        X: =104 + (Parent.Width - 104 - 24 - 24 - 150) / 2 + 12
+                        Y: =Parent.Height - 140
+                  - btnAgregarInvitado:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =colPrimario
+                        BorderThickness: =1
+                        Color: =colPrimario
+                        DisplayMode: =If(!IsBlank(Trim(txtInvNombre.Text)) && (IsBlank(Trim(txtInvCorreo.Text)) || IsMatch(Trim(txtInvCorreo.Text), Match.Email)), DisplayMode.Edit, DisplayMode.Disabled)
+                        Fill: =RGBA(255, 255, 255, 1)
+                        FontWeight: =FontWeight.Bold
+                        Height: =44
+                        OnSelect: |-
+                          =Collect(
+                              colAsis,
+                              {
+                                  Nombre: Trim(txtInvNombre.Text),
+                                  Correo: Lower(Trim(txtInvCorreo.Text)),
+                                  Cargo: "",
+                                  Area: "Invitados",
+                                  Tipo: "Invitado",
+                                  Presente: true,
+                                  IdLocal: Text(GUID())
+                              }
+                          );
+                          Reset(txtInvNombre);
+                          Reset(txtInvCorreo);
+                          Clear(colAsisVista);
+                          With(
+                              {areas: Sort(Distinct(colAsis, Area), Value)},
+                              ForAll(
+                                  Sequence(CountRows(areas)) As i,
+                                  With(
+                                      {a: Index(areas, i.Value).Value},
+                                      With(
+                                          {o: If(a = "Invitados", 999, a = "Sin área", 998, i.Value) * 1000, gente: Sort(Filter(colAsis, Area = a), Nombre)},
+                                          Collect(
+                                              colAsisVista,
+                                              {Orden: o, Fila: "Area", Area: a, IdLocal: "", Nombre: "", Correo: "", Cargo: "", Tipo: "", Presente: true},
+                                              {Orden: o + 1, Fila: "AreaFin", Area: a, IdLocal: "", Nombre: "", Correo: "", Cargo: "", Tipo: "", Presente: true}
+                                          );
+                                          ForAll(
+                                              Sequence(CountRows(gente)) As j,
+                                              With(
+                                                  {p: Index(gente, j.Value)},
+                                                  Collect(
+                                                      colAsisVista,
+                                                      {Orden: o + 1 + j.Value, Fila: "Persona", Area: a, IdLocal: p.IdLocal, Nombre: p.Nombre, Correo: p.Correo, Cargo: p.Cargo, Tipo: p.Tipo, Presente: p.Presente}
+                                                  )
+                                              )
+                                          );
+                                          If(
+                                              Mod(CountRows(gente), 2) = 1,
+                                              Collect(colAsisVista, {Orden: o + 999, Fila: "Vacio", Area: a, IdLocal: "", Nombre: "", Correo: "", Cargo: "", Tipo: "", Presente: true})
+                                          )
+                                      )
+                                  )
+                              )
+                          )
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =13
+                        Text: ="+ Agregar"
+                        Width: =150
+                        X: =Parent.Width - 24 - 150
+                        Y: =Parent.Height - 140
+                  - sepAsPie:
+                      Control: Rectangle@2.3.0
+                      Properties:
+                        Fill: =RGBA(225, 230, 232, 1)
+                        Height: =1
+                        Width: =Parent.Width
+                        X: =0
+                        Y: =Parent.Height - 84
+                  - lblAsConteo:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colTexto
+                        Height: =60
+                        PaddingBottom: =2
+                        PaddingTop: =2
+                        Size: =12
+                        Text: |-
+                          ="Presentes: " & CountRows(Filter(colAsis, Tipo = "Convocado" && Presente)) & " de " & CountRows(Filter(colAsis, Tipo = "Convocado")) &
+                          If(IsEmpty(Filter(colAsis, Tipo = "Invitado")), "", " · invitados: " & CountRows(Filter(colAsis, Tipo = "Invitado"))) & Char(10) &
+                          With({n: CountRows(Distinct(Filter(colAsis, !IsBlank(Correo)), Lower(Correo))) + If(IsBlank(LookUp(colAsis, Lower(Correo) = Lower(User().Email))), 1, 0)}, "La minuta va a " & n & If(n = 1, " correo", " correos"))
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =Parent.Width - 24 - 24 - 470 - 12
+                        X: =24
+                        Y: =Parent.Height - 74
+                  - btnAsVolver:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(160, 160, 160, 1)
+                        BorderThickness: =1
+                        Color: =colTexto
+                        Fill: =RGBA(255, 255, 255, 1)
+                        Height: =52
+                        OnSelect: =Set(varVerAsistencia, false)
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =14
+                        Text: ="Volver a la reunión"
+                        Width: =198
+                        X: =Parent.Width - 24 - 260 - 12 - 198
+                        Y: =Parent.Height - 70
+                  - btnAsCerrar:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        Color: =RGBA(255, 255, 255, 1)
+                        Fill: =colAmbar
+                        FontWeight: =FontWeight.Bold
+                        Height: =52
+                        OnSelect: |-
+                          =If(
+                              IsBlank(varEditNuevo) && !IsBlank(Trim(txtNuevoQue.Text)) && !IsBlank(Trim(txtNuevoResp.Text)),
+                              Collect(colNuevos, {Titulo: Trim(txtNuevoQue.Text), Responsable: Trim(txtNuevoResp.Text), FechaLimite: dpNuevoFecha.SelectedDate, IdLocal: Text(GUID())})
+                          );
+                          Set(varFin, Now());
+                          Collect(colTiempos, {Bloque: varBloque, Seg: DateDiff(varBloqueInicio, varFin, TimeUnit.Seconds)});
+                          // Copia de lo preparado: al registrar la sesión cambia la fecha de la próxima reunión y las fórmulas se recalculan.
+                          ClearCollect(colCierreRev, fxRevision);
+                          // colCierreDest queda vacía, con la forma de fxDest, para que Inicio siga sincronizando igual y no se escriban destacados
+                          // de una preparación anterior.
+                          ClearCollect(colCierreDest, FirstN(fxDest, 0));
+                          Set(varCierreSeg, fxSeg);
+                          ClearCollect(colCierreAvisos, fxAvisos);
+                          Set(varCierreInd, fxIndSeg);
+                          // Los registros salen con las mismas columnas que los Excel de RD/Datos.
+                          // Fechas como texto aaaa-mm-dd (y hh:mm) para que no se corran por zona horaria.
+                          Collect(
+                              colOutSesiones,
+                              {
+                                  Titulo: "RD-" & gblGrupo & "-" & Text(Today(), "yyyy-mm-dd"),
+                                  Grupo: gblGrupo,
+                                  Area: "Operaciones Mina",
+                                  Fecha: Text(Today(), "yyyy-mm-dd"),
+                                  HoraInicio: Text(varInicio, "yyyy-mm-dd hh:mm"),
+                                  HoraTermino: Text(varFin, "yyyy-mm-dd hh:mm"),
+                                  Estado: "Cerrada",
+                                  Motivo: "",
+                                  LiderNombre: User().FullName,
+                                  LiderEmail: User().Email,
+                                  Asistentes: CountRows(Filter(colAsis, Presente)),
+                                  Animo1: 0,
+                                  Animo2: 0,
+                                  Animo3: 0,
+                                  Animo4: 0,
+                                  Animo5: 0,
+                                  TemaSeguridad: varCierreSeg,
+                                  MinutosDuracion: Round(DateDiff(varInicio, varFin, TimeUnit.Seconds) / 60, 1),
+                                  // Minutos sobre la duración planificada (nMinutosMeta).
+                                  MinutosExceso: Max(0, Round(DateDiff(varInicio, varFin, TimeUnit.Seconds) / 60 - nMinutosMeta, 1)),
+                                  TiemposBloques: JSON(colTiempos),
+                                  IdeasPresentadas: 0,
+                                  CompromisosNuevos: CountRows(colNuevos) + CountRows(colNuevosPrep),
+                                  Observaciones: "",
+                                  RutaActa: "",
+                                  IdLocal: gblSesionId
+                              }
+                          );
+                          ForAll(
+                              colCierreRev As r,
+                              Collect(
+                                  colOutRevisiones,
+                                  {
+                                      Clave: "REV-" & gblSesionId & "-" & r.ID,
+                                      FechaRevision: Text(varFin, "yyyy-mm-dd hh:mm"),
+                                      CompromisoId: r.ID,
+                                      Compromiso: r.Titulo,
+                                      EstadoAnterior: r.EstadoAnterior,
+                                      EstadoNuevo: r.EstadoNuevo,
+                                      Comentario: r.Comentario,
+                                      Grupo: gblGrupo,
+                                      SesionIdLocal: gblSesionId
+                                  }
+                              )
+                          );
+                          // Evidencias (fotos o archivos) que no alcanzaron a subirse al preparar (solo en el equipo que las tomó): suben al sincronizar.
+                          ForAll(
+                              colEvid As e,
+                              If(
+                                  IsBlank(LookUp(colCierreRev, ID = e.CompromisoId).Url),
+                                  Collect(
+                                      colOutEvidencias,
+                                      {
+                                          IdLocal: Text(GUID()),
+                                          SesionIdLocal: gblSesionId,
+                                          CompromisoId: e.CompromisoId,
+                                          Grupo: gblGrupo,
+                                          Comentario: LookUp(colCierreRev, ID = e.CompromisoId).Comentario,
+                                          Foto: e.Foto,
+                                          Url: "",
+                                          NombreArchivo: gblGrupo & "_" & Text(Today(), "yyyy-mm-dd") & "_C" & e.CompromisoId & "_" & Left(gblSesionId, 8) &
+                                              If(IsBlank(e.Nombre), ".jpg", IsBlank(Find(".", e.Nombre)), "", "." & Lower(Last(Split(e.Nombre, ".")).Value))
+                                      }
+                                  )
+                              )
+                          );
+                          // Evidencias ya subidas al preparar: solo falta dejar su link en el compromiso.
+                          ForAll(
+                              Filter(colCierreRev, !IsBlank(Url)) As r,
+                              Collect(
+                                  colOutEvidencias,
+                                  {
+                                      IdLocal: Text(GUID()),
+                                      SesionIdLocal: gblSesionId,
+                                      CompromisoId: r.ID,
+                                      Grupo: gblGrupo,
+                                      Comentario: r.Comentario,
+                                      Foto: If(false, First(colEvid).Foto),
+                                      Url: r.Url,
+                                      NombreArchivo: ""
+                                  }
+                              )
+                          );
+                          ForAll(
+                              colNuevos As n,
+                              If(
+                                  IsBlank(LookUp(colOutCompromisos, IdLocal = n.IdLocal)),
+                                  Collect(
+                                      colOutCompromisos,
+                                      {
+                                          // ID se numera al sincronizar (Excel no tiene autonumérico).
+                                          ID: 0,
+                                          Titulo: n.Titulo,
+                                          ResponsableNombre: n.Responsable,
+                                          FechaLimite: Text(n.FechaLimite, "yyyy-mm-dd"),
+                                          Estado: "Abierto",
+                                          Abierto: "Sí",
+                                          FechaCreacion: Text(Today(), "yyyy-mm-dd"),
+                                          FechaCierre: "",
+                                          Comentario: "",
+                                          EvidenciaUrl: "",
+                                          Grupo: gblGrupo,
+                                          Prioridad: "Media",
+                                          Origen: "Reunión",
+                                          ResponsableEmail: "",
+                                          SesionIdLocal: gblSesionId,
+                                          IdLocal: n.IdLocal
+                                      }
+                                  )
+                              )
+                          );
+                          // Compromisos de esta semana preparados en el editor: se vieron en Compromisos y se suben En progreso.
+                          ForAll(
+                              colNuevosPrep As n,
+                              If(
+                                  IsBlank(LookUp(colOutCompromisos, IdLocal = n.IdLocal)),
+                                  Collect(
+                                      colOutCompromisos,
+                                      {
+                                          ID: 0,
+                                          Titulo: n.Titulo,
+                                          ResponsableNombre: n.Responsable,
+                                          FechaLimite: Text(n.FechaLimite, "yyyy-mm-dd"),
+                                          Estado: "En progreso",
+                                          Abierto: "Sí",
+                                          FechaCreacion: Text(Today(), "yyyy-mm-dd"),
+                                          FechaCierre: "",
+                                          Comentario: "",
+                                          EvidenciaUrl: "",
+                                          Grupo: gblGrupo,
+                                          Prioridad: "Media",
+                                          Origen: "Reunión",
+                                          ResponsableEmail: "",
+                                          SesionIdLocal: gblSesionId,
+                                          IdLocal: n.IdLocal
+                                      }
+                                  )
+                              )
+                          );
+                          ForAll(
+                              colCierreDest As d,
+                              Collect(
+                                  colOutDestacados,
+                                  {
+                                      FechaReunion: Text(Today(), "yyyy-mm-dd"),
+                                      Tipo: d.Tipo,
+                                      Orden: d.Orden,
+                                      Texto: d.Texto,
+                                      Grupo: gblGrupo,
+                                      SesionIdLocal: gblSesionId,
+                                      IdLocal: d.IdLocal
+                                  }
+                              )
+                          );
+                          // Asistencia y minuta: una fila de asistencia por reunión y la minuta en la bandeja de salida.
+                          Collect(
+                              colOutAsistencia,
+                              {
+                                  Fecha: Text(Today(), "yyyy-mm-dd"),
+                                  SesionIdLocal: gblSesionId,
+                                  Convocados: CountRows(Filter(colAsis, Tipo = "Convocado")),
+                                  Presentes: CountRows(Filter(colAsis, Tipo = "Convocado" && Presente)),
+                                  Invitados: CountRows(Filter(colAsis, Tipo = "Invitado")),
+                                  Ausentes: Concat(Filter(colAsis, !Presente), Nombre, ", "),
+                                  Json: JSON(ForAll(colAsis As a, {Nombre: a.Nombre, Correo: a.Correo, Area: a.Area, Tipo: a.Tipo, Presente: a.Presente})),
+                                  LiderEmail: User().Email
+                              }
+                          );
+                          Set(
+                              varMinutaCab,
+                              "<div style='background:#1b2a41;color:#ffffff;padding:16px 20px'>" &
+                              "<div style='font-size:20px;font-weight:bold'>Minuta · Reunión semanal de supervisores</div>" &
+                              "<div style='font-size:13px;color:#c8d3e3;margin-top:4px'>RD Minera Demo · " & Text(varInicio, "dddd dd-mm-yyyy", "es-ES") &
+                              " · " & Text(varInicio, "hh:mm") & " a " & Text(varFin, "hh:mm") & " · " &
+                              Round(DateDiff(varInicio, varFin, TimeUnit.Seconds) / 60, 0) & " de " & nMinutosMeta & " min</div></div>"
+                          );
+                          Set(
+                              varMinutaCuerpo,
+                              "<div style='padding:4px 20px 16px'>" &
+                              // Asistencia
+                              "<h3 style='font-size:15px;color:#1b2a41;border-bottom:2px solid #4f9dde;padding-bottom:4px;margin:24px 0 8px'>Asistencia</h3>" &
+                              "<p style='margin:4px 0'><b>Líder:</b> " & Substitute(Substitute(Substitute(User().FullName, "&", "&amp;"), "<", "&lt;"), ">", "&gt;") & "</p>" &
+                              "<p style='margin:4px 0'><b>Presentes (" & CountRows(Filter(colAsis, Tipo = "Convocado" && Presente)) & " de " &
+                              CountRows(Filter(colAsis, Tipo = "Convocado")) & " convocados):</b> " &
+                              If(
+                                  IsEmpty(Filter(colAsis, Tipo = "Convocado" && Presente)),
+                                  "ninguno",
+                                  Concat(Sort(Filter(colAsis, Tipo = "Convocado" && Presente), Nombre), Substitute(Substitute(Substitute(Nombre, "&", "&amp;"), "<", "&lt;"), ">", "&gt;"), ", ")
+                              ) & "</p>" &
+                              If(
+                                  IsEmpty(Filter(colAsis, !Presente)),
+                                  "",
+                                  "<p style='margin:4px 0'><b>Ausentes:</b> " & Concat(Sort(Filter(colAsis, !Presente), Nombre), Substitute(Substitute(Substitute(Nombre, "&", "&amp;"), "<", "&lt;"), ">", "&gt;"), ", ") & "</p>"
+                              ) &
+                              If(
+                                  IsEmpty(Filter(colAsis, Tipo = "Invitado")),
+                                  "",
+                                  "<p style='margin:4px 0'><b>Invitados:</b> " & Concat(Sort(Filter(colAsis, Tipo = "Invitado"), Nombre), Substitute(Substitute(Substitute(Nombre, "&", "&amp;"), "<", "&lt;"), ">", "&gt;"), ", ") & "</p>"
+                              ) &
+                              // 1. Seguridad
+                              "<h3 style='font-size:15px;color:#1b2a41;border-bottom:2px solid #4f9dde;padding-bottom:4px;margin:24px 0 8px'>1. Seguridad</h3>" &
+                              With(
+                                  {d: varCierreInd},
+                                  If(
+                                      IsBlank(d.Inc) && IsBlank(d.Rep) && IsBlank(d.InsReal),
+                                      "",
+                                      "<p style='margin:4px 0'><b>Incidentes de la semana:</b> " & Coalesce(Text(d.Inc), "—") & If(IsBlank(d.IncAnt), "", " (anterior: " & d.IncAnt & ")") &
+                                      " · <b>Hipo Hazard:</b> " & Coalesce(Text(d.Rep), "—") & If(IsBlank(d.RepMeta), "", " (meta " & d.RepMeta & ")") &
+                                      " · <b>Inspecciones:</b> " & Coalesce(Text(d.InsReal), "—") & If(IsBlank(d.InsPlan), "", " de " & d.InsPlan) & "</p>"
+                                  )
+                              ) &
+                              If(
+                                  IsEmpty(colCierreAvisos),
+                                  "<p style='margin:4px 0;color:#828a8e'>Sin avisos registrados.</p>",
+                                  "<table cellpadding='0' cellspacing='0' style='border-collapse:collapse;width:100%;font-size:13px'>" &
+                                  Concat(
+                                      Sort(colCierreAvisos, Rango * 1000 + Orden),
+                                      "<tr><td style='padding:6px 8px;border-bottom:1px solid #e1e6e8;vertical-align:top;white-space:nowrap;width:120px'><span style='color:#ffffff;padding:2px 8px;border-radius:10px;background:" &
+                                      Switch(Nivel, "Crítico", "#c62828", "Precaución", "#ed6c02", "Recordar", "#2e7d32", "#1b2a41") & "'>" &
+                                      Switch(Nivel, "Crítico", "✖ Crítico", "Precaución", "⚠ Precaución", "Recordar", "✔ Recordar", "Aviso") &
+                                      "</span></td><td style='padding:6px 8px;border-bottom:1px solid #e1e6e8;vertical-align:top'>" & Substitute(Substitute(Substitute(Texto, "&", "&amp;"), "<", "&lt;"), ">", "&gt;") & "</td></tr>"
+                                  ) & "</table>"
+                              ) &
+                              // 2. Compromisos: los de la semana pasada y, al final, los de esta semana preparados en el editor (En progreso)
+                              "<h3 style='font-size:15px;color:#1b2a41;border-bottom:2px solid #4f9dde;padding-bottom:4px;margin:24px 0 8px'>2. Compromisos</h3>" &
+                              If(
+                                  IsEmpty(colCierreRev) && IsEmpty(colNuevosPrep),
+                                  "<p style='margin:4px 0;color:#828a8e'>No había compromisos abiertos.</p>",
+                                  "<p style='margin:4px 0'>" & With({n: CountRows(colCierreRev)}, n & If(n = 1, " revisado", " revisados")) & " · " &
+                                  With({n: CountRows(Filter(colCierreRev, EstadoNuevo = "Cumplido"))}, n & If(n = 1, " cumplido", " cumplidos")) & " · " &
+                                  With({n: CountRows(Filter(colCierreRev, EstadoNuevo = "Atrasado"))}, n & If(n = 1, " atrasado", " atrasados")) &
+                                  If(IsEmpty(colNuevosPrep), "", " · " & With({n: CountRows(colNuevosPrep)}, n & If(n = 1, " nuevo de esta semana", " nuevos de esta semana"))) & "</p>" &
+                                  "<table cellpadding='0' cellspacing='0' style='border-collapse:collapse;width:100%;font-size:13px'><tr><th align='left' style='background:#dfe5ee;color:#1b2a41;padding:6px 8px'>Compromiso</th><th align='left' style='background:#dfe5ee;color:#1b2a41;padding:6px 8px'>Responsable</th><th align='center' style='background:#dfe5ee;color:#1b2a41;padding:6px 8px'>Vence</th><th align='center' style='background:#dfe5ee;color:#1b2a41;padding:6px 8px'>Estado</th></tr>" &
+                                  Concat(
+                                      Sort(colCierreRev, FechaLimite),
+                                      "<tr><td style='padding:6px 8px;border-bottom:1px solid #e1e6e8;vertical-align:top'>" & Substitute(Substitute(Substitute(Titulo, "&", "&amp;"), "<", "&lt;"), ">", "&gt;") &
+                                      If(IsBlank(Comentario), "", "<br><span style='font-size:12px;color:#2e7d32'>Evidencia: " & Substitute(Substitute(Substitute(Comentario, "&", "&amp;"), "<", "&lt;"), ">", "&gt;") & "</span>") &
+                                      If(IsBlank(Url), "", " <a href='" & Url & "' style='font-size:12px'>ver evidencia</a>") &
+                                      "</td><td style='padding:6px 8px;border-bottom:1px solid #e1e6e8;vertical-align:top'>" & Substitute(Substitute(Substitute(ResponsableNombre, "&", "&amp;"), "<", "&lt;"), ">", "&gt;") & "</td><td align='center' style='padding:6px 8px;border-bottom:1px solid #e1e6e8;vertical-align:top;white-space:nowrap'>" & Text(FechaLimite, "dd-mm") & "</td><td align='center' style='padding:6px 8px;border-bottom:1px solid #e1e6e8;vertical-align:top;white-space:nowrap'>" &
+                                      "<span style='color:#ffffff;padding:2px 8px;border-radius:10px;background:" &
+                                      Switch(EstadoNuevo, "Cumplido", "#2e7d32", "Atrasado", "#ed6c02", "#1b2a41") & "'>" &
+                                      Switch(EstadoNuevo, "Cumplido", "✔ Cumplido", "Atrasado", "⚠ Atrasado", "En progreso") &
+                                      "</span></td></tr>"
+                                  ) &
+                                  Concat(
+                                      Sort(colNuevosPrep, FechaLimite),
+                                      "<tr><td style='padding:6px 8px;border-bottom:1px solid #e1e6e8;vertical-align:top'>" & Substitute(Substitute(Substitute(Titulo, "&", "&amp;"), "<", "&lt;"), ">", "&gt;") & "</td><td style='padding:6px 8px;border-bottom:1px solid #e1e6e8;vertical-align:top'>" & Substitute(Substitute(Substitute(Responsable, "&", "&amp;"), "<", "&lt;"), ">", "&gt;") & "</td><td align='center' style='padding:6px 8px;border-bottom:1px solid #e1e6e8;vertical-align:top;white-space:nowrap'>" & Text(FechaLimite, "dd-mm") &
+                                      "</td><td align='center' style='padding:6px 8px;border-bottom:1px solid #e1e6e8;vertical-align:top;white-space:nowrap'><span style='color:#ffffff;padding:2px 8px;border-radius:10px;background:#1b2a41'>En progreso</span></td></tr>"
+                                  ) & "</table>"
+                              ) &
+                              // 3. Indicadores: OEE de transporte (CAEX) en JUE-DOM, SEMANAL y MENSUAL, con el detalle solo de lo bajo plan
+                              "<h3 style='font-size:15px;color:#1b2a41;border-bottom:2px solid #4f9dde;padding-bottom:4px;margin:24px 0 8px'>3. Indicadores · OEE de transporte (CAEX)</h3>" &
+                              If(
+                                  IsEmpty(colOEE),
+                                  "<p style='margin:4px 0;color:#828a8e'>Sin datos del informe OEE cargados.</p>",
+                                  "<p style='margin:4px 0 6px;font-size:12px;color:#5a6268'>Movimiento de los CAEX contra el plan y, en cada periodo, solo las " &
+                                  "palancas que quedaron bajo el plan, de la que más perdió a la que menos. " & First(colOEE).Datos & ".</p>" &
+                                  "<table cellpadding='0' cellspacing='0' style='border-collapse:collapse;width:100%;font-size:13px'><tr><th align='left' style='background:#dfe5ee;color:#1b2a41;padding:6px 8px'>Palanca</th><th align='right' style='background:#dfe5ee;color:#1b2a41;padding:6px 8px'>Real</th><th align='right' style='background:#dfe5ee;color:#1b2a41;padding:6px 8px'>Plan</th><th align='right' style='background:#dfe5ee;color:#1b2a41;padding:6px 8px'>Toneladas</th></tr>" &
+                                  Concat(
+                                      Sort(colOEE, Orden) As p,
+                                      "<tr><td colspan='4' style='background:#1b2a41;color:#ffffff;padding:6px 8px;font-weight:bold'>" & p.Periodo & "<span style='font-weight:normal;color:#c8d3e3'> · " &
+                                      Text(p.Ini, "ddd dd-mm", "es-ES") & If(p.Fin = p.Ini, "", " a " & Text(p.Fin, "ddd dd-mm", "es-ES")) & "</span></td></tr>" &
+                                      If(
+                                          IsBlank(p.PlanT) || p.PlanT = 0,
+                                          "<tr><td colspan='4' style='padding:5px 8px;border-bottom:1px solid #e1e6e8;color:#828a8e'>Movimiento " & Text(p.RealT, "#,##0") & " t · sin plan cargado para este periodo.</td></tr>",
+                                          With(
+                                              {v: p.RealT / p.PlanT - 1},
+                                              "<tr><td colspan='4' style='padding:5px 8px;border-bottom:1px solid #e1e6e8;background:#f0f3f9'>Movimiento <b>" & Text(p.RealT, "#,##0") & " t</b> de " & Text(p.PlanT, "#,##0") &
+                                              " t del plan (<b style='color:" & If(v * 1000 < -1, "#c62828", "#1b2a41") & "'>" & If(v > 0, "+", "") &
+                                              Text(v * 100, "0.00") & "%</b>) · OEE " & Text(p.OEEReal * 100, "0.0") & "% (plan " & Text(p.OEEPlan * 100, "0.0") &
+                                              "%)</td></tr>"
+                                          ) &
+                                          With(
+                                              {
+                                                  bajo: Sort(
+                                                      Filter(
+                                                          Table(
+                                                              {Palanca: "Disponibilidad", Real: Text(p.DFReal * 100, "0.0") & "%", Plan: Text(p.DFPlan * 100, "0.0") & "%", T: p.PerdDF},
+                                                              {Palanca: "UEBD", Real: Text(p.UEBDReal * 100, "0.0") & "%", Plan: Text(p.UEBDPlan * 100, "0.0") & "%", T: p.PerdUEBD},
+                                                              {Palanca: "Rendimiento efectivo", Real: Text(p.RendReal, "#,##0") & " t/h", Plan: Text(p.RendPlan, "#,##0") & " t/h", T: p.PerdRend},
+                                                              {Palanca: "Horas nominales", Real: Text(p.HNReal, "#,##0") & " h", Plan: Text(p.HNPlan, "#,##0") & " h", T: p.PerdHN}
+                                                          ),
+                                                          !IsBlank(T) && T < -p.PlanT / 1000
+                                                      ),
+                                                      T
+                                                  )
+                                              },
+                                              If(
+                                                  IsEmpty(bajo),
+                                                  "<tr><td colspan='4' style='padding:5px 8px;border-bottom:1px solid #e1e6e8;color:#2e7d32'>✔ Ninguna palanca quedó bajo el plan.</td></tr>",
+                                                  Concat(
+                                                      bajo,
+                                                      "<tr><td style='padding:5px 8px;border-bottom:1px solid #e1e6e8'>" & Palanca & "</td><td align='right' style='padding:5px 8px;border-bottom:1px solid #e1e6e8;white-space:nowrap'><b>" & Real & "</b></td><td align='right' style='padding:5px 8px;border-bottom:1px solid #e1e6e8;white-space:nowrap'><span style='color:#5a6268'>" & Plan &
+                                                      "</span></td><td align='right' style='padding:5px 8px;border-bottom:1px solid #e1e6e8;white-space:nowrap'><b style='color:#c62828'>" & Text(T, "#,##0") & " t</b></td></tr>"
+                                                  )
+                                              )
+                                          )
+                                      )
+                                  ) & "</table>"
+                              ) &
+                              // 4. Compromisos nuevos que surgieron en la reunión (los preparados en el editor van en la sección 2)
+                              "<h3 style='font-size:15px;color:#1b2a41;border-bottom:2px solid #4f9dde;padding-bottom:4px;margin:24px 0 8px'>4. Compromisos nuevos</h3>" &
+                              If(
+                                  IsEmpty(colNuevos),
+                                  "<p style='margin:4px 0;color:#828a8e'>No se registraron compromisos nuevos.</p>",
+                                  "<table cellpadding='0' cellspacing='0' style='border-collapse:collapse;width:100%;font-size:13px'><tr><th align='left' style='background:#dfe5ee;color:#1b2a41;padding:6px 8px'>Compromiso</th><th align='left' style='background:#dfe5ee;color:#1b2a41;padding:6px 8px'>Responsable</th><th align='center' style='background:#dfe5ee;color:#1b2a41;padding:6px 8px'>Fecha límite</th></tr>" &
+                                  Concat(
+                                      Sort(colNuevos, FechaLimite),
+                                      "<tr><td style='padding:6px 8px;border-bottom:1px solid #e1e6e8;vertical-align:top'>" & Substitute(Substitute(Substitute(Titulo, "&", "&amp;"), "<", "&lt;"), ">", "&gt;") & "</td><td style='padding:6px 8px;border-bottom:1px solid #e1e6e8;vertical-align:top'>" & Substitute(Substitute(Substitute(Responsable, "&", "&amp;"), "<", "&lt;"), ">", "&gt;") & "</td><td align='center' style='padding:6px 8px;border-bottom:1px solid #e1e6e8;vertical-align:top;white-space:nowrap'>" & Text(FechaLimite, "dd-mm-yyyy") & "</td></tr>"
+                                  ) & "</table>"
+                              ) &
+                              "<p style='margin:24px 0 0;font-size:11px;color:#828a8e'>Minuta generada por la app RD Terreno (prototipo) al cerrar la reunión. " &
+                              "Se envía a todos los convocados, hayan asistido o no.</p></div>"
+                          );
+                          // Destinatarios: presentes (con quien cierra, aunque no esté en la lista) y, en otro correo, los ausentes.
+                          ClearCollect(colMinPara, ForAll(Filter(colAsis, Presente && !IsBlank(Correo)) As a, {Correo: Lower(a.Correo)}));
+                          If(IsBlank(LookUp(colAsis, Lower(Correo) = Lower(User().Email))), Collect(colMinPara, {Correo: Lower(User().Email)}));
+                          ClearCollect(colMinParaAus, ForAll(Filter(colAsis, !Presente && !IsBlank(Correo)) As a, {Correo: Lower(a.Correo)}));
+                          Collect(
+                              colOutMinuta,
+                              {
+                                  Id: Text(GUID()),
+                                  SesionIdLocal: gblSesionId,
+                                  Para: Concat(Distinct(colMinPara, Correo), Value, ";"),
+                                  Asunto: "Minuta RD Minera Demo · " & Text(Today(), "dd-mm-yyyy"),
+                                  Html: "<div style='font-family:Segoe UI,Arial,sans-serif;color:#212529;max-width:760px'>" & varMinutaCab & varMinutaCuerpo & "</div>"
+                              }
+                          );
+                          If(
+                              !IsEmpty(colMinParaAus),
+                              Collect(
+                                  colOutMinuta,
+                                  {
+                                      Id: Text(GUID()),
+                                      SesionIdLocal: gblSesionId,
+                                      Para: Concat(Distinct(colMinParaAus, Correo), Value, ";"),
+                                      Asunto: "Minuta RD Minera Demo · " & Text(Today(), "dd-mm-yyyy"),
+                                      Html: "<div style='font-family:Segoe UI,Arial,sans-serif;color:#212529;max-width:760px'>" & varMinutaCab & "<div style='background:#fff3e0;border-left:4px solid #f28c28;padding:10px 14px;margin:14px 20px 0;font-size:13px'>No asististe a esta reunión. Este es el resumen de lo que se vio.</div>" & varMinutaCuerpo & "</div>"
+                                  }
+                              )
+                          );
+                          SaveData(colOutAsistencia, "rd_out_asis");
+                          SaveData(colOutMinuta, "rd_out_min");
+                          SaveData(colOutSesiones, "rd_out_ses");
+                          SaveData(colOutRevisiones, "rd_out_rev");
+                          SaveData(colOutCompromisos, "rd_out_comp");
+                          SaveData(colOutEvidencias, "rd_out_evid");
+                          SaveData(colOutDestacados, "rd_out_dest");
+                          // Cumplido cierra el compromiso (queda en Excel, no vuelve a aparecer); En progreso y Atrasado siguen abiertos.
+                          RemoveIf(colCompromisos, ID in Filter(colCierreRev, EstadoNuevo = "Cumplido").ID);
+                          ForAll(Filter(colCierreRev, EstadoNuevo <> EstadoAnterior) As r, UpdateIf(colCompromisos, ID = r.ID, {Estado: r.EstadoNuevo}));
+                          SaveData(colCompromisos, "rd_comp");
+                          Clear(colNuevos);
+                          Clear(colNuevosPrep);
+                          Clear(colEvid);
+                          Clear(colCierreRev);
+                          Clear(colCierreDest);
+                          Clear(colAsis);
+                          Clear(colAsisQuitados);
+                          Clear(colAsisVista);
+                          Set(varVerAsistencia, false);
+                          Set(varPrepSucia, false);
+                          Set(varReunionEnCurso, false);
+                          Notify("Reunión cerrada en " & Round(DateDiff(varInicio, varFin, TimeUnit.Seconds) / 60, 1) & " min. Se sube sola cuando haya señal.", NotificationType.Success);
+                          Navigate(scrInicio, ScreenTransition.Fade)
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =15
+                        Text: ="Cerrar y enviar minuta"
+                        Width: =260
+                        X: =Parent.Width - 24 - 260
+                        Y: =Parent.Height - 70
+      - conVerEvid:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(0, 0, 0, 0.6)
+            Height: =Parent.Height
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Visible: =varEvidVerId <> 0
+            Width: =Parent.Width
+            X: =0
+            Y: =0
+          Children:
+            - conVerEvidTarjeta:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  DropShadow: =DropShadow.Bold
+                  Fill: =RGBA(255, 255, 255, 1)
+                  Height: =Parent.Height - 48
+                  RadiusBottomLeft: =12
+                  RadiusBottomRight: =12
+                  RadiusTopLeft: =12
+                  RadiusTopRight: =12
+                  Width: =Min(Parent.Width - 48, 960)
+                  X: =(Parent.Width - Self.Width) / 2
+                  Y: =24
+                Children:
+                  - lblVerEvidTitulo:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colVerde
+                        FontWeight: =FontWeight.Bold
+                        Height: =56
+                        PaddingBottom: =2
+                        PaddingTop: =2
+                        Size: =18
+                        Text: ="✔ " & LookUp(fxRevision, ID = varEvidVerId).Titulo
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Parent.Width - 48 - 56
+                        X: =24
+                        Y: =12
+                  - icoVerEvidCerrar:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Cerrar la evidencia"
+                        Color: =RGBA(90, 98, 104, 1)
+                        Height: =44
+                        Icon: =Icon.Cancel
+                        OnSelect: =Set(varEvidVerId, 0)
+                        PaddingBottom: =10
+                        PaddingLeft: =10
+                        PaddingRight: =10
+                        PaddingTop: =10
+                        Tooltip: ="Volver a la reunión"
+                        Width: =44
+                        X: =Parent.Width - 24 - 44
+                        Y: =12
+                  - lblVerEvidComentario:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colTexto
+                        Height: =44
+                        PaddingBottom: =2
+                        PaddingTop: =2
+                        Size: =13
+                        Text: |-
+                          =If(IsBlank(LookUp(fxRevision, ID = varEvidVerId).Comentario), "", "Comentario: " & LookUp(fxRevision, ID = varEvidVerId).Comentario)
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =70
+                  - imgVerEvidLocal:
+                      Control: Image@2.2.3
+                      Properties:
+                        Height: =Parent.Height - 120 - 76
+                        Image: =LookUp(colEvid, CompromisoId = varEvidVerId).Foto
+                        ImagePosition: =ImagePosition.Fit
+                        Visible: =!IsBlank(LookUp(colEvid, CompromisoId = varEvidVerId))
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =120
+                  - imgVerEvidNube:
+                      Control: Image@2.2.3
+                      Properties:
+                        Height: =Parent.Height - 120 - 76
+                        Image: =LookUp(fxRevision, ID = varEvidVerId).Url
+                        ImagePosition: =ImagePosition.Fit
+                        Visible: =IsBlank(LookUp(colEvid, CompromisoId = varEvidVerId))
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =120
+                  - sepVerEvid:
+                      Control: Rectangle@2.3.0
+                      Properties:
+                        Fill: =RGBA(225, 230, 232, 1)
+                        Height: =1
+                        Width: =Parent.Width
+                        X: =0
+                        Y: =Parent.Height - 72
+                  - btnVerEvidAbrir:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =colPrimario
+                        BorderThickness: =1
+                        Color: =colPrimario
+                        Fill: =RGBA(255, 255, 255, 1)
+                        Height: =48
+                        OnSelect: =Launch(LookUp(fxRevision, ID = varEvidVerId).Url)
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =14
+                        Text: ="Abrir en el navegador"
+                        Visible: =!IsBlank(LookUp(fxRevision, ID = varEvidVerId).Url)
+                        Width: =240
+                        X: =24
+                        Y: =Parent.Height - 60
+                  - btnVerEvidVolver:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        Color: =RGBA(255, 255, 255, 1)
+                        Fill: =colPrimario
+                        FontWeight: =FontWeight.Bold
+                        Height: =48
+                        OnSelect: =Set(varEvidVerId, 0)
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =15
+                        Text: ="Volver a la reunión"
+                        Width: =220
+                        X: =Parent.Width - 24 - 220
+                        Y: =Parent.Height - 60
+      - conBorrarNuevo:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(0, 0, 0, 0.45)
+            Height: =Parent.Height
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Visible: =!IsBlank(varBorrarNuevo)
+            Width: =Parent.Width
+            X: =0
+            Y: =0
+          Children:
+            - conBorrarNuevoTarjeta:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  DropShadow: =DropShadow.Bold
+                  Fill: =RGBA(255, 255, 255, 1)
+                  Height: =232
+                  RadiusBottomLeft: =12
+                  RadiusBottomRight: =12
+                  RadiusTopLeft: =12
+                  RadiusTopRight: =12
+                  Width: =480
+                  X: =(Parent.Width - 480) / 2
+                  Y: =(Parent.Height - 232) / 2
+                Children:
+                  - lblBorrarNuevoPregunta:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colTexto
+                        FontWeight: =FontWeight.Bold
+                        Height: =56
+                        PaddingBottom: =2
+                        PaddingTop: =2
+                        Size: =15
+                        Text: ="¿Seguro que quieres eliminar este compromiso?"
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =20
+                  - lblBorrarNuevoDetalle:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =RGBA(90, 98, 104, 1)
+                        Height: =64
+                        PaddingBottom: =2
+                        PaddingTop: =2
+                        Size: =12
+                        Text: |-
+                          =With(
+                              {n: LookUp(colNuevos, IdLocal = varBorrarNuevo)},
+                              If(Len(n.Titulo) > 100, Left(n.Titulo, 97) & "…", n.Titulo) & Char(10) & n.Responsable & " · vence " & Text(n.FechaLimite, "dd-mm")
+                          )
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =80
+                  - btnBorrarNuevoSi:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        Color: =RGBA(255, 255, 255, 1)
+                        Fill: =colRojo
+                        FontWeight: =FontWeight.Bold
+                        Height: =48
+                        OnSelect: |-
+                          =RemoveIf(colNuevos, IdLocal = varBorrarNuevo);
+                          If(varEditNuevo = varBorrarNuevo, Set(varEditNuevo, Blank()); Reset(txtNuevoQue); Reset(txtNuevoResp); Reset(dpNuevoFecha));
+                          Set(varBorrarNuevo, Blank())
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =14
+                        Text: ="Eliminar"
+                        Width: =140
+                        X: =Parent.Width - 24 - 280 - 12
+                        Y: =Parent.Height - 72
+                  - btnBorrarNuevoNo:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(160, 160, 160, 1)
+                        BorderThickness: =1
+                        Color: =colTexto
+                        Fill: =RGBA(255, 255, 255, 1)
+                        Height: =48
+                        OnSelect: =Set(varBorrarNuevo, Blank())
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =14
+                        Text: ="Cancelar"
+                        Width: =140
+                        X: =Parent.Width - 24 - 140
+                        Y: =Parent.Height - 72
+      - conSalir:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(0, 0, 0, 0.45)
+            Height: =Parent.Height
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Visible: =varConfSalir
+            Width: =Parent.Width
+            X: =0
+            Y: =0
+          Children:
+            - conSalirTarjeta:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  DropShadow: =DropShadow.Bold
+                  Fill: =RGBA(255, 255, 255, 1)
+                  Height: =232
+                  RadiusBottomLeft: =12
+                  RadiusBottomRight: =12
+                  RadiusTopLeft: =12
+                  RadiusTopRight: =12
+                  Width: =480
+                  X: =(Parent.Width - 480) / 2
+                  Y: =(Parent.Height - 232) / 2
+                Children:
+                  - lblSalirPregunta:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =colTexto
+                        FontWeight: =FontWeight.Bold
+                        Height: =56
+                        PaddingBottom: =2
+                        PaddingTop: =2
+                        Size: =15
+                        Text: ="¿Salir sin cerrar la reunión?"
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =20
+                  - lblSalirDetalle:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =RGBA(90, 98, 104, 1)
+                        Height: =64
+                        PaddingBottom: =2
+                        PaddingTop: =2
+                        Size: =12
+                        Text: ="No se guarda nada de esta presentación ni se envía la minuta. Lo preparado en el editor sigue igual y se puede volver a presentar cuantas veces se quiera."
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =80
+                  - btnSalirSi:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        Color: =RGBA(255, 255, 255, 1)
+                        Fill: =colRojo
+                        FontWeight: =FontWeight.Bold
+                        Height: =48
+                        OnSelect: |-
+                          =Set(varConfSalir, false);
+                          Set(varReunionEnCurso, false);
+                          Clear(colNuevos);
+                          Clear(colNuevosPrep);
+                          Clear(colAsis);
+                          Clear(colAsisQuitados);
+                          Set(varVerAsistencia, false);
+                          Set(varEvidVerId, 0);
+                          Navigate(scrInicio, ScreenTransition.Fade)
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =14
+                        Text: ="Salir"
+                        Width: =140
+                        X: =Parent.Width - 24 - 280 - 12
+                        Y: =Parent.Height - 72
+                  - btnSalirNo:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =RGBA(160, 160, 160, 1)
+                        BorderThickness: =1
+                        Color: =colTexto
+                        Fill: =RGBA(255, 255, 255, 1)
+                        Height: =48
+                        OnSelect: =Set(varConfSalir, false)
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =14
+                        Text: ="Cancelar"
+                        Width: =140
+                        X: =Parent.Width - 24 - 140
+                        Y: =Parent.Height - 72

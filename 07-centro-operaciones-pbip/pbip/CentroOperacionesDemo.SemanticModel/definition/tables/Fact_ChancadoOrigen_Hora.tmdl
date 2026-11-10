@@ -1,0 +1,140 @@
+table Fact_ChancadoOrigen_Hora
+	lineageTag: 2c3a3852-8713-490a-9239-f88819159847
+
+	measure Plan_Chancado_Dia = ```
+			
+			VAR FechaSel = [Fecha_Efectiva]
+			RETURN
+			    CALCULATE(
+			        SUM(Plan_Semanal_Chancador[Plan Semanal]),
+			        Plan_Semanal_Chancador[Fecha] = FechaSel
+			    )
+			
+			```
+		lineageTag: 1bf54cbe-c37c-48a6-80b5-003638c903fd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Plan_Chancado_Hora =
+			IF(
+			    SELECTEDVALUE(Dim_Hora_Operacional[Es_Espacio]) = 1,
+			    BLANK(),
+			    DIVIDE([Plan_Chancado_Dia], 24)
+			)
+		lineageTag: e4135319-e447-48ac-b932-3eeaf685922e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Toneladas_Chancado_Hora = ```
+			
+			VAR FechaSel = [Fecha_Efectiva]
+			VAR HT = SELECTEDVALUE(Fact_ChancadoOrigen_Hora[HoraTurno])
+			RETURN
+			    IF(
+			        NOT ISBLANK(HT),
+			        AVERAGEX(
+			            VALUES(Fact_ChancadoOrigen_Hora[Turno]),
+			            CALCULATE(
+			                SUM(Fact_ChancadoOrigen_Hora[Tonelaje]),
+			                Fact_ChancadoOrigen_Hora[Fecha] = FechaSel,
+			                Fact_ChancadoOrigen_Hora[HoraTurno] = HT
+			            )
+			        ),
+			        CALCULATE(SUM(Fact_ChancadoOrigen_Hora[Tonelaje]), Fact_ChancadoOrigen_Hora[Fecha] = FechaSel)
+			    )
+			
+			```
+		lineageTag: 79f45fe4-f8f4-45da-a0cf-3263bb815c86
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Fecha
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: c5da20fc-f9db-4074-a5e6-2a76968d72a6
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+	column Hora
+		dataType: int64
+		formatString: 0
+		lineageTag: 6edde5f1-40a9-416f-81e1-b5e1facae276
+		summarizeBy: sum
+		sourceColumn: Hora
+
+		annotation SummarizationSetBy = Automatic
+
+	column Origen
+		dataType: string
+		lineageTag: 765e8f78-78e0-4856-a22d-a7b13bddfc52
+		summarizeBy: none
+		sourceColumn: Origen
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tonelaje
+		dataType: double
+		lineageTag: 87cb77d3-08f7-4f41-9ad4-aeddfe5ed4c9
+		summarizeBy: sum
+		sourceColumn: Tonelaje
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Turno
+		dataType: string
+		lineageTag: 33810d9b-2073-4c87-b55f-307076a4cfd7
+		summarizeBy: none
+		sourceColumn: Turno
+
+		annotation SummarizationSetBy = Automatic
+
+	column Hora_Orden
+		dataType: int64
+		formatString: 0
+		lineageTag: 59592533-37d9-4df7-9a2c-d44264aebfbf
+		summarizeBy: sum
+		sourceColumn: Hora_Orden
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column HoraTurno
+		dataType: int64
+		formatString: 0
+		lineageTag: 072ed102-65e8-4ea2-a92d-477539359885
+		summarizeBy: sum
+		sourceColumn: HoraTurno
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Posicion 1-24 en el dia operacional. En blanco cuando HoraTurno es nulo (hora no asignable al turno).
+	column Orden_Hora_Dia =
+			VAR HT = Fact_ChancadoOrigen_Hora[HoraTurno]
+			RETURN
+			    IF(NOT ISBLANK(HT) && HT >= 1 && HT <= 12, SWITCH(Fact_ChancadoOrigen_Hora[Turno], "A", HT, "B", HT + 12))
+		isHidden
+		formatString: 0
+		lineageTag: 465f83c2-6d58-45b6-879b-1acb67dc81b1
+		summarizeBy: none
+
+	partition Fact_ChancadoOrigen_Hora = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "fact_chancado_origen_hora.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Fecha", type datetime}, {"Hora", Int64.Type}, {"Origen", type text}, {"Tonelaje", type number}, {"Turno", type text}, {"Hora_Orden", Int64.Type}, {"HoraTurno", Int64.Type}}, "en-US"),
+				    // Ventana de historia: solo las filas de los ultimos DiasHistoria dias respecto de FechaReferencia.
+				    Ventana = Table.SelectRows(Tipos, each Date.From([Fecha]) >= Date.AddDays(FechaReferencia, -DiasHistoria))
+				in
+				    Ventana
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

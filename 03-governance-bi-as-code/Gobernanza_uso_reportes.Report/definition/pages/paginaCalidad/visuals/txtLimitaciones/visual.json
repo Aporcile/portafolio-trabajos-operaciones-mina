@@ -1,0 +1,59 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "txtLimitaciones",
+  "position": {
+    "x": 16,
+    "y": 1008,
+    "width": 1888,
+    "height": 56,
+    "z": 59,
+    "tabOrder": 5900
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Limitaciones: ",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "fontWeight": "bold",
+                      "color": "#D5DEEA"
+                    }
+                  },
+                  {
+                    "value": "1) los datos son sintéticos y no describen ninguna operación real; 2) el informe de métricas de uso del servicio guarda unos 30 días, por lo que un histórico más largo necesita una extracción periódica (ver docs/GUIA.md); 3) las aperturas no equivalen a vistas de página; 4) una persona puede tener más de una cuenta (por ejemplo una interna y una externa).",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#9FB0C8"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Limitaciones conocidas de los datos'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

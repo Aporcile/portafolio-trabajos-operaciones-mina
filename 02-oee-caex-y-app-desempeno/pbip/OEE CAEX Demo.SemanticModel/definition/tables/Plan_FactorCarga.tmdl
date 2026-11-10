@@ -1,0 +1,34 @@
+/// Plan diario del factor de carga de los CAEX (t por carga). Hay días sin plan. Fuente: Plan_FactorCarga.csv.
+table Plan_FactorCarga
+	lineageTag: 8d12e091-3467-5c16-bf20-b5c9caeadcdb
+
+	column Fecha
+		dataType: dateTime
+		formatString: dd-mm-yyyy
+		lineageTag: 490b8030-57fa-5ae2-8f02-5ffb9fb5ca47
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+	column Plan
+		dataType: double
+		formatString: #,0.0
+		lineageTag: bed9ef9a-b46c-572a-91da-53524d14bb41
+		summarizeBy: none
+		sourceColumn: Plan
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Plan_FactorCarga = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "Plan_FactorCarga.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Fecha", type datetime}, {"Plan", type number}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

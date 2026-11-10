@@ -1,0 +1,169 @@
+/// Ciclos de acarreo (muestra de dos por camión y turno). time es el día en que empieza el turno; los tiempos están en segundos. Fuente: Fact_Ciclos.csv.
+table Fact_Ciclos
+	lineageTag: e308bf5d-efce-5e81-b6f4-b3de291d3aca
+
+	column time
+		dataType: dateTime
+		formatString: General Number
+		lineageTag: 5a171981-7cfe-55d5-b2c9-009a01bb7b4a
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: time
+
+		annotation SummarizationSetBy = User
+
+	column shift
+		dataType: string
+		lineageTag: 70541049-1dc4-55fc-968c-d2131cd4e9c6
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: shift
+
+		annotation SummarizationSetBy = User
+
+	column crew
+		dataType: string
+		lineageTag: e013be0e-d852-53c1-9abb-db96eff44bb8
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: crew
+
+		annotation SummarizationSetBy = User
+
+	column TruckName
+		dataType: string
+		lineageTag: 36ed1985-acf5-53cc-a4e4-26d34a4e0935
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: TruckName
+
+		annotation SummarizationSetBy = User
+
+	column ShovelName
+		dataType: string
+		lineageTag: 99993d6a-3acf-5abe-9193-65ac90e9a1c8
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: ShovelName
+
+		annotation SummarizationSetBy = User
+
+	column Dump_LocationType
+		dataType: string
+		lineageTag: 68ea20c6-488c-5373-b77d-bdeaecfcb8eb
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Dump_LocationType
+
+		annotation SummarizationSetBy = User
+
+	column TruckOpName
+		dataType: string
+		lineageTag: 44b0912e-53f3-5450-a989-5e1cdebfc09e
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: TruckOpName
+
+		annotation SummarizationSetBy = User
+
+	column payload
+		dataType: double
+		lineageTag: 13be0267-6206-5ce3-972c-1211d323bdfa
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: payload
+
+		annotation SummarizationSetBy = User
+
+	column traveling_time
+		dataType: int64
+		formatString: 0
+		lineageTag: 3a1b20d7-c0f6-5781-9714-904af5d4d75c
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: traveling_time
+
+		annotation SummarizationSetBy = User
+
+	column waiting_time
+		dataType: int64
+		formatString: 0
+		lineageTag: 460fbecc-8daa-525b-a64d-3cbf343b59fc
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: waiting_time
+
+		annotation SummarizationSetBy = User
+
+	column spotting_time
+		dataType: int64
+		formatString: 0
+		lineageTag: 4783c077-c363-5cf5-99be-c13d7fb23e9c
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: spotting_time
+
+		annotation SummarizationSetBy = User
+
+	column loading_time
+		dataType: int64
+		formatString: 0
+		lineageTag: fc938697-d509-5adf-9471-2b3c2e3e3260
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: loading_time
+
+		annotation SummarizationSetBy = User
+
+	column hauling_time
+		dataType: int64
+		formatString: 0
+		lineageTag: ac028d91-b2cc-5498-ab33-bd8068063bd2
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: hauling_time
+
+		annotation SummarizationSetBy = User
+
+	column queued_time
+		dataType: int64
+		formatString: 0
+		lineageTag: 801773fc-02c0-57f8-9545-b8dc62ebd505
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: queued_time
+
+		annotation SummarizationSetBy = User
+
+	column backing_time
+		dataType: int64
+		formatString: 0
+		lineageTag: e3b3e54a-960e-54eb-b233-63d02e058718
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: backing_time
+
+		annotation SummarizationSetBy = User
+
+	column tipping_time
+		dataType: int64
+		formatString: 0
+		lineageTag: f7032144-5e3c-57b1-9041-502783e93e2a
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: tipping_time
+
+		annotation SummarizationSetBy = User
+
+	partition Fact_Ciclos = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "Fact_Ciclos.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"time", type datetime}, {"shift", type text}, {"crew", type text}, {"TruckName", type text}, {"ShovelName", type text}, {"Dump_LocationType", type text}, {"TruckOpName", type text}, {"payload", type number}, {"traveling_time", Int64.Type}, {"waiting_time", Int64.Type}, {"spotting_time", Int64.Type}, {"loading_time", Int64.Type}, {"hauling_time", Int64.Type}, {"queued_time", Int64.Type}, {"backing_time", Int64.Type}, {"tipping_time", Int64.Type}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

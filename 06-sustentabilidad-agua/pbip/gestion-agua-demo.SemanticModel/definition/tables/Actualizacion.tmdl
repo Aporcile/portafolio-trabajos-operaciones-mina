@@ -1,0 +1,32 @@
+/// Reloj del modelo: hora de referencia de los datos (CSV) o hora de la actualización (historiador).
+table Actualizacion
+	lineageTag: 8ffb3604-bc68-47de-a67b-e02b09ae4599
+
+	column FechaActualizacion
+		dataType: dateTime
+		formatString: dd-mm-yyyy HH:mm
+		lineageTag: 560e6852-f150-478a-bb76-7e680ca7afce
+		summarizeBy: none
+		sourceColumn: FechaActualizacion
+
+		annotation SummarizationSetBy = Automatic
+
+	column HoraReferencia
+		dataType: dateTime
+		formatString: dd-mm-yyyy HH:mm
+		lineageTag: 58341381-8ec1-4dea-96ad-567cc11a5a0d
+		summarizeBy: none
+		sourceColumn: HoraReferencia
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Actualizacion = m
+		mode: import
+		source =
+				let
+				    Origen = #table(type table [FechaActualizacion = datetime, HoraReferencia = datetime], {{HoraReferencia, HoraReferencia}})
+				in
+				    Origen
+
+	annotation PBI_ResultType = Table
+

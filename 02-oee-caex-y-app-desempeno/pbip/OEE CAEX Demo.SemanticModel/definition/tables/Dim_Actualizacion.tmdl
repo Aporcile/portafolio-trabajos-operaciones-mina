@@ -1,0 +1,37 @@
+/// Marca de tiempo de la última actualización del conjunto de datos. Una sola fila; alimenta el texto de actualización del encabezado.
+table Dim_Actualizacion
+	lineageTag: 29104fac-b01c-5edf-946c-e6421f13b620
+
+	/// Fecha y hora exactas de la última actualización.
+	column Marca
+		dataType: dateTime
+		formatString: General Number
+		lineageTag: 18e6fdb7-b937-5c1b-b4a5-294ddef6be20
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Marca
+
+		annotation SummarizationSetBy = User
+
+	/// Hora de la última actualización en formato HH:MM.
+	column Hora_Texto
+		dataType: string
+		lineageTag: 37212df8-969c-53ec-a97a-dbd0523f9854
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Hora_Texto
+
+		annotation SummarizationSetBy = User
+
+	partition Dim_Actualizacion = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "Dim_Actualizacion.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Marca", type datetime}, {"Hora_Texto", type text}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

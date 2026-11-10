@@ -1,0 +1,20 @@
+/// Filtro de estado del dato (tabla desconectada, solo alimenta el segmentador de la página Señales y calidad del dato).
+table FiltroEstado
+	lineageTag: c75d13e2-6de2-43a7-ad50-cf9cee60b552
+
+	column Estado
+		lineageTag: a2b786b7-8dfa-441c-9f8b-fdc8d46335dd
+		isNameInferred
+		sourceColumn: [Estado]
+
+	column Cod
+		lineageTag: 786e11ce-7181-4a71-b17b-754213bf9fc4
+		isNameInferred
+		sourceColumn: [Cod]
+
+	partition FiltroEstado = calculated
+		mode: import
+		source = DATATABLE ( "Estado", STRING, "Cod", INTEGER, { { "● Con dato", 1 }, { "◇ Congelado", 2 }, { "■ Atrasado", 3 }, { "◌ Sin muestras", 4 } } )
+
+	annotation PBI_Id = b3eb4deedfc05e8e827eae036e149491
+

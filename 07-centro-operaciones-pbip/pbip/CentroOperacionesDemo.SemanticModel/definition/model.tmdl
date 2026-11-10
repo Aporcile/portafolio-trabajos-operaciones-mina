@@ -1,0 +1,38 @@
+model Model
+	culture: es-ES
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-ES
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["RutaDatos","FechaReferencia","DiasHistoria","DiasHistoriaGPS","Dim_Equipo","Fact_Chancado","Fact_GPS","Fact_Ciclos","Fact_HorasEquipo","Dim_Turno","Dim_Tiempo","Dim_Carguio","Plan_Semanal_Chancador","Fact_ChancadoOrigen_Hora","Plan_Carguio","Fact_LeyAlimentacion_Hora","Plan_CAEX","Plan_Perforadoras","Fact_HorasEquipo_Muro","Plan_Muro","Fact_VelocidadCAEX_Hora","Dim_Actualizacion"]
+
+annotation PBI_ProTooling = ["TMDLView_Desktop","DevMode"]
+
+ref table Dim_Equipo
+ref table Fact_Chancado
+ref table Fact_GPS
+ref table Fact_Ciclos
+ref table Fact_HorasEquipo
+ref table Dim_Carguio
+ref table Dim_Turno
+ref table Dim_Tiempo
+ref table Plan_Semanal_Chancador
+ref table Fact_ChancadoOrigen_Hora
+ref table Plan_Carguio
+ref table Dim_Hora_Operacional
+ref table Dim_Metrica_Carguio
+ref table Fact_LeyAlimentacion_Hora
+ref table Plan_CAEX
+ref table Plan_Perforadoras
+ref table Dim_Metrica_Perforadoras
+ref table Dim_Metrica_Flota
+ref table Dim_Flota_Tipo
+ref table Fact_HorasEquipo_Muro
+ref table Plan_Muro
+ref table Fact_VelocidadCAEX_Hora
+ref table Dim_Actualizacion

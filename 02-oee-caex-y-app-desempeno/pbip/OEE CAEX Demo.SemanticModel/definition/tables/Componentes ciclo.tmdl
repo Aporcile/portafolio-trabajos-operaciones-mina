@@ -1,0 +1,42 @@
+/// Componentes del ciclo del CAEX (Fact_Ciclos) para ordenarlos de mayor a menor.
+table 'Componentes ciclo'
+	lineageTag: da858ecf-7e8a-5164-a400-e5a0b24c8919
+
+	column Orden
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: bc7ca544-effb-5a9c-9e70-b93098611ac1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Orden]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Componente
+		dataType: string
+		lineageTag: 243ad29c-7f6b-5955-b37e-ebdf52e7b35b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Componente]
+		sortByColumn: Orden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Componentes ciclo' = calculated
+		mode: import
+		source =
+				DATATABLE(
+				    "Orden", INTEGER, "Componente", STRING,
+				    {
+				        { 1, "Viaje vacío" },
+				        { 2, "Espera en carguío" },
+				        { 3, "Aculatamiento" },
+				        { 4, "Carguío" },
+				        { 5, "Viaje cargado" },
+				        { 6, "Cola en descarga" },
+				        { 7, "Descarga" },
+				        { 8, "Retroceso" }
+				    }
+				)
+

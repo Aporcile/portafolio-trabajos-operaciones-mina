@@ -1,0 +1,281 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 0,
+            "y": 143.79622270566381
+          },
+          "nodeIndex": "Dim_Equipo",
+          "nodeLineageTag": "4229406e-6f4d-4801-a289-7d27c5d23e01",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 345.542011588642,
+            "y": 405.43718842267674
+          },
+          "nodeIndex": "Fact_Chancado",
+          "nodeLineageTag": "0e64c9ec-2a57-462e-963f-373a4551eddf",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 8
+        },
+        {
+          "location": {
+            "x": 590.5,
+            "y": 274.29622270566381
+          },
+          "nodeIndex": "Fact_GPS",
+          "nodeLineageTag": "7292bbe9-f183-439b-a37a-3c33a0b4b037",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 1115.75,
+            "y": 675.04622270566381
+          },
+          "nodeIndex": "Fact_Ciclos",
+          "nodeLineageTag": "a076c522-d044-4289-b180-a1951a821c25",
+          "size": {
+            "height": 261.25,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 715.22227968299592
+          },
+          "nodeIndex": "Fact_HorasEquipo",
+          "nodeLineageTag": "7a77138c-8900-45ef-9cac-88e53d177eeb",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 677.74999618530273,
+            "y": 715.79622270566381
+          },
+          "nodeIndex": "Dim_Carguio",
+          "nodeLineageTag": "7d1b33b0-38bb-4eb6-bfbd-a8864cfac03e",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 1399.75,
+            "y": 462.67122270566381
+          },
+          "nodeIndex": "Dim_Turno",
+          "nodeLineageTag": "4eb9b665-274a-40e9-9c96-9ef5969e4bc0",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 1683.75,
+            "y": 414.67122270566381
+          },
+          "nodeIndex": "Dim_Tiempo",
+          "nodeLineageTag": "8d0d130a-43e4-41e8-b722-e237168b0825",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 9
+        },
+        {
+          "location": {
+            "x": 1915.49695122411,
+            "y": 194.96896170703303
+          },
+          "nodeIndex": "Plan_Semanal_Chancador",
+          "nodeLineageTag": "d6b8d470-1be8-466c-8617-067136fb9185",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 3486.821193209998,
+            "y": 466.50925119432986
+          },
+          "nodeIndex": "Fact_ChancadoOrigen_Hora",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 4623.1828326253581,
+            "y": 354.40052848866605
+          },
+          "nodeIndex": "Dim_Flota_Tipo",
+          "nodeLineageTag": "e5cfb8c6-661e-454b-9fa3-57c6bc3afdfd",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 4105.0059443906275,
+            "y": 299.86797389999373
+          },
+          "nodeIndex": "Dim_Hora_Operacional",
+          "nodeLineageTag": "24a76d7c-3e5a-40f1-9a8d-3ecbbae47385",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 4907.1828326253581,
+            "y": 354.40052848866605
+          },
+          "nodeIndex": "Dim_Metrica_Carguio",
+          "nodeLineageTag": "0e29042d-4a6f-4806-b5f3-7a3a0e297f1d",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 5191.1828326253581,
+            "y": 426.40052848866605
+          },
+          "nodeIndex": "Dim_Metrica_Flota",
+          "nodeLineageTag": "6ba9471e-f792-4abe-84e4-48781af2bab8",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 5475.1828326253581,
+            "y": 378.40052848866605
+          },
+          "nodeIndex": "Dim_Metrica_Perforadoras",
+          "nodeLineageTag": "b5e866da-1341-40ee-81e4-b09a9461b5dc",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3820.821193209998,
+            "y": 280.93308307733838
+          },
+          "nodeIndex": "Fact_HorasEquipo_Muro",
+          "nodeLineageTag": "9f1ab957-e68b-48a7-8ba5-7871bb362edb",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 4389.1828326253581,
+            "y": 327.19296653243
+          },
+          "nodeIndex": "Fact_LeyAlimentacion_Hora",
+          "nodeLineageTag": "6e93aef8-a47a-4dc0-bc43-e78a41bbaa28",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 5759.1828326253581,
+            "y": 342.40052848866605
+          },
+          "nodeIndex": "Plan_CAEX",
+          "nodeLineageTag": "b47b9eeb-d4ec-4a40-9321-523b495bb6a5",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 6043.1828326253581,
+            "y": 340.40052848866605
+          },
+          "nodeIndex": "Plan_Carguio",
+          "nodeLineageTag": "bbddfdb8-fb9b-4f15-b14a-6a743a375c28",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 6327.1828326253581,
+            "y": 340.40052848866605
+          },
+          "nodeIndex": "Plan_Perforadoras",
+          "nodeLineageTag": "2f9eea5f-df0a-48bc-9bcf-5ed53d85cf75",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas las tablas",
+      "zoomValue": 32.042043779906656,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas las tablas",
+  "defaultDiagram": "Todas las tablas"
+}

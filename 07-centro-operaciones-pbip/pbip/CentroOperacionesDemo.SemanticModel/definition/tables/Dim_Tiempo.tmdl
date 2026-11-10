@@ -1,0 +1,225 @@
+table Dim_Tiempo
+	lineageTag: 8d0d130a-43e4-41e8-b722-e237168b0825
+	dataCategory: Time
+
+	measure Fecha_Efectiva = ```
+			
+			IF(
+			    HASONEVALUE('Dim_Tiempo'[Fecha]),
+			    SELECTEDVALUE('Dim_Tiempo'[Fecha]),
+			    [Fecha_Operacional_Actual]
+			)
+			
+			```
+		formatString: General Date
+		lineageTag: 730c37a7-a9bb-4cb3-88f6-29c75dfed71d
+
+	measure Fecha_Operacional_Actual = ```
+			CALCULATE(MAX(Dim_Tiempo[Fecha]), REMOVEFILTERS(Dim_Tiempo), Dim_Tiempo[Es_Hoy_Operacional] = TRUE())
+			
+			```
+		formatString: General Date
+		lineageTag: ae218f08-9368-4131-ac8b-3616843e5a76
+
+	/// 1 si la fecha tiene datos en mina o chancado; en blanco si no (fechas futuras del calendario y el item "(En blanco)"). Filtro del segmentador FECHA.
+	measure Fecha_Con_Datos =
+			
+			VAR F = SELECTEDVALUE(Dim_Tiempo[Fecha])
+			RETURN
+			    IF(
+			        NOT ISBLANK(F)
+			            && (
+			                NOT ISEMPTY(Fact_HorasEquipo)
+			                    || NOT ISEMPTY(Fact_ChancadoOrigen_Hora)
+			            ),
+			        1
+			    )
+		formatString: 0
+		isHidden
+		lineageTag: fb4c7c36-998e-4ebb-b1d4-1948647cec86
+
+	/// Fecha que muestran las tarjetas, en texto: la del segmentador si hay una sola, o el dia operacional en curso. Va en el encabezado junto al segmentador.
+	measure Fecha_Pantalla = ```
+			
+			VAR F = [Fecha_Efectiva]
+			VAR Dia = CALCULATE(SELECTEDVALUE(Dim_Tiempo[NombreDia]), REMOVEFILTERS(Dim_Tiempo), Dim_Tiempo[Fecha] = F)
+			VAR Mes = CALCULATE(SELECTEDVALUE(Dim_Tiempo[NombreMes]), REMOVEFILTERS(Dim_Tiempo), Dim_Tiempo[Fecha] = F)
+			RETURN
+			    Dia & ", " & FORMAT(DAY(F), "00") & " de " & Mes & " de " & YEAR(F)
+			
+			```
+		lineageTag: 18b1973e-33c1-421c-b1c5-1c331c303edb
+
+	column Fecha
+		dataType: dateTime
+		isKey
+		formatString: Long Date
+		lineageTag: 94b159c9-c23e-4832-b8f2-0950119467e6
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Anio
+		dataType: int64
+		formatString: 0
+		lineageTag: 6141f0a7-b9f9-41e9-b164-ac0b511f811a
+		summarizeBy: sum
+		sourceColumn: Anio
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes
+		dataType: int64
+		formatString: 0
+		lineageTag: 34c26f9f-e7dd-49a7-b7c9-8fcedf6020b3
+		summarizeBy: sum
+		sourceColumn: Mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column NombreMes
+		dataType: string
+		lineageTag: 097a9139-bc31-4379-96f4-7bf27c265dc7
+		summarizeBy: none
+		sourceColumn: NombreMes
+
+		annotation SummarizationSetBy = Automatic
+
+	column AnioMes
+		dataType: string
+		lineageTag: b60b8495-fc01-4fcd-8565-84078c6befea
+		summarizeBy: none
+		sourceColumn: AnioMes
+
+		annotation SummarizationSetBy = Automatic
+
+	column Semana
+		dataType: int64
+		formatString: 0
+		lineageTag: 97a03d89-d566-4c39-9804-acac8244e1c2
+		summarizeBy: sum
+		sourceColumn: Semana
+
+		annotation SummarizationSetBy = Automatic
+
+	column DiaSemana
+		dataType: int64
+		formatString: 0
+		lineageTag: 67c6aca2-2da6-4837-a1fa-e60ac6435da7
+		summarizeBy: sum
+		sourceColumn: DiaSemana
+
+		annotation SummarizationSetBy = Automatic
+
+	column NombreDia
+		dataType: string
+		lineageTag: 33a4bbe3-399f-4c4a-837f-760c2fa0f5f2
+		summarizeBy: none
+		sourceColumn: NombreDia
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Lunes de la semana calendario de esta fecha (fecha real, no numero de semana) -- unica y ordenable entre anios distintos, a diferencia de [Semana].
+	column Semana_Inicio = Dim_Tiempo[Fecha] - (Dim_Tiempo[DiaSemana] - 1)
+		isHidden
+		formatString: General Date
+		lineageTag: 173a3387-adc2-4475-b568-67e3ae3837be
+		summarizeBy: none
+
+	/// Etiqueta para el eje X en vista Semana: "Sem 14-sep" (lunes de esa semana); agrega el anio solo si el calendario cubre mas de un anio, para que la etiqueta nunca se repita. Ordenar por columna: Semana_Inicio.
+	column Etiqueta_Semana =
+			VAR MultiAnio = DATEDIFF(MIN(Dim_Tiempo[Fecha]), MAX(Dim_Tiempo[Fecha]), DAY) > 364
+			RETURN
+			    "Sem " & FORMAT(Dim_Tiempo[Semana_Inicio], IF(MultiAnio, "dd-mmm-yy", "dd-mmm"))
+		lineageTag: 1288daaa-a9b5-400f-ae8c-4895a2816a24
+		summarizeBy: none
+		sortByColumn: Semana_Inicio
+
+	/// Etiqueta para el eje X en vista Mes: "may 2025". Ordenar por columna: AnioMes.
+	column Etiqueta_Mes = FORMAT(Dim_Tiempo[Fecha], "mmm yyyy")
+		lineageTag: 843b8374-369f-4704-9255-6c9e61103b91
+		summarizeBy: none
+		sortByColumn: AnioMes
+
+	/// TRUE para el dia operacional en curso, recalculado en cada actualizacion del dataset segun el reloj de la faena, con cambio de dia a las 08:00.
+	column Es_Hoy_Operacional
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 98f12132-5239-4fe6-bc2f-921306b78ab2
+		summarizeBy: none
+		sourceColumn: Es_Hoy_Operacional
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Texto del segmentador de fecha: "Dia actual" para el dia operacional en curso y la fecha corta para los demas dias. La etiqueta se mueve sola en cada actualizacion del dataset, por eso el segmentador guarda el texto "Dia actual" y no una fecha: el operador nunca tiene que cambiar el dia.
+	column Dia_Etiqueta
+		dataType: string
+		lineageTag: 39590e8f-132d-4f92-83ad-c84cae41deff
+		summarizeBy: none
+		sourceColumn: Dia_Etiqueta
+		sortByColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Tiempo = m
+		mode: import
+		source =
+				/*==============================================================================
+				  DIM_TIEMPO
+				  Calendario del modelo: se genera en Power Query y no viene de ninguna fuente.
+				  Cubre DiasHistoria dias hacia atras desde FechaReferencia (mas 2 de margen) y unos
+				  dias hacia adelante.
+
+				  Se relaciona con:
+				    Fact_HorasEquipo[Fecha]
+				    Fact_Chancado[Fecha]
+				    Fact_Ciclos[DiaOperativo]
+
+				  Fact_GPS queda FUERA a proposito: solo guarda lecturas de baja velocidad y se cruza
+				  por hora, no por calendario.
+
+				  Despues de cargar esta tabla: Modelado -> Marcar como tabla de fechas -> columna [Fecha].
+
+				  FechaReferencia hace de "dia operacional en curso". En una instalacion real se calcula
+				  con el reloj de la faena (el dia operacional cambia a las 08:00); aqui es un parametro
+				  fijo para que los datos sinteticos sean reproducibles.
+				==============================================================================*/
+				let
+				    DiasMargen = 5,
+
+				    FechaInicio = Date.AddDays(FechaReferencia, -(DiasHistoria + 2)),
+				    FechaFin    = Date.AddDays(FechaReferencia, DiasMargen),
+
+				    CantidadDias = Duration.Days(FechaFin - FechaInicio) + 1,
+				    ListaFechas  = List.Dates(FechaInicio, CantidadDias, #duration(1, 0, 0, 0)),
+
+				    Tabla     = Table.FromList(ListaFechas, Splitter.SplitByNothing(), {"Fecha"}, null, ExtraValues.Error),
+				    TipoFecha = Table.TransformColumnTypes(Tabla, {{"Fecha", type date}}),
+
+				    ConAnio      = Table.AddColumn(TipoFecha, "Anio", each Date.Year([Fecha]), Int64.Type),
+				    ConMes       = Table.AddColumn(ConAnio, "Mes", each Date.Month([Fecha]), Int64.Type),
+				    ConNombreMes = Table.AddColumn(ConMes, "NombreMes", each Date.ToText([Fecha], "MMMM", "es-ES"), type text),
+				    ConAnioMes   = Table.AddColumn(ConNombreMes, "AnioMes", each Date.ToText([Fecha], "yyyy-MM"), type text),
+				    ConSemana    = Table.AddColumn(ConAnioMes, "Semana", each Date.WeekOfYear([Fecha]), Int64.Type),
+				    ConDiaSemana = Table.AddColumn(ConSemana, "DiaSemana", each Date.DayOfWeek([Fecha], Day.Monday) + 1, Int64.Type),
+				    ConNombreDia = Table.AddColumn(ConDiaSemana, "NombreDia", each Date.ToText([Fecha], "dddd", "es-ES"), type text),
+
+				    // Dia operacional en curso (cambia a las 08:00 en una instalacion real).
+				    HoyOperacional = FechaReferencia,
+
+				    ConHoy      = Table.AddColumn(ConNombreDia, "Es_Hoy_Operacional", each [Fecha] = HoyOperacional, type logical),
+				    // Etiqueta del segmentador: el dia en curso se rotula "Dia actual" (no una fecha), para que el
+				    // segmentador guarde ese texto fijo y la seleccion siga sola al dia nuevo en cada actualizacion.
+				    ConEtiqueta = Table.AddColumn(ConHoy, "Dia_Etiqueta", each
+				        if [Fecha] = HoyOperacional then "Dia actual"
+				        else Text.Proper(Date.ToText([Fecha], [Format = "ddd", Culture = "es-ES"])) & " " & Date.ToText([Fecha], [Format = "dd-MM-yyyy", Culture = "es-ES"]), type text)
+				in
+				    ConEtiqueta
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

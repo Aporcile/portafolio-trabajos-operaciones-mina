@@ -1,0 +1,500 @@
+- conColHH:
+    Control: GroupContainer@1.5.0
+    Variant: ManualLayout
+    Properties:
+      Fill: =RGBA(232, 236, 242, 1)
+      X: =32
+      Y: =124
+      Width: =640
+      Height: =632
+      DropShadow: =DropShadow.None
+      RadiusTopLeft: =10
+      RadiusTopRight: =10
+      RadiusBottomLeft: =10
+      RadiusBottomRight: =10
+      BorderThickness: =0
+      Visible: =Coalesce(varVista, "area") = "hl"
+- lblColHH:
+    Control: Label@2.5.1
+    Properties:
+      Text: ="HIGHLIGHTS · " & CountRows(galHH.AllItems)
+      Font: =Font.'Segoe UI'
+      Size: =9.5
+      Color: =RGBA(46, 125, 50, 1)
+      X: =48
+      Y: =134
+      Width: =300
+      Height: =22
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      FontWeight: =FontWeight.Bold
+      Visible: =Coalesce(varVista, "area") = "hl"
+- btnAgregarHH:
+    Control: Classic/Button@2.2.0
+    Properties:
+      Fill: =RGBA(255, 255, 255, 1)
+      Color: =RGBA(33, 37, 41, 1)
+      HoverFill: =RGBA(232, 236, 242, 1)
+      HoverColor: =RGBA(33, 37, 41, 1)
+      PressedFill: =RGBA(232, 236, 242, 1)
+      PressedColor: =RGBA(33, 37, 41, 1)
+      BorderColor: =RGBA(219, 225, 233, 1)
+      HoverBorderColor: =RGBA(170, 182, 198, 1)
+      BorderThickness: =1
+      Text: ="+ Agregar"
+      OnSelect: =Set(varModoHL, "nuevo"); Set(varTipoHL, "Highlight"); Select(btnResetHL); Set(varPanelHL, true)
+      Font: =Font.'Segoe UI'
+      Size: =9.5
+      FontWeight: =FontWeight.Semibold
+      X: =560
+      Y: =130
+      Width: =96
+      Height: =28
+      RadiusTopLeft: =8
+      RadiusTopRight: =8
+      RadiusBottomLeft: =8
+      RadiusBottomRight: =8
+      Visible: =Coalesce(varVista, "area") = "hl"
+- galHH:
+    Control: Gallery@2.15.0
+    Variant: VariableHeight
+    Properties:
+      Items: |-
+        =With(
+            {q: Trim(txtBuscar.Text), r: ddResp.Selected.Value},
+            Sort(
+                Filter(
+                    HighlightsLowlights,
+                    Tipo = "Highlight",
+                    IsBlank(q) || q in Tema || q in Detalle || q in Impacto || q in Accion,
+                    r = "Todos los responsables" || (r = "Sin responsable" && IsBlank(Responsable)) || Responsable = r
+                ),
+                Fecha,
+                SortOrder.Descending
+            )
+        )
+      X: =40
+      Y: =168
+      Width: =630
+      Height: =582
+      TemplateSize: =150
+      TemplatePadding: =0
+      ShowScrollbar: =true
+      Fill: =RGBA(0, 0, 0, 0)
+      TemplateFill: =RGBA(0, 0, 0, 0)
+      BorderThickness: =0
+      Visible: =Coalesce(varVista, "area") = "hl"
+      OnSelect: =Set(varHL, ThisItem); Set(varModoHL, "editar"); Select(btnResetHL); Set(varPanelHL, true)
+    Children:
+                      - conTarjHH:
+                          Control: GroupContainer@1.5.0
+                          Variant: ManualLayout
+                          Properties:
+                            Fill: =RGBA(255, 255, 255, 1)
+                            X: =0
+                            Y: =0
+                            Width: =(Parent.TemplateWidth - 30)
+                            Height: =lblRespHH.Y + lblRespHH.Height + 10
+                            DropShadow: =DropShadow.None
+                            RadiusTopLeft: =6
+                            RadiusTopRight: =6
+                            RadiusBottomLeft: =6
+                            RadiusBottomRight: =6
+                            BorderColor: =RGBA(219, 225, 233, 1)
+                            BorderThickness: =1
+                      - lblBarraHH:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =""
+                            Font: =Font.'Segoe UI'
+                            Size: =10
+                            Color: =RGBA(33, 37, 41, 1)
+                            X: =0
+                            Y: =12
+                            Width: =3
+                            Height: =conTarjHH.Height - 24
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            Fill: =RGBA(46, 125, 50, 1)
+                      - lblTemaHH:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =ThisItem.Tema
+                            Font: =Font.'Segoe UI'
+                            Size: =10.5
+                            Color: =RGBA(33, 37, 41, 1)
+                            X: =16
+                            Y: =10
+                            Width: =(Parent.TemplateWidth - 30) - 130
+                            Height: =20
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            FontWeight: =FontWeight.Bold
+                            AutoHeight: =true
+                      - lblFechaHH:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =If(IsBlank(ThisItem.Fecha), "", Text(DateValue(ThisItem.Fecha), "dd-mm-yyyy"))
+                            Font: =Font.'Segoe UI'
+                            Size: =8.5
+                            Color: =RGBA(108, 117, 125, 1)
+                            X: =(Parent.TemplateWidth - 30) - 100
+                            Y: =10
+                            Width: =88
+                            Height: =18
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            Align: =Align.Right
+                      - lblDetHH:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =Coalesce(ThisItem.Detalle, "Sin detalle")
+                            Font: =Font.'Segoe UI'
+                            Size: =9
+                            Color: =If(IsBlank(ThisItem.Detalle), RGBA(173, 181, 189, 1), RGBA(73, 80, 87, 1))
+                            X: =16
+                            Y: =lblTemaHH.Y + lblTemaHH.Height + 4
+                            Width: =(Parent.TemplateWidth - 30) - 32
+                            Height: =20
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                      - lblImpHH:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: |-
+                              =If(!IsBlank(ThisItem.Impacto), "Impacto: " & ThisItem.Impacto, "") & If(!IsBlank(ThisItem.Impacto) && !IsBlank(ThisItem.Accion), Char(10), "") & If(!IsBlank(ThisItem.Accion), "Acción: " & ThisItem.Accion, "")
+                            Font: =Font.'Segoe UI'
+                            Size: =8.5
+                            Color: =RGBA(36, 100, 170, 1)
+                            X: =16
+                            Y: =If(IsBlank(lblImpHH.Text), lblDetHH.Y, lblDetHH.Y + lblDetHH.Height + 6)
+                            Width: =(Parent.TemplateWidth - 30) - 32
+                            Height: =16
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                            Visible: =!IsBlank(lblImpHH.Text)
+                      - lblRespHH:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =If(IsBlank(ThisItem.Responsable), "Sin responsable", ThisItem.Responsable)
+                            Font: =Font.'Segoe UI'
+                            Size: =8
+                            Color: =If(IsBlank(ThisItem.Responsable), RGBA(150, 100, 0, 1), RGBA(108, 117, 125, 1))
+                            X: =16
+                            Y: =If(IsBlank(lblImpHH.Text), lblDetHH.Y + lblDetHH.Height, lblImpHH.Y + lblImpHH.Height) + 6
+                            Width: =(Parent.TemplateWidth - 30) - 32
+                            Height: =16
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                      - btnHitHH:
+                          Control: Classic/Button@2.2.0
+                          Properties:
+                            Text: =""
+                            Fill: =RGBA(0, 0, 0, 0)
+                            HoverFill: =RGBA(27, 42, 65, 0.05)
+                            PressedFill: =RGBA(27, 42, 65, 0.10)
+                            BorderThickness: =0
+                            FocusedBorderThickness: =1
+                            FocusedBorderColor: =RGBA(36, 100, 170, 1)
+                            OnSelect: =Select(Parent)
+                            X: =0
+                            Y: =0
+                            Width: =(Parent.TemplateWidth - 30)
+                            Height: =conTarjHH.Height
+                            RadiusTopLeft: =6
+                            RadiusTopRight: =6
+                            RadiusBottomLeft: =6
+                            RadiusBottomRight: =6
+                      - recSepHH:
+                          Control: Rectangle@2.3.0
+                          Properties:
+                            Fill: =RGBA(0, 0, 0, 0)
+                            X: =0
+                            Y: =conTarjHH.Height
+                            Width: =10
+                            Height: =8
+                            OnSelect: =false
+- lblVacioHH:
+    Control: Label@2.5.1
+    Properties:
+      Text: ="Sin registros"
+      Font: =Font.'Segoe UI'
+      Size: =9
+      Color: =RGBA(173, 181, 189, 1)
+      X: =32
+      Y: =180
+      Width: =640
+      Height: =20
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      Visible: =Coalesce(varVista, "area") = "hl" && CountRows(galHH.AllItems) = 0
+      Align: =Align.Center
+- conColHL:
+    Control: GroupContainer@1.5.0
+    Variant: ManualLayout
+    Properties:
+      Fill: =RGBA(232, 236, 242, 1)
+      X: =694
+      Y: =124
+      Width: =640
+      Height: =632
+      DropShadow: =DropShadow.None
+      RadiusTopLeft: =10
+      RadiusTopRight: =10
+      RadiusBottomLeft: =10
+      RadiusBottomRight: =10
+      BorderThickness: =0
+      Visible: =Coalesce(varVista, "area") = "hl"
+- lblColHL:
+    Control: Label@2.5.1
+    Properties:
+      Text: ="LOWLIGHTS · " & CountRows(galHL.AllItems)
+      Font: =Font.'Segoe UI'
+      Size: =9.5
+      Color: =RGBA(198, 40, 40, 1)
+      X: =710
+      Y: =134
+      Width: =300
+      Height: =22
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      FontWeight: =FontWeight.Bold
+      Visible: =Coalesce(varVista, "area") = "hl"
+- btnAgregarHL:
+    Control: Classic/Button@2.2.0
+    Properties:
+      Fill: =RGBA(255, 255, 255, 1)
+      Color: =RGBA(33, 37, 41, 1)
+      HoverFill: =RGBA(232, 236, 242, 1)
+      HoverColor: =RGBA(33, 37, 41, 1)
+      PressedFill: =RGBA(232, 236, 242, 1)
+      PressedColor: =RGBA(33, 37, 41, 1)
+      BorderColor: =RGBA(219, 225, 233, 1)
+      HoverBorderColor: =RGBA(170, 182, 198, 1)
+      BorderThickness: =1
+      Text: ="+ Agregar"
+      OnSelect: =Set(varModoHL, "nuevo"); Set(varTipoHL, "Lowlight"); Select(btnResetHL); Set(varPanelHL, true)
+      Font: =Font.'Segoe UI'
+      Size: =9.5
+      FontWeight: =FontWeight.Semibold
+      X: =1222
+      Y: =130
+      Width: =96
+      Height: =28
+      RadiusTopLeft: =8
+      RadiusTopRight: =8
+      RadiusBottomLeft: =8
+      RadiusBottomRight: =8
+      Visible: =Coalesce(varVista, "area") = "hl"
+- galHL:
+    Control: Gallery@2.15.0
+    Variant: VariableHeight
+    Properties:
+      Items: |-
+        =With(
+            {q: Trim(txtBuscar.Text), r: ddResp.Selected.Value},
+            Sort(
+                Filter(
+                    HighlightsLowlights,
+                    Tipo = "Lowlight",
+                    IsBlank(q) || q in Tema || q in Detalle || q in Impacto || q in Accion,
+                    r = "Todos los responsables" || (r = "Sin responsable" && IsBlank(Responsable)) || Responsable = r
+                ),
+                Fecha,
+                SortOrder.Descending
+            )
+        )
+      X: =702
+      Y: =168
+      Width: =630
+      Height: =582
+      TemplateSize: =150
+      TemplatePadding: =0
+      ShowScrollbar: =true
+      Fill: =RGBA(0, 0, 0, 0)
+      TemplateFill: =RGBA(0, 0, 0, 0)
+      BorderThickness: =0
+      Visible: =Coalesce(varVista, "area") = "hl"
+      OnSelect: =Set(varHL, ThisItem); Set(varModoHL, "editar"); Select(btnResetHL); Set(varPanelHL, true)
+    Children:
+                      - conTarjHL:
+                          Control: GroupContainer@1.5.0
+                          Variant: ManualLayout
+                          Properties:
+                            Fill: =RGBA(255, 255, 255, 1)
+                            X: =0
+                            Y: =0
+                            Width: =(Parent.TemplateWidth - 30)
+                            Height: =lblRespHL.Y + lblRespHL.Height + 10
+                            DropShadow: =DropShadow.None
+                            RadiusTopLeft: =6
+                            RadiusTopRight: =6
+                            RadiusBottomLeft: =6
+                            RadiusBottomRight: =6
+                            BorderColor: =RGBA(219, 225, 233, 1)
+                            BorderThickness: =1
+                      - lblBarraHL:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =""
+                            Font: =Font.'Segoe UI'
+                            Size: =10
+                            Color: =RGBA(33, 37, 41, 1)
+                            X: =0
+                            Y: =12
+                            Width: =3
+                            Height: =conTarjHL.Height - 24
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            Fill: =RGBA(198, 40, 40, 1)
+                      - lblTemaHL:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =ThisItem.Tema
+                            Font: =Font.'Segoe UI'
+                            Size: =10.5
+                            Color: =RGBA(33, 37, 41, 1)
+                            X: =16
+                            Y: =10
+                            Width: =(Parent.TemplateWidth - 30) - 130
+                            Height: =20
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            FontWeight: =FontWeight.Bold
+                            AutoHeight: =true
+                      - lblFechaHL:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =If(IsBlank(ThisItem.Fecha), "", Text(DateValue(ThisItem.Fecha), "dd-mm-yyyy"))
+                            Font: =Font.'Segoe UI'
+                            Size: =8.5
+                            Color: =RGBA(108, 117, 125, 1)
+                            X: =(Parent.TemplateWidth - 30) - 100
+                            Y: =10
+                            Width: =88
+                            Height: =18
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            Align: =Align.Right
+                      - lblDetHL:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =Coalesce(ThisItem.Detalle, "Sin detalle")
+                            Font: =Font.'Segoe UI'
+                            Size: =9
+                            Color: =If(IsBlank(ThisItem.Detalle), RGBA(173, 181, 189, 1), RGBA(73, 80, 87, 1))
+                            X: =16
+                            Y: =lblTemaHL.Y + lblTemaHL.Height + 4
+                            Width: =(Parent.TemplateWidth - 30) - 32
+                            Height: =20
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                      - lblImpHL:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: |-
+                              =If(!IsBlank(ThisItem.Impacto), "Impacto: " & ThisItem.Impacto, "") & If(!IsBlank(ThisItem.Impacto) && !IsBlank(ThisItem.Accion), Char(10), "") & If(!IsBlank(ThisItem.Accion), "Acción: " & ThisItem.Accion, "")
+                            Font: =Font.'Segoe UI'
+                            Size: =8.5
+                            Color: =RGBA(91, 70, 168, 1)
+                            X: =16
+                            Y: =If(IsBlank(lblImpHL.Text), lblDetHL.Y, lblDetHL.Y + lblDetHL.Height + 6)
+                            Width: =(Parent.TemplateWidth - 30) - 32
+                            Height: =16
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                            Visible: =!IsBlank(lblImpHL.Text)
+                      - lblRespHL:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =If(IsBlank(ThisItem.Responsable), "Sin responsable", ThisItem.Responsable)
+                            Font: =Font.'Segoe UI'
+                            Size: =8
+                            Color: =If(IsBlank(ThisItem.Responsable), RGBA(150, 100, 0, 1), RGBA(108, 117, 125, 1))
+                            X: =16
+                            Y: =If(IsBlank(lblImpHL.Text), lblDetHL.Y + lblDetHL.Height, lblImpHL.Y + lblImpHL.Height) + 6
+                            Width: =(Parent.TemplateWidth - 30) - 32
+                            Height: =16
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                      - btnHitHL:
+                          Control: Classic/Button@2.2.0
+                          Properties:
+                            Text: =""
+                            Fill: =RGBA(0, 0, 0, 0)
+                            HoverFill: =RGBA(27, 42, 65, 0.05)
+                            PressedFill: =RGBA(27, 42, 65, 0.10)
+                            BorderThickness: =0
+                            FocusedBorderThickness: =1
+                            FocusedBorderColor: =RGBA(36, 100, 170, 1)
+                            OnSelect: =Select(Parent)
+                            X: =0
+                            Y: =0
+                            Width: =(Parent.TemplateWidth - 30)
+                            Height: =conTarjHL.Height
+                            RadiusTopLeft: =6
+                            RadiusTopRight: =6
+                            RadiusBottomLeft: =6
+                            RadiusBottomRight: =6
+                      - recSepHL:
+                          Control: Rectangle@2.3.0
+                          Properties:
+                            Fill: =RGBA(0, 0, 0, 0)
+                            X: =0
+                            Y: =conTarjHL.Height
+                            Width: =10
+                            Height: =8
+                            OnSelect: =false
+- lblVacioHL:
+    Control: Label@2.5.1
+    Properties:
+      Text: ="Sin registros"
+      Font: =Font.'Segoe UI'
+      Size: =9
+      Color: =RGBA(173, 181, 189, 1)
+      X: =694
+      Y: =180
+      Width: =640
+      Height: =20
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      Visible: =Coalesce(varVista, "area") = "hl" && CountRows(galHL.AllItems) = 0
+      Align: =Align.Center

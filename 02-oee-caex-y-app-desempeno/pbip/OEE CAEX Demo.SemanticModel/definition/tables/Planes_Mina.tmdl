@@ -1,0 +1,53 @@
+/// Plan mensual de la flota CAEX, una fila por día e ítem (Horas Nominales, Disponibles, Efectivas y Total Toneladas). Fuente: Planes_Mina.csv.
+table Planes_Mina
+	lineageTag: f86bd346-26bd-5463-abf0-c0b11b4b1089
+
+	column start_date
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: f9729a95-f1b8-5e4d-bf48-2d2aec2e4eb7
+		summarizeBy: none
+		sourceColumn: start_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column property_name
+		dataType: string
+		lineageTag: fb9b6eae-ab26-550a-b5fa-f7f9215258d5
+		summarizeBy: none
+		sourceColumn: property_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column value
+		dataType: double
+		lineageTag: add4a6ac-8868-5f08-82a6-094267d1c391
+		summarizeBy: sum
+		sourceColumn: value
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column plan_type
+		dataType: string
+		lineageTag: 4fd342c8-61e8-5169-8b36-bbb1e8a7ff05
+		summarizeBy: none
+		sourceColumn: plan_type
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Planes_Mina = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "Planes_Mina.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"start_date", type date}, {"property_name", type text}, {"value", type number}, {"plan_type", type text}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

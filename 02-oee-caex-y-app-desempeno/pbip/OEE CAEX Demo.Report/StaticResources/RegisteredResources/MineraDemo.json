@@ -1,0 +1,44 @@
+{
+  "name": "Minera Demo RD",
+  "dataColors": [
+    "#1B2A41",
+    "#4F9DDE",
+    "#7B61C9",
+    "#2F6FB5",
+    "#A3B18A",
+    "#C26B8E",
+    "#3A4352",
+    "#B4BAC4",
+    "#8D949F",
+    "#95C4EB",
+    "#B0A0DF",
+    "#C5CBD6"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#3A4352",
+  "tableAccent": "#1B2A41",
+  "good": "#2E7D32",
+  "neutral": "#F28C28",
+  "bad": "#C62828",
+  "maximum": "#1B2A41",
+  "center": "#95C4EB",
+  "minimum": "#E6E9EE",
+  "textClasses": {
+    "title": {
+      "color": "#1B2A41",
+      "fontFace": "Segoe UI Semibold"
+    },
+    "header": {
+      "color": "#1B2A41",
+      "fontFace": "Segoe UI Semibold"
+    },
+    "label": {
+      "color": "#3A4352",
+      "fontFace": "Segoe UI"
+    },
+    "callout": {
+      "color": "#1B2A41",
+      "fontFace": "Segoe UI Semibold"
+    }
+  }
+}

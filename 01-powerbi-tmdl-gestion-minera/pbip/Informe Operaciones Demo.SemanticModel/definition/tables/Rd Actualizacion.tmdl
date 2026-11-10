@@ -1,0 +1,25 @@
+table 'Rd Actualizacion'
+	isHidden
+	lineageTag: cc579632-afcb-45c3-a0d6-205420b61b1f
+
+	column Actualizado
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 9935a382-537c-41e3-aef6-611c2872a010
+		summarizeBy: none
+		sourceColumn: Actualizado
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Rd Actualizacion' = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "actualizacion.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Actualizado", type datetime}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table

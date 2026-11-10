@@ -1,0 +1,268 @@
+table Fact_HorasEquipo_Muro
+	lineageTag: 9f1ab957-e68b-48a7-8ba5-7871bb362edb
+
+	measure 'Camiones Operando Muro' = COALESCE(CALCULATE(DISTINCTCOUNT(Fact_HorasEquipo_Muro[Equipo]), Fact_HorasEquipo_Muro[Tipo Equipo] = "Truck", Fact_HorasEquipo_Muro[Horas Operativas] > 0), 0)
+		formatString: 0
+		lineageTag: 1db49707-2346-455e-bfab-47bd275e1459
+
+	measure 'Camiones Muro' = [Camiones Operando Muro] & " / " & [Flota CAEX Muro Total]
+		lineageTag: 1bee2b74-b6f5-45d5-bd1c-006b644be7df
+
+	measure 'Cargadores Operando Muro' = COALESCE(CALCULATE(DISTINCTCOUNT(Fact_HorasEquipo_Muro[Equipo]), Fact_HorasEquipo_Muro[Tipo Equipo] = "Loader", Fact_HorasEquipo_Muro[Horas Operativas] > 0), 0)
+		formatString: 0
+		lineageTag: 4cfb0401-c740-4adc-909f-d99ad1c831ff
+
+	measure 'Palas Operando Muro' = COALESCE(CALCULATE(DISTINCTCOUNT(Fact_HorasEquipo_Muro[Equipo]), Fact_HorasEquipo_Muro[Tipo Equipo] = "Shovel", Fact_HorasEquipo_Muro[Horas Operativas] > 0), 0)
+		formatString: 0
+		lineageTag: f21a15f8-a5c2-4116-9401-d00b5df7dfc9
+
+	measure 'Cargadores Muro' = [Cargadores Operando Muro] & " / " & [Flota Cargador Muro Total]
+		lineageTag: 773249b6-662b-432b-a834-e80f0855cadb
+
+	measure 'Palas Muro' = [Palas Operando Muro] & " / " & [Flota Pala Muro Total]
+		lineageTag: d3152f6e-1178-4d8c-8f96-eb335d4d820a
+
+	measure 'Disponibilidad CAEX Muro' =
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo_Muro[Horas Disponibles]), Fact_HorasEquipo_Muro[Tipo Equipo] IN {"Truck"}),
+			    CALCULATE(SUM(Fact_HorasEquipo_Muro[Horas Nominales]), Fact_HorasEquipo_Muro[Tipo Equipo] IN {"Truck"}),
+			    0
+			)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: 13295e46-f3a2-4955-9d3b-ba05f639091f
+
+	measure 'UEBD CAEX Muro' =
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo_Muro[Horas Efectivas]), Fact_HorasEquipo_Muro[Tipo Equipo] IN {"Truck"}),
+			    CALCULATE(SUM(Fact_HorasEquipo_Muro[Horas Disponibles]), Fact_HorasEquipo_Muro[Tipo Equipo] IN {"Truck"}),
+			    0
+			)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: 10de8e4b-55dc-4dda-93b7-2c77677f838b
+
+	measure 'Rendimiento CAEX Muro' =
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo_Muro[Movimiento Total]), Fact_HorasEquipo_Muro[Tipo Equipo] IN {"Truck"}),
+			    CALCULATE(SUM(Fact_HorasEquipo_Muro[Horas Efectivas]), Fact_HorasEquipo_Muro[Tipo Equipo] IN {"Truck"}),
+			    0
+			)
+		formatString: #,0.0
+		lineageTag: ac6e3969-e07c-4788-8b5c-296f88780211
+
+	measure 'Disponibilidad Pala Muro' =
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo_Muro[Horas Disponibles]), Fact_HorasEquipo_Muro[Tipo Equipo] IN {"Shovel"}),
+			    CALCULATE(SUM(Fact_HorasEquipo_Muro[Horas Nominales]), Fact_HorasEquipo_Muro[Tipo Equipo] IN {"Shovel"}),
+			    0
+			)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: bb1619dd-87f1-4eaa-baef-767c4c57a950
+
+	measure 'UEBD Pala Muro' =
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo_Muro[Horas Efectivas]), Fact_HorasEquipo_Muro[Tipo Equipo] IN {"Shovel"}),
+			    CALCULATE(SUM(Fact_HorasEquipo_Muro[Horas Disponibles]), Fact_HorasEquipo_Muro[Tipo Equipo] IN {"Shovel"}),
+			    0
+			)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: 8bc67728-5f3a-44fa-b962-f62893d7820e
+
+	measure 'Rendimiento Pala Muro' =
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo_Muro[Tonelaje]), Fact_HorasEquipo_Muro[Tipo Equipo] IN {"Shovel"}),
+			    CALCULATE(SUM(Fact_HorasEquipo_Muro[Horas Efectivas]), Fact_HorasEquipo_Muro[Tipo Equipo] IN {"Shovel"}),
+			    0
+			)
+		formatString: #,0.0
+		lineageTag: 47c5e682-649f-4946-8974-2f647acf6e9b
+
+	measure 'Disponibilidad Carguio Muro' =
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo_Muro[Horas Disponibles]), Fact_HorasEquipo_Muro[Tipo Equipo] IN {"Shovel", "Loader"}),
+			    CALCULATE(SUM(Fact_HorasEquipo_Muro[Horas Nominales]), Fact_HorasEquipo_Muro[Tipo Equipo] IN {"Shovel", "Loader"}),
+			    0
+			)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: e4af8e06-1c35-46b5-b18a-ad90a1d6d89d
+
+	measure 'UEBD Carguio Muro' =
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo_Muro[Horas Efectivas]), Fact_HorasEquipo_Muro[Tipo Equipo] IN {"Shovel", "Loader"}),
+			    CALCULATE(SUM(Fact_HorasEquipo_Muro[Horas Disponibles]), Fact_HorasEquipo_Muro[Tipo Equipo] IN {"Shovel", "Loader"}),
+			    0
+			)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: f2fa7406-8129-45cb-a0c6-e8463f2e0834
+
+	measure 'Rendimiento Carguio Muro t/h' =
+			DIVIDE(
+			    CALCULATE(SUM(Fact_HorasEquipo_Muro[Tonelaje]), Fact_HorasEquipo_Muro[Tipo Equipo] IN {"Shovel", "Loader"}),
+			    CALCULATE(SUM(Fact_HorasEquipo_Muro[Horas Efectivas]), Fact_HorasEquipo_Muro[Tipo Equipo] IN {"Shovel", "Loader"}),
+			    0
+			)
+		formatString: #,0.0
+		lineageTag: 1dedcc5a-30a3-4c7a-b1ad-040ef53622c1
+
+	measure 'Material Muro' = SUM(Fact_HorasEquipo_Muro[Movimiento Total])
+		formatString: #,0
+		lineageTag: 9082bbdf-7bca-41b2-a6db-a93d003bd9bc
+
+	column Fecha
+		dataType: dateTime
+		isHidden
+		lineageTag: 10e3acaf-989a-477a-b838-a96cd1cc1573
+		sourceColumn: Fecha
+
+	column Turno
+		dataType: string
+		isHidden
+		lineageTag: 0319c4d4-4aa4-4d6e-8ac4-5d835059aea6
+		sourceColumn: Turno
+
+	column Hora
+		dataType: int64
+		isHidden
+		lineageTag: 3723023d-e6a7-40d5-80ba-58e8adace099
+		sourceColumn: Hora
+
+	column Equipo
+		dataType: string
+		isHidden
+		lineageTag: 11231cc7-7afc-4175-ab68-7e40e5cc62b8
+		sourceColumn: Equipo
+
+	column 'Horas Operativas'
+		dataType: double
+		isHidden
+		lineageTag: e9d9bdcf-c244-42c6-ba11-df0e9ad04258
+		sourceColumn: Horas Operativas
+
+	column 'Tipo Equipo'
+		dataType: string
+		isHidden
+		lineageTag: 47ac3dc9-60cc-43e7-8fa0-52d06742ac9d
+		sourceColumn: Tipo Equipo
+
+	column Flota
+		dataType: string
+		lineageTag: 0bd51379-8a72-4417-8cc6-e621874ccb92
+		summarizeBy: none
+		sourceColumn: Flota
+
+	column 'Horas Nominales'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 34086648-73a2-480b-a736-9f3e851a9f2d
+		summarizeBy: sum
+		sourceColumn: Horas Nominales
+
+	column 'Horas Efectivas'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: d8866eb4-0870-4a9d-989d-02657455ec16
+		summarizeBy: sum
+		sourceColumn: Horas Efectivas
+
+	column 'Horas Disponibles'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 8f7b41e2-5a84-437d-9ad5-4ead057b331a
+		summarizeBy: sum
+		sourceColumn: Horas Disponibles
+
+	column 'Horas PO Totales'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 57bedaee-d009-44a4-8e08-095e5cfa094f
+		summarizeBy: sum
+		sourceColumn: Horas PO Totales
+
+	column 'Horas Demora No Programada'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 558c57f5-efa9-4c47-92cc-996737e1dcc7
+		summarizeBy: sum
+		sourceColumn: Horas Demora No Programada
+
+	column 'Horas Demora Programada'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: a7aecf61-c918-40ec-9db2-d715e0a41bce
+		summarizeBy: sum
+		sourceColumn: Horas Demora Programada
+
+	column 'Horas Reserva'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 7e41cb33-05a0-4fd4-a725-1bcba05d2cab
+		summarizeBy: sum
+		sourceColumn: Horas Reserva
+
+	column 'Horas Mantencion Programada'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 0735938a-f22f-47c6-b113-e124534c030c
+		summarizeBy: sum
+		sourceColumn: Horas Mantencion Programada
+
+	column 'Horas Mantencion No Programada'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: ed3d516e-78f9-4470-8447-f44b50954c5a
+		summarizeBy: sum
+		sourceColumn: Horas Mantencion No Programada
+
+	column Tonelaje
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 1de25c79-8599-4d82-9ea4-36f91908b864
+		summarizeBy: sum
+		sourceColumn: Tonelaje
+
+	column 'Material Extraido'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 75b3ca3b-153d-4193-bd98-555deb118ce7
+		summarizeBy: sum
+		sourceColumn: Material Extraido
+
+	column 'Material Remanejo'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 612103ee-0b2f-471c-9dbc-b01e61aee02f
+		summarizeBy: sum
+		sourceColumn: Material Remanejo
+
+	column 'Movimiento Total'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: cbc13308-b87f-4d19-a573-45e98141d469
+		summarizeBy: sum
+		sourceColumn: Movimiento Total
+
+	column Orden_Hora_Dia =
+			VAR H = Fact_HorasEquipo_Muro[Hora]
+			RETURN
+			    IF(H >= 0 && H <= 11, SWITCH(Fact_HorasEquipo_Muro[Turno], "A", H + 1, "B", H + 13))
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 17a4efc6-e31e-4604-96b0-6523e672c16c
+		summarizeBy: none
+
+	partition Fact_HorasEquipo_Muro = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "fact_horas_equipo_muro.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Fecha", type datetime}, {"Turno", type text}, {"Hora", Int64.Type}, {"Equipo", type text}, {"Horas Operativas", type number}, {"Tipo Equipo", type text}, {"Flota", type text}, {"Horas Nominales", type number}, {"Horas Efectivas", type number}, {"Horas Disponibles", type number}, {"Horas PO Totales", type number}, {"Horas Demora No Programada", type number}, {"Horas Demora Programada", type number}, {"Horas Reserva", type number}, {"Horas Mantencion Programada", type number}, {"Horas Mantencion No Programada", type number}, {"Tonelaje", type number}, {"Material Extraido", type number}, {"Material Remanejo", type number}, {"Movimiento Total", type number}}, "en-US"),
+				    // Ventana de historia: solo las filas de los ultimos DiasHistoria dias respecto de FechaReferencia.
+				    Ventana = Table.SelectRows(Tipos, each Date.From([Fecha]) >= Date.AddDays(FechaReferencia, -DiasHistoria))
+				in
+				    Ventana
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,392 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "e2c2f02b6be96cbd8eb6",
+  "displayName": "Operación Diaria",
+  "displayOption": "FitToPage",
+  "height": 1440,
+  "width": 2740,
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "e9784596001d59ff286d",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Dim_Carguio"
+              }
+            },
+            "Property": "Es Carguio"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "d",
+              "Entity": "Dim_Carguio",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "d"
+                          }
+                        },
+                        "Property": "Es Carguio"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "1L"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "howCreated": "Drillthrough"
+      },
+      {
+        "name": "178cd12bb4ef45464725",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Dim_Carguio"
+              }
+            },
+            "Property": "Activo_KPI"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "d",
+              "Entity": "Dim_Carguio",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "d"
+                          }
+                        },
+                        "Property": "Activo_KPI"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "1L"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "howCreated": "Drillthrough"
+      }
+    ]
+  },
+  "pageBinding": {
+    "name": "63c32307da5304f14cb8",
+    "type": "Drillthrough",
+    "parameters": [
+      {
+        "name": "4dcdf28e27cb931ebd09",
+        "boundFilter": "e9784596001d59ff286d",
+        "fieldExpr": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Dim_Carguio"
+              }
+            },
+            "Property": "Es Carguio"
+          }
+        }
+      },
+      {
+        "name": "862a6252f3d7f90db849",
+        "boundFilter": "178cd12bb4ef45464725",
+        "fieldExpr": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Dim_Carguio"
+              }
+            },
+            "Property": "Activo_KPI"
+          }
+        }
+      }
+    ]
+  },
+  "objects": {
+    "outspacePane": [
+      {
+        "properties": {
+          "width": {
+            "expr": {
+              "Literal": {
+                "Value": "223L"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#0F1A2C'"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspace": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#0F1A2C'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "0812d0014daf3944af68",
+      "target": "1d39f863b1839a1d1f92",
+      "type": "NoFilter"
+    },
+    {
+      "source": "0812d0014daf3944af68",
+      "target": "6b1c605fc4e306ad36e3",
+      "type": "NoFilter"
+    },
+    {
+      "source": "0812d0014daf3944af68",
+      "target": "70669807f06ab56aacc0",
+      "type": "NoFilter"
+    },
+    {
+      "source": "44f09b618471fbb03260",
+      "target": "1d39f863b1839a1d1f92",
+      "type": "NoFilter"
+    },
+    {
+      "source": "44f09b618471fbb03260",
+      "target": "6b1c605fc4e306ad36e3",
+      "type": "NoFilter"
+    },
+    {
+      "source": "44f09b618471fbb03260",
+      "target": "70669807f06ab56aacc0",
+      "type": "NoFilter"
+    },
+    {
+      "source": "1d39f863b1839a1d1f92",
+      "target": "0812d0014daf3944af68",
+      "type": "NoFilter"
+    },
+    {
+      "source": "1d39f863b1839a1d1f92",
+      "target": "44f09b618471fbb03260",
+      "type": "NoFilter"
+    },
+    {
+      "source": "6b1c605fc4e306ad36e3",
+      "target": "0812d0014daf3944af68",
+      "type": "NoFilter"
+    },
+    {
+      "source": "6b1c605fc4e306ad36e3",
+      "target": "44f09b618471fbb03260",
+      "type": "NoFilter"
+    },
+    {
+      "source": "70669807f06ab56aacc0",
+      "target": "0812d0014daf3944af68",
+      "type": "NoFilter"
+    },
+    {
+      "source": "70669807f06ab56aacc0",
+      "target": "44f09b618471fbb03260",
+      "type": "NoFilter"
+    },
+    {
+      "source": "f80d2c2fb5402de77bb1",
+      "target": "2ea0f3ba01c670b5a835",
+      "type": "DataFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "0812d0014daf3944af68",
+      "type": "NoFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "1d39f863b1839a1d1f92",
+      "type": "NoFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "272b03ccba34e619c4d3",
+      "type": "NoFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "b603a186b033a66d5cf4",
+      "type": "NoFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "0b8e7480d34e5300a1d8",
+      "type": "NoFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "44f09b618471fbb03260",
+      "type": "NoFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "c873758e8ab0f80b33c1",
+      "type": "NoFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "53021872915859015cd2",
+      "type": "NoFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "5c881064e59d12877721",
+      "type": "NoFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "6b1c605fc4e306ad36e3",
+      "type": "NoFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "3e112ace4a13ba1c30ad",
+      "type": "NoFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "f80d2c2fb5402de77bb1",
+      "type": "NoFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "611e3b957586eabaedfa",
+      "type": "NoFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "461546e1993dd9f17389",
+      "type": "NoFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "06184de363b9cb981061",
+      "type": "NoFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "d6c2c0f49a169559d4f0",
+      "type": "NoFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "4482a541ddfefe2b283a",
+      "type": "NoFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "cc9629fb33aaea7547fd",
+      "type": "NoFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "5378820f5dfc6e036006",
+      "type": "NoFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "70669807f06ab56aacc0",
+      "type": "NoFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "775f328aab698a2e9de2",
+      "type": "NoFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "d4ee38cbc50a998ac201",
+      "type": "NoFilter"
+    },
+    {
+      "source": "2ea0f3ba01c670b5a835",
+      "target": "6a180921db9c9f7caa38",
+      "type": "NoFilter"
+    }
+  ]
+}

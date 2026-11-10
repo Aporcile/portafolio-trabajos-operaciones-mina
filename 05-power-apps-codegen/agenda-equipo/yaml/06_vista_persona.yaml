@@ -1,0 +1,1176 @@
+- conColP1:
+    Control: GroupContainer@1.5.0
+    Variant: ManualLayout
+    Properties:
+      Fill: =RGBA(232, 236, 242, 1)
+      X: =32
+      Y: =124
+      Width: =315
+      Height: =632
+      DropShadow: =DropShadow.None
+      RadiusTopLeft: =10
+      RadiusTopRight: =10
+      RadiusBottomLeft: =10
+      RadiusBottomRight: =10
+      BorderThickness: =0
+      Visible: =Coalesce(varVista, "area") = "persona"
+- btnAvP1:
+    Control: Classic/Button@2.2.0
+    Properties:
+      Text: =Index(Personas, 1).Iniciales
+      Font: =Font.'Segoe UI'
+      Size: =9
+      FontWeight: =FontWeight.Bold
+      Fill: =RGBA(36, 100, 170, 1)
+      Color: =RGBA(255, 255, 255, 1)
+      HoverFill: =RGBA(36, 100, 170, 1)
+      HoverColor: =RGBA(255, 255, 255, 1)
+      PressedFill: =RGBA(36, 100, 170, 1)
+      PressedColor: =RGBA(255, 255, 255, 1)
+      BorderThickness: =0
+      FocusedBorderThickness: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      PaddingLeft: =0
+      PaddingRight: =0
+      OnSelect: =false
+      TabIndex: =-1
+      X: =46
+      Y: =136
+      Width: =32
+      Height: =32
+      RadiusTopLeft: =16
+      RadiusTopRight: =16
+      RadiusBottomLeft: =16
+      RadiusBottomRight: =16
+      Visible: =Coalesce(varVista, "area") = "persona"
+- lblNomP1:
+    Control: Label@2.5.1
+    Properties:
+      Text: =Index(Personas, 1).NombreCompleto
+      Font: =Font.'Segoe UI'
+      Size: =11
+      Color: =RGBA(33, 37, 41, 1)
+      X: =88
+      Y: =134
+      Width: =245
+      Height: =22
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      FontWeight: =FontWeight.Bold
+      Visible: =Coalesce(varVista, "area") = "persona"
+- lblCntP1:
+    Control: Label@2.5.1
+    Properties:
+      Text: =CountRows(Filter(galP1.AllItems, Estado <> "Terminada")) & " activas  ·  " & CountRows(Filter(galP1.AllItems, Estado = "Bloqueada")) & " bloqueadas  ·  " & CountRows(Filter(galP1.AllItems, Estado = "Terminada")) & " terminadas"
+      Font: =Font.'Segoe UI'
+      Size: =8
+      Color: =RGBA(108, 117, 125, 1)
+      X: =88
+      Y: =156
+      Width: =249
+      Height: =16
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      Visible: =Coalesce(varVista, "area") = "persona"
+- galP1:
+    Control: Gallery@2.15.0
+    Variant: VariableHeight
+    Properties:
+      Items: |-
+        =With(
+            {q: Trim(txtBuscar.Text), r: ddResp.Selected.Value},
+            Sort(
+                Filter(
+                    Actividades,
+                    Responsable = Index(Personas, 1).Nombre,
+                    IsBlank(q) || q in Actividad || q in ID || q in Area || q in Contraparte || q in StatusActual || q in Bloqueo
+                ),
+                Switch(Estado, "Bloqueada", 1, "En curso", 2, "En revisión", 3, "Por hacer", 4, 5) * 10 + Switch(Prioridad, "Alta", 1, "Media", 2, 3),
+                SortOrder.Ascending
+            )
+        )
+      X: =38
+      Y: =184
+      Width: =307
+      Height: =566
+      TemplateSize: =80
+      TemplatePadding: =0
+      ShowScrollbar: =true
+      Fill: =RGBA(0, 0, 0, 0)
+      TemplateFill: =RGBA(0, 0, 0, 0)
+      BorderThickness: =0
+      Visible: =Coalesce(varVista, "area") = "persona"
+      OnSelect: =Set(varAct, ThisItem); Set(varModo, "editar"); Select(btnReset); Set(varPanel, true)
+    Children:
+                      - conTarjP1:
+                          Control: GroupContainer@1.5.0
+                          Variant: ManualLayout
+                          Properties:
+                            Fill: =RGBA(255, 255, 255, 1)
+                            X: =0
+                            Y: =0
+                            Width: =(Parent.TemplateWidth - 30)
+                            Height: =If(IsBlank(lblSubP1.Text), lblAreaP1.Y + lblAreaP1.Height, lblSubP1.Y + lblSubP1.Height) + 8
+                            DropShadow: =DropShadow.None
+                            RadiusTopLeft: =6
+                            RadiusTopRight: =6
+                            RadiusBottomLeft: =6
+                            RadiusBottomRight: =6
+                            BorderColor: =RGBA(219, 225, 233, 1)
+                            BorderThickness: =1
+                      - lblIDP1:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =ThisItem.ID
+                            Font: =Font.'Segoe UI'
+                            Size: =8
+                            Color: =RGBA(108, 117, 125, 1)
+                            X: =8
+                            Y: =6
+                            Width: =54
+                            Height: =16
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                      - btnAltaP1:
+                          Control: Classic/Button@2.2.0
+                          Properties:
+                            Text: ="Alta"
+                            Font: =Font.'Segoe UI'
+                            Size: =7
+                            FontWeight: =FontWeight.Bold
+                            Fill: =RGBA(253, 232, 232, 1)
+                            Color: =RGBA(176, 32, 32, 1)
+                            HoverFill: =RGBA(253, 232, 232, 1)
+                            HoverColor: =RGBA(176, 32, 32, 1)
+                            PressedFill: =RGBA(253, 232, 232, 1)
+                            PressedColor: =RGBA(176, 32, 32, 1)
+                            BorderThickness: =0
+                            FocusedBorderThickness: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            OnSelect: =Select(Parent)
+                            TabIndex: =-1
+                            X: =58
+                            Y: =7
+                            Width: =30
+                            Height: =14
+                            RadiusTopLeft: =4
+                            RadiusTopRight: =4
+                            RadiusBottomLeft: =4
+                            RadiusBottomRight: =4
+                            Visible: =ThisItem.Prioridad = "Alta"
+                      - btnEstP1:
+                          Control: Classic/Button@2.2.0
+                          Properties:
+                            Text: =ThisItem.Estado
+                            Font: =Font.'Segoe UI'
+                            Size: =7
+                            FontWeight: =FontWeight.Bold
+                            Fill: =Switch(ThisItem.Estado, "Por hacer", RGBA(233, 236, 239, 1), "En curso", RGBA(221, 236, 250, 1), "En revisión", RGBA(255, 243, 214, 1), "Bloqueada", RGBA(236, 231, 248, 1), RGBA(225, 241, 226, 1))
+                            Color: =Switch(ThisItem.Estado, "Por hacer", RGBA(73, 80, 87, 1), "En curso", RGBA(28, 88, 150, 1), "En revisión", RGBA(150, 100, 0, 1), "Bloqueada", RGBA(91, 70, 168, 1), RGBA(46, 125, 50, 1))
+                            HoverFill: =Switch(ThisItem.Estado, "Por hacer", RGBA(233, 236, 239, 1), "En curso", RGBA(221, 236, 250, 1), "En revisión", RGBA(255, 243, 214, 1), "Bloqueada", RGBA(236, 231, 248, 1), RGBA(225, 241, 226, 1))
+                            HoverColor: =Switch(ThisItem.Estado, "Por hacer", RGBA(73, 80, 87, 1), "En curso", RGBA(28, 88, 150, 1), "En revisión", RGBA(150, 100, 0, 1), "Bloqueada", RGBA(91, 70, 168, 1), RGBA(46, 125, 50, 1))
+                            PressedFill: =Switch(ThisItem.Estado, "Por hacer", RGBA(233, 236, 239, 1), "En curso", RGBA(221, 236, 250, 1), "En revisión", RGBA(255, 243, 214, 1), "Bloqueada", RGBA(236, 231, 248, 1), RGBA(225, 241, 226, 1))
+                            PressedColor: =Switch(ThisItem.Estado, "Por hacer", RGBA(73, 80, 87, 1), "En curso", RGBA(28, 88, 150, 1), "En revisión", RGBA(150, 100, 0, 1), "Bloqueada", RGBA(91, 70, 168, 1), RGBA(46, 125, 50, 1))
+                            BorderThickness: =0
+                            FocusedBorderThickness: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            OnSelect: =Select(Parent)
+                            TabIndex: =-1
+                            X: =(Parent.TemplateWidth - 30) - 88
+                            Y: =6
+                            Width: =80
+                            Height: =16
+                            RadiusTopLeft: =8
+                            RadiusTopRight: =8
+                            RadiusBottomLeft: =8
+                            RadiusBottomRight: =8
+                      - lblTitP1:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =ThisItem.Actividad
+                            Font: =Font.'Segoe UI'
+                            Size: =9
+                            Color: =RGBA(33, 37, 41, 1)
+                            X: =8
+                            Y: =24
+                            Width: =(Parent.TemplateWidth - 30) - 16
+                            Height: =16
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            FontWeight: =FontWeight.Bold
+                            AutoHeight: =true
+                      - lblAreaP1:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =Coalesce(ThisItem.Area, "Sin área")
+                            Font: =Font.'Segoe UI'
+                            Size: =8
+                            Color: =RGBA(36, 100, 170, 1)
+                            X: =8
+                            Y: =lblTitP1.Y + lblTitP1.Height + 1
+                            Width: =(Parent.TemplateWidth - 30) - 16
+                            Height: =14
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                      - lblSubP1:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =If(ThisItem.Estado = "Bloqueada" && !IsBlank(ThisItem.Bloqueo), ThisItem.Bloqueo, Coalesce(ThisItem.StatusActual, ThisItem.Bloqueo, If(IsBlank(ThisItem.Responsable), "Sin responsable", "")))
+                            Font: =Font.'Segoe UI'
+                            Size: =8
+                            Color: =If(ThisItem.Estado = "Bloqueada" || IsBlank(ThisItem.Responsable) || (IsBlank(ThisItem.StatusActual) && !IsBlank(ThisItem.Bloqueo)), RGBA(91, 70, 168, 1), RGBA(108, 117, 125, 1))
+                            X: =8
+                            Y: =If(IsBlank(lblSubP1.Text), lblAreaP1.Y, lblAreaP1.Y + lblAreaP1.Height + 1)
+                            Width: =(Parent.TemplateWidth - 30) - 16
+                            Height: =14
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                            Visible: =!IsBlank(lblSubP1.Text)
+                      - btnHitP1:
+                          Control: Classic/Button@2.2.0
+                          Properties:
+                            Text: =""
+                            Fill: =RGBA(0, 0, 0, 0)
+                            HoverFill: =RGBA(27, 42, 65, 0.05)
+                            PressedFill: =RGBA(27, 42, 65, 0.10)
+                            BorderThickness: =0
+                            FocusedBorderThickness: =1
+                            FocusedBorderColor: =RGBA(36, 100, 170, 1)
+                            OnSelect: =Select(Parent)
+                            X: =0
+                            Y: =0
+                            Width: =(Parent.TemplateWidth - 30)
+                            Height: =conTarjP1.Height
+                            RadiusTopLeft: =6
+                            RadiusTopRight: =6
+                            RadiusBottomLeft: =6
+                            RadiusBottomRight: =6
+                      - recSepP1:
+                          Control: Rectangle@2.3.0
+                          Properties:
+                            Fill: =RGBA(0, 0, 0, 0)
+                            X: =0
+                            Y: =conTarjP1.Height
+                            Width: =10
+                            Height: =8
+                            OnSelect: =false
+- lblVacioP1:
+    Control: Label@2.5.1
+    Properties:
+      Text: ="—"
+      Font: =Font.'Segoe UI'
+      Size: =9
+      Color: =RGBA(173, 181, 189, 1)
+      X: =32
+      Y: =190
+      Width: =315
+      Height: =20
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      Visible: =Coalesce(varVista, "area") = "persona" && CountRows(galP1.AllItems) = 0
+      Align: =Align.Center
+- conColP2:
+    Control: GroupContainer@1.5.0
+    Variant: ManualLayout
+    Properties:
+      Fill: =RGBA(232, 236, 242, 1)
+      X: =361
+      Y: =124
+      Width: =315
+      Height: =632
+      DropShadow: =DropShadow.None
+      RadiusTopLeft: =10
+      RadiusTopRight: =10
+      RadiusBottomLeft: =10
+      RadiusBottomRight: =10
+      BorderThickness: =0
+      Visible: =Coalesce(varVista, "area") = "persona"
+- btnAvP2:
+    Control: Classic/Button@2.2.0
+    Properties:
+      Text: =Index(Personas, 2).Iniciales
+      Font: =Font.'Segoe UI'
+      Size: =9
+      FontWeight: =FontWeight.Bold
+      Fill: =RGBA(36, 100, 170, 1)
+      Color: =RGBA(255, 255, 255, 1)
+      HoverFill: =RGBA(36, 100, 170, 1)
+      HoverColor: =RGBA(255, 255, 255, 1)
+      PressedFill: =RGBA(36, 100, 170, 1)
+      PressedColor: =RGBA(255, 255, 255, 1)
+      BorderThickness: =0
+      FocusedBorderThickness: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      PaddingLeft: =0
+      PaddingRight: =0
+      OnSelect: =false
+      TabIndex: =-1
+      X: =375
+      Y: =136
+      Width: =32
+      Height: =32
+      RadiusTopLeft: =16
+      RadiusTopRight: =16
+      RadiusBottomLeft: =16
+      RadiusBottomRight: =16
+      Visible: =Coalesce(varVista, "area") = "persona"
+- lblNomP2:
+    Control: Label@2.5.1
+    Properties:
+      Text: =Index(Personas, 2).NombreCompleto
+      Font: =Font.'Segoe UI'
+      Size: =11
+      Color: =RGBA(33, 37, 41, 1)
+      X: =417
+      Y: =134
+      Width: =245
+      Height: =22
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      FontWeight: =FontWeight.Bold
+      Visible: =Coalesce(varVista, "area") = "persona"
+- lblCntP2:
+    Control: Label@2.5.1
+    Properties:
+      Text: =CountRows(Filter(galP2.AllItems, Estado <> "Terminada")) & " activas  ·  " & CountRows(Filter(galP2.AllItems, Estado = "Bloqueada")) & " bloqueadas  ·  " & CountRows(Filter(galP2.AllItems, Estado = "Terminada")) & " terminadas"
+      Font: =Font.'Segoe UI'
+      Size: =8
+      Color: =RGBA(108, 117, 125, 1)
+      X: =417
+      Y: =156
+      Width: =249
+      Height: =16
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      Visible: =Coalesce(varVista, "area") = "persona"
+- galP2:
+    Control: Gallery@2.15.0
+    Variant: VariableHeight
+    Properties:
+      Items: |-
+        =With(
+            {q: Trim(txtBuscar.Text), r: ddResp.Selected.Value},
+            Sort(
+                Filter(
+                    Actividades,
+                    Responsable = Index(Personas, 2).Nombre,
+                    IsBlank(q) || q in Actividad || q in ID || q in Area || q in Contraparte || q in StatusActual || q in Bloqueo
+                ),
+                Switch(Estado, "Bloqueada", 1, "En curso", 2, "En revisión", 3, "Por hacer", 4, 5) * 10 + Switch(Prioridad, "Alta", 1, "Media", 2, 3),
+                SortOrder.Ascending
+            )
+        )
+      X: =367
+      Y: =184
+      Width: =307
+      Height: =566
+      TemplateSize: =80
+      TemplatePadding: =0
+      ShowScrollbar: =true
+      Fill: =RGBA(0, 0, 0, 0)
+      TemplateFill: =RGBA(0, 0, 0, 0)
+      BorderThickness: =0
+      Visible: =Coalesce(varVista, "area") = "persona"
+      OnSelect: =Set(varAct, ThisItem); Set(varModo, "editar"); Select(btnReset); Set(varPanel, true)
+    Children:
+                      - conTarjP2:
+                          Control: GroupContainer@1.5.0
+                          Variant: ManualLayout
+                          Properties:
+                            Fill: =RGBA(255, 255, 255, 1)
+                            X: =0
+                            Y: =0
+                            Width: =(Parent.TemplateWidth - 30)
+                            Height: =If(IsBlank(lblSubP2.Text), lblAreaP2.Y + lblAreaP2.Height, lblSubP2.Y + lblSubP2.Height) + 8
+                            DropShadow: =DropShadow.None
+                            RadiusTopLeft: =6
+                            RadiusTopRight: =6
+                            RadiusBottomLeft: =6
+                            RadiusBottomRight: =6
+                            BorderColor: =RGBA(219, 225, 233, 1)
+                            BorderThickness: =1
+                      - lblIDP2:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =ThisItem.ID
+                            Font: =Font.'Segoe UI'
+                            Size: =8
+                            Color: =RGBA(108, 117, 125, 1)
+                            X: =8
+                            Y: =6
+                            Width: =54
+                            Height: =16
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                      - btnAltaP2:
+                          Control: Classic/Button@2.2.0
+                          Properties:
+                            Text: ="Alta"
+                            Font: =Font.'Segoe UI'
+                            Size: =7
+                            FontWeight: =FontWeight.Bold
+                            Fill: =RGBA(253, 232, 232, 1)
+                            Color: =RGBA(176, 32, 32, 1)
+                            HoverFill: =RGBA(253, 232, 232, 1)
+                            HoverColor: =RGBA(176, 32, 32, 1)
+                            PressedFill: =RGBA(253, 232, 232, 1)
+                            PressedColor: =RGBA(176, 32, 32, 1)
+                            BorderThickness: =0
+                            FocusedBorderThickness: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            OnSelect: =Select(Parent)
+                            TabIndex: =-1
+                            X: =58
+                            Y: =7
+                            Width: =30
+                            Height: =14
+                            RadiusTopLeft: =4
+                            RadiusTopRight: =4
+                            RadiusBottomLeft: =4
+                            RadiusBottomRight: =4
+                            Visible: =ThisItem.Prioridad = "Alta"
+                      - btnEstP2:
+                          Control: Classic/Button@2.2.0
+                          Properties:
+                            Text: =ThisItem.Estado
+                            Font: =Font.'Segoe UI'
+                            Size: =7
+                            FontWeight: =FontWeight.Bold
+                            Fill: =Switch(ThisItem.Estado, "Por hacer", RGBA(233, 236, 239, 1), "En curso", RGBA(221, 236, 250, 1), "En revisión", RGBA(255, 243, 214, 1), "Bloqueada", RGBA(236, 231, 248, 1), RGBA(225, 241, 226, 1))
+                            Color: =Switch(ThisItem.Estado, "Por hacer", RGBA(73, 80, 87, 1), "En curso", RGBA(28, 88, 150, 1), "En revisión", RGBA(150, 100, 0, 1), "Bloqueada", RGBA(91, 70, 168, 1), RGBA(46, 125, 50, 1))
+                            HoverFill: =Switch(ThisItem.Estado, "Por hacer", RGBA(233, 236, 239, 1), "En curso", RGBA(221, 236, 250, 1), "En revisión", RGBA(255, 243, 214, 1), "Bloqueada", RGBA(236, 231, 248, 1), RGBA(225, 241, 226, 1))
+                            HoverColor: =Switch(ThisItem.Estado, "Por hacer", RGBA(73, 80, 87, 1), "En curso", RGBA(28, 88, 150, 1), "En revisión", RGBA(150, 100, 0, 1), "Bloqueada", RGBA(91, 70, 168, 1), RGBA(46, 125, 50, 1))
+                            PressedFill: =Switch(ThisItem.Estado, "Por hacer", RGBA(233, 236, 239, 1), "En curso", RGBA(221, 236, 250, 1), "En revisión", RGBA(255, 243, 214, 1), "Bloqueada", RGBA(236, 231, 248, 1), RGBA(225, 241, 226, 1))
+                            PressedColor: =Switch(ThisItem.Estado, "Por hacer", RGBA(73, 80, 87, 1), "En curso", RGBA(28, 88, 150, 1), "En revisión", RGBA(150, 100, 0, 1), "Bloqueada", RGBA(91, 70, 168, 1), RGBA(46, 125, 50, 1))
+                            BorderThickness: =0
+                            FocusedBorderThickness: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            OnSelect: =Select(Parent)
+                            TabIndex: =-1
+                            X: =(Parent.TemplateWidth - 30) - 88
+                            Y: =6
+                            Width: =80
+                            Height: =16
+                            RadiusTopLeft: =8
+                            RadiusTopRight: =8
+                            RadiusBottomLeft: =8
+                            RadiusBottomRight: =8
+                      - lblTitP2:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =ThisItem.Actividad
+                            Font: =Font.'Segoe UI'
+                            Size: =9
+                            Color: =RGBA(33, 37, 41, 1)
+                            X: =8
+                            Y: =24
+                            Width: =(Parent.TemplateWidth - 30) - 16
+                            Height: =16
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            FontWeight: =FontWeight.Bold
+                            AutoHeight: =true
+                      - lblAreaP2:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =Coalesce(ThisItem.Area, "Sin área")
+                            Font: =Font.'Segoe UI'
+                            Size: =8
+                            Color: =RGBA(36, 100, 170, 1)
+                            X: =8
+                            Y: =lblTitP2.Y + lblTitP2.Height + 1
+                            Width: =(Parent.TemplateWidth - 30) - 16
+                            Height: =14
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                      - lblSubP2:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =If(ThisItem.Estado = "Bloqueada" && !IsBlank(ThisItem.Bloqueo), ThisItem.Bloqueo, Coalesce(ThisItem.StatusActual, ThisItem.Bloqueo, If(IsBlank(ThisItem.Responsable), "Sin responsable", "")))
+                            Font: =Font.'Segoe UI'
+                            Size: =8
+                            Color: =If(ThisItem.Estado = "Bloqueada" || IsBlank(ThisItem.Responsable) || (IsBlank(ThisItem.StatusActual) && !IsBlank(ThisItem.Bloqueo)), RGBA(91, 70, 168, 1), RGBA(108, 117, 125, 1))
+                            X: =8
+                            Y: =If(IsBlank(lblSubP2.Text), lblAreaP2.Y, lblAreaP2.Y + lblAreaP2.Height + 1)
+                            Width: =(Parent.TemplateWidth - 30) - 16
+                            Height: =14
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                            Visible: =!IsBlank(lblSubP2.Text)
+                      - btnHitP2:
+                          Control: Classic/Button@2.2.0
+                          Properties:
+                            Text: =""
+                            Fill: =RGBA(0, 0, 0, 0)
+                            HoverFill: =RGBA(27, 42, 65, 0.05)
+                            PressedFill: =RGBA(27, 42, 65, 0.10)
+                            BorderThickness: =0
+                            FocusedBorderThickness: =1
+                            FocusedBorderColor: =RGBA(36, 100, 170, 1)
+                            OnSelect: =Select(Parent)
+                            X: =0
+                            Y: =0
+                            Width: =(Parent.TemplateWidth - 30)
+                            Height: =conTarjP2.Height
+                            RadiusTopLeft: =6
+                            RadiusTopRight: =6
+                            RadiusBottomLeft: =6
+                            RadiusBottomRight: =6
+                      - recSepP2:
+                          Control: Rectangle@2.3.0
+                          Properties:
+                            Fill: =RGBA(0, 0, 0, 0)
+                            X: =0
+                            Y: =conTarjP2.Height
+                            Width: =10
+                            Height: =8
+                            OnSelect: =false
+- lblVacioP2:
+    Control: Label@2.5.1
+    Properties:
+      Text: ="—"
+      Font: =Font.'Segoe UI'
+      Size: =9
+      Color: =RGBA(173, 181, 189, 1)
+      X: =361
+      Y: =190
+      Width: =315
+      Height: =20
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      Visible: =Coalesce(varVista, "area") = "persona" && CountRows(galP2.AllItems) = 0
+      Align: =Align.Center
+- conColP3:
+    Control: GroupContainer@1.5.0
+    Variant: ManualLayout
+    Properties:
+      Fill: =RGBA(232, 236, 242, 1)
+      X: =690
+      Y: =124
+      Width: =315
+      Height: =632
+      DropShadow: =DropShadow.None
+      RadiusTopLeft: =10
+      RadiusTopRight: =10
+      RadiusBottomLeft: =10
+      RadiusBottomRight: =10
+      BorderThickness: =0
+      Visible: =Coalesce(varVista, "area") = "persona"
+- btnAvP3:
+    Control: Classic/Button@2.2.0
+    Properties:
+      Text: =Index(Personas, 3).Iniciales
+      Font: =Font.'Segoe UI'
+      Size: =9
+      FontWeight: =FontWeight.Bold
+      Fill: =RGBA(36, 100, 170, 1)
+      Color: =RGBA(255, 255, 255, 1)
+      HoverFill: =RGBA(36, 100, 170, 1)
+      HoverColor: =RGBA(255, 255, 255, 1)
+      PressedFill: =RGBA(36, 100, 170, 1)
+      PressedColor: =RGBA(255, 255, 255, 1)
+      BorderThickness: =0
+      FocusedBorderThickness: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      PaddingLeft: =0
+      PaddingRight: =0
+      OnSelect: =false
+      TabIndex: =-1
+      X: =704
+      Y: =136
+      Width: =32
+      Height: =32
+      RadiusTopLeft: =16
+      RadiusTopRight: =16
+      RadiusBottomLeft: =16
+      RadiusBottomRight: =16
+      Visible: =Coalesce(varVista, "area") = "persona"
+- lblNomP3:
+    Control: Label@2.5.1
+    Properties:
+      Text: =Index(Personas, 3).NombreCompleto
+      Font: =Font.'Segoe UI'
+      Size: =11
+      Color: =RGBA(33, 37, 41, 1)
+      X: =746
+      Y: =134
+      Width: =245
+      Height: =22
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      FontWeight: =FontWeight.Bold
+      Visible: =Coalesce(varVista, "area") = "persona"
+- lblCntP3:
+    Control: Label@2.5.1
+    Properties:
+      Text: =CountRows(Filter(galP3.AllItems, Estado <> "Terminada")) & " activas  ·  " & CountRows(Filter(galP3.AllItems, Estado = "Bloqueada")) & " bloqueadas  ·  " & CountRows(Filter(galP3.AllItems, Estado = "Terminada")) & " terminadas"
+      Font: =Font.'Segoe UI'
+      Size: =8
+      Color: =RGBA(108, 117, 125, 1)
+      X: =746
+      Y: =156
+      Width: =249
+      Height: =16
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      Visible: =Coalesce(varVista, "area") = "persona"
+- galP3:
+    Control: Gallery@2.15.0
+    Variant: VariableHeight
+    Properties:
+      Items: |-
+        =With(
+            {q: Trim(txtBuscar.Text), r: ddResp.Selected.Value},
+            Sort(
+                Filter(
+                    Actividades,
+                    Responsable = Index(Personas, 3).Nombre,
+                    IsBlank(q) || q in Actividad || q in ID || q in Area || q in Contraparte || q in StatusActual || q in Bloqueo
+                ),
+                Switch(Estado, "Bloqueada", 1, "En curso", 2, "En revisión", 3, "Por hacer", 4, 5) * 10 + Switch(Prioridad, "Alta", 1, "Media", 2, 3),
+                SortOrder.Ascending
+            )
+        )
+      X: =696
+      Y: =184
+      Width: =307
+      Height: =566
+      TemplateSize: =80
+      TemplatePadding: =0
+      ShowScrollbar: =true
+      Fill: =RGBA(0, 0, 0, 0)
+      TemplateFill: =RGBA(0, 0, 0, 0)
+      BorderThickness: =0
+      Visible: =Coalesce(varVista, "area") = "persona"
+      OnSelect: =Set(varAct, ThisItem); Set(varModo, "editar"); Select(btnReset); Set(varPanel, true)
+    Children:
+                      - conTarjP3:
+                          Control: GroupContainer@1.5.0
+                          Variant: ManualLayout
+                          Properties:
+                            Fill: =RGBA(255, 255, 255, 1)
+                            X: =0
+                            Y: =0
+                            Width: =(Parent.TemplateWidth - 30)
+                            Height: =If(IsBlank(lblSubP3.Text), lblAreaP3.Y + lblAreaP3.Height, lblSubP3.Y + lblSubP3.Height) + 8
+                            DropShadow: =DropShadow.None
+                            RadiusTopLeft: =6
+                            RadiusTopRight: =6
+                            RadiusBottomLeft: =6
+                            RadiusBottomRight: =6
+                            BorderColor: =RGBA(219, 225, 233, 1)
+                            BorderThickness: =1
+                      - lblIDP3:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =ThisItem.ID
+                            Font: =Font.'Segoe UI'
+                            Size: =8
+                            Color: =RGBA(108, 117, 125, 1)
+                            X: =8
+                            Y: =6
+                            Width: =54
+                            Height: =16
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                      - btnAltaP3:
+                          Control: Classic/Button@2.2.0
+                          Properties:
+                            Text: ="Alta"
+                            Font: =Font.'Segoe UI'
+                            Size: =7
+                            FontWeight: =FontWeight.Bold
+                            Fill: =RGBA(253, 232, 232, 1)
+                            Color: =RGBA(176, 32, 32, 1)
+                            HoverFill: =RGBA(253, 232, 232, 1)
+                            HoverColor: =RGBA(176, 32, 32, 1)
+                            PressedFill: =RGBA(253, 232, 232, 1)
+                            PressedColor: =RGBA(176, 32, 32, 1)
+                            BorderThickness: =0
+                            FocusedBorderThickness: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            OnSelect: =Select(Parent)
+                            TabIndex: =-1
+                            X: =58
+                            Y: =7
+                            Width: =30
+                            Height: =14
+                            RadiusTopLeft: =4
+                            RadiusTopRight: =4
+                            RadiusBottomLeft: =4
+                            RadiusBottomRight: =4
+                            Visible: =ThisItem.Prioridad = "Alta"
+                      - btnEstP3:
+                          Control: Classic/Button@2.2.0
+                          Properties:
+                            Text: =ThisItem.Estado
+                            Font: =Font.'Segoe UI'
+                            Size: =7
+                            FontWeight: =FontWeight.Bold
+                            Fill: =Switch(ThisItem.Estado, "Por hacer", RGBA(233, 236, 239, 1), "En curso", RGBA(221, 236, 250, 1), "En revisión", RGBA(255, 243, 214, 1), "Bloqueada", RGBA(236, 231, 248, 1), RGBA(225, 241, 226, 1))
+                            Color: =Switch(ThisItem.Estado, "Por hacer", RGBA(73, 80, 87, 1), "En curso", RGBA(28, 88, 150, 1), "En revisión", RGBA(150, 100, 0, 1), "Bloqueada", RGBA(91, 70, 168, 1), RGBA(46, 125, 50, 1))
+                            HoverFill: =Switch(ThisItem.Estado, "Por hacer", RGBA(233, 236, 239, 1), "En curso", RGBA(221, 236, 250, 1), "En revisión", RGBA(255, 243, 214, 1), "Bloqueada", RGBA(236, 231, 248, 1), RGBA(225, 241, 226, 1))
+                            HoverColor: =Switch(ThisItem.Estado, "Por hacer", RGBA(73, 80, 87, 1), "En curso", RGBA(28, 88, 150, 1), "En revisión", RGBA(150, 100, 0, 1), "Bloqueada", RGBA(91, 70, 168, 1), RGBA(46, 125, 50, 1))
+                            PressedFill: =Switch(ThisItem.Estado, "Por hacer", RGBA(233, 236, 239, 1), "En curso", RGBA(221, 236, 250, 1), "En revisión", RGBA(255, 243, 214, 1), "Bloqueada", RGBA(236, 231, 248, 1), RGBA(225, 241, 226, 1))
+                            PressedColor: =Switch(ThisItem.Estado, "Por hacer", RGBA(73, 80, 87, 1), "En curso", RGBA(28, 88, 150, 1), "En revisión", RGBA(150, 100, 0, 1), "Bloqueada", RGBA(91, 70, 168, 1), RGBA(46, 125, 50, 1))
+                            BorderThickness: =0
+                            FocusedBorderThickness: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            OnSelect: =Select(Parent)
+                            TabIndex: =-1
+                            X: =(Parent.TemplateWidth - 30) - 88
+                            Y: =6
+                            Width: =80
+                            Height: =16
+                            RadiusTopLeft: =8
+                            RadiusTopRight: =8
+                            RadiusBottomLeft: =8
+                            RadiusBottomRight: =8
+                      - lblTitP3:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =ThisItem.Actividad
+                            Font: =Font.'Segoe UI'
+                            Size: =9
+                            Color: =RGBA(33, 37, 41, 1)
+                            X: =8
+                            Y: =24
+                            Width: =(Parent.TemplateWidth - 30) - 16
+                            Height: =16
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            FontWeight: =FontWeight.Bold
+                            AutoHeight: =true
+                      - lblAreaP3:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =Coalesce(ThisItem.Area, "Sin área")
+                            Font: =Font.'Segoe UI'
+                            Size: =8
+                            Color: =RGBA(36, 100, 170, 1)
+                            X: =8
+                            Y: =lblTitP3.Y + lblTitP3.Height + 1
+                            Width: =(Parent.TemplateWidth - 30) - 16
+                            Height: =14
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                      - lblSubP3:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =If(ThisItem.Estado = "Bloqueada" && !IsBlank(ThisItem.Bloqueo), ThisItem.Bloqueo, Coalesce(ThisItem.StatusActual, ThisItem.Bloqueo, If(IsBlank(ThisItem.Responsable), "Sin responsable", "")))
+                            Font: =Font.'Segoe UI'
+                            Size: =8
+                            Color: =If(ThisItem.Estado = "Bloqueada" || IsBlank(ThisItem.Responsable) || (IsBlank(ThisItem.StatusActual) && !IsBlank(ThisItem.Bloqueo)), RGBA(91, 70, 168, 1), RGBA(108, 117, 125, 1))
+                            X: =8
+                            Y: =If(IsBlank(lblSubP3.Text), lblAreaP3.Y, lblAreaP3.Y + lblAreaP3.Height + 1)
+                            Width: =(Parent.TemplateWidth - 30) - 16
+                            Height: =14
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                            Visible: =!IsBlank(lblSubP3.Text)
+                      - btnHitP3:
+                          Control: Classic/Button@2.2.0
+                          Properties:
+                            Text: =""
+                            Fill: =RGBA(0, 0, 0, 0)
+                            HoverFill: =RGBA(27, 42, 65, 0.05)
+                            PressedFill: =RGBA(27, 42, 65, 0.10)
+                            BorderThickness: =0
+                            FocusedBorderThickness: =1
+                            FocusedBorderColor: =RGBA(36, 100, 170, 1)
+                            OnSelect: =Select(Parent)
+                            X: =0
+                            Y: =0
+                            Width: =(Parent.TemplateWidth - 30)
+                            Height: =conTarjP3.Height
+                            RadiusTopLeft: =6
+                            RadiusTopRight: =6
+                            RadiusBottomLeft: =6
+                            RadiusBottomRight: =6
+                      - recSepP3:
+                          Control: Rectangle@2.3.0
+                          Properties:
+                            Fill: =RGBA(0, 0, 0, 0)
+                            X: =0
+                            Y: =conTarjP3.Height
+                            Width: =10
+                            Height: =8
+                            OnSelect: =false
+- lblVacioP3:
+    Control: Label@2.5.1
+    Properties:
+      Text: ="—"
+      Font: =Font.'Segoe UI'
+      Size: =9
+      Color: =RGBA(173, 181, 189, 1)
+      X: =690
+      Y: =190
+      Width: =315
+      Height: =20
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      Visible: =Coalesce(varVista, "area") = "persona" && CountRows(galP3.AllItems) = 0
+      Align: =Align.Center
+- conColP4:
+    Control: GroupContainer@1.5.0
+    Variant: ManualLayout
+    Properties:
+      Fill: =RGBA(232, 236, 242, 1)
+      X: =1019
+      Y: =124
+      Width: =315
+      Height: =632
+      DropShadow: =DropShadow.None
+      RadiusTopLeft: =10
+      RadiusTopRight: =10
+      RadiusBottomLeft: =10
+      RadiusBottomRight: =10
+      BorderThickness: =0
+      Visible: =Coalesce(varVista, "area") = "persona"
+- btnAvP4:
+    Control: Classic/Button@2.2.0
+    Properties:
+      Text: ="?"
+      Font: =Font.'Segoe UI'
+      Size: =9
+      FontWeight: =FontWeight.Bold
+      Fill: =RGBA(255, 243, 214, 1)
+      Color: =RGBA(150, 100, 0, 1)
+      HoverFill: =RGBA(255, 243, 214, 1)
+      HoverColor: =RGBA(150, 100, 0, 1)
+      PressedFill: =RGBA(255, 243, 214, 1)
+      PressedColor: =RGBA(150, 100, 0, 1)
+      BorderThickness: =0
+      FocusedBorderThickness: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      PaddingLeft: =0
+      PaddingRight: =0
+      OnSelect: =false
+      TabIndex: =-1
+      X: =1033
+      Y: =136
+      Width: =32
+      Height: =32
+      RadiusTopLeft: =16
+      RadiusTopRight: =16
+      RadiusBottomLeft: =16
+      RadiusBottomRight: =16
+      Visible: =Coalesce(varVista, "area") = "persona"
+- lblNomP4:
+    Control: Label@2.5.1
+    Properties:
+      Text: ="Sin responsable"
+      Font: =Font.'Segoe UI'
+      Size: =11
+      Color: =RGBA(33, 37, 41, 1)
+      X: =1075
+      Y: =134
+      Width: =245
+      Height: =22
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      FontWeight: =FontWeight.Bold
+      Visible: =Coalesce(varVista, "area") = "persona"
+- lblCntP4:
+    Control: Label@2.5.1
+    Properties:
+      Text: =CountRows(Filter(galP4.AllItems, Estado <> "Terminada")) & " activas  ·  " & CountRows(Filter(galP4.AllItems, Estado = "Bloqueada")) & " bloqueadas  ·  " & CountRows(Filter(galP4.AllItems, Estado = "Terminada")) & " terminadas"
+      Font: =Font.'Segoe UI'
+      Size: =8
+      Color: =RGBA(108, 117, 125, 1)
+      X: =1075
+      Y: =156
+      Width: =249
+      Height: =16
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      Visible: =Coalesce(varVista, "area") = "persona"
+- galP4:
+    Control: Gallery@2.15.0
+    Variant: VariableHeight
+    Properties:
+      Items: |-
+        =With(
+            {q: Trim(txtBuscar.Text), r: ddResp.Selected.Value},
+            Sort(
+                Filter(
+                    Actividades,
+                    IsBlank(Responsable),
+                    IsBlank(q) || q in Actividad || q in ID || q in Area || q in Contraparte || q in StatusActual || q in Bloqueo
+                ),
+                Switch(Estado, "Bloqueada", 1, "En curso", 2, "En revisión", 3, "Por hacer", 4, 5) * 10 + Switch(Prioridad, "Alta", 1, "Media", 2, 3),
+                SortOrder.Ascending
+            )
+        )
+      X: =1025
+      Y: =184
+      Width: =307
+      Height: =566
+      TemplateSize: =80
+      TemplatePadding: =0
+      ShowScrollbar: =true
+      Fill: =RGBA(0, 0, 0, 0)
+      TemplateFill: =RGBA(0, 0, 0, 0)
+      BorderThickness: =0
+      Visible: =Coalesce(varVista, "area") = "persona"
+      OnSelect: =Set(varAct, ThisItem); Set(varModo, "editar"); Select(btnReset); Set(varPanel, true)
+    Children:
+                      - conTarjP4:
+                          Control: GroupContainer@1.5.0
+                          Variant: ManualLayout
+                          Properties:
+                            Fill: =RGBA(255, 255, 255, 1)
+                            X: =0
+                            Y: =0
+                            Width: =(Parent.TemplateWidth - 30)
+                            Height: =If(IsBlank(lblSubP4.Text), lblAreaP4.Y + lblAreaP4.Height, lblSubP4.Y + lblSubP4.Height) + 8
+                            DropShadow: =DropShadow.None
+                            RadiusTopLeft: =6
+                            RadiusTopRight: =6
+                            RadiusBottomLeft: =6
+                            RadiusBottomRight: =6
+                            BorderColor: =RGBA(219, 225, 233, 1)
+                            BorderThickness: =1
+                      - lblIDP4:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =ThisItem.ID
+                            Font: =Font.'Segoe UI'
+                            Size: =8
+                            Color: =RGBA(108, 117, 125, 1)
+                            X: =8
+                            Y: =6
+                            Width: =54
+                            Height: =16
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                      - btnAltaP4:
+                          Control: Classic/Button@2.2.0
+                          Properties:
+                            Text: ="Alta"
+                            Font: =Font.'Segoe UI'
+                            Size: =7
+                            FontWeight: =FontWeight.Bold
+                            Fill: =RGBA(253, 232, 232, 1)
+                            Color: =RGBA(176, 32, 32, 1)
+                            HoverFill: =RGBA(253, 232, 232, 1)
+                            HoverColor: =RGBA(176, 32, 32, 1)
+                            PressedFill: =RGBA(253, 232, 232, 1)
+                            PressedColor: =RGBA(176, 32, 32, 1)
+                            BorderThickness: =0
+                            FocusedBorderThickness: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            OnSelect: =Select(Parent)
+                            TabIndex: =-1
+                            X: =58
+                            Y: =7
+                            Width: =30
+                            Height: =14
+                            RadiusTopLeft: =4
+                            RadiusTopRight: =4
+                            RadiusBottomLeft: =4
+                            RadiusBottomRight: =4
+                            Visible: =ThisItem.Prioridad = "Alta"
+                      - btnEstP4:
+                          Control: Classic/Button@2.2.0
+                          Properties:
+                            Text: =ThisItem.Estado
+                            Font: =Font.'Segoe UI'
+                            Size: =7
+                            FontWeight: =FontWeight.Bold
+                            Fill: =Switch(ThisItem.Estado, "Por hacer", RGBA(233, 236, 239, 1), "En curso", RGBA(221, 236, 250, 1), "En revisión", RGBA(255, 243, 214, 1), "Bloqueada", RGBA(236, 231, 248, 1), RGBA(225, 241, 226, 1))
+                            Color: =Switch(ThisItem.Estado, "Por hacer", RGBA(73, 80, 87, 1), "En curso", RGBA(28, 88, 150, 1), "En revisión", RGBA(150, 100, 0, 1), "Bloqueada", RGBA(91, 70, 168, 1), RGBA(46, 125, 50, 1))
+                            HoverFill: =Switch(ThisItem.Estado, "Por hacer", RGBA(233, 236, 239, 1), "En curso", RGBA(221, 236, 250, 1), "En revisión", RGBA(255, 243, 214, 1), "Bloqueada", RGBA(236, 231, 248, 1), RGBA(225, 241, 226, 1))
+                            HoverColor: =Switch(ThisItem.Estado, "Por hacer", RGBA(73, 80, 87, 1), "En curso", RGBA(28, 88, 150, 1), "En revisión", RGBA(150, 100, 0, 1), "Bloqueada", RGBA(91, 70, 168, 1), RGBA(46, 125, 50, 1))
+                            PressedFill: =Switch(ThisItem.Estado, "Por hacer", RGBA(233, 236, 239, 1), "En curso", RGBA(221, 236, 250, 1), "En revisión", RGBA(255, 243, 214, 1), "Bloqueada", RGBA(236, 231, 248, 1), RGBA(225, 241, 226, 1))
+                            PressedColor: =Switch(ThisItem.Estado, "Por hacer", RGBA(73, 80, 87, 1), "En curso", RGBA(28, 88, 150, 1), "En revisión", RGBA(150, 100, 0, 1), "Bloqueada", RGBA(91, 70, 168, 1), RGBA(46, 125, 50, 1))
+                            BorderThickness: =0
+                            FocusedBorderThickness: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            OnSelect: =Select(Parent)
+                            TabIndex: =-1
+                            X: =(Parent.TemplateWidth - 30) - 88
+                            Y: =6
+                            Width: =80
+                            Height: =16
+                            RadiusTopLeft: =8
+                            RadiusTopRight: =8
+                            RadiusBottomLeft: =8
+                            RadiusBottomRight: =8
+                      - lblTitP4:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =ThisItem.Actividad
+                            Font: =Font.'Segoe UI'
+                            Size: =9
+                            Color: =RGBA(33, 37, 41, 1)
+                            X: =8
+                            Y: =24
+                            Width: =(Parent.TemplateWidth - 30) - 16
+                            Height: =16
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            FontWeight: =FontWeight.Bold
+                            AutoHeight: =true
+                      - lblAreaP4:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =Coalesce(ThisItem.Area, "Sin área")
+                            Font: =Font.'Segoe UI'
+                            Size: =8
+                            Color: =RGBA(36, 100, 170, 1)
+                            X: =8
+                            Y: =lblTitP4.Y + lblTitP4.Height + 1
+                            Width: =(Parent.TemplateWidth - 30) - 16
+                            Height: =14
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                      - lblSubP4:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =If(ThisItem.Estado = "Bloqueada" && !IsBlank(ThisItem.Bloqueo), ThisItem.Bloqueo, Coalesce(ThisItem.StatusActual, ThisItem.Bloqueo, If(IsBlank(ThisItem.Responsable), "Sin responsable", "")))
+                            Font: =Font.'Segoe UI'
+                            Size: =8
+                            Color: =If(ThisItem.Estado = "Bloqueada" || IsBlank(ThisItem.Responsable) || (IsBlank(ThisItem.StatusActual) && !IsBlank(ThisItem.Bloqueo)), RGBA(91, 70, 168, 1), RGBA(108, 117, 125, 1))
+                            X: =8
+                            Y: =If(IsBlank(lblSubP4.Text), lblAreaP4.Y, lblAreaP4.Y + lblAreaP4.Height + 1)
+                            Width: =(Parent.TemplateWidth - 30) - 16
+                            Height: =14
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                            Visible: =!IsBlank(lblSubP4.Text)
+                      - btnHitP4:
+                          Control: Classic/Button@2.2.0
+                          Properties:
+                            Text: =""
+                            Fill: =RGBA(0, 0, 0, 0)
+                            HoverFill: =RGBA(27, 42, 65, 0.05)
+                            PressedFill: =RGBA(27, 42, 65, 0.10)
+                            BorderThickness: =0
+                            FocusedBorderThickness: =1
+                            FocusedBorderColor: =RGBA(36, 100, 170, 1)
+                            OnSelect: =Select(Parent)
+                            X: =0
+                            Y: =0
+                            Width: =(Parent.TemplateWidth - 30)
+                            Height: =conTarjP4.Height
+                            RadiusTopLeft: =6
+                            RadiusTopRight: =6
+                            RadiusBottomLeft: =6
+                            RadiusBottomRight: =6
+                      - recSepP4:
+                          Control: Rectangle@2.3.0
+                          Properties:
+                            Fill: =RGBA(0, 0, 0, 0)
+                            X: =0
+                            Y: =conTarjP4.Height
+                            Width: =10
+                            Height: =8
+                            OnSelect: =false
+- lblVacioP4:
+    Control: Label@2.5.1
+    Properties:
+      Text: ="—"
+      Font: =Font.'Segoe UI'
+      Size: =9
+      Color: =RGBA(173, 181, 189, 1)
+      X: =1019
+      Y: =190
+      Width: =315
+      Height: =20
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      Visible: =Coalesce(varVista, "area") = "persona" && CountRows(galP4.AllItems) = 0
+      Align: =Align.Center

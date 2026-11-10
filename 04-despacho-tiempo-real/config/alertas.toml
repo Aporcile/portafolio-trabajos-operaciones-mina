@@ -1,0 +1,44 @@
+# Reglas de alerta (contrato de configuración; el motor de alertas figura en la hoja de ruta).
+# Cada regla es un tipo registrado en el motor más sus umbrales. Ciclo de vida previsto:
+# activa -> reconocida -> resuelta. Clave de deduplicación = regla + equipo (o ruta).
+# Valores de ejemplo.
+
+[[regla]]
+id = "equipo_detenido"            # tipo de regla
+nombre = "Equipo de carguío detenido"
+severidad = "critica"             # critica | alta | media | informativa
+umbral = 30                       # minutos detenido
+duracion_min = 0                  # minutos que debe mantenerse la condición antes de activar
+histeresis = 5                    # margen para resolver (evita oscilación)
+activa = true
+accion = "Evaluar el estado de {equipo} y definir cuándo reincorporarlo."
+
+[[regla]]
+id = "ciclo_sobre_norma"
+nombre = "Ciclo sobre la norma de la ruta"
+severidad = "alta"
+umbral = 15                       # % sobre la norma
+duracion_min = 20
+histeresis = 3
+activa = true
+accion = "Revisar congestión o aculatamiento en la ruta {ruta}."
+
+[[regla]]
+id = "velocidad_baja"
+nombre = "Velocidad de CAEX bajo lo normal"
+severidad = "media"
+umbral = 20                       # % bajo la velocidad normal de la misma hora
+duracion_min = 30
+histeresis = 5
+activa = true
+accion = "Revisar estado de caminos y tramos lentos."
+
+[[regla]]
+id = "datos_atrasados"
+nombre = "Fuente de datos atrasada"
+severidad = "informativa"
+umbral = 600                      # segundos sin dato nuevo
+duracion_min = 0
+histeresis = 0
+activa = true
+accion = "Verificar la conexión con la fuente de datos."

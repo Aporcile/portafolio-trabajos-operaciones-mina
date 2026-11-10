@@ -1,0 +1,56 @@
+// Plan MENSUAL de la flota CAEX para la app: extracción, DF, UEBD y rendimiento del mes, a la fecha y completo, desde Planes_Mina.
+// Modelo: «OEE CAEX Demo» (pbip/). No cambia el modelo: solo medidas de consulta sobre columnas existentes.
+// El flujo reemplaza @HOY@ por la fecha del día ("aaaa-mm-dd hh:mm"; solo se lee la fecha). Corte = ayer; el mes es el del corte.
+// Los % salen como fracción (0,85). La numeración de los indicadores sigue el catálogo (docs/catalogo_indicadores.md).
+// Ejecución manual: reemplazar @HOY@ por una fecha, por ejemplo 2025-06-01 00:00.
+DEFINE
+    VAR _s = "@HOY@"
+    VAR _hoy = DATE(VALUE(LEFT(_s, 4)), VALUE(MID(_s, 6, 2)), VALUE(MID(_s, 9, 2)))
+    VAR _fin = _hoy - 1
+    VAR _iniMes = DATE(YEAR(_fin), MONTH(_fin), 1)
+    VAR _finMes = EOMONTH(_fin, 0)
+    MEASURE Planes_Mina[_m] = CALCULATE(SUM(Planes_Mina[value]), Planes_Mina[plan_type] = "Mensual")
+    MEASURE Planes_Mina[_CaexNom] = CALCULATE([_m], Planes_Mina[property_name] = "Horas Nominales CAEX")
+    MEASURE Planes_Mina[_CaexDis] = CALCULATE([_m], Planes_Mina[property_name] = "Horas Disponibles CAEX")
+    MEASURE Planes_Mina[_CaexEfe] = CALCULATE([_m], Planes_Mina[property_name] = "Horas Efectivas CAEX")
+    MEASURE Planes_Mina[_CaexTon] = CALCULATE([_m], Planes_Mina[property_name] = "Total Toneladas CAEX")
+EVALUATE
+VAR Ind =
+    DATATABLE(
+        "Orden", INTEGER, "Indicador", STRING,
+        {
+            { 1, "Extracción total mina" },
+            { 2, "DF CAEX" },
+            { 3, "UEBD CAEX" },
+            { 4, "Rendimiento CAEX" }
+        }
+    )
+VAR Mtd = DATESBETWEEN(Planes_Mina[start_date], _iniMes, _fin)
+VAR Mes = DATESBETWEEN(Planes_Mina[start_date], _iniMes, _finMes)
+RETURN
+    ADDCOLUMNS(
+        Ind,
+        "PlanMesAFecha",
+            VAR o = [Orden]
+            RETURN
+                CALCULATE(
+                    SWITCH(o,
+                        1, [_CaexTon],
+                        2, DIVIDE([_CaexDis], [_CaexNom]),
+                        3, DIVIDE([_CaexEfe], [_CaexDis]),
+                        4, DIVIDE([_CaexTon], [_CaexEfe])),
+                    Mtd),
+        "PlanMesCompleto",
+            VAR o = [Orden]
+            RETURN
+                CALCULATE(
+                    SWITCH(o,
+                        1, [_CaexTon],
+                        2, DIVIDE([_CaexDis], [_CaexNom]),
+                        3, DIVIDE([_CaexEfe], [_CaexDis]),
+                        4, DIVIDE([_CaexTon], [_CaexEfe])),
+                    Mes),
+        "DiasPlanMes", CALCULATE(DISTINCTCOUNT(Planes_Mina[start_date]), Mes, Planes_Mina[plan_type] = "Mensual"),
+        "MesInicio", _iniMes,
+        "Corte", _fin
+    )

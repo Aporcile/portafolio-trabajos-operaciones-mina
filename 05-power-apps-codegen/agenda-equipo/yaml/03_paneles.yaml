@@ -1,0 +1,1462 @@
+- recVelo:
+    Control: Rectangle@2.3.0
+    Properties:
+      Fill: =RGBA(0, 0, 0, 0.45)
+      X: =0
+      Y: =0
+      Width: =Parent.Width
+      Height: =Parent.Height
+      Visible: =varPanel || varPanelHL || varPanelRev
+      OnSelect: =false
+- conPanel:
+    Control: GroupContainer@1.5.0
+    Variant: ManualLayout
+    Properties:
+      Fill: =RGBA(255, 255, 255, 1)
+      X: =323
+      Y: =68
+      Width: =720
+      Height: =632
+      DropShadow: =DropShadow.ExtraBold
+      RadiusTopLeft: =12
+      RadiusTopRight: =12
+      RadiusBottomLeft: =12
+      RadiusBottomRight: =12
+      BorderColor: =RGBA(219, 225, 233, 1)
+      BorderThickness: =1
+      Visible: =varPanel
+    Children:
+          - lblPanelTitulo:
+              Control: Label@2.5.1
+              Properties:
+                Text: =If(varModo = "editar", varAct.Actividad, "Nueva actividad")
+                Font: =Font.'Segoe UI'
+                Size: =13
+                Color: =RGBA(33, 37, 41, 1)
+                X: =24
+                Y: =18
+                Width: =672
+                Height: =30
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+                FontWeight: =FontWeight.Bold
+                Wrap: =false
+          - lblNextID:
+              Control: Label@2.5.1
+              Properties:
+                Text: |-
+                  =With(
+                      {yy: Text(Today(), "yy"), letras: "ABCDEFGHIJKLMNOPQRSTUVWXYZ"},
+                      With(
+                          {
+                              n: Coalesce(
+                                  Max(
+                                      Filter(Actividades, IsMatch(ID, "[A-Z]-\d{2}-\d{2}") && Right(ID, 2) = yy),
+                                      (Find(Left(ID, 1), letras) - 1) * 100 + Value(Mid(ID, 3, 2))
+                                  ),
+                                  0
+                              ) + 1
+                          },
+                          Mid(letras, RoundDown(n / 100, 0) + 1, 1) & "-" & Text(Mod(n, 100), "00") & "-" & yy
+                      )
+                  )
+                Font: =Font.'Segoe UI'
+                Size: =8
+                Color: =RGBA(33, 37, 41, 1)
+                X: =0
+                Y: =0
+                Width: =10
+                Height: =10
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+                Visible: =false
+          - lblFID:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="ID (automático)"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =24
+                Y: =56
+                Width: =140
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - txtID:
+              Control: Classic/TextInput@2.3.2
+              Properties:
+                Default: =If(varModo = "editar", varAct.ID, lblNextID.Text)
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                HoverFill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                FocusedBorderColor: =RGBA(27, 42, 65, 1)
+                BorderThickness: =1
+                FocusedBorderThickness: =1
+                PaddingLeft: =12
+                X: =24
+                Y: =78
+                Width: =140
+                Height: =38
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+                DisplayMode: =DisplayMode.Disabled
+                DisabledFill: =RGBA(245, 246, 248, 1)
+                DisabledColor: =RGBA(73, 80, 87, 1)
+                DisabledBorderColor: =RGBA(219, 225, 233, 1)
+          - lblFActividad:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Actividad *"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =176
+                Y: =56
+                Width: =520
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - txtActividad:
+              Control: Classic/TextInput@2.3.2
+              Properties:
+                Default: =If(varModo = "editar", varAct.Actividad, "")
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                HoverFill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                FocusedBorderColor: =RGBA(27, 42, 65, 1)
+                BorderThickness: =1
+                FocusedBorderThickness: =1
+                PaddingLeft: =12
+                X: =176
+                Y: =78
+                Width: =520
+                Height: =38
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+          - lblFDescripcion:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Descripción / alcance"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =24
+                Y: =124
+                Width: =324
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - txtDescripcion:
+              Control: Classic/TextInput@2.3.2
+              Properties:
+                Default: =If(varModo = "editar", varAct.Descripcion, "")
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                HoverFill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                FocusedBorderColor: =RGBA(27, 42, 65, 1)
+                BorderThickness: =1
+                FocusedBorderThickness: =1
+                PaddingLeft: =12
+                X: =24
+                Y: =146
+                Width: =672
+                Height: =56
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+                Mode: =TextMode.MultiLine
+                PaddingTop: =8
+          - lblFArea:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Área"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =24
+                Y: =210
+                Width: =324
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - ddArea:
+              Control: Classic/DropDown@2.3.1
+              Properties:
+                Items: =ShowColumns(Sort(Areas, Area), Area)
+                Default: =If(varModo = "editar", varAct.Area, "")
+                AllowEmptySelection: =true
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverFill: =RGBA(232, 236, 242, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                PressedFill: =RGBA(232, 236, 242, 1)
+                PressedColor: =RGBA(33, 37, 41, 1)
+                SelectionFill: =RGBA(222, 232, 246, 1)
+                SelectionColor: =RGBA(27, 42, 65, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                BorderThickness: =1
+                ChevronBackground: =RGBA(255, 255, 255, 1)
+                ChevronFill: =RGBA(73, 80, 87, 1)
+                ChevronHoverBackground: =RGBA(232, 236, 242, 1)
+                ChevronHoverFill: =RGBA(33, 37, 41, 1)
+                PaddingLeft: =12
+                X: =24
+                Y: =232
+                Width: =324
+                Height: =38
+          - lblFResponsable:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Responsable (uno solo)"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =372
+                Y: =210
+                Width: =324
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - ddResponsable:
+              Control: Classic/DropDown@2.3.1
+              Properties:
+                Items: =ShowColumns(Personas, Nombre)
+                Default: =If(varModo = "editar", varAct.Responsable, "")
+                AllowEmptySelection: =true
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverFill: =RGBA(232, 236, 242, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                PressedFill: =RGBA(232, 236, 242, 1)
+                PressedColor: =RGBA(33, 37, 41, 1)
+                SelectionFill: =RGBA(222, 232, 246, 1)
+                SelectionColor: =RGBA(27, 42, 65, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                BorderThickness: =1
+                ChevronBackground: =RGBA(255, 255, 255, 1)
+                ChevronFill: =RGBA(73, 80, 87, 1)
+                ChevronHoverBackground: =RGBA(232, 236, 242, 1)
+                ChevronHoverFill: =RGBA(33, 37, 41, 1)
+                PaddingLeft: =12
+                X: =372
+                Y: =232
+                Width: =324
+                Height: =38
+          - lblFContraparte:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Contraparte / externos"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =24
+                Y: =278
+                Width: =324
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - txtContraparte:
+              Control: Classic/TextInput@2.3.2
+              Properties:
+                Default: =If(varModo = "editar", varAct.Contraparte, "")
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                HoverFill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                FocusedBorderColor: =RGBA(27, 42, 65, 1)
+                BorderThickness: =1
+                FocusedBorderThickness: =1
+                PaddingLeft: =12
+                X: =24
+                Y: =300
+                Width: =324
+                Height: =38
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+          - lblFPrioridad:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Prioridad"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =372
+                Y: =278
+                Width: =324
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - ddPrioridad:
+              Control: Classic/DropDown@2.3.1
+              Properties:
+                Items: =["Alta", "Media", "Baja"]
+                Default: =If(varModo = "editar", varAct.Prioridad, "")
+                AllowEmptySelection: =true
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverFill: =RGBA(232, 236, 242, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                PressedFill: =RGBA(232, 236, 242, 1)
+                PressedColor: =RGBA(33, 37, 41, 1)
+                SelectionFill: =RGBA(222, 232, 246, 1)
+                SelectionColor: =RGBA(27, 42, 65, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                BorderThickness: =1
+                ChevronBackground: =RGBA(255, 255, 255, 1)
+                ChevronFill: =RGBA(73, 80, 87, 1)
+                ChevronHoverBackground: =RGBA(232, 236, 242, 1)
+                ChevronHoverFill: =RGBA(33, 37, 41, 1)
+                PaddingLeft: =12
+                X: =372
+                Y: =300
+                Width: =324
+                Height: =38
+          - lblFEstado:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Estado"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =24
+                Y: =346
+                Width: =208
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - ddEstado:
+              Control: Classic/DropDown@2.3.1
+              Properties:
+                Items: =["Por hacer", "En curso", "En revisión", "Bloqueada", "Terminada"]
+                Default: =If(varModo = "editar", varAct.Estado, "Por hacer")
+                AllowEmptySelection: =true
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverFill: =RGBA(232, 236, 242, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                PressedFill: =RGBA(232, 236, 242, 1)
+                PressedColor: =RGBA(33, 37, 41, 1)
+                SelectionFill: =RGBA(222, 232, 246, 1)
+                SelectionColor: =RGBA(27, 42, 65, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                BorderThickness: =1
+                ChevronBackground: =RGBA(255, 255, 255, 1)
+                ChevronFill: =RGBA(73, 80, 87, 1)
+                ChevronHoverBackground: =RGBA(232, 236, 242, 1)
+                ChevronHoverFill: =RGBA(33, 37, 41, 1)
+                PaddingLeft: =12
+                X: =24
+                Y: =368
+                Width: =208
+                Height: =38
+          - lblFInicio:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Fecha inicio"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =248
+                Y: =346
+                Width: =208
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - dpInicio:
+              Control: Classic/DatePicker@2.6.0
+              Properties:
+                DefaultDate: =If(varModo = "editar", If(IsBlank(varAct.FechaInicio), Blank(), DateValue(varAct.FechaInicio)), Today())
+                Format: ="dd-mm-yyyy"
+                InputTextPlaceholder: ="dd-mm-aaaa"
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                BorderThickness: =1
+                IconFill: =RGBA(73, 80, 87, 1)
+                IconBackground: =RGBA(255, 255, 255, 1)
+                DateTimeZone: =DateTimeZone.Local
+                PaddingLeft: =12
+                X: =248
+                Y: =368
+                Width: =208
+                Height: =38
+          - lblFTermino:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Fecha término"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =472
+                Y: =346
+                Width: =224
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - dpTermino:
+              Control: Classic/DatePicker@2.6.0
+              Properties:
+                DefaultDate: =If(varModo = "editar" && !IsBlank(varAct.FechaTermino), DateValue(varAct.FechaTermino), Blank())
+                Format: ="dd-mm-yyyy"
+                InputTextPlaceholder: ="dd-mm-aaaa"
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                BorderThickness: =1
+                IconFill: =RGBA(73, 80, 87, 1)
+                IconBackground: =RGBA(255, 255, 255, 1)
+                DateTimeZone: =DateTimeZone.Local
+                PaddingLeft: =12
+                X: =472
+                Y: =368
+                Width: =224
+                Height: =38
+          - lblFStatus:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Status actual / pendientes"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =24
+                Y: =414
+                Width: =324
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - txtStatus:
+              Control: Classic/TextInput@2.3.2
+              Properties:
+                Default: =If(varModo = "editar", varAct.StatusActual, "")
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                HoverFill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                FocusedBorderColor: =RGBA(27, 42, 65, 1)
+                BorderThickness: =1
+                FocusedBorderThickness: =1
+                PaddingLeft: =12
+                X: =24
+                Y: =436
+                Width: =672
+                Height: =56
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+                Mode: =TextMode.MultiLine
+                PaddingTop: =8
+          - lblFBloqueo:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Bloqueo / dependencia" & If(ddEstado.Selected.Value = "Bloqueada", " *", "")
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =If(ddEstado.Selected.Value = "Bloqueada", RGBA(91, 70, 168, 1), RGBA(108, 117, 125, 1))
+                X: =24
+                Y: =500
+                Width: =400
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - txtBloqueo:
+              Control: Classic/TextInput@2.3.2
+              Properties:
+                Default: =If(varModo = "editar", varAct.Bloqueo, "")
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                HoverFill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                FocusedBorderColor: =RGBA(27, 42, 65, 1)
+                BorderThickness: =1
+                FocusedBorderThickness: =1
+                PaddingLeft: =12
+                X: =24
+                Y: =522
+                Width: =672
+                Height: =44
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+                Mode: =TextMode.MultiLine
+                PaddingTop: =8
+          - btnGuardar:
+              Control: Classic/Button@2.2.0
+              Properties:
+                Fill: =RGBA(27, 42, 65, 1)
+                Color: =RGBA(255, 255, 255, 1)
+                HoverFill: =RGBA(44, 66, 98, 1)
+                HoverColor: =RGBA(255, 255, 255, 1)
+                PressedFill: =RGBA(18, 29, 46, 1)
+                PressedColor: =RGBA(255, 255, 255, 1)
+                BorderThickness: =0
+                Text: ="Guardar"
+                OnSelect: |-
+                  =With(
+                      {nid: If(varModo = "editar", varAct.ID, lblNextID.Text)},
+                      If(
+                          IsBlank(Trim(txtActividad.Text)),
+                              Notify("Escribe el nombre de la actividad.", NotificationType.Error),
+                          ddEstado.Selected.Value = "Bloqueada" && IsBlank(Trim(txtBloqueo.Text)),
+                              Notify("Una actividad bloqueada necesita el motivo en «Bloqueo / dependencia».", NotificationType.Error),
+                          varModo = "nuevo" && !IsBlank(LookUp(Actividades, Lower(Trim(Actividad)) = Lower(Trim(txtActividad.Text)), ID)),
+                              Notify("Ya existe una actividad con ese nombre. Búscala antes de crear otra.", NotificationType.Warning),
+                          With(
+                              {
+                                  reg: {
+                                      ID: nid,
+                                      Area: If(IsBlank(ddArea.Selected.Area), "", ddArea.Selected.Area),
+                                      Actividad: Trim(txtActividad.Text),
+                                      Descripcion: txtDescripcion.Text,
+                                      Responsable: If(IsBlank(ddResponsable.Selected.Nombre), "", ddResponsable.Selected.Nombre),
+                                      Contraparte: txtContraparte.Text,
+                                      Prioridad: If(IsBlank(ddPrioridad.Selected.Value), "", ddPrioridad.Selected.Value),
+                                      Estado: Coalesce(ddEstado.Selected.Value, "Por hacer"),
+                                      FechaInicio: If(IsBlank(dpInicio.SelectedDate), "", Text(dpInicio.SelectedDate, "yyyy-mm-dd")),
+                                      FechaTermino: If(
+                                          !IsBlank(dpTermino.SelectedDate), Text(dpTermino.SelectedDate, "yyyy-mm-dd"),
+                                          ddEstado.Selected.Value = "Terminada", Text(Today(), "yyyy-mm-dd"),
+                                          ""
+                                      ),
+                                      StatusActual: txtStatus.Text,
+                                      Bloqueo: txtBloqueo.Text
+                                  }
+                              },
+                              If(varModo = "editar", Patch(Actividades, varAct, reg), Patch(Actividades, Defaults(Actividades), reg))
+                          );
+                          If(
+                              IsEmpty(Errors(Actividades)),
+                                  Set(varPanel, false); Notify("Actividad guardada.", NotificationType.Success),
+                                  Notify("No se pudo guardar: " & First(Errors(Actividades)).Message, NotificationType.Error)
+                          )
+                      )
+                  )
+                Font: =Font.'Segoe UI'
+                Size: =10.5
+                FontWeight: =FontWeight.Semibold
+                X: =24
+                Y: =576
+                Width: =110
+                Height: =38
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+          - btnCancelar:
+              Control: Classic/Button@2.2.0
+              Properties:
+                Fill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverFill: =RGBA(232, 236, 242, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                PressedFill: =RGBA(232, 236, 242, 1)
+                PressedColor: =RGBA(33, 37, 41, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                BorderThickness: =1
+                Text: ="Cancelar"
+                OnSelect: =Set(varPanel, false); Set(varConfirmDel, false)
+                Font: =Font.'Segoe UI'
+                Size: =10.5
+                FontWeight: =FontWeight.Semibold
+                X: =144
+                Y: =576
+                Width: =110
+                Height: =38
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+          - btnEliminar:
+              Control: Classic/Button@2.2.0
+              Properties:
+                Fill: =RGBA(0, 0, 0, 0)
+                Color: =RGBA(176, 32, 32, 1)
+                HoverFill: =RGBA(198, 40, 40, 0.08)
+                HoverColor: =RGBA(176, 32, 32, 1)
+                PressedFill: =RGBA(253, 232, 232, 1)
+                PressedColor: =RGBA(176, 32, 32, 1)
+                BorderColor: =RGBA(198, 40, 40, 1)
+                HoverBorderColor: =RGBA(198, 40, 40, 1)
+                BorderThickness: =1
+                Text: =If(varConfirmDel, "¿Confirmar?", "Eliminar")
+                OnSelect: =If(varConfirmDel, Remove(Actividades, varAct); Set(varConfirmDel, false); Set(varPanel, false); Notify("Actividad eliminada.", NotificationType.Success), Set(varConfirmDel, true))
+                Font: =Font.'Segoe UI'
+                Size: =10.5
+                FontWeight: =FontWeight.Semibold
+                X: =566
+                Y: =576
+                Width: =130
+                Height: =38
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+                Visible: =varModo = "editar"
+- conPanelHL:
+    Control: GroupContainer@1.5.0
+    Variant: ManualLayout
+    Properties:
+      Fill: =RGBA(255, 255, 255, 1)
+      X: =323
+      Y: =84
+      Width: =720
+      Height: =600
+      DropShadow: =DropShadow.ExtraBold
+      RadiusTopLeft: =12
+      RadiusTopRight: =12
+      RadiusBottomLeft: =12
+      RadiusBottomRight: =12
+      BorderColor: =RGBA(219, 225, 233, 1)
+      BorderThickness: =1
+      Visible: =varPanelHL
+    Children:
+          - lblPanelTituloHL:
+              Control: Label@2.5.1
+              Properties:
+                Text: =If(varModoHL = "editar", "Editar registro", "Nuevo registro")
+                Font: =Font.'Segoe UI'
+                Size: =13
+                Color: =RGBA(33, 37, 41, 1)
+                X: =24
+                Y: =18
+                Width: =600
+                Height: =30
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+                FontWeight: =FontWeight.Bold
+          - lblFTipoHL:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Tipo"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =24
+                Y: =56
+                Width: =324
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - ddTipoHL:
+              Control: Classic/DropDown@2.3.1
+              Properties:
+                Items: =["Highlight", "Lowlight"]
+                Default: =If(varModoHL = "editar", varHL.Tipo, varTipoHL)
+                AllowEmptySelection: =true
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverFill: =RGBA(232, 236, 242, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                PressedFill: =RGBA(232, 236, 242, 1)
+                PressedColor: =RGBA(33, 37, 41, 1)
+                SelectionFill: =RGBA(222, 232, 246, 1)
+                SelectionColor: =RGBA(27, 42, 65, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                BorderThickness: =1
+                ChevronBackground: =RGBA(255, 255, 255, 1)
+                ChevronFill: =RGBA(73, 80, 87, 1)
+                ChevronHoverBackground: =RGBA(232, 236, 242, 1)
+                ChevronHoverFill: =RGBA(33, 37, 41, 1)
+                PaddingLeft: =12
+                X: =24
+                Y: =78
+                Width: =324
+                Height: =38
+          - lblFFechaHL:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Fecha"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =372
+                Y: =56
+                Width: =324
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - dpFechaHL:
+              Control: Classic/DatePicker@2.6.0
+              Properties:
+                DefaultDate: =If(varModoHL = "editar" && !IsBlank(varHL.Fecha), DateValue(varHL.Fecha), Blank())
+                Format: ="dd-mm-yyyy"
+                InputTextPlaceholder: ="dd-mm-aaaa"
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                BorderThickness: =1
+                IconFill: =RGBA(73, 80, 87, 1)
+                IconBackground: =RGBA(255, 255, 255, 1)
+                DateTimeZone: =DateTimeZone.Local
+                PaddingLeft: =12
+                X: =372
+                Y: =78
+                Width: =324
+                Height: =38
+          - lblFTemaHL:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Tema *"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =24
+                Y: =124
+                Width: =324
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - txtTemaHL:
+              Control: Classic/TextInput@2.3.2
+              Properties:
+                Default: =If(varModoHL = "editar", varHL.Tema, "")
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                HoverFill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                FocusedBorderColor: =RGBA(27, 42, 65, 1)
+                BorderThickness: =1
+                FocusedBorderThickness: =1
+                PaddingLeft: =12
+                X: =24
+                Y: =146
+                Width: =672
+                Height: =38
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+          - lblFDetalleHL:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Detalle"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =24
+                Y: =192
+                Width: =324
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - txtDetalleHL:
+              Control: Classic/TextInput@2.3.2
+              Properties:
+                Default: =If(varModoHL = "editar", varHL.Detalle, "")
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                HoverFill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                FocusedBorderColor: =RGBA(27, 42, 65, 1)
+                BorderThickness: =1
+                FocusedBorderThickness: =1
+                PaddingLeft: =12
+                X: =24
+                Y: =214
+                Width: =672
+                Height: =72
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+                Mode: =TextMode.MultiLine
+                PaddingTop: =8
+          - lblFImpactoHL:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Impacto"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =24
+                Y: =294
+                Width: =324
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - txtImpactoHL:
+              Control: Classic/TextInput@2.3.2
+              Properties:
+                Default: =If(varModoHL = "editar", varHL.Impacto, "")
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                HoverFill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                FocusedBorderColor: =RGBA(27, 42, 65, 1)
+                BorderThickness: =1
+                FocusedBorderThickness: =1
+                PaddingLeft: =12
+                X: =24
+                Y: =316
+                Width: =672
+                Height: =56
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+                Mode: =TextMode.MultiLine
+                PaddingTop: =8
+          - lblFAccionHL:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Acción"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =24
+                Y: =380
+                Width: =324
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - txtAccionHL:
+              Control: Classic/TextInput@2.3.2
+              Properties:
+                Default: =If(varModoHL = "editar", varHL.Accion, "")
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                HoverFill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                FocusedBorderColor: =RGBA(27, 42, 65, 1)
+                BorderThickness: =1
+                FocusedBorderThickness: =1
+                PaddingLeft: =12
+                X: =24
+                Y: =402
+                Width: =672
+                Height: =56
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+                Mode: =TextMode.MultiLine
+                PaddingTop: =8
+          - lblFRespHL:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Responsable"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =24
+                Y: =466
+                Width: =324
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - ddRespHL:
+              Control: Classic/DropDown@2.3.1
+              Properties:
+                Items: =ShowColumns(Personas, Nombre)
+                Default: =If(varModoHL = "editar", varHL.Responsable, "")
+                AllowEmptySelection: =true
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverFill: =RGBA(232, 236, 242, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                PressedFill: =RGBA(232, 236, 242, 1)
+                PressedColor: =RGBA(33, 37, 41, 1)
+                SelectionFill: =RGBA(222, 232, 246, 1)
+                SelectionColor: =RGBA(27, 42, 65, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                BorderThickness: =1
+                ChevronBackground: =RGBA(255, 255, 255, 1)
+                ChevronFill: =RGBA(73, 80, 87, 1)
+                ChevronHoverBackground: =RGBA(232, 236, 242, 1)
+                ChevronHoverFill: =RGBA(33, 37, 41, 1)
+                PaddingLeft: =12
+                X: =24
+                Y: =488
+                Width: =324
+                Height: =38
+          - btnGuardarHL:
+              Control: Classic/Button@2.2.0
+              Properties:
+                Fill: =RGBA(27, 42, 65, 1)
+                Color: =RGBA(255, 255, 255, 1)
+                HoverFill: =RGBA(44, 66, 98, 1)
+                HoverColor: =RGBA(255, 255, 255, 1)
+                PressedFill: =RGBA(18, 29, 46, 1)
+                PressedColor: =RGBA(255, 255, 255, 1)
+                BorderThickness: =0
+                Text: ="Guardar"
+                OnSelect: |-
+                  =If(
+                      IsBlank(Trim(txtTemaHL.Text)),
+                          Notify("Escribe el tema.", NotificationType.Error),
+                      With(
+                          {reg: {Tipo: Coalesce(ddTipoHL.Selected.Value, "Highlight"), Fecha: If(IsBlank(dpFechaHL.SelectedDate), Text(Today(), "yyyy-mm-dd"), Text(dpFechaHL.SelectedDate, "yyyy-mm-dd")), Tema: Trim(txtTemaHL.Text), Detalle: txtDetalleHL.Text, Impacto: txtImpactoHL.Text, Accion: txtAccionHL.Text, Responsable: If(IsBlank(ddRespHL.Selected.Nombre), "", ddRespHL.Selected.Nombre)}},
+                          If(varModoHL = "editar", Patch(HighlightsLowlights, varHL, reg), Patch(HighlightsLowlights, Defaults(HighlightsLowlights), reg))
+                      );
+                      If(IsEmpty(Errors(HighlightsLowlights)), Set(varPanelHL, false); Notify("Registro guardado.", NotificationType.Success), Notify("No se pudo guardar: " & First(Errors(HighlightsLowlights)).Message, NotificationType.Error))
+                  )
+                Font: =Font.'Segoe UI'
+                Size: =10.5
+                FontWeight: =FontWeight.Semibold
+                X: =24
+                Y: =546
+                Width: =110
+                Height: =38
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+          - btnCancelarHL:
+              Control: Classic/Button@2.2.0
+              Properties:
+                Fill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverFill: =RGBA(232, 236, 242, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                PressedFill: =RGBA(232, 236, 242, 1)
+                PressedColor: =RGBA(33, 37, 41, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                BorderThickness: =1
+                Text: ="Cancelar"
+                OnSelect: =Set(varPanelHL, false); Set(varConfirmDel, false)
+                Font: =Font.'Segoe UI'
+                Size: =10.5
+                FontWeight: =FontWeight.Semibold
+                X: =144
+                Y: =546
+                Width: =110
+                Height: =38
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+          - btnEliminarHL:
+              Control: Classic/Button@2.2.0
+              Properties:
+                Fill: =RGBA(0, 0, 0, 0)
+                Color: =RGBA(176, 32, 32, 1)
+                HoverFill: =RGBA(198, 40, 40, 0.08)
+                HoverColor: =RGBA(176, 32, 32, 1)
+                PressedFill: =RGBA(253, 232, 232, 1)
+                PressedColor: =RGBA(176, 32, 32, 1)
+                BorderColor: =RGBA(198, 40, 40, 1)
+                HoverBorderColor: =RGBA(198, 40, 40, 1)
+                BorderThickness: =1
+                Text: =If(varConfirmDel, "¿Confirmar?", "Eliminar")
+                OnSelect: =If(varConfirmDel, Remove(HighlightsLowlights, varHL); Set(varConfirmDel, false); Set(varPanelHL, false); Notify("Registro eliminado.", NotificationType.Success), Set(varConfirmDel, true))
+                Font: =Font.'Segoe UI'
+                Size: =10.5
+                FontWeight: =FontWeight.Semibold
+                X: =566
+                Y: =546
+                Width: =130
+                Height: =38
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+                Visible: =varModoHL = "editar"
+- conPanelRev:
+    Control: GroupContainer@1.5.0
+    Variant: ManualLayout
+    Properties:
+      Fill: =RGBA(255, 255, 255, 1)
+      X: =323
+      Y: =149
+      Width: =720
+      Height: =470
+      DropShadow: =DropShadow.ExtraBold
+      RadiusTopLeft: =12
+      RadiusTopRight: =12
+      RadiusBottomLeft: =12
+      RadiusBottomRight: =12
+      BorderColor: =RGBA(219, 225, 233, 1)
+      BorderThickness: =1
+      Visible: =varPanelRev
+    Children:
+          - lblPanelTituloRev:
+              Control: Label@2.5.1
+              Properties:
+                Text: =If(varModoRev = "editar", "Editar tema por revisar", "Nuevo tema por revisar")
+                Font: =Font.'Segoe UI'
+                Size: =13
+                Color: =RGBA(33, 37, 41, 1)
+                X: =24
+                Y: =18
+                Width: =600
+                Height: =30
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+                FontWeight: =FontWeight.Bold
+          - lblFTemaRev:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Tema *"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =24
+                Y: =56
+                Width: =324
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - txtTemaRev:
+              Control: Classic/TextInput@2.3.2
+              Properties:
+                Default: =If(varModoRev = "editar", varRev.Tema, "")
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                HoverFill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                FocusedBorderColor: =RGBA(27, 42, 65, 1)
+                BorderThickness: =1
+                FocusedBorderThickness: =1
+                PaddingLeft: =12
+                X: =24
+                Y: =78
+                Width: =672
+                Height: =38
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+          - lblFDetalleRev:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Detalle"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =24
+                Y: =124
+                Width: =324
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - txtDetalleRev:
+              Control: Classic/TextInput@2.3.2
+              Properties:
+                Default: =If(varModoRev = "editar", varRev.Detalle, "")
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                HoverFill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                FocusedBorderColor: =RGBA(27, 42, 65, 1)
+                BorderThickness: =1
+                FocusedBorderThickness: =1
+                PaddingLeft: =12
+                X: =24
+                Y: =146
+                Width: =672
+                Height: =72
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+                Mode: =TextMode.MultiLine
+                PaddingTop: =8
+          - lblFContraRev:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Contraparte"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =24
+                Y: =226
+                Width: =324
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - txtContraRev:
+              Control: Classic/TextInput@2.3.2
+              Properties:
+                Default: =If(varModoRev = "editar", varRev.Contraparte, "")
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                HoverFill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                FocusedBorderColor: =RGBA(27, 42, 65, 1)
+                BorderThickness: =1
+                FocusedBorderThickness: =1
+                PaddingLeft: =12
+                X: =24
+                Y: =248
+                Width: =324
+                Height: =38
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+          - lblFRespRev:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Responsable propuesto"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =372
+                Y: =226
+                Width: =324
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - ddRespRev:
+              Control: Classic/DropDown@2.3.1
+              Properties:
+                Items: =ShowColumns(Personas, Nombre)
+                Default: =If(varModoRev = "editar", varRev.ResponsablePropuesto, "")
+                AllowEmptySelection: =true
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverFill: =RGBA(232, 236, 242, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                PressedFill: =RGBA(232, 236, 242, 1)
+                PressedColor: =RGBA(33, 37, 41, 1)
+                SelectionFill: =RGBA(222, 232, 246, 1)
+                SelectionColor: =RGBA(27, 42, 65, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                BorderThickness: =1
+                ChevronBackground: =RGBA(255, 255, 255, 1)
+                ChevronFill: =RGBA(73, 80, 87, 1)
+                ChevronHoverBackground: =RGBA(232, 236, 242, 1)
+                ChevronHoverFill: =RGBA(33, 37, 41, 1)
+                PaddingLeft: =12
+                X: =372
+                Y: =248
+                Width: =324
+                Height: =38
+          - lblFDecRev:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Decisión"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =24
+                Y: =294
+                Width: =324
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - ddDecRev:
+              Control: Classic/DropDown@2.3.1
+              Properties:
+                Items: =["Por decidir", "Aprobado", "Descartado", "Pospuesto"]
+                Default: =If(varModoRev = "editar", Coalesce(varRev.Decision, "Por decidir"), "Por decidir")
+                AllowEmptySelection: =true
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverFill: =RGBA(232, 236, 242, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                PressedFill: =RGBA(232, 236, 242, 1)
+                PressedColor: =RGBA(33, 37, 41, 1)
+                SelectionFill: =RGBA(222, 232, 246, 1)
+                SelectionColor: =RGBA(27, 42, 65, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                BorderThickness: =1
+                ChevronBackground: =RGBA(255, 255, 255, 1)
+                ChevronFill: =RGBA(73, 80, 87, 1)
+                ChevronHoverBackground: =RGBA(232, 236, 242, 1)
+                ChevronHoverFill: =RGBA(33, 37, 41, 1)
+                PaddingLeft: =12
+                X: =24
+                Y: =316
+                Width: =324
+                Height: =38
+          - lblFFechaRev:
+              Control: Label@2.5.1
+              Properties:
+                Text: ="Fecha"
+                Font: =Font.'Segoe UI'
+                Size: =9
+                Color: =RGBA(108, 117, 125, 1)
+                X: =372
+                Y: =294
+                Width: =324
+                Height: =20
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PaddingBottom: =0
+          - dpFechaRev:
+              Control: Classic/DatePicker@2.6.0
+              Properties:
+                DefaultDate: =If(varModoRev = "editar" && !IsBlank(varRev.Fecha), DateValue(varRev.Fecha), Blank())
+                Format: ="dd-mm-yyyy"
+                InputTextPlaceholder: ="dd-mm-aaaa"
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Fill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                BorderThickness: =1
+                IconFill: =RGBA(73, 80, 87, 1)
+                IconBackground: =RGBA(255, 255, 255, 1)
+                DateTimeZone: =DateTimeZone.Local
+                PaddingLeft: =12
+                X: =372
+                Y: =316
+                Width: =324
+                Height: =38
+          - btnGuardarRev:
+              Control: Classic/Button@2.2.0
+              Properties:
+                Fill: =RGBA(27, 42, 65, 1)
+                Color: =RGBA(255, 255, 255, 1)
+                HoverFill: =RGBA(44, 66, 98, 1)
+                HoverColor: =RGBA(255, 255, 255, 1)
+                PressedFill: =RGBA(18, 29, 46, 1)
+                PressedColor: =RGBA(255, 255, 255, 1)
+                BorderThickness: =0
+                Text: ="Guardar"
+                OnSelect: |-
+                  =If(
+                      IsBlank(Trim(txtTemaRev.Text)),
+                          Notify("Escribe el tema.", NotificationType.Error),
+                      With(
+                          {reg: {Tema: Trim(txtTemaRev.Text), Detalle: txtDetalleRev.Text, Contraparte: txtContraRev.Text, ResponsablePropuesto: If(IsBlank(ddRespRev.Selected.Nombre), "", ddRespRev.Selected.Nombre), Decision: Coalesce(ddDecRev.Selected.Value, "Por decidir"), Fecha: If(IsBlank(dpFechaRev.SelectedDate), Text(Today(), "yyyy-mm-dd"), Text(dpFechaRev.SelectedDate, "yyyy-mm-dd"))}},
+                          If(varModoRev = "editar", Patch(PorRevisar, varRev, reg), Patch(PorRevisar, Defaults(PorRevisar), reg))
+                      );
+                      If(IsEmpty(Errors(PorRevisar)), Set(varPanelRev, false); Notify("Tema guardado.", NotificationType.Success), Notify("No se pudo guardar: " & First(Errors(PorRevisar)).Message, NotificationType.Error))
+                  )
+                Font: =Font.'Segoe UI'
+                Size: =10.5
+                FontWeight: =FontWeight.Semibold
+                X: =24
+                Y: =396
+                Width: =110
+                Height: =38
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+          - btnCancelarRev:
+              Control: Classic/Button@2.2.0
+              Properties:
+                Fill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(33, 37, 41, 1)
+                HoverFill: =RGBA(232, 236, 242, 1)
+                HoverColor: =RGBA(33, 37, 41, 1)
+                PressedFill: =RGBA(232, 236, 242, 1)
+                PressedColor: =RGBA(33, 37, 41, 1)
+                BorderColor: =RGBA(219, 225, 233, 1)
+                HoverBorderColor: =RGBA(170, 182, 198, 1)
+                BorderThickness: =1
+                Text: ="Cancelar"
+                OnSelect: =Set(varPanelRev, false); Set(varConfirmDel, false)
+                Font: =Font.'Segoe UI'
+                Size: =10.5
+                FontWeight: =FontWeight.Semibold
+                X: =144
+                Y: =396
+                Width: =110
+                Height: =38
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+          - btnEliminarRev:
+              Control: Classic/Button@2.2.0
+              Properties:
+                Fill: =RGBA(0, 0, 0, 0)
+                Color: =RGBA(176, 32, 32, 1)
+                HoverFill: =RGBA(198, 40, 40, 0.08)
+                HoverColor: =RGBA(176, 32, 32, 1)
+                PressedFill: =RGBA(253, 232, 232, 1)
+                PressedColor: =RGBA(176, 32, 32, 1)
+                BorderColor: =RGBA(198, 40, 40, 1)
+                HoverBorderColor: =RGBA(198, 40, 40, 1)
+                BorderThickness: =1
+                Text: =If(varConfirmDel, "¿Confirmar?", "Eliminar")
+                OnSelect: =If(varConfirmDel, Remove(PorRevisar, varRev); Set(varConfirmDel, false); Set(varPanelRev, false); Notify("Tema eliminado.", NotificationType.Success), Set(varConfirmDel, true))
+                Font: =Font.'Segoe UI'
+                Size: =10.5
+                FontWeight: =FontWeight.Semibold
+                X: =566
+                Y: =396
+                Width: =130
+                Height: =38
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+                Visible: =varModoRev = "editar"
+- btnReset:
+    Control: Classic/Button@2.2.0
+    Properties:
+      Text: ="reset"
+      OnSelect: =Reset(txtID); Reset(txtActividad); Reset(txtDescripcion); Reset(ddArea); Reset(ddResponsable); Reset(txtContraparte); Reset(ddPrioridad); Reset(ddEstado); Reset(dpInicio); Reset(dpTermino); Reset(txtStatus); Reset(txtBloqueo); Set(varConfirmDel, false)
+      Visible: =false
+      X: =0
+      Y: =0
+      Width: =40
+      Height: =20
+- btnResetHL:
+    Control: Classic/Button@2.2.0
+    Properties:
+      Text: ="reset"
+      OnSelect: =Reset(ddTipoHL); Reset(dpFechaHL); Reset(txtTemaHL); Reset(txtDetalleHL); Reset(txtImpactoHL); Reset(txtAccionHL); Reset(ddRespHL); Set(varConfirmDel, false)
+      Visible: =false
+      X: =0
+      Y: =0
+      Width: =40
+      Height: =20
+- btnResetRev:
+    Control: Classic/Button@2.2.0
+    Properties:
+      Text: ="reset"
+      OnSelect: =Reset(txtTemaRev); Reset(txtDetalleRev); Reset(txtContraRev); Reset(ddRespRev); Reset(ddDecRev); Reset(dpFechaRev); Set(varConfirmDel, false)
+      Visible: =false
+      X: =0
+      Y: =0
+      Width: =40
+      Height: =20

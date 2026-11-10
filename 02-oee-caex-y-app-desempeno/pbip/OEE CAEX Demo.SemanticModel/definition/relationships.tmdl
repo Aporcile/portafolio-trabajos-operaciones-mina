@@ -1,0 +1,43 @@
+relationship 1917df5f-d987-523b-b3ce-fce78c074a19
+	fromColumn: Fact_HorasEquipo.Equipo
+	toColumn: Dim_Equipo.Equipo
+
+relationship bc19e3e1-d6b1-5bda-8df8-658435f04437
+	fromColumn: Fact_HorasEquipo.Turno
+	toColumn: Dim_Turno.Turno
+
+relationship 11ae093b-51f9-5fbc-b5de-483cf2754dd2
+	fromColumn: Fact_HorasEquipo.Fecha
+	toColumn: Dim_Tiempo.Fecha
+
+relationship 76aa3b9b-d611-58cd-acef-802cefe19911
+	fromColumn: Fact_Ciclos.TruckName
+	toColumn: Dim_Equipo.Equipo
+
+relationship 9d45c3de-ffac-56ee-b24f-b69ffd7ddb49
+	fromColumn: Fact_Ciclos.shift
+	toColumn: Dim_Turno.Turno
+
+relationship f0332660-fa43-5445-9a56-5af81f173497
+	fromColumn: Fact_Ciclos.time
+	toColumn: Dim_Tiempo.Fecha
+
+relationship f34f5acd-d03c-5f31-9831-a70e9a413e21
+	fromColumn: Plan_CAEX.Fecha
+	toColumn: Dim_Tiempo.Fecha
+
+relationship 104025ae-fd98-5256-ba7d-22efeac91ec5
+	fromColumn: Plan_FactorCarga.Fecha
+	toColumn: Dim_Tiempo.Fecha
+
+relationship 37323812-b78e-54fa-87a3-30ea542095e7
+	fromColumn: Horas_Codigo_CAEX.Fecha
+	toColumn: Dim_Tiempo.Fecha
+
+relationship 534bb4e2-3601-5063-9a64-14497dd7e797
+	fromColumn: Horas_Codigo_CAEX.Turno
+	toColumn: Dim_Turno.Turno
+
+relationship 9725923a-4ab3-5ce7-9989-56f447537abb
+	fromColumn: Horas_Codigo_CAEX.Equipo
+	toColumn: Dim_Equipo.Equipo

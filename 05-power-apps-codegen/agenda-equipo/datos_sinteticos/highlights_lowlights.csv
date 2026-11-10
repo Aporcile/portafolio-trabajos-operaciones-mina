@@ -1,0 +1,25 @@
+﻿Tipo,Fecha,Tema,Detalle,Impacto,Accion,Responsable
+Highlight,2025-03-03,Integración exitosa de una nueva persona al equipo,,Más capacidad disponible para el periodo.,Asignar su primera actividad con seguimiento.,Persona Demo 03
+Lowlight,2025-03-14,Solicitudes urgentes alteraron el plan semanal,Llegaron pedidos no planificados que desplazaron actividades comprometidas.,Se movieron fechas de entrega.,Definir un cupo semanal para urgencias.,Persona Demo 01
+Lowlight,2025-03-16,Estándar sin validar por la contraparte,El borrador sigue sin comentarios.,No se puede publicar la versión final.,Pedir una fecha de respuesta.,
+Highlight,2025-03-17,Capacitación en el tablero de seguimiento completada,Todos los integrantes participaron y resolvieron sus dudas en la sesión práctica.,Mejor uso del tablero en las reuniones.,,Persona Demo 01
+Lowlight,2025-03-21,Baja asistencia a la capacitación,Varias personas no pudieron conectarse por coincidencia con otras tareas.,Conocimiento desigual sobre la herramienta.,Repetir la sesión en otro horario.,Persona Demo 01
+Lowlight,2025-03-21,Inspección postergada por falta de disponibilidad,El equipo asignado estaba cubriendo otra prioridad.,,Reprogramar con fecha confirmada.,Persona Demo 03
+Highlight,2025-03-23,Coordinación efectiva con contratistas,Se acordó un canal único de consultas y una pauta de entregas.,Menos reprocesos por información dispersa.,Replicar la pauta con otros proveedores.,Persona Demo 02
+Highlight,2025-03-27,Plan semanal cumplido sin desvíos,Todas las actividades comprometidas para la semana se cerraron en la fecha acordada.,Mayor previsibilidad para la planificación del periodo.,Mantener la revisión de inicio de semana.,Persona Demo 02
+Lowlight,2025-03-28,Informe mensual publicado con observaciones,Se detectaron datos inconsistentes después de la publicación.,Se debió reemitir el informe.,Agregar una revisión cruzada antes de publicar.,Persona Demo 03
+Highlight,2025-04-05,Nuevo formato de reporte de turno adoptado,,Menos tiempo de preparación y datos más comparables.,Evaluar ajustes tras algunas semanas de uso.,Persona Demo 02
+Highlight,2025-04-09,Documentación del proceso actualizada y publicada,Los instructivos vigentes quedaron en la carpeta compartida del equipo.,Una única versión de referencia.,,Persona Demo 01
+Highlight,2025-04-16,Inspecciones del área sin hallazgos críticos,Las inspecciones programadas se realizaron y quedaron registradas.,,Programar la siguiente ronda.,
+Lowlight,2025-04-20,Datos incompletos en el registro de demoras,Algunos turnos no completaron el registro.,Análisis de causas menos confiable.,Recordar el registro en el cambio de turno.,Persona Demo 03
+Lowlight,2025-04-22,Retraso en la entrega de insumos de la contraparte,El proveedor reprogramó la entrega y el equipo debió ajustar el plan.,Varias actividades quedaron a la espera.,Acordar fechas firmes y un contacto de respaldo.,Persona Demo 02
+Highlight,2025-04-26,Estándar de registro de parámetros aprobado,La contraparte validó el estándar propuesto por el equipo.,Registros homogéneos entre turnos.,Difundir el estándar y recoger comentarios.,Persona Demo 03
+Highlight,2025-05-04,Simulacro de emergencia realizado según lo planificado,Participó todo el equipo y se levantaron oportunidades de mejora.,Mejor preparación ante contingencias.,Cerrar las oportunidades de mejora levantadas.,Persona Demo 02
+Lowlight,2025-05-04,Acceso pendiente a una fuente de información,El permiso solicitado sigue en trámite.,Una actividad quedó detenida.,Escalar la solicitud a la jefatura.,Persona Demo 03
+Lowlight,2025-05-12,Reuniones sin acta ni acuerdos registrados,Se repitieron temas ya conversados por falta de registro.,Pérdida de tiempo y acuerdos ambiguos.,Usar una plantilla única de acta.,Persona Demo 03
+Highlight,2025-05-18,Backlog de órdenes de trabajo ordenado por prioridad,Se depuró el listado y se reasignaron las órdenes sin responsable.,Foco en lo prioritario y menos pendientes antiguos.,Revisar el backlog cada semana.,Persona Demo 01
+Lowlight,2025-05-18,Dependencia de una sola persona en una actividad crítica,El conocimiento del procedimiento no está documentado.,Riesgo de continuidad si la persona no está disponible.,Documentar el procedimiento y definir un respaldo.,Persona Demo 02
+Highlight,2025-05-21,Reunión de planificación más breve y enfocada,"Con agenda fija y acuerdos escritos, la reunión se resolvió sin extenderse.",,,Persona Demo 01
+Lowlight,2025-05-25,Reprogramación de la auditoría interna,La auditoría se movió por falta de evidencia lista.,,Reunir la evidencia faltante.,Persona Demo 03
+Highlight,2025-05-26,Propuesta de mejora aceptada por la jefatura,La propuesta de mejora continua fue aprobada para su implementación.,Se habilita trabajo conjunto entre áreas.,Armar el plan de implementación.,Persona Demo 01
+Lowlight,2025-05-29,Desfase en el cierre de acciones de seguridad,Varias acciones superaron la fecha comprometida.,,Revisar el avance en la reunión semanal.,Persona Demo 02

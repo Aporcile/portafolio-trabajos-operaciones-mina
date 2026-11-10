@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "OEE CAEX Demo"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "9faf8d01-9234-5c70-97ee-41c3c53bb1f3"
+  }
+}

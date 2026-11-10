@@ -1,0 +1,47 @@
+table Calendario
+	lineageTag: 2729c81b-8693-4317-adf4-3ccd446ccf31
+
+	column Fecha
+		formatString: Short Date
+		lineageTag: 789a3106-7865-46b6-9d35-76177630e277
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Fecha]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Día Reporte' =
+			VAR _ult = MAXX ( ALL ( 'Produccion Mina'[time] ), 'Produccion Mina'[time] )
+			VAR _act = MAX ( 'Rd Actualizacion'[Actualizado] )
+			VAR _t = _act - 8 / 24
+			VAR _diaAct = IF ( NOT ISBLANK ( _act ), DATE ( YEAR ( _t ), MONTH ( _t ), DAY ( _t ) ) )
+			VAR _max = MAX ( Calendario[Fecha] )
+			VAR _diaDatos = IF ( NOT ISBLANK ( _ult ), DATE ( YEAR ( _ult ), MONTH ( _ult ), DAY ( _ult ) ) )
+			VAR _dia = MAX ( _diaAct, _diaDatos )
+			VAR _enCurso = IF ( ISBLANK ( _dia ) || _dia > _max, _max, _dia )
+			RETURN
+			    IF (
+			        Calendario[Fecha] = _enCurso,
+			        "Día actual",
+			        FORMAT ( Calendario[Fecha], "dd-mm-yyyy" )
+			    )
+		lineageTag: 8a1a4330-e46f-43df-bac1-9da5131397c2
+		summarizeBy: none
+		sortByColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'En Ventana' = Calendario[Fecha] > MAX ( Calendario[Fecha] ) - 45
+		isHidden
+		lineageTag: 5e66c34d-42a2-45a0-9c6c-e26471e2ffc8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Calendario = calculated
+		mode: import
+		source =
+				VAR _min = MIN ( 'Produccion Mina'[time] )
+				VAR _max = MAX ( 'Produccion Mina'[time] )
+				RETURN
+				    SELECTCOLUMNS ( CALENDAR ( DATE ( YEAR ( _min ), MONTH ( _min ), 1 ), _max ), "Fecha", [Date] )

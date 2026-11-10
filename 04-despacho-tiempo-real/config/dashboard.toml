@@ -1,0 +1,98 @@
+# Configuración general del dashboard de despacho en tiempo real.
+# Este archivo NO contiene secretos (van en .env). Se puede editar y reiniciar el servidor.
+# Todos los valores son de ejemplo (empresa ficticia Minera Demo).
+
+[general]
+nombre = "Despacho Mina en Tiempo Real"
+faena = "Minera Demo"
+fuente_nombre = "Sistema de despacho (demo)"   # nombre con que se muestra la fuente de datos en el encabezado
+
+[refresco]
+snapshot_s = 10                  # cada cuántos segundos se recalcula y envía el snapshot
+sse_ping_s = 15                  # latido del stream de eventos
+recarga_navegador_h = 24         # el navegador se recarga solo cada N horas (0 = nunca)
+hilos_consultas = 3              # consultas SQL simultáneas como máximo
+
+[frescura]
+atrasado_s = 600                 # último dato más antiguo que 10 min -> DATOS ATRASADOS
+sin_conexion_s = 1800            # 30 min sin ningún dato o conexión caída -> SIN CONEXIÓN
+mostrar_ultimo_dato_s = 86400    # cuánto tiempo se sigue mostrando (atenuado) el último dato real
+
+[ventanas]
+historia_corta_dias = 7          # normas de ciclo y velocidad "normal"
+planes_dias = 21                 # días hacia atrás que se leen de los planes
+gps_minutos = 15                 # ventana de posiciones GPS
+ciclos_turnos = 2                # turno actual + anterior
+
+[equipos]
+prefijo_caex = "CAEX-"
+prefijo_pala = "PALA-"
+prefijo_cargador = "CARG-"
+prefijo_perforadora = "PERF-"
+sufijo_auxiliar = "_AUX"
+excluidos = ["CAEX-26"]          # además de cualquier nombre con "_AUX" o "TEST"
+capacidad_caex_t = 220           # tonelaje medio por viaje si no hay dato real
+
+[proyeccion]
+# Cierre probable = real acumulado + horas restantes × ritmo esperado.
+# ritmo esperado = peso_reciente × ritmo de las últimas horas + (1 - peso_reciente) × ritmo plan horario.
+peso_reciente = 0.5
+horas_recientes = 3
+cv_minimo = 0.08                 # dispersión mínima (coef. de variación) del rango P10–P90
+cv_maximo = 0.35
+horas_minimas_para_proyectar = 1.0
+
+[velocidad]
+normal_dias = 7                  # "normal" = mediana de la misma hora del turno en los últimos N días
+normal_por_defecto_kmh = 22.0
+umbral_lento_kmh = 6.0           # tramo "lento" en el mapa
+
+[ciclos]
+norma_dias = 7                   # norma = mediana del ciclo por ruta en los últimos N días
+norma_por_defecto_min = 36.0
+minimo_ciclos_ruta = 3           # rutas con menos ciclos no se muestran en la tabla
+rutas_visibles = 5
+
+[chancado]
+# Mezcla plan por origen (participación del tonelaje). Se usa para adherencia a la mezcla.
+[chancado.mezcla_plan]
+"Fase 1" = 0.45
+"Fase 2" = 0.30
+"Fase 3" = 0.15
+"Stock" = 0.10
+
+[chancado.nombres_origen]
+# Cómo se muestran en pantalla los códigos de origen de la base.
+"F01" = "Fase 1"
+"F02" = "Fase 2"
+"F03" = "Fase 3"
+"F04" = "Fase 4"
+"STK" = "Stock"
+
+[planes_por_defecto]
+# Se usan solo cuando la base no trae plan para la fecha (y en modo demo).
+movimiento_mina_kt_dia = 192.0
+chancado_kt_dia = 96.0
+ley_cut_pct = 0.55
+ampliacion_kt_dia = 94.0
+auxiliar_kt_dia = 36.0
+df_caex_pct = 88.0
+uebd_caex_pct = 78.0
+rend_caex_tph = 460
+df_palas_pct = 90.0
+uebd_palas_pct = 76.0
+rend_palas_tph = 1900
+df_perfo_pct = 86.0
+uebd_perfo_pct = 74.0
+rend_perfo_mph = 21.0
+df_auxiliar_pct = 87.0
+uebd_auxiliar_pct = 72.0
+
+[formato]
+locale = "es"
+decimales_kt = 1
+decimales_pct = 1
+
+[mapa]
+usar_gps = true                  # si hay GPS, posiciona por coordenadas; si no, posición nominal
+suavizado_s = 10                 # duración de la interpolación de movimiento en el navegador

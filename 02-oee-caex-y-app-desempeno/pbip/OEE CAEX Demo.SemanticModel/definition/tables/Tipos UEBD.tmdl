@@ -1,0 +1,39 @@
+/// Tipos de horas disponibles no efectivas para ordenarlas de mayor a menor.
+table 'Tipos UEBD'
+	lineageTag: f0d97c5b-24dc-5fd0-8a6a-3191f55f9396
+
+	column Orden
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: db970059-6867-5ecf-8fc3-0d485a9f0e62
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Orden]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tipo
+		dataType: string
+		lineageTag: 7c27c534-b592-5f94-bcce-256d7f0c7130
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Tipo]
+		sortByColumn: Orden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Tipos UEBD' = calculated
+		mode: import
+		source =
+				DATATABLE(
+				    "Orden", INTEGER, "Tipo", STRING,
+				    {
+				        { 1, "Demora programada" },
+				        { 2, "Demora no programada" },
+				        { 3, "Reserva" },
+				        { 4, "PO espera" },
+				        { 5, "PO cola" }
+				    }
+				)
+

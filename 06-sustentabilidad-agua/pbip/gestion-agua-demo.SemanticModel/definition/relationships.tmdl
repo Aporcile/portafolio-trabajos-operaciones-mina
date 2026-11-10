@@ -1,0 +1,16 @@
+relationship 0975bab9-21c1-4fc6-8e45-e87bb388e8b3
+	fromColumn: Mediciones.Tag
+	toColumn: Tags.Tag
+
+relationship d6487d08-a786-4047-b618-aef21781f331
+	fromColumn: Tags.ActivoID
+	toColumn: Activos.ActivoID
+
+relationship 2c9bc2a6-e8e3-4c31-b5f4-47decd6fe4f6
+	fromColumn: Tags.Fuente
+	toColumn: Fuentes.Fuente
+
+relationship c6a0990a-a0f2-42c3-834e-a0c4bf6c8f29
+	fromColumn: LabCalidad.ActivoID
+	toColumn: Activos.ActivoID
+

@@ -1,0 +1,305 @@
+{
+  "version": 1,
+  "generado": "2025-05-31T15:03:10+00:00",
+  "modo": "demo",
+  "estado_datos": "DEMO",
+  "fuente": {
+    "nombre": "Sistema de despacho (demo)",
+    "ultimo_dato": "2025-05-31T15:02:50+00:00",
+    "edad_s": 20,
+    "detalle": "datos sintéticos · semilla 20261110",
+    "consultas": {
+      "horas_equipo": {"ok": true, "filas": 175, "ms": 38, "actualizado": "2025-05-31T15:03:05+00:00", "error": null},
+      "ciclos": {"ok": true, "filas": 586, "ms": 52, "actualizado": "2025-05-31T15:03:05+00:00", "error": null},
+      "gps": {"ok": true, "filas": 31, "ms": 12, "actualizado": "2025-05-31T15:03:05+00:00", "error": null},
+      "chancado_hora": {"ok": true, "filas": 32, "ms": 21, "actualizado": "2025-05-31T15:03:05+00:00", "error": null}
+    }
+  },
+  "turno": {
+    "fecha_operacional": "2025-05-31",
+    "fecha_texto": "sábado, 31 de mayo",
+    "turno": "A",
+    "nombre": "Turno A",
+    "etiqueta": "TA",
+    "inicio": "2025-05-31T08:00:00+00:00",
+    "fin": "2025-05-31T20:00:00+00:00",
+    "hora_turno": 8,
+    "horas_transcurridas": 7.05,
+    "horas_restantes": 4.95,
+    "fraccion_dia": 0.294
+  },
+  "reloj": {"iso": "2025-05-31T15:03:10+00:00", "texto_12h": "03:03 p.m.", "texto_24h": "15:03"},
+  "tarjetas": {
+    "movimiento_mina": {
+      "titulo": "Movimiento Mina",
+      "unidad": "kt",
+      "real_kt": 53.3,
+      "turno_kt": 53.3,
+      "plan_dia_kt": 192.0,
+      "plan_a_la_hora_kt": 55.9,
+      "cierre_p50_kt": 176.1,
+      "cierre_p10_kt": 137.2,
+      "cierre_p90_kt": 215.1,
+      "prob_cumplir": 0.3,
+      "estado": "rojo",
+      "fuente": "horas_equipo.MovimientoTotal (Truck) · plan_caex.ToneladasPlan",
+      "estimado": ["cierre_p50_kt", "cierre_p10_kt", "cierre_p90_kt", "prob_cumplir"]
+    },
+    "chancado": {
+      "titulo": "Chancado",
+      "unidad": "kt",
+      "real_kt": 30.4,
+      "plan_dia_kt": 96.0,
+      "plan_a_la_hora_kt": 28.0,
+      "alimentacion_tph": 4288,
+      "cierre_p50_kt": 101.7,
+      "cierre_p10_kt": 79.1,
+      "cierre_p90_kt": 124.3,
+      "prob_cumplir": 0.63,
+      "estado": "verde",
+      "fuente": "chancado_hora.Tonelaje · plan_chancador.ToneladasPlan",
+      "estimado": ["cierre_p50_kt", "cierre_p10_kt", "cierre_p90_kt", "prob_cumplir"]
+    },
+    "velocidad_caex": {
+      "titulo": "Velocidad CAEX",
+      "unidad": "km/h",
+      "mina_kmh": 22.8,
+      "normal_kmh": 22.8,
+      "delta_kmh": 0.0,
+      "estado": "verde",
+      "fuente": "velocidad_hora: SumaVelocidadMovimiento / LecturasMovimiento (turno actual) · normal = mismas horas de los 6 días previos",
+      "estimado": ["normal_kmh"]
+    },
+    "equipos_en_uso": {
+      "titulo": "Equipos en uso · turno A",
+      "mina": {"caex": {"en_uso": 21, "total": 25}, "pala": {"en_uso": 3, "total": 4}, "cargador": {"en_uso": 2, "total": 2}, "perforadora": {"en_uso": 3, "total": 4}},
+      "fuente": "horas_equipo: HorasOperativas > 0 en la hora vigente"
+    }
+  },
+  "gaviota": {
+    "titulo": "Gaviota",
+    "turno_actual": {
+      "etiqueta": "TA",
+      "total_kt": 53.3,
+      "horas": [
+        {"hora_turno": 1, "hora_reloj": 8, "kt": 6.54, "completa": true},
+        {"hora_turno": 2, "hora_reloj": 9, "kt": 9.22, "completa": true},
+        {"hora_turno": 3, "hora_reloj": 10, "kt": 9.29, "completa": true},
+        {"hora_turno": 4, "hora_reloj": 11, "kt": 8.4, "completa": true},
+        {"hora_turno": 5, "hora_reloj": 12, "kt": 6.06, "completa": true},
+        {"hora_turno": 6, "hora_reloj": 13, "kt": 5.54, "completa": true},
+        {"hora_turno": 7, "hora_reloj": 14, "kt": 7.81, "completa": true},
+        {"hora_turno": 8, "hora_reloj": 15, "kt": 0.44, "completa": false},
+        {"hora_turno": 9, "hora_reloj": 16, "kt": null, "completa": false},
+        {"hora_turno": 10, "hora_reloj": 17, "kt": null, "completa": false},
+        {"hora_turno": 11, "hora_reloj": 18, "kt": null, "completa": false},
+        {"hora_turno": 12, "hora_reloj": 19, "kt": null, "completa": false}
+      ]
+    },
+    "turno_anterior": {
+      "etiqueta": "TB del 30",
+      "total_kt": 112.3,
+      "horas": [
+        {"hora_turno": 1, "hora_reloj": 20, "kt": 7.69, "completa": true},
+        {"hora_turno": 2, "hora_reloj": 21, "kt": 9.19, "completa": true},
+        {"hora_turno": 3, "hora_reloj": 22, "kt": 11.7, "completa": true},
+        {"hora_turno": 4, "hora_reloj": 23, "kt": 9.05, "completa": true},
+        {"hora_turno": 5, "hora_reloj": 0, "kt": 6.24, "completa": true},
+        {"hora_turno": 6, "hora_reloj": 1, "kt": 10.34, "completa": true},
+        {"hora_turno": 7, "hora_reloj": 2, "kt": 9.07, "completa": true},
+        {"hora_turno": 8, "hora_reloj": 3, "kt": 9.86, "completa": true},
+        {"hora_turno": 9, "hora_reloj": 4, "kt": 9.5, "completa": true},
+        {"hora_turno": 10, "hora_reloj": 5, "kt": 10.12, "completa": true},
+        {"hora_turno": 11, "hora_reloj": 6, "kt": 10.89, "completa": true},
+        {"hora_turno": 12, "hora_reloj": 7, "kt": 8.64, "completa": true}
+      ]
+    },
+    "plan_horas_kt": [6.72, 8.64, 8.64, 8.45, 8.45, 5.76, 8.83, 8.64, 8.64, 8.45, 8.06, 6.72],
+    "acumulado_kt": [6.5, 15.8, 25.1, 33.5, 39.5, 45.1, 52.9, 53.3, null, null, null, null],
+    "fuente": "horas_equipo.MovimientoTotal por hora · plan = plan_dia × perfil horario (config/plan_horario.toml)"
+  },
+  "ciclos": {
+    "titulo": "Ciclo origen → destino TA",
+    "rutas": [
+      {"origen": "CARG-01", "destino": "CHANCADO PRIMARIO", "tipo_destino": "chancado", "ciclos": 74, "real_min": 30.6, "norma_min": 30.6, "desvio_min": 0.0, "kt_delta": 0.0},
+      {"origen": "PALA-03", "destino": "BOTADERO 1", "tipo_destino": "botadero", "ciclos": 44, "real_min": 35.7, "norma_min": 36.1, "desvio_min": -0.4, "kt_delta": 0.1},
+      {"origen": "PALA-01", "destino": "CHANCADO PRIMARIO", "tipo_destino": "chancado", "ciclos": 28, "real_min": 28.3, "norma_min": 28.4, "desvio_min": -0.1, "kt_delta": 0.0},
+      {"origen": "CARG-02", "destino": "BOTADERO 2", "tipo_destino": "botadero", "ciclos": 26, "real_min": 42.8, "norma_min": 42.6, "desvio_min": 0.2, "kt_delta": 0.0},
+      {"origen": "PALA-02", "destino": "CHANCADO PRIMARIO", "tipo_destino": "chancado", "ciclos": 26, "real_min": 40.5, "norma_min": 37.3, "desvio_min": 3.2, "kt_delta": -0.5}
+    ],
+    "total": {"ciclos": 208, "real_min": 34.0, "norma_min": 33.6, "desvio_min": 0.4},
+    "fuente": "ciclos: promedio del ciclo por ruta · norma = promedio de las mismas horas en los 6 días previos (estimado)",
+    "estimado": ["norma_min", "kt_delta"]
+  },
+  "flota": {
+    "titulo": "Flota · real del día vs plan",
+    "filas": [
+      {"flota": "CAEX", "df_pct": 85.7, "df_plan_pct": 88.0, "uebd_pct": 79.0, "uebd_plan_pct": 78.0, "rend": 446, "rend_plan": 460, "rend_unidad": "t/h"},
+      {"flota": "Carguío", "df_pct": 85.9, "df_plan_pct": 90.0, "uebd_pct": 75.2, "uebd_plan_pct": 76.0, "rend": 1946, "rend_plan": 1900, "rend_unidad": "t/h"},
+      {"flota": "Perforación", "df_pct": 87.8, "df_plan_pct": 86.0, "uebd_pct": 75.4, "uebd_plan_pct": 74.0, "rend": 17.6, "rend_plan": 21.0, "rend_unidad": "m/h"}
+    ],
+    "fuente": "horas_equipo (día operacional): DF = Disponibles/Nominales · UEBD = Efectivas/Disponibles · Rend = Tonelaje/Efectivas"
+  },
+  "chancado": {
+    "titulo": "Chancado TA acumulado",
+    "acumulado_kt": 30.2,
+    "plan_a_la_hora_kt": 27.7,
+    "horas": [
+      {"hora_turno": 1, "acumulado_kt": 4.4, "por_origen": {"Fase 1": 1.8, "Fase 2": 1.5, "Fase 3": 0.7, "Stock": 0.4}},
+      {"hora_turno": 2, "acumulado_kt": 8.6, "por_origen": {"Fase 1": 3.2, "Fase 2": 3.1, "Fase 3": 1.3, "Stock": 0.9}},
+      {"hora_turno": 3, "acumulado_kt": 12.9, "por_origen": {"Fase 1": 5.0, "Fase 2": 4.7, "Fase 3": 1.9, "Stock": 1.3}},
+      {"hora_turno": 4, "acumulado_kt": 17.0, "por_origen": {"Fase 1": 6.8, "Fase 2": 6.0, "Fase 3": 2.5, "Stock": 1.7}},
+      {"hora_turno": 5, "acumulado_kt": 21.3, "por_origen": {"Fase 1": 8.4, "Fase 2": 7.6, "Fase 3": 3.2, "Stock": 2.1}},
+      {"hora_turno": 6, "acumulado_kt": 25.9, "por_origen": {"Fase 1": 10.2, "Fase 2": 9.1, "Fase 3": 4.0, "Stock": 2.7}},
+      {"hora_turno": 7, "acumulado_kt": 30.2, "por_origen": {"Fase 1": 12.0, "Fase 2": 10.5, "Fase 3": 4.6, "Stock": 3.2}}
+    ],
+    "origenes": [
+      {"origen": "Fase 1", "real_pct": 40, "plan_pct": 45},
+      {"origen": "Fase 2", "real_pct": 35, "plan_pct": 30},
+      {"origen": "Fase 3", "real_pct": 15, "plan_pct": 15},
+      {"origen": "Stock", "real_pct": 10, "plan_pct": 10}
+    ],
+    "adherencia_pct": 95,
+    "granulometria_pct": {"Fina (<12 mm)": 61.3, "Media (12-25 mm)": 19.6, "Gruesa (>25 mm)": 19.2},
+    "fuente": "chancado_hora.Tonelaje acumulado por HoraTurno y Origen · granulometría: promedio de las últimas 3 horas",
+    "estimado": ["adherencia_pct", "granulometria_pct"]
+  },
+  "equipos": {
+    "lista": [
+      {
+        "equipo": "PALA-03",
+        "tipo": "pala",
+        "tipo_equipo": "Shovel",
+        "estado": "demora",
+        "categoria": "DemoraOperacional",
+        "motivo": "Demora operacional",
+        "desde": "2025-05-31T14:10:00+00:00",
+        "minutos_en_estado": 53,
+        "kt_turno": 11.2,
+        "velocidad_kmh": 0.0,
+        "ultimo_gps": "2025-05-31T15:02:55+00:00"
+      },
+      {
+        "equipo": "PALA-01",
+        "tipo": "pala",
+        "tipo_equipo": "Shovel",
+        "estado": "operativo",
+        "categoria": "Operativo",
+        "motivo": null,
+        "desde": "2025-05-31T14:23:00+00:00",
+        "minutos_en_estado": 40,
+        "kt_turno": 7.1,
+        "velocidad_kmh": 0.0,
+        "ultimo_gps": "2025-05-31T15:02:57+00:00"
+      },
+      {
+        "equipo": "CARG-01",
+        "tipo": "cargador",
+        "tipo_equipo": "Loader",
+        "estado": "operativo",
+        "categoria": "Operativo",
+        "motivo": null,
+        "desde": "2025-05-31T14:23:00+00:00",
+        "minutos_en_estado": 40,
+        "kt_turno": 18.8,
+        "velocidad_kmh": 0.0,
+        "ultimo_gps": "2025-05-31T15:02:57+00:00"
+      },
+      {
+        "equipo": "CAEX-01",
+        "tipo": "caex",
+        "tipo_equipo": "Truck",
+        "estado": "mantencion",
+        "categoria": "MantencionNoProgramada",
+        "motivo": "Mantención no programada",
+        "desde": "2025-05-31T12:40:00+00:00",
+        "minutos_en_estado": 143,
+        "kt_turno": 1.3,
+        "velocidad_kmh": null,
+        "ultimo_gps": null
+      }
+    ],
+    "fuente": "estado_equipos si existe; si no, derivado de horas_equipo y gps. estado ∈ operativo | detenido | demora | mantencion | reserva | sin_dato"
+  },
+  "mapa": {
+    "equipos": [
+      {"equipo": "CAEX-02", "tipo": "caex", "x": 0.17, "y": 0.3, "lat": 12.084, "lon": -34.9728, "velocidad_kmh": 0.0, "cargado": false, "estado": "operativo", "alerta_id": null},
+      {"equipo": "CAEX-04", "tipo": "caex", "x": 0.37, "y": 0.403, "lat": 12.07166, "lon": -34.9408, "velocidad_kmh": 16.8, "cargado": true, "estado": "operativo", "alerta_id": null},
+      {"equipo": "CAEX-05", "tipo": "caex", "x": 0.439, "y": 0.433, "lat": 12.06805, "lon": -34.92972, "velocidad_kmh": 23.7, "cargado": true, "estado": "operativo", "alerta_id": null},
+      {"equipo": "CAEX-06", "tipo": "caex", "x": 0.579, "y": 0.142, "lat": 12.10299, "lon": -34.90734, "velocidad_kmh": 24.2, "cargado": false, "estado": "operativo", "alerta_id": null},
+      {"equipo": "CAEX-07", "tipo": "caex", "x": 0.544, "y": 0.145, "lat": 12.10264, "lon": -34.91289, "velocidad_kmh": 17.2, "cargado": true, "estado": "operativo", "alerta_id": null},
+      {"equipo": "CAEX-08", "tipo": "caex", "x": 0.657, "y": 0.204, "lat": 12.09556, "lon": -34.89493, "velocidad_kmh": 19.0, "cargado": true, "estado": "operativo", "alerta_id": null},
+      {"equipo": "CAEX-09", "tipo": "caex", "x": 0.714, "y": 0.658, "lat": 12.04106, "lon": -34.8858, "velocidad_kmh": 22.6, "cargado": false, "estado": "operativo", "alerta_id": null},
+      {"equipo": "CAEX-10", "tipo": "caex", "x": 0.698, "y": 0.479, "lat": 12.0625, "lon": -34.88827, "velocidad_kmh": 20.2, "cargado": true, "estado": "operativo", "alerta_id": null},
+      {"equipo": "CAEX-11", "tipo": "caex", "x": 0.17, "y": 0.3, "lat": 12.084, "lon": -34.9728, "velocidad_kmh": 0.0, "cargado": false, "estado": "operativo", "alerta_id": null},
+      {"equipo": "CAEX-12", "tipo": "caex", "x": 0.738, "y": 0.628, "lat": 12.04466, "lon": -34.88196, "velocidad_kmh": 15.6, "cargado": true, "estado": "operativo", "alerta_id": null},
+      {"equipo": "CAEX-13", "tipo": "caex", "x": 0.623, "y": 0.757, "lat": 12.02922, "lon": -34.90024, "velocidad_kmh": 27.4, "cargado": false, "estado": "operativo", "alerta_id": null},
+      {"equipo": "CAEX-14", "tipo": "caex", "x": 0.58, "y": 0.8, "lat": 12.024, "lon": -34.9072, "velocidad_kmh": 0.0, "cargado": false, "estado": "operativo", "alerta_id": null},
+      {"equipo": "CAEX-15", "tipo": "caex", "x": 0.17, "y": 0.3, "lat": 12.084, "lon": -34.9728, "velocidad_kmh": 0.0, "cargado": false, "estado": "operativo", "alerta_id": null},
+      {"equipo": "CAEX-16", "tipo": "caex", "x": 0.685, "y": 0.694, "lat": 12.03678, "lon": -34.89037, "velocidad_kmh": 25.5, "cargado": false, "estado": "operativo", "alerta_id": null},
+      {"equipo": "CAEX-18", "tipo": "caex", "x": 0.773, "y": 0.548, "lat": 12.05424, "lon": -34.87632, "velocidad_kmh": 15.8, "cargado": true, "estado": "operativo", "alerta_id": null},
+      {"equipo": "CAEX-19", "tipo": "caex", "x": 0.24, "y": 0.44, "lat": 12.0672, "lon": -34.9616, "velocidad_kmh": 0.0, "cargado": false, "estado": "operativo", "alerta_id": null},
+      {"equipo": "CAEX-20", "tipo": "caex", "x": 0.303, "y": 0.202, "lat": 12.0958, "lon": -34.95145, "velocidad_kmh": 21.0, "cargado": true, "estado": "operativo", "alerta_id": null},
+      {"equipo": "CAEX-22", "tipo": "caex", "x": 0.58, "y": 0.8, "lat": 12.024, "lon": -34.9072, "velocidad_kmh": 0.0, "cargado": false, "estado": "operativo", "alerta_id": null},
+      {"equipo": "CAEX-23", "tipo": "caex", "x": 0.669, "y": 0.205, "lat": 12.09542, "lon": -34.89302, "velocidad_kmh": 18.9, "cargado": true, "estado": "operativo", "alerta_id": null},
+      {"equipo": "CAEX-24", "tipo": "caex", "x": 0.631, "y": 0.446, "lat": 12.06652, "lon": -34.89898, "velocidad_kmh": 24.0, "cargado": false, "estado": "operativo", "alerta_id": null},
+      {"equipo": "CAEX-25", "tipo": "caex", "x": 0.346, "y": 0.17, "lat": 12.09958, "lon": -34.94462, "velocidad_kmh": 22.8, "cargado": true, "estado": "operativo", "alerta_id": null},
+      {"equipo": "PALA-01", "tipo": "pala", "x": 0.55, "y": 0.36, "lat": 12.0768, "lon": -34.912, "velocidad_kmh": 0.0, "cargado": false, "estado": "operativo", "alerta_id": null},
+      {"equipo": "PALA-02", "tipo": "pala", "x": 0.24, "y": 0.44, "lat": 12.0672, "lon": -34.9616, "velocidad_kmh": 0.0, "cargado": false, "estado": "operativo", "alerta_id": null},
+      {"equipo": "PALA-03", "tipo": "pala", "x": 0.33, "y": 0.66, "lat": 12.0408, "lon": -34.9472, "velocidad_kmh": 0.0, "cargado": false, "estado": "demora", "alerta_id": "al-0001"},
+      {"equipo": "PALA-04", "tipo": "pala", "x": 0.62, "y": 0.2, "lat": 12.096, "lon": -34.9008, "velocidad_kmh": 0.0, "cargado": false, "estado": "operativo", "alerta_id": null},
+      {"equipo": "CARG-01", "tipo": "cargador", "x": 0.58, "y": 0.8, "lat": 12.024, "lon": -34.9072, "velocidad_kmh": 0.0, "cargado": false, "estado": "operativo", "alerta_id": null},
+      {"equipo": "CARG-02", "tipo": "cargador", "x": 0.17, "y": 0.3, "lat": 12.084, "lon": -34.9728, "velocidad_kmh": 0.0, "cargado": false, "estado": "operativo", "alerta_id": null}
+    ],
+    "frentes": [
+      {"nombre": "PALA-01", "x": 0.55, "y": 0.36, "kt": 7.1},
+      {"nombre": "PALA-02", "x": 0.24, "y": 0.44, "kt": 6.7},
+      {"nombre": "PALA-03", "x": 0.33, "y": 0.66, "kt": 11.2},
+      {"nombre": "PALA-04", "x": 0.62, "y": 0.2, "kt": 2.5},
+      {"nombre": "CARG-01", "x": 0.58, "y": 0.8, "kt": 18.8},
+      {"nombre": "CARG-02", "x": 0.17, "y": 0.3, "kt": 6.5}
+    ],
+    "destinos": [
+      {"nombre": "CHANCADO PRIMARIO", "tipo": "chancado", "x": 0.78, "y": 0.52},
+      {"nombre": "BOTADERO 1", "tipo": "botadero", "x": 0.84, "y": 0.82},
+      {"nombre": "BOTADERO 2", "tipo": "botadero", "x": 0.86, "y": 0.24},
+      {"nombre": "STOCK 1", "tipo": "stock", "x": 0.66, "y": 0.88}
+    ],
+    "rutas": [
+      {"id": "PALA-01-CHANCADO PRIMARIO", "puntos": [[0.55, 0.36], [0.62, 0.44], [0.7, 0.48], [0.78, 0.52]], "velocidad_kmh": 22.1, "estado": "normal"},
+      {"id": "PALA-02-CHANCADO PRIMARIO", "puntos": [[0.24, 0.44], [0.38, 0.4], [0.56, 0.5], [0.78, 0.52]], "velocidad_kmh": 13.5, "estado": "normal"},
+      {"id": "PALA-03-BOTADERO 1", "puntos": [[0.33, 0.66], [0.5, 0.74], [0.7, 0.78], [0.84, 0.82]], "velocidad_kmh": null, "estado": "normal"},
+      {"id": "PALA-04-BOTADERO 2", "puntos": [[0.62, 0.2], [0.72, 0.21], [0.8, 0.22], [0.86, 0.24]], "velocidad_kmh": 18.9, "estado": "normal"},
+      {"id": "CARG-01-CHANCADO PRIMARIO", "puntos": [[0.58, 0.8], [0.68, 0.7], [0.76, 0.6], [0.78, 0.52]], "velocidad_kmh": 15.3, "estado": "normal"},
+      {"id": "CARG-02-BOTADERO 2", "puntos": [[0.17, 0.3], [0.36, 0.16], [0.6, 0.14], [0.86, 0.24]], "velocidad_kmh": 12.2, "estado": "normal"}
+    ],
+    "calibracion": {"lat_min": 12.0, "lat_max": 12.12, "lon_min": -35.0, "lon_max": -34.84, "rotacion_grados": 0, "milisegundos_arco_por_grado": 3600000},
+    "nota": "coordenadas ficticias: no corresponden a ninguna faena real"
+  },
+  "alertas": {
+    "activas": [
+      {
+        "id": "al-0001",
+        "regla": "equipo_detenido",
+        "severidad": "critica",
+        "estado": "activa",
+        "clave": "PALA-03",
+        "equipo": "PALA-03",
+        "tipo_equipo": "Shovel",
+        "titulo": "PALA-03 detenida",
+        "detalle": "Demora operacional",
+        "desde": "2025-05-31T14:10:00+00:00",
+        "duracion_min": 53,
+        "duracion_texto": "53 min",
+        "impacto_kt": -1.5,
+        "valor": 53,
+        "umbral": 30,
+        "unidad": "min",
+        "accion": "Evaluar el estado de PALA-03 y reasignar sus camiones mientras tanto.",
+        "reconocida_en": null,
+        "reconocida_por": null
+      }
+    ],
+    "resumen": {"criticas": 1, "altas": 0, "medias": 0, "informativas": 0, "total": 1}
+  }
+}

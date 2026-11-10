@@ -1,0 +1,162 @@
+/// Calendario con el día operacional en curso (cambio de día a las 08:00). Fuente: Dim_Tiempo.csv.
+table Dim_Tiempo
+	lineageTag: b88fb199-fa77-5f71-8fd7-456edef6a3e4
+
+	measure Fecha_Operacional_Actual = CALCULATE(MAX(Dim_Tiempo[Fecha]), REMOVEFILTERS(Dim_Tiempo), Dim_Tiempo[Es_Hoy_Operacional] = TRUE())
+		formatString: General Number
+		lineageTag: e8a5e138-2551-5e21-86b3-fc41cc17ac5f
+
+	column Fecha
+		dataType: dateTime
+		isNullable: false
+		formatString: Long Date
+		lineageTag: de02ef6a-59e2-56d1-a7f2-839d5634fbd9
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation SummarizationSetBy = User
+
+	column Anio
+		dataType: int64
+		formatString: 0
+		lineageTag: 882732b4-b995-59ec-8ed4-b8d9a1bb596f
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Anio
+
+		annotation SummarizationSetBy = User
+
+	column Mes
+		dataType: int64
+		formatString: 0
+		lineageTag: 9dbd056e-b8ad-5451-9de9-666879b07f13
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Mes
+
+		annotation SummarizationSetBy = User
+
+	column NombreMes
+		dataType: string
+		lineageTag: 60ba9da0-b063-5035-8018-b16dc344a0ae
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: NombreMes
+
+		annotation SummarizationSetBy = User
+
+	column AnioMes
+		dataType: string
+		lineageTag: 759f717c-33d9-5a21-95d0-dd4aa23bf7d6
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: AnioMes
+
+		annotation SummarizationSetBy = User
+
+	column Semana
+		dataType: int64
+		formatString: 0
+		lineageTag: a6402b8b-8dfd-507e-ba48-1bed79329052
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Semana
+
+		annotation SummarizationSetBy = User
+
+	column DiaSemana
+		dataType: int64
+		formatString: 0
+		lineageTag: 4e29a3ac-a58f-5689-b045-2a8902b57324
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: DiaSemana
+
+		annotation SummarizationSetBy = User
+
+	column NombreDia
+		dataType: string
+		lineageTag: b6621f5f-6e9a-5885-a92f-34bb5561ea04
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: NombreDia
+
+		annotation SummarizationSetBy = User
+
+	/// Lunes de la semana calendario de esta fecha (fecha real, no número de semana): única y ordenable entre años.
+	column Semana_Inicio
+		dataType: dateTime
+		isHidden
+		formatString: General Number
+		lineageTag: 5547799e-8333-5886-86c2-2d297c55e9e0
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Semana_Inicio
+
+		annotation SummarizationSetBy = User
+
+	/// Etiqueta del eje X en vista semana: «Sem 14-abr» (lunes de esa semana).
+	column Etiqueta_Semana
+		dataType: string
+		lineageTag: 4b473f13-7eea-53c2-899e-cacbfd8c5dab
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Etiqueta_Semana
+		sortByColumn: Semana_Inicio
+
+		annotation SummarizationSetBy = User
+
+	/// Etiqueta del eje X en vista mes: «abr 2025».
+	column Etiqueta_Mes
+		dataType: string
+		lineageTag: 43809182-8976-5fcd-acd6-5318ad62dd7b
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Etiqueta_Mes
+		sortByColumn: AnioMes
+
+		annotation SummarizationSetBy = User
+
+	/// VERDADERO para el día operacional en curso (cambio de día a las 08:00).
+	column Es_Hoy_Operacional
+		dataType: boolean
+		formatString: "TRUE";"TRUE";"FALSE"
+		lineageTag: 2db46486-4d8d-526e-ae9e-49d4c7f906f5
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Es_Hoy_Operacional
+
+		annotation SummarizationSetBy = User
+
+	/// Texto del segmentador de fecha: «HOY» para el día operacional en curso y la fecha larga para los demás.
+	column Dia_Etiqueta
+		dataType: string
+		lineageTag: 950726b0-b09f-554e-8eee-a987595679bb
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Dia_Etiqueta
+		sortByColumn: Fecha
+
+		annotation SummarizationSetBy = User
+
+	column 'Dia RD' = SUBSTITUTE(FORMAT(Dim_Tiempo[Fecha], "ddd dd-mm"), ".", "")
+		dataType: string
+		lineageTag: 1b87b6bb-4cde-52fc-9fa2-3e6df7de8acd
+		summarizeBy: none
+		sortByColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Tiempo = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "Dim_Tiempo.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Fecha", type datetime}, {"Anio", Int64.Type}, {"Mes", Int64.Type}, {"NombreMes", type text}, {"AnioMes", type text}, {"Semana", Int64.Type}, {"DiaSemana", Int64.Type}, {"NombreDia", type text}, {"Semana_Inicio", type datetime}, {"Etiqueta_Semana", type text}, {"Etiqueta_Mes", type text}, {"Es_Hoy_Operacional", type logical}, {"Dia_Etiqueta", type text}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

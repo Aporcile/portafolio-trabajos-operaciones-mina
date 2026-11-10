@@ -1,0 +1,39 @@
+relationship 2dab5330-469a-4582-84a9-7b8e79ac374f
+	fromColumn: 'Produccion Palas Turno'.ShiftID
+	toColumn: 'Calendario Turno Pala'.ShiftID
+
+relationship ce5c56d4-5375-478f-87ab-d9bca5e7d761
+	fromColumn: 'Horas Palas Turno'.shiftID
+	toColumn: 'Calendario Turno Pala'.ShiftID
+
+relationship 36280236-bd75-48c1-8dd2-3163963760f6
+	fromColumn: 'Horas CAEX'.time
+	toColumn: Calendario.Fecha
+
+relationship 7834374b-013f-4a6b-9dee-2a0536e8d76d
+	fromColumn: 'Produccion Mina'.time
+	toColumn: Calendario.Fecha
+
+relationship f53daa69-ef16-4397-89cc-48beebaa4cd2
+	fromColumn: 'Calendario Turno Pala'.time
+	toColumn: Calendario.Fecha
+
+relationship af9f9b77-3bdb-4191-bd96-19af04e32c9c
+	fromColumn: Planes_Mina.start_date
+	toColumn: Calendario.Fecha
+
+relationship c801ea0a-0ecd-4a57-8258-f048c8314b6f
+	fromColumn: 'Calendario Turno Pala Hora'.ShiftID
+	toColumn: 'Calendario Turno Pala'.ShiftID
+
+relationship d7e21e74-dbac-4271-b858-b6be7759641e
+	fromColumn: 'Produccion Palas Hora'.ShiftIDHora
+	toColumn: 'Calendario Turno Pala Hora'.ShiftIDhora
+
+relationship 61cc216d-5be1-4b50-a14a-863ad0d7cb9c
+	fromColumn: 'Produccion Mina'.DumpPrefix
+	toColumn: 'Dim Destino'.Clave
+
+relationship a329eeb6-4beb-451b-8f21-acad0b91f046
+	fromColumn: 'Produccion Mina'.'Rd Fase Clave'
+	toColumn: 'Dim Fase'.Clave

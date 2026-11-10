@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "OEE CAEX Demo"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "2203df30-83a6-57a8-9bcb-aa46e77ee842"
+  }
+}

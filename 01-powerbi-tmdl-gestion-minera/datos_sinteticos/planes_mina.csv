@@ -1,0 +1,2945 @@
+start_date,property_name,value,plan_type
+2025-03-01,Total Toneladas,203754.56,Mensual
+2025-03-01,Total Toneladas Chancado,65119.96,Mensual
+2025-03-01,Total Toneladas Chancador,77345.23,Mensual
+2025-03-01,Total Toneladas Dump,19152.93,Mensual
+2025-03-01,Total Toneladas Esteril,91934.06,Mensual
+2025-03-01,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-01,Total Toneladas SEM,214301.49,Semanal
+2025-03-01,Total Toneladas Chancado SEM,68490.76,Semanal
+2025-03-01,Total Toneladas Chancador SEM,81348.85,Semanal
+2025-03-01,Total Toneladas Dump SEM,20144.34,Semanal
+2025-03-01,Total Toneladas Esteril SEM,96692.83,Semanal
+2025-03-01,Total Toneladas Stock Sulfuro SEM,16115.47,Semanal
+2025-03-01,Total Toneladas CAEX SEM,214301.49,Semanal
+2025-03-01,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-01,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-01,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-01,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-01,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-01,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-01,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-01,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-01,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-01,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-01,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-01,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-01,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-01,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-01,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-01,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-01,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-01,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-01,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-02,Total Toneladas,203754.56,Mensual
+2025-03-02,Total Toneladas Chancado,65119.96,Mensual
+2025-03-02,Total Toneladas Chancador,77345.23,Mensual
+2025-03-02,Total Toneladas Dump,19152.93,Mensual
+2025-03-02,Total Toneladas Esteril,91934.06,Mensual
+2025-03-02,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-02,Total Toneladas SEM,209329.72,Semanal
+2025-03-02,Total Toneladas Chancado SEM,66901.78,Semanal
+2025-03-02,Total Toneladas Chancador SEM,79461.56,Semanal
+2025-03-02,Total Toneladas Dump SEM,19676.99,Semanal
+2025-03-02,Total Toneladas Esteril SEM,94449.57,Semanal
+2025-03-02,Total Toneladas Stock Sulfuro SEM,15741.59,Semanal
+2025-03-02,Total Toneladas CAEX SEM,209329.72,Semanal
+2025-03-02,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-02,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-02,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-02,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-02,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-02,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-02,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-02,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-02,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-02,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-02,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-02,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-02,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-02,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-02,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-02,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-02,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-02,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-02,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-03,Total Toneladas,203754.56,Mensual
+2025-03-03,Total Toneladas Chancado,65119.96,Mensual
+2025-03-03,Total Toneladas Chancador,77345.23,Mensual
+2025-03-03,Total Toneladas Dump,19152.93,Mensual
+2025-03-03,Total Toneladas Esteril,91934.06,Mensual
+2025-03-03,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-03,Total Toneladas SEM,214443.05,Semanal
+2025-03-03,Total Toneladas Chancado SEM,68536.00,Semanal
+2025-03-03,Total Toneladas Chancador SEM,81402.58,Semanal
+2025-03-03,Total Toneladas Dump SEM,20157.65,Semanal
+2025-03-03,Total Toneladas Esteril SEM,96756.70,Semanal
+2025-03-03,Total Toneladas Stock Sulfuro SEM,16126.12,Semanal
+2025-03-03,Total Toneladas CAEX SEM,214443.05,Semanal
+2025-03-03,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-03,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-03,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-03,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-03,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-03,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-03,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-03,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-03,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-03,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-03,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-03,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-03,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-03,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-03,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-03,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-03,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-03,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-03,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-04,Total Toneladas,203754.56,Mensual
+2025-03-04,Total Toneladas Chancado,65119.96,Mensual
+2025-03-04,Total Toneladas Chancador,77345.23,Mensual
+2025-03-04,Total Toneladas Dump,19152.93,Mensual
+2025-03-04,Total Toneladas Esteril,91934.06,Mensual
+2025-03-04,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-04,Total Toneladas SEM,212563.42,Semanal
+2025-03-04,Total Toneladas Chancado SEM,67935.27,Semanal
+2025-03-04,Total Toneladas Chancador SEM,80689.08,Semanal
+2025-03-04,Total Toneladas Dump SEM,19980.96,Semanal
+2025-03-04,Total Toneladas Esteril SEM,95908.62,Semanal
+2025-03-04,Total Toneladas Stock Sulfuro SEM,15984.77,Semanal
+2025-03-04,Total Toneladas CAEX SEM,212563.42,Semanal
+2025-03-04,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-04,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-04,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-04,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-04,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-04,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-04,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-04,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-04,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-04,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-04,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-04,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-04,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-04,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-04,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-04,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-04,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-04,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-04,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-05,Total Toneladas,203754.56,Mensual
+2025-03-05,Total Toneladas Chancado,65119.96,Mensual
+2025-03-05,Total Toneladas Chancador,77345.23,Mensual
+2025-03-05,Total Toneladas Dump,19152.93,Mensual
+2025-03-05,Total Toneladas Esteril,91934.06,Mensual
+2025-03-05,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-05,Total Toneladas SEM,219287.75,Semanal
+2025-03-05,Total Toneladas Chancado SEM,70084.37,Semanal
+2025-03-05,Total Toneladas Chancador SEM,83241.63,Semanal
+2025-03-05,Total Toneladas Dump SEM,20613.05,Semanal
+2025-03-05,Total Toneladas Esteril SEM,98942.63,Semanal
+2025-03-05,Total Toneladas Stock Sulfuro SEM,16490.44,Semanal
+2025-03-05,Total Toneladas CAEX SEM,219287.75,Semanal
+2025-03-05,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-05,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-05,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-05,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-05,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-05,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-05,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-05,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-05,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-05,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-05,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-05,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-05,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-05,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-05,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-05,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-05,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-05,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-05,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-06,Total Toneladas,203754.56,Mensual
+2025-03-06,Total Toneladas Chancado,65119.96,Mensual
+2025-03-06,Total Toneladas Chancador,77345.23,Mensual
+2025-03-06,Total Toneladas Dump,19152.93,Mensual
+2025-03-06,Total Toneladas Esteril,91934.06,Mensual
+2025-03-06,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-06,Total Toneladas SEM,212123.04,Semanal
+2025-03-06,Total Toneladas Chancado SEM,67794.52,Semanal
+2025-03-06,Total Toneladas Chancador SEM,80521.91,Semanal
+2025-03-06,Total Toneladas Dump SEM,19939.57,Semanal
+2025-03-06,Total Toneladas Esteril SEM,95709.92,Semanal
+2025-03-06,Total Toneladas Stock Sulfuro SEM,15951.65,Semanal
+2025-03-06,Total Toneladas CAEX SEM,212123.04,Semanal
+2025-03-06,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-06,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-06,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-06,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-06,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-06,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-06,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-06,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-06,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-06,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-06,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-06,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-06,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-06,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-06,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-06,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-06,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-06,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-06,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-07,Total Toneladas,203754.56,Mensual
+2025-03-07,Total Toneladas Chancado,65119.96,Mensual
+2025-03-07,Total Toneladas Chancador,77345.23,Mensual
+2025-03-07,Total Toneladas Dump,19152.93,Mensual
+2025-03-07,Total Toneladas Esteril,91934.06,Mensual
+2025-03-07,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-07,Total Toneladas SEM,215901.12,Semanal
+2025-03-07,Total Toneladas Chancado SEM,69002.00,Semanal
+2025-03-07,Total Toneladas Chancador SEM,81956.07,Semanal
+2025-03-07,Total Toneladas Dump SEM,20294.71,Semanal
+2025-03-07,Total Toneladas Esteril SEM,97414.59,Semanal
+2025-03-07,Total Toneladas Stock Sulfuro SEM,16235.76,Semanal
+2025-03-07,Total Toneladas CAEX SEM,215901.12,Semanal
+2025-03-07,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-07,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-07,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-07,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-07,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-07,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-07,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-07,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-07,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-07,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-07,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-07,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-07,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-07,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-07,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-07,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-07,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-07,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-07,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-08,Total Toneladas,203754.56,Mensual
+2025-03-08,Total Toneladas Chancado,65119.96,Mensual
+2025-03-08,Total Toneladas Chancador,77345.23,Mensual
+2025-03-08,Total Toneladas Dump,19152.93,Mensual
+2025-03-08,Total Toneladas Esteril,91934.06,Mensual
+2025-03-08,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-08,Total Toneladas SEM,216877.58,Semanal
+2025-03-08,Total Toneladas Chancado SEM,69314.08,Semanal
+2025-03-08,Total Toneladas Chancador SEM,82326.73,Semanal
+2025-03-08,Total Toneladas Dump SEM,20386.49,Semanal
+2025-03-08,Total Toneladas Esteril SEM,97855.17,Semanal
+2025-03-08,Total Toneladas Stock Sulfuro SEM,16309.19,Semanal
+2025-03-08,Total Toneladas CAEX SEM,216877.58,Semanal
+2025-03-08,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-08,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-08,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-08,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-08,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-08,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-08,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-08,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-08,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-08,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-08,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-08,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-08,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-08,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-08,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-08,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-08,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-08,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-08,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-09,Total Toneladas,203754.56,Mensual
+2025-03-09,Total Toneladas Chancado,65119.96,Mensual
+2025-03-09,Total Toneladas Chancador,77345.23,Mensual
+2025-03-09,Total Toneladas Dump,19152.93,Mensual
+2025-03-09,Total Toneladas Esteril,91934.06,Mensual
+2025-03-09,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-09,Total Toneladas SEM,217425.69,Semanal
+2025-03-09,Total Toneladas Chancado SEM,69489.25,Semanal
+2025-03-09,Total Toneladas Chancador SEM,82534.79,Semanal
+2025-03-09,Total Toneladas Dump SEM,20438.02,Semanal
+2025-03-09,Total Toneladas Esteril SEM,98102.47,Semanal
+2025-03-09,Total Toneladas Stock Sulfuro SEM,16350.41,Semanal
+2025-03-09,Total Toneladas CAEX SEM,217425.69,Semanal
+2025-03-09,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-09,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-09,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-09,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-09,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-09,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-09,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-09,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-09,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-09,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-09,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-09,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-09,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-09,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-09,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-09,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-09,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-09,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-09,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-10,Total Toneladas,203754.56,Mensual
+2025-03-10,Total Toneladas Chancado,65119.96,Mensual
+2025-03-10,Total Toneladas Chancador,77345.23,Mensual
+2025-03-10,Total Toneladas Dump,19152.93,Mensual
+2025-03-10,Total Toneladas Esteril,91934.06,Mensual
+2025-03-10,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-10,Total Toneladas SEM,210209.42,Semanal
+2025-03-10,Total Toneladas Chancado SEM,67182.93,Semanal
+2025-03-10,Total Toneladas Chancador SEM,79795.49,Semanal
+2025-03-10,Total Toneladas Dump SEM,19759.69,Semanal
+2025-03-10,Total Toneladas Esteril SEM,94846.49,Semanal
+2025-03-10,Total Toneladas Stock Sulfuro SEM,15807.75,Semanal
+2025-03-10,Total Toneladas CAEX SEM,210209.42,Semanal
+2025-03-10,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-10,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-10,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-10,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-10,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-10,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-10,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-10,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-10,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-10,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-10,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-10,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-10,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-10,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-10,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-10,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-10,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-10,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-10,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-11,Total Toneladas,203754.56,Mensual
+2025-03-11,Total Toneladas Chancado,65119.96,Mensual
+2025-03-11,Total Toneladas Chancador,77345.23,Mensual
+2025-03-11,Total Toneladas Dump,19152.93,Mensual
+2025-03-11,Total Toneladas Esteril,91934.06,Mensual
+2025-03-11,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-11,Total Toneladas SEM,215628.85,Semanal
+2025-03-11,Total Toneladas Chancado SEM,68914.98,Semanal
+2025-03-11,Total Toneladas Chancador SEM,81852.71,Semanal
+2025-03-11,Total Toneladas Dump SEM,20269.11,Semanal
+2025-03-11,Total Toneladas Esteril SEM,97291.74,Semanal
+2025-03-11,Total Toneladas Stock Sulfuro SEM,16215.29,Semanal
+2025-03-11,Total Toneladas CAEX SEM,215628.85,Semanal
+2025-03-11,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-11,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-11,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-11,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-11,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-11,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-11,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-11,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-11,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-11,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-11,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-11,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-11,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-11,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-11,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-11,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-11,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-11,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-11,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-12,Total Toneladas,203754.56,Mensual
+2025-03-12,Total Toneladas Chancado,65119.96,Mensual
+2025-03-12,Total Toneladas Chancador,77345.23,Mensual
+2025-03-12,Total Toneladas Dump,19152.93,Mensual
+2025-03-12,Total Toneladas Esteril,91934.06,Mensual
+2025-03-12,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-12,Total Toneladas SEM,211850.73,Semanal
+2025-03-12,Total Toneladas Chancado SEM,67707.49,Semanal
+2025-03-12,Total Toneladas Chancador SEM,80418.54,Semanal
+2025-03-12,Total Toneladas Dump SEM,19913.97,Semanal
+2025-03-12,Total Toneladas Esteril SEM,95587.05,Semanal
+2025-03-12,Total Toneladas Stock Sulfuro SEM,15931.17,Semanal
+2025-03-12,Total Toneladas CAEX SEM,211850.73,Semanal
+2025-03-12,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-12,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-12,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-12,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-12,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-12,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-12,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-12,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-12,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-12,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-12,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-12,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-12,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-12,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-12,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-12,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-12,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-12,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-12,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-13,Total Toneladas,203754.56,Mensual
+2025-03-13,Total Toneladas Chancado,65119.96,Mensual
+2025-03-13,Total Toneladas Chancador,77345.23,Mensual
+2025-03-13,Total Toneladas Dump,19152.93,Mensual
+2025-03-13,Total Toneladas Esteril,91934.06,Mensual
+2025-03-13,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-13,Total Toneladas SEM,212049.23,Semanal
+2025-03-13,Total Toneladas Chancado SEM,67770.94,Semanal
+2025-03-13,Total Toneladas Chancador SEM,80493.89,Semanal
+2025-03-13,Total Toneladas Dump SEM,19932.63,Semanal
+2025-03-13,Total Toneladas Esteril SEM,95676.61,Semanal
+2025-03-13,Total Toneladas Stock Sulfuro SEM,15946.10,Semanal
+2025-03-13,Total Toneladas CAEX SEM,212049.23,Semanal
+2025-03-13,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-13,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-13,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-13,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-13,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-13,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-13,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-13,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-13,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-13,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-13,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-13,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-13,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-13,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-13,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-13,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-13,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-13,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-13,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-14,Total Toneladas,203754.56,Mensual
+2025-03-14,Total Toneladas Chancado,65119.96,Mensual
+2025-03-14,Total Toneladas Chancador,77345.23,Mensual
+2025-03-14,Total Toneladas Dump,19152.93,Mensual
+2025-03-14,Total Toneladas Esteril,91934.06,Mensual
+2025-03-14,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-14,Total Toneladas SEM,209775.37,Semanal
+2025-03-14,Total Toneladas Chancado SEM,67044.21,Semanal
+2025-03-14,Total Toneladas Chancador SEM,79630.73,Semanal
+2025-03-14,Total Toneladas Dump SEM,19718.88,Semanal
+2025-03-14,Total Toneladas Esteril SEM,94650.65,Semanal
+2025-03-14,Total Toneladas Stock Sulfuro SEM,15775.11,Semanal
+2025-03-14,Total Toneladas CAEX SEM,209775.37,Semanal
+2025-03-14,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-14,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-14,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-14,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-14,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-14,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-14,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-14,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-14,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-14,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-14,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-14,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-14,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-14,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-14,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-14,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-14,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-14,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-14,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-15,Total Toneladas,203754.56,Mensual
+2025-03-15,Total Toneladas Chancado,65119.96,Mensual
+2025-03-15,Total Toneladas Chancador,77345.23,Mensual
+2025-03-15,Total Toneladas Dump,19152.93,Mensual
+2025-03-15,Total Toneladas Esteril,91934.06,Mensual
+2025-03-15,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-15,Total Toneladas SEM,213160.35,Semanal
+2025-03-15,Total Toneladas Chancado SEM,68126.05,Semanal
+2025-03-15,Total Toneladas Chancador SEM,80915.67,Semanal
+2025-03-15,Total Toneladas Dump SEM,20037.07,Semanal
+2025-03-15,Total Toneladas Esteril SEM,96177.95,Semanal
+2025-03-15,Total Toneladas Stock Sulfuro SEM,16029.66,Semanal
+2025-03-15,Total Toneladas CAEX SEM,213160.35,Semanal
+2025-03-15,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-15,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-15,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-15,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-15,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-15,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-15,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-15,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-15,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-15,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-15,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-15,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-15,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-15,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-15,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-15,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-15,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-15,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-15,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-16,Total Toneladas,203754.56,Mensual
+2025-03-16,Total Toneladas Chancado,65119.96,Mensual
+2025-03-16,Total Toneladas Chancador,77345.23,Mensual
+2025-03-16,Total Toneladas Dump,19152.93,Mensual
+2025-03-16,Total Toneladas Esteril,91934.06,Mensual
+2025-03-16,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-16,Total Toneladas SEM,210928.97,Semanal
+2025-03-16,Total Toneladas Chancado SEM,67412.90,Semanal
+2025-03-16,Total Toneladas Chancador SEM,80068.64,Semanal
+2025-03-16,Total Toneladas Dump SEM,19827.32,Semanal
+2025-03-16,Total Toneladas Esteril SEM,95171.15,Semanal
+2025-03-16,Total Toneladas Stock Sulfuro SEM,15861.86,Semanal
+2025-03-16,Total Toneladas CAEX SEM,210928.97,Semanal
+2025-03-16,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-16,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-16,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-16,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-16,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-16,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-16,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-16,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-16,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-16,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-16,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-16,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-16,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-16,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-16,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-16,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-16,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-16,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-16,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-17,Total Toneladas,203754.56,Mensual
+2025-03-17,Total Toneladas Chancado,65119.96,Mensual
+2025-03-17,Total Toneladas Chancador,77345.23,Mensual
+2025-03-17,Total Toneladas Dump,19152.93,Mensual
+2025-03-17,Total Toneladas Esteril,91934.06,Mensual
+2025-03-17,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-17,Total Toneladas SEM,203635.12,Semanal
+2025-03-17,Total Toneladas Chancado SEM,65081.79,Semanal
+2025-03-17,Total Toneladas Chancador SEM,77299.89,Semanal
+2025-03-17,Total Toneladas Dump SEM,19141.70,Semanal
+2025-03-17,Total Toneladas Esteril SEM,91880.17,Semanal
+2025-03-17,Total Toneladas Stock Sulfuro SEM,15313.36,Semanal
+2025-03-17,Total Toneladas CAEX SEM,203635.12,Semanal
+2025-03-17,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-17,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-17,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-17,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-17,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-17,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-17,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-17,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-17,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-17,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-17,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-17,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-17,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-17,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-17,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-17,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-17,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-17,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-17,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-18,Total Toneladas,203754.56,Mensual
+2025-03-18,Total Toneladas Chancado,65119.96,Mensual
+2025-03-18,Total Toneladas Chancador,77345.23,Mensual
+2025-03-18,Total Toneladas Dump,19152.93,Mensual
+2025-03-18,Total Toneladas Esteril,91934.06,Mensual
+2025-03-18,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-18,Total Toneladas SEM,206535.70,Semanal
+2025-03-18,Total Toneladas Chancado SEM,66008.81,Semanal
+2025-03-18,Total Toneladas Chancador SEM,78400.95,Semanal
+2025-03-18,Total Toneladas Dump SEM,19414.36,Semanal
+2025-03-18,Total Toneladas Esteril SEM,93188.91,Semanal
+2025-03-18,Total Toneladas Stock Sulfuro SEM,15531.48,Semanal
+2025-03-18,Total Toneladas CAEX SEM,206535.70,Semanal
+2025-03-18,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-18,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-18,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-18,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-18,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-18,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-18,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-18,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-18,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-18,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-18,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-18,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-18,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-18,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-18,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-18,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-18,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-18,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-18,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-19,Total Toneladas,203754.56,Mensual
+2025-03-19,Total Toneladas Chancado,65119.96,Mensual
+2025-03-19,Total Toneladas Chancador,77345.23,Mensual
+2025-03-19,Total Toneladas Dump,19152.93,Mensual
+2025-03-19,Total Toneladas Esteril,91934.06,Mensual
+2025-03-19,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-19,Total Toneladas SEM,205532.67,Semanal
+2025-03-19,Total Toneladas Chancado SEM,65688.24,Semanal
+2025-03-19,Total Toneladas Chancador SEM,78020.20,Semanal
+2025-03-19,Total Toneladas Dump SEM,19320.07,Semanal
+2025-03-19,Total Toneladas Esteril SEM,92736.34,Semanal
+2025-03-19,Total Toneladas Stock Sulfuro SEM,15456.06,Semanal
+2025-03-19,Total Toneladas CAEX SEM,205532.67,Semanal
+2025-03-19,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-19,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-19,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-19,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-19,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-19,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-19,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-19,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-19,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-19,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-19,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-19,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-19,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-19,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-19,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-19,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-19,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-19,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-19,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-20,Total Toneladas,203754.56,Mensual
+2025-03-20,Total Toneladas Chancado,65119.96,Mensual
+2025-03-20,Total Toneladas Chancador,77345.23,Mensual
+2025-03-20,Total Toneladas Dump,19152.93,Mensual
+2025-03-20,Total Toneladas Esteril,91934.06,Mensual
+2025-03-20,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-20,Total Toneladas SEM,206676.46,Semanal
+2025-03-20,Total Toneladas Chancado SEM,66053.80,Semanal
+2025-03-20,Total Toneladas Chancador SEM,78454.38,Semanal
+2025-03-20,Total Toneladas Dump SEM,19427.59,Semanal
+2025-03-20,Total Toneladas Esteril SEM,93252.42,Semanal
+2025-03-20,Total Toneladas Stock Sulfuro SEM,15542.07,Semanal
+2025-03-20,Total Toneladas CAEX SEM,206676.46,Semanal
+2025-03-20,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-20,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-20,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-20,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-20,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-20,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-20,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-20,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-20,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-20,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-20,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-20,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-20,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-20,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-20,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-20,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-20,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-20,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-20,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-21,Total Toneladas,203754.56,Mensual
+2025-03-21,Total Toneladas Chancado,65119.96,Mensual
+2025-03-21,Total Toneladas Chancador,77345.23,Mensual
+2025-03-21,Total Toneladas Dump,19152.93,Mensual
+2025-03-21,Total Toneladas Esteril,91934.06,Mensual
+2025-03-21,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-21,Total Toneladas SEM,207365.36,Semanal
+2025-03-21,Total Toneladas Chancado SEM,66273.97,Semanal
+2025-03-21,Total Toneladas Chancador SEM,78715.89,Semanal
+2025-03-21,Total Toneladas Dump SEM,19492.34,Semanal
+2025-03-21,Total Toneladas Esteril SEM,93563.25,Semanal
+2025-03-21,Total Toneladas Stock Sulfuro SEM,15593.88,Semanal
+2025-03-21,Total Toneladas CAEX SEM,207365.36,Semanal
+2025-03-21,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-21,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-21,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-21,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-21,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-21,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-21,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-21,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-21,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-21,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-21,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-21,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-21,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-21,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-21,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-21,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-21,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-21,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-21,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-22,Total Toneladas,203754.56,Mensual
+2025-03-22,Total Toneladas Chancado,65119.96,Mensual
+2025-03-22,Total Toneladas Chancador,77345.23,Mensual
+2025-03-22,Total Toneladas Dump,19152.93,Mensual
+2025-03-22,Total Toneladas Esteril,91934.06,Mensual
+2025-03-22,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-22,Total Toneladas SEM,204555.54,Semanal
+2025-03-22,Total Toneladas Chancado SEM,65375.95,Semanal
+2025-03-22,Total Toneladas Chancador SEM,77649.28,Semanal
+2025-03-22,Total Toneladas Dump SEM,19228.22,Semanal
+2025-03-22,Total Toneladas Esteril SEM,92295.46,Semanal
+2025-03-22,Total Toneladas Stock Sulfuro SEM,15382.58,Semanal
+2025-03-22,Total Toneladas CAEX SEM,204555.54,Semanal
+2025-03-22,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-22,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-22,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-22,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-22,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-22,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-22,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-22,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-22,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-22,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-22,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-22,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-22,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-22,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-22,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-22,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-22,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-22,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-22,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-23,Total Toneladas,203754.56,Mensual
+2025-03-23,Total Toneladas Chancado,65119.96,Mensual
+2025-03-23,Total Toneladas Chancador,77345.23,Mensual
+2025-03-23,Total Toneladas Dump,19152.93,Mensual
+2025-03-23,Total Toneladas Esteril,91934.06,Mensual
+2025-03-23,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-23,Total Toneladas SEM,206110.87,Semanal
+2025-03-23,Total Toneladas Chancado SEM,65873.04,Semanal
+2025-03-23,Total Toneladas Chancador SEM,78239.69,Semanal
+2025-03-23,Total Toneladas Dump SEM,19374.42,Semanal
+2025-03-23,Total Toneladas Esteril SEM,92997.23,Semanal
+2025-03-23,Total Toneladas Stock Sulfuro SEM,15499.54,Semanal
+2025-03-23,Total Toneladas CAEX SEM,206110.87,Semanal
+2025-03-23,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-23,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-23,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-23,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-23,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-23,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-23,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-23,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-23,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-23,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-23,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-23,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-23,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-23,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-23,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-23,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-23,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-23,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-23,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-24,Total Toneladas,203754.56,Mensual
+2025-03-24,Total Toneladas Chancado,65119.96,Mensual
+2025-03-24,Total Toneladas Chancador,77345.23,Mensual
+2025-03-24,Total Toneladas Dump,19152.93,Mensual
+2025-03-24,Total Toneladas Esteril,91934.06,Mensual
+2025-03-24,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-24,Total Toneladas SEM,204778.96,Semanal
+2025-03-24,Total Toneladas Chancado SEM,65447.36,Semanal
+2025-03-24,Total Toneladas Chancador SEM,77734.09,Semanal
+2025-03-24,Total Toneladas Dump SEM,19249.22,Semanal
+2025-03-24,Total Toneladas Esteril SEM,92396.27,Semanal
+2025-03-24,Total Toneladas Stock Sulfuro SEM,15399.38,Semanal
+2025-03-24,Total Toneladas CAEX SEM,204778.96,Semanal
+2025-03-24,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-24,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-24,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-24,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-24,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-24,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-24,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-24,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-24,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-24,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-24,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-24,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-24,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-24,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-24,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-24,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-24,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-24,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-24,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-25,Total Toneladas,203754.56,Mensual
+2025-03-25,Total Toneladas Chancado,65119.96,Mensual
+2025-03-25,Total Toneladas Chancador,77345.23,Mensual
+2025-03-25,Total Toneladas Dump,19152.93,Mensual
+2025-03-25,Total Toneladas Esteril,91934.06,Mensual
+2025-03-25,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-25,Total Toneladas SEM,206280.88,Semanal
+2025-03-25,Total Toneladas Chancado SEM,65927.37,Semanal
+2025-03-25,Total Toneladas Chancador SEM,78304.22,Semanal
+2025-03-25,Total Toneladas Dump SEM,19390.40,Semanal
+2025-03-25,Total Toneladas Esteril SEM,93073.93,Semanal
+2025-03-25,Total Toneladas Stock Sulfuro SEM,15512.32,Semanal
+2025-03-25,Total Toneladas CAEX SEM,206280.88,Semanal
+2025-03-25,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-25,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-25,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-25,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-25,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-25,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-25,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-25,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-25,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-25,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-25,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-25,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-25,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-25,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-25,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-25,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-25,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-25,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-25,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-26,Total Toneladas,203754.56,Mensual
+2025-03-26,Total Toneladas Chancado,65119.96,Mensual
+2025-03-26,Total Toneladas Chancador,77345.23,Mensual
+2025-03-26,Total Toneladas Dump,19152.93,Mensual
+2025-03-26,Total Toneladas Esteril,91934.06,Mensual
+2025-03-26,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-26,Total Toneladas SEM,208415.57,Semanal
+2025-03-26,Total Toneladas Chancado SEM,66609.62,Semanal
+2025-03-26,Total Toneladas Chancador SEM,79114.55,Semanal
+2025-03-26,Total Toneladas Dump SEM,19591.06,Semanal
+2025-03-26,Total Toneladas Esteril SEM,94037.11,Semanal
+2025-03-26,Total Toneladas Stock Sulfuro SEM,15672.85,Semanal
+2025-03-26,Total Toneladas CAEX SEM,208415.57,Semanal
+2025-03-26,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-26,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-26,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-26,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-26,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-26,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-26,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-26,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-26,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-26,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-26,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-26,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-26,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-26,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-26,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-26,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-26,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-26,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-26,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-27,Total Toneladas,203754.56,Mensual
+2025-03-27,Total Toneladas Chancado,65119.96,Mensual
+2025-03-27,Total Toneladas Chancador,77345.23,Mensual
+2025-03-27,Total Toneladas Dump,19152.93,Mensual
+2025-03-27,Total Toneladas Esteril,91934.06,Mensual
+2025-03-27,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-27,Total Toneladas SEM,203906.10,Semanal
+2025-03-27,Total Toneladas Chancado SEM,65168.39,Semanal
+2025-03-27,Total Toneladas Chancador SEM,77402.75,Semanal
+2025-03-27,Total Toneladas Dump SEM,19167.17,Semanal
+2025-03-27,Total Toneladas Esteril SEM,92002.43,Semanal
+2025-03-27,Total Toneladas Stock Sulfuro SEM,15333.74,Semanal
+2025-03-27,Total Toneladas CAEX SEM,203906.10,Semanal
+2025-03-27,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-27,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-27,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-27,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-27,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-27,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-27,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-27,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-27,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-27,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-27,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-27,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-27,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-27,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-27,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-27,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-27,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-27,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-27,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-28,Total Toneladas,203754.56,Mensual
+2025-03-28,Total Toneladas Chancado,65119.96,Mensual
+2025-03-28,Total Toneladas Chancador,77345.23,Mensual
+2025-03-28,Total Toneladas Dump,19152.93,Mensual
+2025-03-28,Total Toneladas Esteril,91934.06,Mensual
+2025-03-28,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-28,Total Toneladas SEM,206659.58,Semanal
+2025-03-28,Total Toneladas Chancado SEM,66048.40,Semanal
+2025-03-28,Total Toneladas Chancador SEM,78447.98,Semanal
+2025-03-28,Total Toneladas Dump SEM,19426.00,Semanal
+2025-03-28,Total Toneladas Esteril SEM,93244.80,Semanal
+2025-03-28,Total Toneladas Stock Sulfuro SEM,15540.80,Semanal
+2025-03-28,Total Toneladas CAEX SEM,206659.58,Semanal
+2025-03-28,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-28,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-28,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-28,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-28,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-28,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-28,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-28,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-28,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-28,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-28,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-28,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-28,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-28,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-28,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-28,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-28,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-28,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-28,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-29,Total Toneladas,203754.56,Mensual
+2025-03-29,Total Toneladas Chancado,65119.96,Mensual
+2025-03-29,Total Toneladas Chancador,77345.23,Mensual
+2025-03-29,Total Toneladas Dump,19152.93,Mensual
+2025-03-29,Total Toneladas Esteril,91934.06,Mensual
+2025-03-29,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-29,Total Toneladas SEM,209932.26,Semanal
+2025-03-29,Total Toneladas Chancado SEM,67094.35,Semanal
+2025-03-29,Total Toneladas Chancador SEM,79690.28,Semanal
+2025-03-29,Total Toneladas Dump SEM,19733.63,Semanal
+2025-03-29,Total Toneladas Esteril SEM,94721.43,Semanal
+2025-03-29,Total Toneladas Stock Sulfuro SEM,15786.91,Semanal
+2025-03-29,Total Toneladas CAEX SEM,209932.26,Semanal
+2025-03-29,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-29,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-29,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-29,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-29,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-29,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-29,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-29,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-29,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-29,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-29,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-29,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-29,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-29,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-29,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-29,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-29,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-29,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-29,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-30,Total Toneladas,203754.56,Mensual
+2025-03-30,Total Toneladas Chancado,65119.96,Mensual
+2025-03-30,Total Toneladas Chancador,77345.23,Mensual
+2025-03-30,Total Toneladas Dump,19152.93,Mensual
+2025-03-30,Total Toneladas Esteril,91934.06,Mensual
+2025-03-30,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-30,Total Toneladas SEM,210813.72,Semanal
+2025-03-30,Total Toneladas Chancado SEM,67376.07,Semanal
+2025-03-30,Total Toneladas Chancador SEM,80024.89,Semanal
+2025-03-30,Total Toneladas Dump SEM,19816.49,Semanal
+2025-03-30,Total Toneladas Esteril SEM,95119.15,Semanal
+2025-03-30,Total Toneladas Stock Sulfuro SEM,15853.19,Semanal
+2025-03-30,Total Toneladas CAEX SEM,210813.72,Semanal
+2025-03-30,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-30,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-30,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-30,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-30,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-30,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-30,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-30,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-30,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-30,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-30,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-30,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-30,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-30,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-30,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-30,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-30,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-30,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-30,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-03-31,Total Toneladas,203754.56,Mensual
+2025-03-31,Total Toneladas Chancado,65119.96,Mensual
+2025-03-31,Total Toneladas Chancador,77345.23,Mensual
+2025-03-31,Total Toneladas Dump,19152.93,Mensual
+2025-03-31,Total Toneladas Esteril,91934.06,Mensual
+2025-03-31,Total Toneladas Stock Sulfuro,15322.34,Mensual
+2025-03-31,Total Toneladas SEM,217302.87,Semanal
+2025-03-31,Total Toneladas Chancado SEM,69450.00,Semanal
+2025-03-31,Total Toneladas Chancador SEM,82488.17,Semanal
+2025-03-31,Total Toneladas Dump SEM,20426.47,Semanal
+2025-03-31,Total Toneladas Esteril SEM,98047.05,Semanal
+2025-03-31,Total Toneladas Stock Sulfuro SEM,16341.18,Semanal
+2025-03-31,Total Toneladas CAEX SEM,217302.87,Semanal
+2025-03-31,Horas Nominales CAEX SEM,624.00,Semanal
+2025-03-31,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-03-31,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-03-31,Horas Operativas CAEX SEM,438.05,Semanal
+2025-03-31,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-03-31,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-03-31,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-03-31,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-03-31,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-03-31,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-03-31,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-03-31,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-03-31,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-03-31,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-03-31,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-03-31,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-03-31,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-03-31,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-03-31,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-01,Total Toneladas,205061.51,Mensual
+2025-04-01,Total Toneladas Chancado,65537.66,Mensual
+2025-04-01,Total Toneladas Chancador,77841.35,Mensual
+2025-04-01,Total Toneladas Dump,19275.78,Mensual
+2025-04-01,Total Toneladas Esteril,92523.75,Mensual
+2025-04-01,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-01,Total Toneladas SEM,215774.79,Semanal
+2025-04-01,Total Toneladas Chancado SEM,68961.62,Semanal
+2025-04-01,Total Toneladas Chancador SEM,81908.11,Semanal
+2025-04-01,Total Toneladas Dump SEM,20282.83,Semanal
+2025-04-01,Total Toneladas Esteril SEM,97357.59,Semanal
+2025-04-01,Total Toneladas Stock Sulfuro SEM,16226.26,Semanal
+2025-04-01,Total Toneladas CAEX SEM,215774.79,Semanal
+2025-04-01,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-01,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-01,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-01,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-01,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-01,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-01,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-01,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-01,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-01,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-01,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-01,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-01,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-01,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-01,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-01,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-01,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-01,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-01,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-02,Total Toneladas,205061.51,Mensual
+2025-04-02,Total Toneladas Chancado,65537.66,Mensual
+2025-04-02,Total Toneladas Chancador,77841.35,Mensual
+2025-04-02,Total Toneladas Dump,19275.78,Mensual
+2025-04-02,Total Toneladas Esteril,92523.75,Mensual
+2025-04-02,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-02,Total Toneladas SEM,212269.64,Semanal
+2025-04-02,Total Toneladas Chancado SEM,67841.38,Semanal
+2025-04-02,Total Toneladas Chancador SEM,80577.56,Semanal
+2025-04-02,Total Toneladas Dump SEM,19953.35,Semanal
+2025-04-02,Total Toneladas Esteril SEM,95776.06,Semanal
+2025-04-02,Total Toneladas Stock Sulfuro SEM,15962.68,Semanal
+2025-04-02,Total Toneladas CAEX SEM,212269.64,Semanal
+2025-04-02,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-02,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-02,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-02,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-02,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-02,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-02,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-02,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-02,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-02,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-02,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-02,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-02,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-02,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-02,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-02,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-02,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-02,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-02,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-03,Total Toneladas,205061.51,Mensual
+2025-04-03,Total Toneladas Chancado,65537.66,Mensual
+2025-04-03,Total Toneladas Chancador,77841.35,Mensual
+2025-04-03,Total Toneladas Dump,19275.78,Mensual
+2025-04-03,Total Toneladas Esteril,92523.75,Mensual
+2025-04-03,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-03,Total Toneladas SEM,216663.56,Semanal
+2025-04-03,Total Toneladas Chancado SEM,69245.67,Semanal
+2025-04-03,Total Toneladas Chancador SEM,82245.49,Semanal
+2025-04-03,Total Toneladas Dump SEM,20366.37,Semanal
+2025-04-03,Total Toneladas Esteril SEM,97758.60,Semanal
+2025-04-03,Total Toneladas Stock Sulfuro SEM,16293.10,Semanal
+2025-04-03,Total Toneladas CAEX SEM,216663.56,Semanal
+2025-04-03,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-03,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-03,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-03,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-03,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-03,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-03,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-03,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-03,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-03,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-03,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-03,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-03,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-03,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-03,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-03,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-03,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-03,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-03,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-04,Total Toneladas,205061.51,Mensual
+2025-04-04,Total Toneladas Chancado,65537.66,Mensual
+2025-04-04,Total Toneladas Chancador,77841.35,Mensual
+2025-04-04,Total Toneladas Dump,19275.78,Mensual
+2025-04-04,Total Toneladas Esteril,92523.75,Mensual
+2025-04-04,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-04,Total Toneladas SEM,212531.88,Semanal
+2025-04-04,Total Toneladas Chancado SEM,67925.19,Semanal
+2025-04-04,Total Toneladas Chancador SEM,80677.10,Semanal
+2025-04-04,Total Toneladas Dump SEM,19978.00,Semanal
+2025-04-04,Total Toneladas Esteril SEM,95894.39,Semanal
+2025-04-04,Total Toneladas Stock Sulfuro SEM,15982.40,Semanal
+2025-04-04,Total Toneladas CAEX SEM,212531.88,Semanal
+2025-04-04,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-04,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-04,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-04,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-04,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-04,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-04,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-04,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-04,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-04,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-04,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-04,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-04,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-04,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-04,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-04,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-04,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-04,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-04,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-05,Total Toneladas,205061.51,Mensual
+2025-04-05,Total Toneladas Chancado,65537.66,Mensual
+2025-04-05,Total Toneladas Chancador,77841.35,Mensual
+2025-04-05,Total Toneladas Dump,19275.78,Mensual
+2025-04-05,Total Toneladas Esteril,92523.75,Mensual
+2025-04-05,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-05,Total Toneladas SEM,216474.73,Semanal
+2025-04-05,Total Toneladas Chancado SEM,69185.32,Semanal
+2025-04-05,Total Toneladas Chancador SEM,82173.81,Semanal
+2025-04-05,Total Toneladas Dump SEM,20348.62,Semanal
+2025-04-05,Total Toneladas Esteril SEM,97673.40,Semanal
+2025-04-05,Total Toneladas Stock Sulfuro SEM,16278.90,Semanal
+2025-04-05,Total Toneladas CAEX SEM,216474.73,Semanal
+2025-04-05,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-05,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-05,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-05,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-05,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-05,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-05,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-05,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-05,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-05,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-05,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-05,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-05,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-05,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-05,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-05,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-05,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-05,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-05,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-06,Total Toneladas,205061.51,Mensual
+2025-04-06,Total Toneladas Chancado,65537.66,Mensual
+2025-04-06,Total Toneladas Chancador,77841.35,Mensual
+2025-04-06,Total Toneladas Dump,19275.78,Mensual
+2025-04-06,Total Toneladas Esteril,92523.75,Mensual
+2025-04-06,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-06,Total Toneladas SEM,212258.02,Semanal
+2025-04-06,Total Toneladas Chancado SEM,67837.66,Semanal
+2025-04-06,Total Toneladas Chancador SEM,80573.14,Semanal
+2025-04-06,Total Toneladas Dump SEM,19952.25,Semanal
+2025-04-06,Total Toneladas Esteril SEM,95770.82,Semanal
+2025-04-06,Total Toneladas Stock Sulfuro SEM,15961.80,Semanal
+2025-04-06,Total Toneladas CAEX SEM,212258.02,Semanal
+2025-04-06,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-06,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-06,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-06,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-06,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-06,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-06,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-06,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-06,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-06,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-06,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-06,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-06,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-06,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-06,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-06,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-06,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-06,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-06,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-07,Total Toneladas,205061.51,Mensual
+2025-04-07,Total Toneladas Chancado,65537.66,Mensual
+2025-04-07,Total Toneladas Chancador,77841.35,Mensual
+2025-04-07,Total Toneladas Dump,19275.78,Mensual
+2025-04-07,Total Toneladas Esteril,92523.75,Mensual
+2025-04-07,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-07,Total Toneladas SEM,200972.55,Semanal
+2025-04-07,Total Toneladas Chancado SEM,64230.83,Semanal
+2025-04-07,Total Toneladas Chancador SEM,76289.18,Semanal
+2025-04-07,Total Toneladas Dump SEM,18891.42,Semanal
+2025-04-07,Total Toneladas Esteril SEM,90678.82,Semanal
+2025-04-07,Total Toneladas Stock Sulfuro SEM,15113.14,Semanal
+2025-04-07,Total Toneladas CAEX SEM,200972.55,Semanal
+2025-04-07,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-07,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-07,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-07,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-07,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-07,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-07,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-07,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-07,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-07,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-07,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-07,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-07,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-07,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-07,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-07,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-07,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-07,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-07,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-08,Total Toneladas,205061.51,Mensual
+2025-04-08,Total Toneladas Chancado,65537.66,Mensual
+2025-04-08,Total Toneladas Chancador,77841.35,Mensual
+2025-04-08,Total Toneladas Dump,19275.78,Mensual
+2025-04-08,Total Toneladas Esteril,92523.75,Mensual
+2025-04-08,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-08,Total Toneladas SEM,197750.13,Semanal
+2025-04-08,Total Toneladas Chancado SEM,63200.94,Semanal
+2025-04-08,Total Toneladas Chancador SEM,75065.95,Semanal
+2025-04-08,Total Toneladas Dump SEM,18588.51,Semanal
+2025-04-08,Total Toneladas Esteril SEM,89224.86,Semanal
+2025-04-08,Total Toneladas Stock Sulfuro SEM,14870.81,Semanal
+2025-04-08,Total Toneladas CAEX SEM,197750.13,Semanal
+2025-04-08,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-08,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-08,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-08,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-08,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-08,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-08,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-08,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-08,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-08,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-08,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-08,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-08,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-08,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-08,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-08,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-08,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-08,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-08,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-09,Total Toneladas,205061.51,Mensual
+2025-04-09,Total Toneladas Chancado,65537.66,Mensual
+2025-04-09,Total Toneladas Chancador,77841.35,Mensual
+2025-04-09,Total Toneladas Dump,19275.78,Mensual
+2025-04-09,Total Toneladas Esteril,92523.75,Mensual
+2025-04-09,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-09,Total Toneladas SEM,197047.71,Semanal
+2025-04-09,Total Toneladas Chancado SEM,62976.45,Semanal
+2025-04-09,Total Toneladas Chancador SEM,74799.31,Semanal
+2025-04-09,Total Toneladas Dump SEM,18522.48,Semanal
+2025-04-09,Total Toneladas Esteril SEM,88907.93,Semanal
+2025-04-09,Total Toneladas Stock Sulfuro SEM,14817.99,Semanal
+2025-04-09,Total Toneladas CAEX SEM,197047.71,Semanal
+2025-04-09,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-09,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-09,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-09,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-09,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-09,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-09,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-09,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-09,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-09,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-09,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-09,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-09,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-09,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-09,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-09,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-09,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-09,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-09,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-10,Total Toneladas,205061.51,Mensual
+2025-04-10,Total Toneladas Chancado,65537.66,Mensual
+2025-04-10,Total Toneladas Chancador,77841.35,Mensual
+2025-04-10,Total Toneladas Dump,19275.78,Mensual
+2025-04-10,Total Toneladas Esteril,92523.75,Mensual
+2025-04-10,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-10,Total Toneladas SEM,197181.79,Semanal
+2025-04-10,Total Toneladas Chancado SEM,63019.30,Semanal
+2025-04-10,Total Toneladas Chancador SEM,74850.21,Semanal
+2025-04-10,Total Toneladas Dump SEM,18535.09,Semanal
+2025-04-10,Total Toneladas Esteril SEM,88968.42,Semanal
+2025-04-10,Total Toneladas Stock Sulfuro SEM,14828.07,Semanal
+2025-04-10,Total Toneladas CAEX SEM,197181.79,Semanal
+2025-04-10,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-10,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-10,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-10,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-10,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-10,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-10,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-10,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-10,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-10,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-10,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-10,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-10,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-10,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-10,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-10,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-10,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-10,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-10,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-11,Total Toneladas,205061.51,Mensual
+2025-04-11,Total Toneladas Chancado,65537.66,Mensual
+2025-04-11,Total Toneladas Chancador,77841.35,Mensual
+2025-04-11,Total Toneladas Dump,19275.78,Mensual
+2025-04-11,Total Toneladas Esteril,92523.75,Mensual
+2025-04-11,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-11,Total Toneladas SEM,197118.68,Semanal
+2025-04-11,Total Toneladas Chancado SEM,62999.13,Semanal
+2025-04-11,Total Toneladas Chancador SEM,74826.25,Semanal
+2025-04-11,Total Toneladas Dump SEM,18529.16,Semanal
+2025-04-11,Total Toneladas Esteril SEM,88939.95,Semanal
+2025-04-11,Total Toneladas Stock Sulfuro SEM,14823.32,Semanal
+2025-04-11,Total Toneladas CAEX SEM,197118.68,Semanal
+2025-04-11,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-11,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-11,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-11,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-11,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-11,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-11,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-11,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-11,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-11,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-11,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-11,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-11,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-11,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-11,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-11,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-11,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-11,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-11,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-12,Total Toneladas,205061.51,Mensual
+2025-04-12,Total Toneladas Chancado,65537.66,Mensual
+2025-04-12,Total Toneladas Chancador,77841.35,Mensual
+2025-04-12,Total Toneladas Dump,19275.78,Mensual
+2025-04-12,Total Toneladas Esteril,92523.75,Mensual
+2025-04-12,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-12,Total Toneladas SEM,201612.51,Semanal
+2025-04-12,Total Toneladas Chancado SEM,64435.36,Semanal
+2025-04-12,Total Toneladas Chancador SEM,76532.11,Semanal
+2025-04-12,Total Toneladas Dump SEM,18951.58,Semanal
+2025-04-12,Total Toneladas Esteril SEM,90967.56,Semanal
+2025-04-12,Total Toneladas Stock Sulfuro SEM,15161.26,Semanal
+2025-04-12,Total Toneladas CAEX SEM,201612.51,Semanal
+2025-04-12,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-12,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-12,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-12,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-12,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-12,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-12,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-12,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-12,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-12,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-12,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-12,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-12,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-12,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-12,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-12,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-12,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-12,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-12,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-13,Total Toneladas,205061.51,Mensual
+2025-04-13,Total Toneladas Chancado,65537.66,Mensual
+2025-04-13,Total Toneladas Chancador,77841.35,Mensual
+2025-04-13,Total Toneladas Dump,19275.78,Mensual
+2025-04-13,Total Toneladas Esteril,92523.75,Mensual
+2025-04-13,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-13,Total Toneladas SEM,201158.92,Semanal
+2025-04-13,Total Toneladas Chancado SEM,64290.39,Semanal
+2025-04-13,Total Toneladas Chancador SEM,76359.92,Semanal
+2025-04-13,Total Toneladas Dump SEM,18908.94,Semanal
+2025-04-13,Total Toneladas Esteril SEM,90762.90,Semanal
+2025-04-13,Total Toneladas Stock Sulfuro SEM,15127.15,Semanal
+2025-04-13,Total Toneladas CAEX SEM,201158.92,Semanal
+2025-04-13,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-13,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-13,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-13,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-13,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-13,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-13,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-13,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-13,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-13,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-13,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-13,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-13,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-13,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-13,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-13,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-13,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-13,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-13,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-14,Total Toneladas,205061.51,Mensual
+2025-04-14,Total Toneladas Chancado,65537.66,Mensual
+2025-04-14,Total Toneladas Chancador,77841.35,Mensual
+2025-04-14,Total Toneladas Dump,19275.78,Mensual
+2025-04-14,Total Toneladas Esteril,92523.75,Mensual
+2025-04-14,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-14,Total Toneladas SEM,217635.78,Semanal
+2025-04-14,Total Toneladas Chancado SEM,69556.39,Semanal
+2025-04-14,Total Toneladas Chancador SEM,82614.54,Semanal
+2025-04-14,Total Toneladas Dump SEM,20457.76,Semanal
+2025-04-14,Total Toneladas Esteril SEM,98197.26,Semanal
+2025-04-14,Total Toneladas Stock Sulfuro SEM,16366.21,Semanal
+2025-04-14,Total Toneladas CAEX SEM,217635.78,Semanal
+2025-04-14,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-14,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-14,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-14,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-14,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-14,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-14,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-14,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-14,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-14,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-14,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-14,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-14,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-14,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-14,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-14,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-14,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-14,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-14,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-15,Total Toneladas,205061.51,Mensual
+2025-04-15,Total Toneladas Chancado,65537.66,Mensual
+2025-04-15,Total Toneladas Chancador,77841.35,Mensual
+2025-04-15,Total Toneladas Dump,19275.78,Mensual
+2025-04-15,Total Toneladas Esteril,92523.75,Mensual
+2025-04-15,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-15,Total Toneladas SEM,214133.06,Semanal
+2025-04-15,Total Toneladas Chancado SEM,68436.93,Semanal
+2025-04-15,Total Toneladas Chancador SEM,81284.91,Semanal
+2025-04-15,Total Toneladas Dump SEM,20128.51,Semanal
+2025-04-15,Total Toneladas Esteril SEM,96616.84,Semanal
+2025-04-15,Total Toneladas Stock Sulfuro SEM,16102.81,Semanal
+2025-04-15,Total Toneladas CAEX SEM,214133.06,Semanal
+2025-04-15,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-15,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-15,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-15,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-15,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-15,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-15,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-15,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-15,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-15,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-15,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-15,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-15,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-15,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-15,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-15,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-15,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-15,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-15,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-16,Total Toneladas,205061.51,Mensual
+2025-04-16,Total Toneladas Chancado,65537.66,Mensual
+2025-04-16,Total Toneladas Chancador,77841.35,Mensual
+2025-04-16,Total Toneladas Dump,19275.78,Mensual
+2025-04-16,Total Toneladas Esteril,92523.75,Mensual
+2025-04-16,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-16,Total Toneladas SEM,212837.83,Semanal
+2025-04-16,Total Toneladas Chancado SEM,68022.97,Semanal
+2025-04-16,Total Toneladas Chancador SEM,80793.24,Semanal
+2025-04-16,Total Toneladas Dump SEM,20006.76,Semanal
+2025-04-16,Total Toneladas Esteril SEM,96032.43,Semanal
+2025-04-16,Total Toneladas Stock Sulfuro SEM,16005.40,Semanal
+2025-04-16,Total Toneladas CAEX SEM,212837.83,Semanal
+2025-04-16,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-16,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-16,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-16,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-16,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-16,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-16,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-16,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-16,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-16,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-16,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-16,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-16,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-16,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-16,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-16,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-16,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-16,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-16,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-17,Total Toneladas,205061.51,Mensual
+2025-04-17,Total Toneladas Chancado,65537.66,Mensual
+2025-04-17,Total Toneladas Chancador,77841.35,Mensual
+2025-04-17,Total Toneladas Dump,19275.78,Mensual
+2025-04-17,Total Toneladas Esteril,92523.75,Mensual
+2025-04-17,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-17,Total Toneladas SEM,212440.84,Semanal
+2025-04-17,Total Toneladas Chancado SEM,67896.09,Semanal
+2025-04-17,Total Toneladas Chancador SEM,80642.54,Semanal
+2025-04-17,Total Toneladas Dump SEM,19969.44,Semanal
+2025-04-17,Total Toneladas Esteril SEM,95853.31,Semanal
+2025-04-17,Total Toneladas Stock Sulfuro SEM,15975.55,Semanal
+2025-04-17,Total Toneladas CAEX SEM,212440.84,Semanal
+2025-04-17,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-17,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-17,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-17,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-17,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-17,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-17,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-17,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-17,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-17,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-17,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-17,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-17,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-17,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-17,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-17,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-17,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-17,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-17,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-18,Total Toneladas,205061.51,Mensual
+2025-04-18,Total Toneladas Chancado,65537.66,Mensual
+2025-04-18,Total Toneladas Chancador,77841.35,Mensual
+2025-04-18,Total Toneladas Dump,19275.78,Mensual
+2025-04-18,Total Toneladas Esteril,92523.75,Mensual
+2025-04-18,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-18,Total Toneladas SEM,218786.72,Semanal
+2025-04-18,Total Toneladas Chancado SEM,69924.23,Semanal
+2025-04-18,Total Toneladas Chancador SEM,83051.44,Semanal
+2025-04-18,Total Toneladas Dump SEM,20565.95,Semanal
+2025-04-18,Total Toneladas Esteril SEM,98716.57,Semanal
+2025-04-18,Total Toneladas Stock Sulfuro SEM,16452.76,Semanal
+2025-04-18,Total Toneladas CAEX SEM,218786.72,Semanal
+2025-04-18,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-18,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-18,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-18,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-18,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-18,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-18,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-18,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-18,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-18,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-18,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-18,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-18,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-18,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-18,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-18,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-18,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-18,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-18,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-19,Total Toneladas,205061.51,Mensual
+2025-04-19,Total Toneladas Chancado,65537.66,Mensual
+2025-04-19,Total Toneladas Chancador,77841.35,Mensual
+2025-04-19,Total Toneladas Dump,19275.78,Mensual
+2025-04-19,Total Toneladas Esteril,92523.75,Mensual
+2025-04-19,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-19,Total Toneladas SEM,214117.33,Semanal
+2025-04-19,Total Toneladas Chancado SEM,68431.90,Semanal
+2025-04-19,Total Toneladas Chancador SEM,81278.94,Semanal
+2025-04-19,Total Toneladas Dump SEM,20127.03,Semanal
+2025-04-19,Total Toneladas Esteril SEM,96609.74,Semanal
+2025-04-19,Total Toneladas Stock Sulfuro SEM,16101.62,Semanal
+2025-04-19,Total Toneladas CAEX SEM,214117.33,Semanal
+2025-04-19,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-19,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-19,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-19,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-19,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-19,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-19,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-19,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-19,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-19,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-19,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-19,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-19,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-19,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-19,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-19,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-19,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-19,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-19,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-20,Total Toneladas,205061.51,Mensual
+2025-04-20,Total Toneladas Chancado,65537.66,Mensual
+2025-04-20,Total Toneladas Chancador,77841.35,Mensual
+2025-04-20,Total Toneladas Dump,19275.78,Mensual
+2025-04-20,Total Toneladas Esteril,92523.75,Mensual
+2025-04-20,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-20,Total Toneladas SEM,217835.04,Semanal
+2025-04-20,Total Toneladas Chancado SEM,69620.08,Semanal
+2025-04-20,Total Toneladas Chancador SEM,82690.18,Semanal
+2025-04-20,Total Toneladas Dump SEM,20476.49,Semanal
+2025-04-20,Total Toneladas Esteril SEM,98287.17,Semanal
+2025-04-20,Total Toneladas Stock Sulfuro SEM,16381.19,Semanal
+2025-04-20,Total Toneladas CAEX SEM,217835.04,Semanal
+2025-04-20,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-20,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-20,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-20,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-20,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-20,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-20,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-20,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-20,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-20,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-20,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-20,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-20,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-20,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-20,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-20,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-20,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-20,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-20,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-21,Total Toneladas,205061.51,Mensual
+2025-04-21,Total Toneladas Chancado,65537.66,Mensual
+2025-04-21,Total Toneladas Chancador,77841.35,Mensual
+2025-04-21,Total Toneladas Dump,19275.78,Mensual
+2025-04-21,Total Toneladas Esteril,92523.75,Mensual
+2025-04-21,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-21,Total Toneladas SEM,218133.41,Semanal
+2025-04-21,Total Toneladas Chancado SEM,69715.44,Semanal
+2025-04-21,Total Toneladas Chancador SEM,82803.44,Semanal
+2025-04-21,Total Toneladas Dump SEM,20504.54,Semanal
+2025-04-21,Total Toneladas Esteril SEM,98421.79,Semanal
+2025-04-21,Total Toneladas Stock Sulfuro SEM,16403.63,Semanal
+2025-04-21,Total Toneladas CAEX SEM,218133.41,Semanal
+2025-04-21,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-21,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-21,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-21,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-21,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-21,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-21,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-21,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-21,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-21,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-21,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-21,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-21,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-21,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-21,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-21,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-21,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-21,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-21,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-22,Total Toneladas,205061.51,Mensual
+2025-04-22,Total Toneladas Chancado,65537.66,Mensual
+2025-04-22,Total Toneladas Chancador,77841.35,Mensual
+2025-04-22,Total Toneladas Dump,19275.78,Mensual
+2025-04-22,Total Toneladas Esteril,92523.75,Mensual
+2025-04-22,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-22,Total Toneladas SEM,219511.02,Semanal
+2025-04-22,Total Toneladas Chancado SEM,70155.72,Semanal
+2025-04-22,Total Toneladas Chancador SEM,83326.38,Semanal
+2025-04-22,Total Toneladas Dump SEM,20634.04,Semanal
+2025-04-22,Total Toneladas Esteril SEM,99043.37,Semanal
+2025-04-22,Total Toneladas Stock Sulfuro SEM,16507.23,Semanal
+2025-04-22,Total Toneladas CAEX SEM,219511.02,Semanal
+2025-04-22,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-22,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-22,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-22,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-22,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-22,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-22,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-22,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-22,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-22,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-22,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-22,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-22,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-22,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-22,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-22,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-22,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-22,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-22,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-23,Total Toneladas,205061.51,Mensual
+2025-04-23,Total Toneladas Chancado,65537.66,Mensual
+2025-04-23,Total Toneladas Chancador,77841.35,Mensual
+2025-04-23,Total Toneladas Dump,19275.78,Mensual
+2025-04-23,Total Toneladas Esteril,92523.75,Mensual
+2025-04-23,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-23,Total Toneladas SEM,214322.66,Semanal
+2025-04-23,Total Toneladas Chancado SEM,68497.52,Semanal
+2025-04-23,Total Toneladas Chancador SEM,81356.88,Semanal
+2025-04-23,Total Toneladas Dump SEM,20146.33,Semanal
+2025-04-23,Total Toneladas Esteril SEM,96702.39,Semanal
+2025-04-23,Total Toneladas Stock Sulfuro SEM,16117.06,Semanal
+2025-04-23,Total Toneladas CAEX SEM,214322.66,Semanal
+2025-04-23,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-23,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-23,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-23,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-23,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-23,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-23,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-23,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-23,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-23,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-23,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-23,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-23,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-23,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-23,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-23,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-23,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-23,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-23,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-24,Total Toneladas,205061.51,Mensual
+2025-04-24,Total Toneladas Chancado,65537.66,Mensual
+2025-04-24,Total Toneladas Chancador,77841.35,Mensual
+2025-04-24,Total Toneladas Dump,19275.78,Mensual
+2025-04-24,Total Toneladas Esteril,92523.75,Mensual
+2025-04-24,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-24,Total Toneladas SEM,216201.14,Semanal
+2025-04-24,Total Toneladas Chancado SEM,69097.89,Semanal
+2025-04-24,Total Toneladas Chancador SEM,82069.95,Semanal
+2025-04-24,Total Toneladas Dump SEM,20322.91,Semanal
+2025-04-24,Total Toneladas Esteril SEM,97549.96,Semanal
+2025-04-24,Total Toneladas Stock Sulfuro SEM,16258.33,Semanal
+2025-04-24,Total Toneladas CAEX SEM,216201.14,Semanal
+2025-04-24,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-24,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-24,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-24,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-24,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-24,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-24,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-24,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-24,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-24,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-24,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-24,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-24,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-24,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-24,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-24,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-24,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-24,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-24,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-25,Total Toneladas,205061.51,Mensual
+2025-04-25,Total Toneladas Chancado,65537.66,Mensual
+2025-04-25,Total Toneladas Chancador,77841.35,Mensual
+2025-04-25,Total Toneladas Dump,19275.78,Mensual
+2025-04-25,Total Toneladas Esteril,92523.75,Mensual
+2025-04-25,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-25,Total Toneladas SEM,213238.18,Semanal
+2025-04-25,Total Toneladas Chancado SEM,68150.92,Semanal
+2025-04-25,Total Toneladas Chancador SEM,80945.21,Semanal
+2025-04-25,Total Toneladas Dump SEM,20044.39,Semanal
+2025-04-25,Total Toneladas Esteril SEM,96213.07,Semanal
+2025-04-25,Total Toneladas Stock Sulfuro SEM,16035.51,Semanal
+2025-04-25,Total Toneladas CAEX SEM,213238.18,Semanal
+2025-04-25,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-25,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-25,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-25,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-25,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-25,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-25,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-25,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-25,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-25,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-25,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-25,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-25,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-25,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-25,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-25,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-25,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-25,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-25,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-26,Total Toneladas,205061.51,Mensual
+2025-04-26,Total Toneladas Chancado,65537.66,Mensual
+2025-04-26,Total Toneladas Chancador,77841.35,Mensual
+2025-04-26,Total Toneladas Dump,19275.78,Mensual
+2025-04-26,Total Toneladas Esteril,92523.75,Mensual
+2025-04-26,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-26,Total Toneladas SEM,220377.17,Semanal
+2025-04-26,Total Toneladas Chancado SEM,70432.54,Semanal
+2025-04-26,Total Toneladas Chancador SEM,83655.18,Semanal
+2025-04-26,Total Toneladas Dump SEM,20715.45,Semanal
+2025-04-26,Total Toneladas Esteril SEM,99434.18,Semanal
+2025-04-26,Total Toneladas Stock Sulfuro SEM,16572.36,Semanal
+2025-04-26,Total Toneladas CAEX SEM,220377.17,Semanal
+2025-04-26,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-26,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-26,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-26,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-26,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-26,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-26,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-26,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-26,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-26,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-26,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-26,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-26,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-26,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-26,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-26,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-26,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-26,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-26,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-27,Total Toneladas,205061.51,Mensual
+2025-04-27,Total Toneladas Chancado,65537.66,Mensual
+2025-04-27,Total Toneladas Chancador,77841.35,Mensual
+2025-04-27,Total Toneladas Dump,19275.78,Mensual
+2025-04-27,Total Toneladas Esteril,92523.75,Mensual
+2025-04-27,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-27,Total Toneladas SEM,214942.60,Semanal
+2025-04-27,Total Toneladas Chancado SEM,68695.66,Semanal
+2025-04-27,Total Toneladas Chancador SEM,81592.21,Semanal
+2025-04-27,Total Toneladas Dump SEM,20204.60,Semanal
+2025-04-27,Total Toneladas Esteril SEM,96982.10,Semanal
+2025-04-27,Total Toneladas Stock Sulfuro SEM,16163.68,Semanal
+2025-04-27,Total Toneladas CAEX SEM,214942.60,Semanal
+2025-04-27,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-27,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-27,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-27,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-27,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-27,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-27,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-27,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-27,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-27,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-27,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-27,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-27,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-27,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-27,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-27,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-27,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-27,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-27,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-28,Total Toneladas,205061.51,Mensual
+2025-04-28,Total Toneladas Chancado,65537.66,Mensual
+2025-04-28,Total Toneladas Chancador,77841.35,Mensual
+2025-04-28,Total Toneladas Dump,19275.78,Mensual
+2025-04-28,Total Toneladas Esteril,92523.75,Mensual
+2025-04-28,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-28,Total Toneladas SEM,198803.05,Semanal
+2025-04-28,Total Toneladas Chancado SEM,63537.45,Semanal
+2025-04-28,Total Toneladas Chancador SEM,75465.64,Semanal
+2025-04-28,Total Toneladas Dump SEM,18687.49,Semanal
+2025-04-28,Total Toneladas Esteril SEM,89699.94,Semanal
+2025-04-28,Total Toneladas Stock Sulfuro SEM,14949.99,Semanal
+2025-04-28,Total Toneladas CAEX SEM,198803.05,Semanal
+2025-04-28,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-28,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-28,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-28,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-28,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-28,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-28,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-28,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-28,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-28,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-28,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-28,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-28,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-28,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-28,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-28,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-28,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-28,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-28,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-29,Total Toneladas,205061.51,Mensual
+2025-04-29,Total Toneladas Chancado,65537.66,Mensual
+2025-04-29,Total Toneladas Chancador,77841.35,Mensual
+2025-04-29,Total Toneladas Dump,19275.78,Mensual
+2025-04-29,Total Toneladas Esteril,92523.75,Mensual
+2025-04-29,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-29,Total Toneladas SEM,200730.36,Semanal
+2025-04-29,Total Toneladas Chancado SEM,64153.42,Semanal
+2025-04-29,Total Toneladas Chancador SEM,76197.25,Semanal
+2025-04-29,Total Toneladas Dump SEM,18868.65,Semanal
+2025-04-29,Total Toneladas Esteril SEM,90569.54,Semanal
+2025-04-29,Total Toneladas Stock Sulfuro SEM,15094.92,Semanal
+2025-04-29,Total Toneladas CAEX SEM,200730.36,Semanal
+2025-04-29,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-29,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-29,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-29,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-29,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-29,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-29,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-29,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-29,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-29,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-29,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-29,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-29,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-29,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-29,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-29,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-29,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-29,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-29,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-04-30,Total Toneladas,205061.51,Mensual
+2025-04-30,Total Toneladas Chancado,65537.66,Mensual
+2025-04-30,Total Toneladas Chancador,77841.35,Mensual
+2025-04-30,Total Toneladas Dump,19275.78,Mensual
+2025-04-30,Total Toneladas Esteril,92523.75,Mensual
+2025-04-30,Total Toneladas Stock Sulfuro,15420.63,Mensual
+2025-04-30,Total Toneladas SEM,194842.79,Semanal
+2025-04-30,Total Toneladas Chancado SEM,62271.76,Semanal
+2025-04-30,Total Toneladas Chancador SEM,73962.32,Semanal
+2025-04-30,Total Toneladas Dump SEM,18315.22,Semanal
+2025-04-30,Total Toneladas Esteril SEM,87913.07,Semanal
+2025-04-30,Total Toneladas Stock Sulfuro SEM,14652.18,Semanal
+2025-04-30,Total Toneladas CAEX SEM,194842.79,Semanal
+2025-04-30,Horas Nominales CAEX SEM,624.00,Semanal
+2025-04-30,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-04-30,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-04-30,Horas Operativas CAEX SEM,438.05,Semanal
+2025-04-30,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-04-30,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-04-30,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-04-30,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-04-30,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-04-30,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-04-30,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-04-30,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-04-30,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-04-30,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-04-30,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-04-30,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-04-30,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-04-30,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-04-30,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-01,Total Toneladas,209520.62,Mensual
+2025-05-01,Total Toneladas Chancado,66962.79,Mensual
+2025-05-01,Total Toneladas Chancador,79534.03,Mensual
+2025-05-01,Total Toneladas Dump,19694.94,Mensual
+2025-05-01,Total Toneladas Esteril,94535.71,Mensual
+2025-05-01,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-01,Total Toneladas SEM,197323.67,Semanal
+2025-05-01,Total Toneladas Chancado SEM,63064.64,Semanal
+2025-05-01,Total Toneladas Chancador SEM,74904.06,Semanal
+2025-05-01,Total Toneladas Dump SEM,18548.42,Semanal
+2025-05-01,Total Toneladas Esteril SEM,89032.44,Semanal
+2025-05-01,Total Toneladas Stock Sulfuro SEM,14838.74,Semanal
+2025-05-01,Total Toneladas CAEX SEM,197323.67,Semanal
+2025-05-01,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-01,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-01,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-01,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-01,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-01,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-01,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-01,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-01,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-01,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-01,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-01,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-01,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-01,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-01,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-01,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-01,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-01,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-01,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-02,Total Toneladas,209520.62,Mensual
+2025-05-02,Total Toneladas Chancado,66962.79,Mensual
+2025-05-02,Total Toneladas Chancador,79534.03,Mensual
+2025-05-02,Total Toneladas Dump,19694.94,Mensual
+2025-05-02,Total Toneladas Esteril,94535.71,Mensual
+2025-05-02,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-02,Total Toneladas SEM,196361.86,Semanal
+2025-05-02,Total Toneladas Chancado SEM,62757.25,Semanal
+2025-05-02,Total Toneladas Chancador SEM,74538.96,Semanal
+2025-05-02,Total Toneladas Dump SEM,18458.01,Semanal
+2025-05-02,Total Toneladas Esteril SEM,88598.47,Semanal
+2025-05-02,Total Toneladas Stock Sulfuro SEM,14766.41,Semanal
+2025-05-02,Total Toneladas CAEX SEM,196361.86,Semanal
+2025-05-02,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-02,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-02,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-02,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-02,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-02,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-02,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-02,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-02,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-02,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-02,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-02,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-02,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-02,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-02,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-02,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-02,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-02,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-02,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-03,Total Toneladas,209520.62,Mensual
+2025-05-03,Total Toneladas Chancado,66962.79,Mensual
+2025-05-03,Total Toneladas Chancador,79534.03,Mensual
+2025-05-03,Total Toneladas Dump,19694.94,Mensual
+2025-05-03,Total Toneladas Esteril,94535.71,Mensual
+2025-05-03,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-03,Total Toneladas SEM,195086.25,Semanal
+2025-05-03,Total Toneladas Chancado SEM,62349.57,Semanal
+2025-05-03,Total Toneladas Chancador SEM,74054.74,Semanal
+2025-05-03,Total Toneladas Dump SEM,18338.11,Semanal
+2025-05-03,Total Toneladas Esteril SEM,88022.92,Semanal
+2025-05-03,Total Toneladas Stock Sulfuro SEM,14670.49,Semanal
+2025-05-03,Total Toneladas CAEX SEM,195086.25,Semanal
+2025-05-03,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-03,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-03,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-03,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-03,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-03,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-03,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-03,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-03,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-03,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-03,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-03,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-03,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-03,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-03,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-03,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-03,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-03,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-03,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-04,Total Toneladas,209520.62,Mensual
+2025-05-04,Total Toneladas Chancado,66962.79,Mensual
+2025-05-04,Total Toneladas Chancador,79534.03,Mensual
+2025-05-04,Total Toneladas Dump,19694.94,Mensual
+2025-05-04,Total Toneladas Esteril,94535.71,Mensual
+2025-05-04,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-04,Total Toneladas SEM,196509.98,Semanal
+2025-05-04,Total Toneladas Chancado SEM,62804.59,Semanal
+2025-05-04,Total Toneladas Chancador SEM,74595.19,Semanal
+2025-05-04,Total Toneladas Dump SEM,18471.94,Semanal
+2025-05-04,Total Toneladas Esteril SEM,88665.30,Semanal
+2025-05-04,Total Toneladas Stock Sulfuro SEM,14777.55,Semanal
+2025-05-04,Total Toneladas CAEX SEM,196509.98,Semanal
+2025-05-04,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-04,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-04,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-04,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-04,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-04,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-04,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-04,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-04,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-04,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-04,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-04,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-04,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-04,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-04,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-04,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-04,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-04,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-04,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-05,Total Toneladas,209520.62,Mensual
+2025-05-05,Total Toneladas Chancado,66962.79,Mensual
+2025-05-05,Total Toneladas Chancador,79534.03,Mensual
+2025-05-05,Total Toneladas Dump,19694.94,Mensual
+2025-05-05,Total Toneladas Esteril,94535.71,Mensual
+2025-05-05,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-05,Total Toneladas SEM,199707.29,Semanal
+2025-05-05,Total Toneladas Chancado SEM,63826.45,Semanal
+2025-05-05,Total Toneladas Chancador SEM,75808.89,Semanal
+2025-05-05,Total Toneladas Dump SEM,18772.49,Semanal
+2025-05-05,Total Toneladas Esteril SEM,90107.93,Semanal
+2025-05-05,Total Toneladas Stock Sulfuro SEM,15017.99,Semanal
+2025-05-05,Total Toneladas CAEX SEM,199707.29,Semanal
+2025-05-05,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-05,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-05,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-05,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-05,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-05,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-05,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-05,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-05,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-05,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-05,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-05,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-05,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-05,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-05,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-05,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-05,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-05,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-05,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-06,Total Toneladas,209520.62,Mensual
+2025-05-06,Total Toneladas Chancado,66962.79,Mensual
+2025-05-06,Total Toneladas Chancador,79534.03,Mensual
+2025-05-06,Total Toneladas Dump,19694.94,Mensual
+2025-05-06,Total Toneladas Esteril,94535.71,Mensual
+2025-05-06,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-06,Total Toneladas SEM,203999.91,Semanal
+2025-05-06,Total Toneladas Chancado SEM,65198.37,Semanal
+2025-05-06,Total Toneladas Chancador SEM,77438.37,Semanal
+2025-05-06,Total Toneladas Dump SEM,19175.99,Semanal
+2025-05-06,Total Toneladas Esteril SEM,92044.76,Semanal
+2025-05-06,Total Toneladas Stock Sulfuro SEM,15340.79,Semanal
+2025-05-06,Total Toneladas CAEX SEM,203999.91,Semanal
+2025-05-06,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-06,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-06,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-06,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-06,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-06,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-06,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-06,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-06,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-06,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-06,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-06,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-06,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-06,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-06,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-06,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-06,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-06,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-06,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-07,Total Toneladas,209520.62,Mensual
+2025-05-07,Total Toneladas Chancado,66962.79,Mensual
+2025-05-07,Total Toneladas Chancador,79534.03,Mensual
+2025-05-07,Total Toneladas Dump,19694.94,Mensual
+2025-05-07,Total Toneladas Esteril,94535.71,Mensual
+2025-05-07,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-07,Total Toneladas SEM,198198.57,Semanal
+2025-05-07,Total Toneladas Chancado SEM,63344.26,Semanal
+2025-05-07,Total Toneladas Chancador SEM,75236.18,Semanal
+2025-05-07,Total Toneladas Dump SEM,18630.67,Semanal
+2025-05-07,Total Toneladas Esteril SEM,89427.20,Semanal
+2025-05-07,Total Toneladas Stock Sulfuro SEM,14904.53,Semanal
+2025-05-07,Total Toneladas CAEX SEM,198198.57,Semanal
+2025-05-07,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-07,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-07,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-07,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-07,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-07,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-07,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-07,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-07,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-07,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-07,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-07,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-07,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-07,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-07,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-07,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-07,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-07,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-07,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-08,Total Toneladas,209520.62,Mensual
+2025-05-08,Total Toneladas Chancado,66962.79,Mensual
+2025-05-08,Total Toneladas Chancador,79534.03,Mensual
+2025-05-08,Total Toneladas Dump,19694.94,Mensual
+2025-05-08,Total Toneladas Esteril,94535.71,Mensual
+2025-05-08,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-08,Total Toneladas SEM,199770.16,Semanal
+2025-05-08,Total Toneladas Chancado SEM,63846.54,Semanal
+2025-05-08,Total Toneladas Chancador SEM,75832.75,Semanal
+2025-05-08,Total Toneladas Dump SEM,18778.40,Semanal
+2025-05-08,Total Toneladas Esteril SEM,90136.30,Semanal
+2025-05-08,Total Toneladas Stock Sulfuro SEM,15022.72,Semanal
+2025-05-08,Total Toneladas CAEX SEM,199770.16,Semanal
+2025-05-08,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-08,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-08,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-08,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-08,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-08,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-08,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-08,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-08,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-08,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-08,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-08,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-08,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-08,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-08,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-08,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-08,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-08,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-08,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-09,Total Toneladas,209520.62,Mensual
+2025-05-09,Total Toneladas Chancado,66962.79,Mensual
+2025-05-09,Total Toneladas Chancador,79534.03,Mensual
+2025-05-09,Total Toneladas Dump,19694.94,Mensual
+2025-05-09,Total Toneladas Esteril,94535.71,Mensual
+2025-05-09,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-09,Total Toneladas SEM,205043.66,Semanal
+2025-05-09,Total Toneladas Chancado SEM,65531.95,Semanal
+2025-05-09,Total Toneladas Chancador SEM,77834.57,Semanal
+2025-05-09,Total Toneladas Dump SEM,19274.10,Semanal
+2025-05-09,Total Toneladas Esteril SEM,92515.70,Semanal
+2025-05-09,Total Toneladas Stock Sulfuro SEM,15419.28,Semanal
+2025-05-09,Total Toneladas CAEX SEM,205043.66,Semanal
+2025-05-09,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-09,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-09,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-09,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-09,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-09,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-09,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-09,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-09,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-09,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-09,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-09,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-09,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-09,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-09,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-09,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-09,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-09,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-09,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-10,Total Toneladas,209520.62,Mensual
+2025-05-10,Total Toneladas Chancado,66962.79,Mensual
+2025-05-10,Total Toneladas Chancador,79534.03,Mensual
+2025-05-10,Total Toneladas Dump,19694.94,Mensual
+2025-05-10,Total Toneladas Esteril,94535.71,Mensual
+2025-05-10,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-10,Total Toneladas SEM,198495.16,Semanal
+2025-05-10,Total Toneladas Chancado SEM,63439.05,Semanal
+2025-05-10,Total Toneladas Chancador SEM,75348.76,Semanal
+2025-05-10,Total Toneladas Dump SEM,18658.55,Semanal
+2025-05-10,Total Toneladas Esteril SEM,89561.02,Semanal
+2025-05-10,Total Toneladas Stock Sulfuro SEM,14926.84,Semanal
+2025-05-10,Total Toneladas CAEX SEM,198495.16,Semanal
+2025-05-10,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-10,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-10,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-10,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-10,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-10,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-10,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-10,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-10,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-10,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-10,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-10,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-10,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-10,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-10,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-10,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-10,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-10,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-10,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-11,Total Toneladas,209520.62,Mensual
+2025-05-11,Total Toneladas Chancado,66962.79,Mensual
+2025-05-11,Total Toneladas Chancador,79534.03,Mensual
+2025-05-11,Total Toneladas Dump,19694.94,Mensual
+2025-05-11,Total Toneladas Esteril,94535.71,Mensual
+2025-05-11,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-11,Total Toneladas SEM,204234.75,Semanal
+2025-05-11,Total Toneladas Chancado SEM,65273.43,Semanal
+2025-05-11,Total Toneladas Chancador SEM,77527.51,Semanal
+2025-05-11,Total Toneladas Dump SEM,19198.07,Semanal
+2025-05-11,Total Toneladas Esteril SEM,92150.72,Semanal
+2025-05-11,Total Toneladas Stock Sulfuro SEM,15358.45,Semanal
+2025-05-11,Total Toneladas CAEX SEM,204234.75,Semanal
+2025-05-11,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-11,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-11,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-11,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-11,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-11,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-11,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-11,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-11,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-11,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-11,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-11,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-11,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-11,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-11,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-11,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-11,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-11,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-11,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-12,Total Toneladas,209520.62,Mensual
+2025-05-12,Total Toneladas Chancado,66962.79,Mensual
+2025-05-12,Total Toneladas Chancador,79534.03,Mensual
+2025-05-12,Total Toneladas Dump,19694.94,Mensual
+2025-05-12,Total Toneladas Esteril,94535.71,Mensual
+2025-05-12,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-12,Total Toneladas SEM,204474.71,Semanal
+2025-05-12,Total Toneladas Chancado SEM,65350.12,Semanal
+2025-05-12,Total Toneladas Chancador SEM,77618.60,Semanal
+2025-05-12,Total Toneladas Dump SEM,19220.62,Semanal
+2025-05-12,Total Toneladas Esteril SEM,92258.99,Semanal
+2025-05-12,Total Toneladas Stock Sulfuro SEM,15376.50,Semanal
+2025-05-12,Total Toneladas CAEX SEM,204474.71,Semanal
+2025-05-12,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-12,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-12,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-12,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-12,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-12,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-12,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-12,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-12,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-12,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-12,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-12,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-12,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-12,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-12,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-12,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-12,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-12,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-12,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-13,Total Toneladas,209520.62,Mensual
+2025-05-13,Total Toneladas Chancado,66962.79,Mensual
+2025-05-13,Total Toneladas Chancador,79534.03,Mensual
+2025-05-13,Total Toneladas Dump,19694.94,Mensual
+2025-05-13,Total Toneladas Esteril,94535.71,Mensual
+2025-05-13,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-13,Total Toneladas SEM,205002.81,Semanal
+2025-05-13,Total Toneladas Chancado SEM,65518.90,Semanal
+2025-05-13,Total Toneladas Chancador SEM,77819.07,Semanal
+2025-05-13,Total Toneladas Dump SEM,19270.26,Semanal
+2025-05-13,Total Toneladas Esteril SEM,92497.27,Semanal
+2025-05-13,Total Toneladas Stock Sulfuro SEM,15416.21,Semanal
+2025-05-13,Total Toneladas CAEX SEM,205002.81,Semanal
+2025-05-13,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-13,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-13,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-13,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-13,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-13,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-13,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-13,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-13,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-13,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-13,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-13,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-13,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-13,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-13,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-13,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-13,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-13,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-13,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-14,Total Toneladas,209520.62,Mensual
+2025-05-14,Total Toneladas Chancado,66962.79,Mensual
+2025-05-14,Total Toneladas Chancador,79534.03,Mensual
+2025-05-14,Total Toneladas Dump,19694.94,Mensual
+2025-05-14,Total Toneladas Esteril,94535.71,Mensual
+2025-05-14,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-14,Total Toneladas SEM,204302.41,Semanal
+2025-05-14,Total Toneladas Chancado SEM,65295.05,Semanal
+2025-05-14,Total Toneladas Chancador SEM,77553.20,Semanal
+2025-05-14,Total Toneladas Dump SEM,19204.43,Semanal
+2025-05-14,Total Toneladas Esteril SEM,92181.25,Semanal
+2025-05-14,Total Toneladas Stock Sulfuro SEM,15363.54,Semanal
+2025-05-14,Total Toneladas CAEX SEM,204302.41,Semanal
+2025-05-14,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-14,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-14,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-14,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-14,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-14,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-14,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-14,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-14,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-14,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-14,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-14,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-14,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-14,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-14,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-14,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-14,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-14,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-14,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-15,Total Toneladas,209520.62,Mensual
+2025-05-15,Total Toneladas Chancado,66962.79,Mensual
+2025-05-15,Total Toneladas Chancador,79534.03,Mensual
+2025-05-15,Total Toneladas Dump,19694.94,Mensual
+2025-05-15,Total Toneladas Esteril,94535.71,Mensual
+2025-05-15,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-15,Total Toneladas SEM,210440.54,Semanal
+2025-05-15,Total Toneladas Chancado SEM,67256.80,Semanal
+2025-05-15,Total Toneladas Chancador SEM,79883.23,Semanal
+2025-05-15,Total Toneladas Dump SEM,19781.41,Semanal
+2025-05-15,Total Toneladas Esteril SEM,94950.77,Semanal
+2025-05-15,Total Toneladas Stock Sulfuro SEM,15825.13,Semanal
+2025-05-15,Total Toneladas CAEX SEM,210440.54,Semanal
+2025-05-15,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-15,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-15,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-15,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-15,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-15,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-15,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-15,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-15,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-15,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-15,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-15,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-15,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-15,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-15,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-15,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-15,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-15,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-15,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-16,Total Toneladas,209520.62,Mensual
+2025-05-16,Total Toneladas Chancado,66962.79,Mensual
+2025-05-16,Total Toneladas Chancador,79534.03,Mensual
+2025-05-16,Total Toneladas Dump,19694.94,Mensual
+2025-05-16,Total Toneladas Esteril,94535.71,Mensual
+2025-05-16,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-16,Total Toneladas SEM,203164.72,Semanal
+2025-05-16,Total Toneladas Chancado SEM,64931.44,Semanal
+2025-05-16,Total Toneladas Chancador SEM,77121.33,Semanal
+2025-05-16,Total Toneladas Dump SEM,19097.48,Semanal
+2025-05-16,Total Toneladas Esteril SEM,91667.92,Semanal
+2025-05-16,Total Toneladas Stock Sulfuro SEM,15277.99,Semanal
+2025-05-16,Total Toneladas CAEX SEM,203164.72,Semanal
+2025-05-16,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-16,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-16,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-16,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-16,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-16,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-16,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-16,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-16,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-16,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-16,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-16,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-16,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-16,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-16,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-16,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-16,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-16,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-16,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-17,Total Toneladas,209520.62,Mensual
+2025-05-17,Total Toneladas Chancado,66962.79,Mensual
+2025-05-17,Total Toneladas Chancador,79534.03,Mensual
+2025-05-17,Total Toneladas Dump,19694.94,Mensual
+2025-05-17,Total Toneladas Esteril,94535.71,Mensual
+2025-05-17,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-17,Total Toneladas SEM,210168.78,Semanal
+2025-05-17,Total Toneladas Chancado SEM,67169.94,Semanal
+2025-05-17,Total Toneladas Chancador SEM,79780.07,Semanal
+2025-05-17,Total Toneladas Dump SEM,19755.87,Semanal
+2025-05-17,Total Toneladas Esteril SEM,94828.15,Semanal
+2025-05-17,Total Toneladas Stock Sulfuro SEM,15804.69,Semanal
+2025-05-17,Total Toneladas CAEX SEM,210168.78,Semanal
+2025-05-17,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-17,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-17,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-17,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-17,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-17,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-17,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-17,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-17,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-17,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-17,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-17,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-17,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-17,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-17,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-17,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-17,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-17,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-17,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-18,Total Toneladas,209520.62,Mensual
+2025-05-18,Total Toneladas Chancado,66962.79,Mensual
+2025-05-18,Total Toneladas Chancador,79534.03,Mensual
+2025-05-18,Total Toneladas Dump,19694.94,Mensual
+2025-05-18,Total Toneladas Esteril,94535.71,Mensual
+2025-05-18,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-18,Total Toneladas SEM,202840.61,Semanal
+2025-05-18,Total Toneladas Chancado SEM,64827.86,Semanal
+2025-05-18,Total Toneladas Chancador SEM,76998.29,Semanal
+2025-05-18,Total Toneladas Dump SEM,19067.02,Semanal
+2025-05-18,Total Toneladas Esteril SEM,91521.68,Semanal
+2025-05-18,Total Toneladas Stock Sulfuro SEM,15253.61,Semanal
+2025-05-18,Total Toneladas CAEX SEM,202840.61,Semanal
+2025-05-18,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-18,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-18,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-18,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-18,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-18,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-18,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-18,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-18,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-18,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-18,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-18,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-18,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-18,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-18,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-18,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-18,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-18,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-18,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-19,Total Toneladas,209520.62,Mensual
+2025-05-19,Total Toneladas Chancado,66962.79,Mensual
+2025-05-19,Total Toneladas Chancador,79534.03,Mensual
+2025-05-19,Total Toneladas Dump,19694.94,Mensual
+2025-05-19,Total Toneladas Esteril,94535.71,Mensual
+2025-05-19,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-19,Total Toneladas SEM,216749.61,Semanal
+2025-05-19,Total Toneladas Chancado SEM,69273.18,Semanal
+2025-05-19,Total Toneladas Chancador SEM,82278.15,Semanal
+2025-05-19,Total Toneladas Dump SEM,20374.46,Semanal
+2025-05-19,Total Toneladas Esteril SEM,97797.42,Semanal
+2025-05-19,Total Toneladas Stock Sulfuro SEM,16299.57,Semanal
+2025-05-19,Total Toneladas CAEX SEM,216749.61,Semanal
+2025-05-19,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-19,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-19,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-19,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-19,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-19,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-19,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-19,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-19,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-19,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-19,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-19,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-19,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-19,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-19,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-19,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-19,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-19,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-19,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-20,Total Toneladas,209520.62,Mensual
+2025-05-20,Total Toneladas Chancado,66962.79,Mensual
+2025-05-20,Total Toneladas Chancador,79534.03,Mensual
+2025-05-20,Total Toneladas Dump,19694.94,Mensual
+2025-05-20,Total Toneladas Esteril,94535.71,Mensual
+2025-05-20,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-20,Total Toneladas SEM,216964.31,Semanal
+2025-05-20,Total Toneladas Chancado SEM,69341.79,Semanal
+2025-05-20,Total Toneladas Chancador SEM,82359.65,Semanal
+2025-05-20,Total Toneladas Dump SEM,20394.64,Semanal
+2025-05-20,Total Toneladas Esteril SEM,97894.30,Semanal
+2025-05-20,Total Toneladas Stock Sulfuro SEM,16315.72,Semanal
+2025-05-20,Total Toneladas CAEX SEM,216964.31,Semanal
+2025-05-20,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-20,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-20,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-20,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-20,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-20,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-20,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-20,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-20,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-20,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-20,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-20,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-20,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-20,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-20,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-20,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-20,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-20,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-20,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-21,Total Toneladas,209520.62,Mensual
+2025-05-21,Total Toneladas Chancado,66962.79,Mensual
+2025-05-21,Total Toneladas Chancador,79534.03,Mensual
+2025-05-21,Total Toneladas Dump,19694.94,Mensual
+2025-05-21,Total Toneladas Esteril,94535.71,Mensual
+2025-05-21,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-21,Total Toneladas SEM,216471.40,Semanal
+2025-05-21,Total Toneladas Chancado SEM,69184.26,Semanal
+2025-05-21,Total Toneladas Chancador SEM,82172.54,Semanal
+2025-05-21,Total Toneladas Dump SEM,20348.31,Semanal
+2025-05-21,Total Toneladas Esteril SEM,97671.90,Semanal
+2025-05-21,Total Toneladas Stock Sulfuro SEM,16278.65,Semanal
+2025-05-21,Total Toneladas CAEX SEM,216471.40,Semanal
+2025-05-21,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-21,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-21,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-21,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-21,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-21,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-21,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-21,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-21,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-21,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-21,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-21,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-21,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-21,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-21,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-21,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-21,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-21,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-21,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-22,Total Toneladas,209520.62,Mensual
+2025-05-22,Total Toneladas Chancado,66962.79,Mensual
+2025-05-22,Total Toneladas Chancador,79534.03,Mensual
+2025-05-22,Total Toneladas Dump,19694.94,Mensual
+2025-05-22,Total Toneladas Esteril,94535.71,Mensual
+2025-05-22,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-22,Total Toneladas SEM,212621.08,Semanal
+2025-05-22,Total Toneladas Chancado SEM,67953.70,Semanal
+2025-05-22,Total Toneladas Chancador SEM,80710.96,Semanal
+2025-05-22,Total Toneladas Dump SEM,19986.38,Semanal
+2025-05-22,Total Toneladas Esteril SEM,95934.63,Semanal
+2025-05-22,Total Toneladas Stock Sulfuro SEM,15989.11,Semanal
+2025-05-22,Total Toneladas CAEX SEM,212621.08,Semanal
+2025-05-22,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-22,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-22,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-22,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-22,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-22,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-22,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-22,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-22,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-22,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-22,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-22,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-22,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-22,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-22,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-22,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-22,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-22,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-22,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-23,Total Toneladas,209520.62,Mensual
+2025-05-23,Total Toneladas Chancado,66962.79,Mensual
+2025-05-23,Total Toneladas Chancador,79534.03,Mensual
+2025-05-23,Total Toneladas Dump,19694.94,Mensual
+2025-05-23,Total Toneladas Esteril,94535.71,Mensual
+2025-05-23,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-23,Total Toneladas SEM,211815.70,Semanal
+2025-05-23,Total Toneladas Chancado SEM,67696.30,Semanal
+2025-05-23,Total Toneladas Chancador SEM,80405.24,Semanal
+2025-05-23,Total Toneladas Dump SEM,19910.68,Semanal
+2025-05-23,Total Toneladas Esteril SEM,95571.24,Semanal
+2025-05-23,Total Toneladas Stock Sulfuro SEM,15928.54,Semanal
+2025-05-23,Total Toneladas CAEX SEM,211815.70,Semanal
+2025-05-23,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-23,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-23,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-23,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-23,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-23,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-23,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-23,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-23,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-23,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-23,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-23,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-23,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-23,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-23,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-23,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-23,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-23,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-23,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-24,Total Toneladas,209520.62,Mensual
+2025-05-24,Total Toneladas Chancado,66962.79,Mensual
+2025-05-24,Total Toneladas Chancador,79534.03,Mensual
+2025-05-24,Total Toneladas Dump,19694.94,Mensual
+2025-05-24,Total Toneladas Esteril,94535.71,Mensual
+2025-05-24,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-24,Total Toneladas SEM,214381.13,Semanal
+2025-05-24,Total Toneladas Chancado SEM,68516.21,Semanal
+2025-05-24,Total Toneladas Chancador SEM,81379.08,Semanal
+2025-05-24,Total Toneladas Dump SEM,20151.83,Semanal
+2025-05-24,Total Toneladas Esteril SEM,96728.77,Semanal
+2025-05-24,Total Toneladas Stock Sulfuro SEM,16121.46,Semanal
+2025-05-24,Total Toneladas CAEX SEM,214381.13,Semanal
+2025-05-24,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-24,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-24,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-24,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-24,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-24,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-24,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-24,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-24,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-24,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-24,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-24,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-24,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-24,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-24,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-24,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-24,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-24,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-24,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-25,Total Toneladas,209520.62,Mensual
+2025-05-25,Total Toneladas Chancado,66962.79,Mensual
+2025-05-25,Total Toneladas Chancador,79534.03,Mensual
+2025-05-25,Total Toneladas Dump,19694.94,Mensual
+2025-05-25,Total Toneladas Esteril,94535.71,Mensual
+2025-05-25,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-25,Total Toneladas SEM,212097.07,Semanal
+2025-05-25,Total Toneladas Chancado SEM,67786.22,Semanal
+2025-05-25,Total Toneladas Chancador SEM,80512.05,Semanal
+2025-05-25,Total Toneladas Dump SEM,19937.12,Semanal
+2025-05-25,Total Toneladas Esteril SEM,95698.20,Semanal
+2025-05-25,Total Toneladas Stock Sulfuro SEM,15949.70,Semanal
+2025-05-25,Total Toneladas CAEX SEM,212097.07,Semanal
+2025-05-25,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-25,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-25,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-25,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-25,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-25,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-25,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-25,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-25,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-25,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-25,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-25,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-25,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-25,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-25,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-25,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-25,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-25,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-25,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-26,Total Toneladas,209520.62,Mensual
+2025-05-26,Total Toneladas Chancado,66962.79,Mensual
+2025-05-26,Total Toneladas Chancador,79534.03,Mensual
+2025-05-26,Total Toneladas Dump,19694.94,Mensual
+2025-05-26,Total Toneladas Esteril,94535.71,Mensual
+2025-05-26,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-26,Total Toneladas SEM,217249.22,Semanal
+2025-05-26,Total Toneladas Chancado SEM,69432.85,Semanal
+2025-05-26,Total Toneladas Chancador SEM,82467.81,Semanal
+2025-05-26,Total Toneladas Dump SEM,20421.43,Semanal
+2025-05-26,Total Toneladas Esteril SEM,98022.85,Semanal
+2025-05-26,Total Toneladas Stock Sulfuro SEM,16337.14,Semanal
+2025-05-26,Total Toneladas CAEX SEM,217249.22,Semanal
+2025-05-26,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-26,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-26,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-26,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-26,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-26,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-26,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-26,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-26,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-26,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-26,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-26,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-26,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-26,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-26,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-26,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-26,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-26,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-26,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-27,Total Toneladas,209520.62,Mensual
+2025-05-27,Total Toneladas Chancado,66962.79,Mensual
+2025-05-27,Total Toneladas Chancador,79534.03,Mensual
+2025-05-27,Total Toneladas Dump,19694.94,Mensual
+2025-05-27,Total Toneladas Esteril,94535.71,Mensual
+2025-05-27,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-27,Total Toneladas SEM,216116.09,Semanal
+2025-05-27,Total Toneladas Chancado SEM,69070.70,Semanal
+2025-05-27,Total Toneladas Chancador SEM,82037.67,Semanal
+2025-05-27,Total Toneladas Dump SEM,20314.91,Semanal
+2025-05-27,Total Toneladas Esteril SEM,97511.58,Semanal
+2025-05-27,Total Toneladas Stock Sulfuro SEM,16251.93,Semanal
+2025-05-27,Total Toneladas CAEX SEM,216116.09,Semanal
+2025-05-27,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-27,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-27,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-27,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-27,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-27,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-27,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-27,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-27,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-27,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-27,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-27,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-27,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-27,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-27,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-27,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-27,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-27,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-27,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-28,Total Toneladas,209520.62,Mensual
+2025-05-28,Total Toneladas Chancado,66962.79,Mensual
+2025-05-28,Total Toneladas Chancador,79534.03,Mensual
+2025-05-28,Total Toneladas Dump,19694.94,Mensual
+2025-05-28,Total Toneladas Esteril,94535.71,Mensual
+2025-05-28,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-28,Total Toneladas SEM,210396.19,Semanal
+2025-05-28,Total Toneladas Chancado SEM,67242.62,Semanal
+2025-05-28,Total Toneladas Chancador SEM,79866.39,Semanal
+2025-05-28,Total Toneladas Dump SEM,19777.24,Semanal
+2025-05-28,Total Toneladas Esteril SEM,94930.76,Semanal
+2025-05-28,Total Toneladas Stock Sulfuro SEM,15821.79,Semanal
+2025-05-28,Total Toneladas CAEX SEM,210396.19,Semanal
+2025-05-28,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-28,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-28,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-28,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-28,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-28,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-28,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-28,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-28,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-28,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-28,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-28,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-28,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-28,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-28,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-28,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-28,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-28,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-28,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-29,Total Toneladas,209520.62,Mensual
+2025-05-29,Total Toneladas Chancado,66962.79,Mensual
+2025-05-29,Total Toneladas Chancador,79534.03,Mensual
+2025-05-29,Total Toneladas Dump,19694.94,Mensual
+2025-05-29,Total Toneladas Esteril,94535.71,Mensual
+2025-05-29,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-29,Total Toneladas SEM,214252.99,Semanal
+2025-05-29,Total Toneladas Chancado SEM,68475.26,Semanal
+2025-05-29,Total Toneladas Chancador SEM,81330.43,Semanal
+2025-05-29,Total Toneladas Dump SEM,20139.78,Semanal
+2025-05-29,Total Toneladas Esteril SEM,96670.95,Semanal
+2025-05-29,Total Toneladas Stock Sulfuro SEM,16111.82,Semanal
+2025-05-29,Total Toneladas CAEX SEM,214252.99,Semanal
+2025-05-29,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-29,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-29,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-29,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-29,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-29,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-29,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-29,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-29,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-29,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-29,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-29,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-29,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-29,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-29,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-29,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-29,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-29,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-29,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-30,Total Toneladas,209520.62,Mensual
+2025-05-30,Total Toneladas Chancado,66962.79,Mensual
+2025-05-30,Total Toneladas Chancador,79534.03,Mensual
+2025-05-30,Total Toneladas Dump,19694.94,Mensual
+2025-05-30,Total Toneladas Esteril,94535.71,Mensual
+2025-05-30,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-30,Total Toneladas SEM,211062.19,Semanal
+2025-05-30,Total Toneladas Chancado SEM,67455.48,Semanal
+2025-05-30,Total Toneladas Chancador SEM,80119.21,Semanal
+2025-05-30,Total Toneladas Dump SEM,19839.85,Semanal
+2025-05-30,Total Toneladas Esteril SEM,95231.26,Semanal
+2025-05-30,Total Toneladas Stock Sulfuro SEM,15871.88,Semanal
+2025-05-30,Total Toneladas CAEX SEM,211062.19,Semanal
+2025-05-30,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-30,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-30,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-30,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-30,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-30,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-30,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-30,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-30,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-30,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-30,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-30,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-30,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-30,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-30,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-30,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-30,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-30,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-30,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal
+2025-05-31,Total Toneladas,209520.62,Mensual
+2025-05-31,Total Toneladas Chancado,66962.79,Mensual
+2025-05-31,Total Toneladas Chancador,79534.03,Mensual
+2025-05-31,Total Toneladas Dump,19694.94,Mensual
+2025-05-31,Total Toneladas Esteril,94535.71,Mensual
+2025-05-31,Total Toneladas Stock Sulfuro,15755.95,Mensual
+2025-05-31,Total Toneladas SEM,217364.92,Semanal
+2025-05-31,Total Toneladas Chancado SEM,69469.83,Semanal
+2025-05-31,Total Toneladas Chancador SEM,82511.72,Semanal
+2025-05-31,Total Toneladas Dump SEM,20432.30,Semanal
+2025-05-31,Total Toneladas Esteril SEM,98075.05,Semanal
+2025-05-31,Total Toneladas Stock Sulfuro SEM,16345.84,Semanal
+2025-05-31,Total Toneladas CAEX SEM,217364.92,Semanal
+2025-05-31,Horas Nominales CAEX SEM,624.00,Semanal
+2025-05-31,Horas Disponibles CAEX SEM,561.60,Semanal
+2025-05-31,Horas Efectivas CAEX SEM,438.05,Semanal
+2025-05-31,Horas Operativas CAEX SEM,438.05,Semanal
+2025-05-31,Horas Nominales Cargador CARG-01 SEM,24.00,Semanal
+2025-05-31,Horas Disponibles Cargador CARG-01 SEM,21.12,Semanal
+2025-05-31,Horas Efectivas Cargador CARG-01 SEM,16.47,Semanal
+2025-05-31,Horas Nominales Cargador CARG-02 SEM,24.00,Semanal
+2025-05-31,Horas Disponibles Cargador CARG-02 SEM,21.12,Semanal
+2025-05-31,Horas Efectivas Cargador CARG-02 SEM,16.47,Semanal
+2025-05-31,Horas Nominales Pala PALA-01 SEM,24.00,Semanal
+2025-05-31,Horas Disponibles Pala PALA-01 SEM,21.12,Semanal
+2025-05-31,Horas Efectivas Pala PALA-01 SEM,16.47,Semanal
+2025-05-31,Horas Nominales Pala PALA-02 SEM,24.00,Semanal
+2025-05-31,Horas Disponibles Pala PALA-02 SEM,21.12,Semanal
+2025-05-31,Horas Efectivas Pala PALA-02 SEM,16.47,Semanal
+2025-05-31,Horas Nominales Pala PALA-03 SEM,24.00,Semanal
+2025-05-31,Horas Disponibles Pala PALA-03 SEM,21.12,Semanal
+2025-05-31,Horas Efectivas Pala PALA-03 SEM,16.47,Semanal

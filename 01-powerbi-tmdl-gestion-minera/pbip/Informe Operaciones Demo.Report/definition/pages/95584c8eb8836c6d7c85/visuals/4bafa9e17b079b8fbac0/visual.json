@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "4bafa9e17b079b8fbac0",
+  "position": {
+    "x": 1384,
+    "y": 24,
+    "z": 36000,
+    "height": 64,
+    "width": 195.51724137931035,
+    "tabOrder": 35000
+  },
+  "visualGroup": {
+    "displayName": "Fecha",
+    "groupMode": "ScaleMode"
+  }
+}

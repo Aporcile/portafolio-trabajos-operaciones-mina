@@ -1,0 +1,97 @@
+table Fact_LeyAlimentacion_Hora
+	lineageTag: 6e93aef8-a47a-4dc0-bc43-e78a41bbaa28
+
+	measure 'Ley Alimentacion Blast' = DIVIDE(SUM(Fact_LeyAlimentacion_Hora[Ley_x_Ton]), SUM(Fact_LeyAlimentacion_Hora[Tonelaje]))
+		formatString: 0.00
+		lineageTag: 53c373c5-2cc1-4cb2-838c-22bbd4d7ef49
+
+	measure 'Ley Alimentacion Etiqueta' =
+			VAR TurnoActual = SELECTEDVALUE ( Dim_Hora_Operacional[Turno] )
+			VAR OrdenActual = MAX ( Dim_Hora_Operacional[Orden_Eje] )
+			VAR ValorActual = ROUND ( [Ley Alimentacion Blast], 2 )
+			VAR OrdenAnterior =
+			    CALCULATE (
+			        MAX ( Dim_Hora_Operacional[Orden_Eje] ),
+			        REMOVEFILTERS ( Dim_Hora_Operacional ),
+			        Dim_Hora_Operacional[Turno] = TurnoActual,
+			        Dim_Hora_Operacional[Orden_Eje] < OrdenActual,
+			        Dim_Hora_Operacional[Es_Espacio] = 0
+			    )
+			VAR ValorAnterior =
+			    IF (
+			        ISBLANK ( OrdenAnterior ),
+			        BLANK (),
+			        CALCULATE (
+			            ROUND ( [Ley Alimentacion Blast], 2 ),
+			            REMOVEFILTERS ( Dim_Hora_Operacional ),
+			            Dim_Hora_Operacional[Orden_Eje] = OrdenAnterior
+			        )
+			    )
+			RETURN
+			    IF (
+			        ISBLANK ( ValorActual ),
+			        BLANK (),
+			        IF ( ISBLANK ( ValorAnterior ) || ValorActual <> ValorAnterior, [Ley Alimentacion Blast], BLANK () )
+			    )
+		formatString: 0.00
+		isHidden
+		lineageTag: cc7439a5-2538-470a-bc9e-b3f47f016430
+
+	column Fecha
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b5ab46bf-2f8c-4286-8c1f-ff44853645d1
+		summarizeBy: none
+		sourceColumn: Fecha
+
+	column Turno
+		dataType: string
+		lineageTag: 3ce3bc4f-16d2-4d3d-9691-49b11dbf579f
+		summarizeBy: none
+		sourceColumn: Turno
+
+	column Blast
+		dataType: string
+		lineageTag: 8515b7da-28b4-4532-8d55-63b346a86405
+		summarizeBy: none
+		sourceColumn: Blast
+
+	column Orden_Hora_Dia
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 20d8a79b-aa0a-45d8-bdd8-a9dd684c4e2d
+		summarizeBy: none
+		sourceColumn: Orden_Hora_Dia
+
+	column Tonelaje
+		dataType: double
+		formatString: #,0
+		lineageTag: c1c28dcd-e0ca-4782-a60b-35e41022db80
+		summarizeBy: sum
+		sourceColumn: Tonelaje
+
+	column Ley_x_Ton
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: c669f68a-0992-4fd5-809b-d76636a99f26
+		summarizeBy: none
+		sourceColumn: Ley_x_Ton
+
+	partition Fact_LeyAlimentacion_Hora = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "fact_ley_alimentacion_hora.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Fecha", type datetime}, {"Turno", type text}, {"Blast", type text}, {"Orden_Hora_Dia", Int64.Type}, {"Tonelaje", type number}, {"Ley_x_Ton", type number}}, "en-US"),
+				    // Ventana de historia: solo las filas de los ultimos DiasHistoria dias respecto de FechaReferencia.
+				    Ventana = Table.SelectRows(Tipos, each Date.From([Fecha]) >= Date.AddDays(FechaReferencia, -DiasHistoria))
+				in
+				    Ventana
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

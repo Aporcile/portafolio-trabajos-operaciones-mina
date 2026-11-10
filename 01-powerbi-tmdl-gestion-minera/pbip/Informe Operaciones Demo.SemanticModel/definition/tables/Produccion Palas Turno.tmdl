@@ -1,0 +1,61 @@
+table 'Produccion Palas Turno'
+	lineageTag: d578ffd5-3d14-4f39-9651-2d2b4397c840
+
+	/// Toneladas cargadas por las palas y cargadores en los turnos del contexto de fecha.
+	measure 'Movimiento Palas' = Sum('Produccion Palas Turno'[material_tonnage])
+		lineageTag: 491ff110-10ae-4fcd-9437-5864d877d47b
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column time
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: a5169f62-409e-4b28-9d9f-5f426b7986f1
+		summarizeBy: none
+		sourceColumn: time
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column shift
+		dataType: string
+		lineageTag: 69cb5a61-6f5d-455b-8136-1057a0669452
+		summarizeBy: none
+		sourceColumn: shift
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column material_tonnage
+		dataType: double
+		lineageTag: fddf704f-8df2-4c49-b751-99a87fc85b6f
+		summarizeBy: sum
+		sourceColumn: material_tonnage
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ShiftID = CONCATENATE('Produccion Palas Turno'[time],'Produccion Palas Turno'[shift])
+		lineageTag: 937778c0-f0ec-4af9-afac-30460a701b3e
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Produccion Palas Turno' = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "produccion_palas_turno.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"time", type datetime}, {"shift", type text}, {"material_tonnage", type number}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table

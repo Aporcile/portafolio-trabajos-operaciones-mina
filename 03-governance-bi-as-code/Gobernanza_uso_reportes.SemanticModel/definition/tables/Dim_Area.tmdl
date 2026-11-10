@@ -1,0 +1,53 @@
+table Dim_Area
+	lineageTag: 08ec6613-9f46-ddab-c0b2-69714ddb8e86
+
+	column workspace_id
+		dataType: string
+		isHidden
+		isKey
+		lineageTag: a67cb328-58f3-0efa-d6ef-fa9807044404
+		sourceColumn: workspace_id
+
+	column workspace_nombre
+		dataType: string
+		isHidden
+		lineageTag: ab8d04ab-63b7-03b8-a73e-e8bcebef765e
+		sourceColumn: workspace_nombre
+
+	column Area
+		dataType: string
+		lineageTag: c0ce6a17-a185-80c1-dcff-aa0502286625
+		sourceColumn: Area
+
+	column ultima_lectura
+		dataType: dateTime
+		isHidden
+		formatString: dd-MM-yyyy HH:mm
+		lineageTag: e1005eb9-d88c-a636-5da5-078150c69bac
+		sourceColumn: ultima_lectura
+
+	partition Dim_Area = m
+		mode: import
+		source =
+				// Consulta: Dim_Area (una fila por workspace; workspace_id es la clave)
+				// Es una consulta M y no una tabla calculada: el motor rechaza las relaciones hacia tablas calculadas al crear el modelo desde archivos.
+				// ultima_lectura sale de lecturas_area.csv (registro de la extracción, una fila por área): si se queda atrás, la
+				// extracción dejó de leer esa área. En blanco si el área no figura en el registro.
+				let
+				    ConClave = Table.SelectRows(Dim_Reporte, each [workspace_id] <> null and [workspace_id] <> ""),
+				    Areas = Table.Group(ConClave, {"workspace_id"}, {
+				        {"workspace_nombre", each List.Last([workspace_nombre]), type text},
+				        {"Area", each List.Last([Area]), type text}
+				    }),
+				    Origen = Csv.Document(File.Contents(RutaDatos & "lecturas_area.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Nombres = Table.TransformColumnNames(Encabezados, each Text.Lower(Text.Trim(_))),
+				    Lecturas = Table.TransformColumns(Table.SelectColumns(Nombres, {"workspace_id", "ultima_lectura"}), {
+				        {"workspace_id", each Text.Lower(Text.Trim(_ ?? "")), type text},
+				        {"ultima_lectura", each try DateTime.FromText(Text.Trim(_), [Format = "yyyy-MM-dd HH:mm", Culture = "en-US"]) otherwise null, type nullable datetime}
+				    }),
+				    ConLectura = Table.ExpandTableColumn(
+				        Table.NestedJoin(Areas, {"workspace_id"}, Lecturas, {"workspace_id"}, "l", JoinKind.LeftOuter), "l", {"ultima_lectura"})
+				in
+				    Table.TransformColumnTypes(ConLectura, {{"ultima_lectura", type datetime}})
+

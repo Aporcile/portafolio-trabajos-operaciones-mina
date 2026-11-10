@@ -1,0 +1,206 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "tblRatioUsuario",
+  "position": {
+    "x": 1092,
+    "y": 712,
+    "width": 812,
+    "height": 280,
+    "z": 58,
+    "tabOrder": 5800
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Usuario"
+                    }
+                  },
+                  "Property": "usuario"
+                }
+              },
+              "queryRef": "Dim_Usuario.usuario",
+              "nativeQueryRef": "usuario",
+              "displayName": "Usuario"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Usuario"
+                    }
+                  },
+                  "Property": "tipo_usuario"
+                }
+              },
+              "queryRef": "Dim_Usuario.tipo_usuario",
+              "nativeQueryRef": "tipo_usuario",
+              "displayName": "Tipo de usuario"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Aperturas"
+                }
+              },
+              "queryRef": "_Medidas.Aperturas",
+              "nativeQueryRef": "Aperturas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Vistas de pagina"
+                }
+              },
+              "queryRef": "_Medidas.Vistas de pagina",
+              "nativeQueryRef": "Vistas de pagina",
+              "displayName": "Vistas de página"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Pags por apertura"
+                }
+              },
+              "queryRef": "_Medidas.Pags por apertura",
+              "nativeQueryRef": "Pags por apertura",
+              "displayName": "Págs. por apertura"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Medidas"
+                  }
+                },
+                "Property": "Pags por apertura"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": false
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'PÁGINAS POR APERTURA SEGÚN USUARIO (MENOR PRIMERO)'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Tabla de usuarios con aperturas, ordenada por páginas por apertura de menor a mayor'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "fltConAperturas",
+        "displayName": "Aperturas",
+        "isHiddenInViewMode": true,
+        "isLockedInViewMode": true,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Medidas"
+              }
+            },
+            "Property": "Aperturas"
+          }
+        },
+        "type": "Advanced",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "m",
+              "Entity": "_Medidas",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Comparison": {
+                  "ComparisonKind": 1,
+                  "Left": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Source": "m"
+                        }
+                      },
+                      "Property": "Aperturas"
+                    }
+                  },
+                  "Right": {
+                    "Literal": {
+                      "Value": "0L"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "howCreated": "User"
+      }
+    ]
+  }
+}

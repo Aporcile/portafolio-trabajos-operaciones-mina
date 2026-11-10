@@ -1,0 +1,70 @@
+/// Sólidos suspendidos (SST) de laboratorio: resultados semanales por punto, con límites de ejemplo.
+table LabCalidad
+	lineageTag: 72c6cd11-0b24-49c2-8689-1915d15ac8b6
+
+	column Fecha
+		dataType: dateTime
+		formatString: dd-mm-yyyy
+		lineageTag: a8041d7b-1363-46b7-a9e5-fdea290fb5b5
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Punto
+		dataType: string
+		lineageTag: 03bec3e3-630f-44d0-8f92-a2e0c7457ad4
+		summarizeBy: none
+		sourceColumn: Punto
+
+		annotation SummarizationSetBy = Automatic
+
+	column ActivoID
+		dataType: string
+		lineageTag: e4642955-6ede-48d2-9568-c6f40df37d83
+		summarizeBy: none
+		sourceColumn: ActivoID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SST
+		dataType: double
+		formatString: #,0
+		lineageTag: 7e239b2f-0bb4-47e4-8f1a-ecad12b01891
+		summarizeBy: none
+		sourceColumn: SST
+
+		annotation SummarizationSetBy = Automatic
+
+	column LimiteAviso
+		dataType: double
+		formatString: #,0
+		lineageTag: dbb0b217-4211-45cb-b4ec-c7da2d6acf41
+		summarizeBy: none
+		sourceColumn: LimiteAviso
+
+		annotation SummarizationSetBy = Automatic
+
+	column LimiteAlerta
+		dataType: double
+		formatString: #,0
+		lineageTag: e70dca56-298d-47e6-8e8b-4ae67e2d095d
+		summarizeBy: none
+		sourceColumn: LimiteAlerta
+
+		annotation SummarizationSetBy = Automatic
+
+	partition LabCalidad = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "lab_calidad.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Fecha", type date}, {"Punto", type text}, {"ActivoID", type text}, {"SST", type number}, {"LimiteAviso", type number}, {"LimiteAlerta", type number}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

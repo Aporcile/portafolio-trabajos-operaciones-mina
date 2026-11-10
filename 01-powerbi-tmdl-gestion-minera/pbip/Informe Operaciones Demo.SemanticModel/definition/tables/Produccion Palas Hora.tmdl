@@ -1,0 +1,108 @@
+table 'Produccion Palas Hora'
+	lineageTag: 6c49d41d-e587-4f6c-9ea3-777d67bdd0e3
+
+	/// Toneladas cargadas por hora de mina; admite el filtro de pala y de destino.
+	measure 'Movimiento Palas por hora' = Sum('Produccion Palas Hora'[material_tonnage])
+		lineageTag: 2283785e-b8de-48a1-912e-aa8647e89a9e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column time
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 104762bd-bbf2-496f-ba7f-2bcfba2872e4
+		summarizeBy: none
+		sourceColumn: time
+
+		annotation SummarizationSetBy = Automatic
+
+	column shift
+		dataType: string
+		lineageTag: 28c14acb-d9c4-4d93-8620-2af7cb82034d
+		summarizeBy: none
+		sourceColumn: shift
+
+		annotation SummarizationSetBy = Automatic
+
+	column hour
+		dataType: int64
+		formatString: 0
+		lineageTag: 16d086da-ac29-4383-b61a-7eb421935043
+		summarizeBy: sum
+		sourceColumn: hour
+
+		annotation SummarizationSetBy = Automatic
+
+	column material_tonnage
+		dataType: double
+		lineageTag: 5cb3a102-f9a4-4190-b58f-9620d0fba69b
+		summarizeBy: sum
+		sourceColumn: material_tonnage
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ShiftID = CONCATENATE( 'Produccion Palas Hora'[time], 'Produccion Palas Hora'[shift])
+		lineageTag: c05f2c37-a480-4062-a209-4a204d4674ff
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Bloque_1_a_12 = 'Produccion Palas Hora'[hour]+1
+		formatString: 0
+		lineageTag: 370113c8-24cf-4e36-af95-0b27671bd9d6
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column ShiftIDHora = CONCATENATE('Produccion Palas Hora'[ShiftID],'Produccion Palas Hora'[Bloque_1_a_12])
+		lineageTag: bf9720d4-cad4-4c51-9d43-5cd2ab795df4
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Rd Hora Op' =
+			IF (
+			    'Produccion Palas Hora'[shift] = "A",
+			    'Produccion Palas Hora'[Bloque_1_a_12],
+			    'Produccion Palas Hora'[Bloque_1_a_12] + 12
+			)
+		formatString: 0
+		lineageTag: b1733642-e344-4b8d-a188-48d4670f00a3
+		summarizeBy: none
+
+	column shovel
+		dataType: string
+		lineageTag: f6c5d9a3-c6d9-4940-8baa-00c1d10fa66d
+		summarizeBy: none
+		sourceColumn: shovel
+
+		annotation SummarizationSetBy = Automatic
+
+	column dump
+		dataType: string
+		lineageTag: 18f166ee-da9e-495f-9ae8-239e24a3a2e1
+		summarizeBy: none
+		sourceColumn: dump
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Rd Hora Reloj' = FORMAT ( MOD ( 'Produccion Palas Hora'[Rd Hora Op] + 7, 24 ), "00" )
+		lineageTag: c5bb6313-5d0b-4dc3-b9a8-3376a9e74c95
+		summarizeBy: none
+		sortByColumn: 'Rd Hora Op'
+
+		changedProperty = SortByColumn
+
+	partition 'Produccion Palas Hora' = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "produccion_palas_hora.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"time", type datetime}, {"shift", type text}, {"hour", Int64.Type}, {"shovel", type text}, {"dump", type text}, {"material_tonnage", type number}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table

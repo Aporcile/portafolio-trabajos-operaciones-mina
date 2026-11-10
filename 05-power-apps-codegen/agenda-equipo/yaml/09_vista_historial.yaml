@@ -1,0 +1,365 @@
+- lblHistTitulo:
+    Control: Label@2.5.1
+    Properties:
+      Text: ="ACTIVIDADES TERMINADAS · " & CountRows(galHist.AllItems)
+      Font: =Font.'Segoe UI'
+      Size: =9.5
+      Color: =RGBA(46, 125, 50, 1)
+      X: =44
+      Y: =124
+      Width: =500
+      Height: =20
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      FontWeight: =FontWeight.Bold
+      Visible: =Coalesce(varVista, "area") = "historial"
+- lblHHID:
+    Control: Label@2.5.1
+    Properties:
+      Text: ="ID"
+      Font: =Font.'Segoe UI'
+      Size: =8.5
+      Color: =RGBA(108, 117, 125, 1)
+      X: =44
+      Y: =150
+      Width: =56
+      Height: =20
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      FontWeight: =FontWeight.Bold
+      Visible: =Coalesce(varVista, "area") = "historial"
+- lblHHACTIVIDAD:
+    Control: Label@2.5.1
+    Properties:
+      Text: ="ACTIVIDAD"
+      Font: =Font.'Segoe UI'
+      Size: =8.5
+      Color: =RGBA(108, 117, 125, 1)
+      X: =104
+      Y: =150
+      Width: =330
+      Height: =20
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      FontWeight: =FontWeight.Bold
+      Visible: =Coalesce(varVista, "area") = "historial"
+- lblHHAREA:
+    Control: Label@2.5.1
+    Properties:
+      Text: ="ÁREA"
+      Font: =Font.'Segoe UI'
+      Size: =8.5
+      Color: =RGBA(108, 117, 125, 1)
+      X: =444
+      Y: =150
+      Width: =150
+      Height: =20
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      FontWeight: =FontWeight.Bold
+      Visible: =Coalesce(varVista, "area") = "historial"
+- lblHHRESPONSABLE:
+    Control: Label@2.5.1
+    Properties:
+      Text: ="RESPONSABLE"
+      Font: =Font.'Segoe UI'
+      Size: =8.5
+      Color: =RGBA(108, 117, 125, 1)
+      X: =604
+      Y: =150
+      Width: =120
+      Height: =20
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      FontWeight: =FontWeight.Bold
+      Visible: =Coalesce(varVista, "area") = "historial"
+- lblHHINICIO:
+    Control: Label@2.5.1
+    Properties:
+      Text: ="INICIO"
+      Font: =Font.'Segoe UI'
+      Size: =8.5
+      Color: =RGBA(108, 117, 125, 1)
+      X: =734
+      Y: =150
+      Width: =90
+      Height: =20
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      FontWeight: =FontWeight.Bold
+      Visible: =Coalesce(varVista, "area") = "historial"
+- lblHHTERMINO:
+    Control: Label@2.5.1
+    Properties:
+      Text: ="TÉRMINO"
+      Font: =Font.'Segoe UI'
+      Size: =8.5
+      Color: =RGBA(108, 117, 125, 1)
+      X: =834
+      Y: =150
+      Width: =90
+      Height: =20
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      FontWeight: =FontWeight.Bold
+      Visible: =Coalesce(varVista, "area") = "historial"
+- lblHHSTATUS:
+    Control: Label@2.5.1
+    Properties:
+      Text: ="STATUS FINAL"
+      Font: =Font.'Segoe UI'
+      Size: =8.5
+      Color: =RGBA(108, 117, 125, 1)
+      X: =934
+      Y: =150
+      Width: =370
+      Height: =20
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      FontWeight: =FontWeight.Bold
+      Visible: =Coalesce(varVista, "area") = "historial"
+- galHist:
+    Control: Gallery@2.15.0
+    Variant: VariableHeight
+    Properties:
+      Items: |-
+        =With(
+            {q: Trim(txtBuscar.Text), r: ddResp.Selected.Value},
+            Sort(
+                Filter(Actividades, Estado = "Terminada", IsBlank(q) || q in Actividad || q in ID || q in Area || q in Contraparte || q in StatusActual || q in Bloqueo, r = "Todos los responsables" || (r = "Sin responsable" && IsBlank(Responsable)) || Responsable = r),
+                Coalesce(FechaTermino, "0000"),
+                SortOrder.Descending
+            )
+        )
+      X: =32
+      Y: =174
+      Width: =1332
+      Height: =582
+      TemplateSize: =50
+      TemplatePadding: =0
+      ShowScrollbar: =true
+      Fill: =RGBA(0, 0, 0, 0)
+      TemplateFill: =RGBA(0, 0, 0, 0)
+      BorderThickness: =0
+      Visible: =Coalesce(varVista, "area") = "historial"
+      OnSelect: =Set(varAct, ThisItem); Set(varModo, "editar"); Select(btnReset); Set(varPanel, true)
+    Children:
+                      - conFilaH:
+                          Control: GroupContainer@1.5.0
+                          Variant: ManualLayout
+                          Properties:
+                            Fill: =RGBA(255, 255, 255, 1)
+                            X: =0
+                            Y: =0
+                            Width: =(Parent.TemplateWidth - 30)
+                            Height: =Max(lblHiAct.Height, lblHiSub.Height, lblHiArea.Height, 20) + 24
+                            DropShadow: =DropShadow.None
+                            RadiusTopLeft: =8
+                            RadiusTopRight: =8
+                            RadiusBottomLeft: =8
+                            RadiusBottomRight: =8
+                            BorderColor: =RGBA(219, 225, 233, 1)
+                            BorderThickness: =1
+                      - lblHiID:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =ThisItem.ID
+                            Font: =Font.'Segoe UI'
+                            Size: =8.5
+                            Color: =RGBA(108, 117, 125, 1)
+                            X: =12
+                            Y: =(conFilaH.Height - lblHiID.Height) / 2
+                            Width: =56
+                            Height: =14
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                      - lblHiAct:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =ThisItem.Actividad
+                            Font: =Font.'Segoe UI'
+                            Size: =9
+                            Color: =RGBA(33, 37, 41, 1)
+                            X: =72
+                            Y: =(conFilaH.Height - lblHiAct.Height) / 2
+                            Width: =330
+                            Height: =16
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            FontWeight: =FontWeight.Bold
+                            AutoHeight: =true
+                      - lblHiArea:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =Coalesce(ThisItem.Area, "Sin área")
+                            Font: =Font.'Segoe UI'
+                            Size: =9
+                            Color: =RGBA(36, 100, 170, 1)
+                            X: =412
+                            Y: =(conFilaH.Height - lblHiArea.Height) / 2
+                            Width: =150
+                            Height: =16
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                      - btnHiAv:
+                          Control: Classic/Button@2.2.0
+                          Properties:
+                            Text: =If(IsBlank(ThisItem.Responsable), "?", Coalesce(LookUp(Personas, Nombre = ThisItem.Responsable).Iniciales, Upper(Left(ThisItem.Responsable, 2))))
+                            Font: =Font.'Segoe UI'
+                            Size: =6.5
+                            FontWeight: =FontWeight.Bold
+                            Fill: =If(IsBlank(ThisItem.Responsable), RGBA(255, 243, 214, 1), RGBA(36, 100, 170, 1))
+                            Color: =If(IsBlank(ThisItem.Responsable), RGBA(150, 100, 0, 1), RGBA(255, 255, 255, 1))
+                            HoverFill: =If(IsBlank(ThisItem.Responsable), RGBA(255, 243, 214, 1), RGBA(36, 100, 170, 1))
+                            HoverColor: =If(IsBlank(ThisItem.Responsable), RGBA(150, 100, 0, 1), RGBA(255, 255, 255, 1))
+                            PressedFill: =If(IsBlank(ThisItem.Responsable), RGBA(255, 243, 214, 1), RGBA(36, 100, 170, 1))
+                            PressedColor: =If(IsBlank(ThisItem.Responsable), RGBA(150, 100, 0, 1), RGBA(255, 255, 255, 1))
+                            BorderThickness: =0
+                            FocusedBorderThickness: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            OnSelect: =Select(Parent)
+                            TabIndex: =-1
+                            X: =572
+                            Y: =(conFilaH.Height - 20) / 2
+                            Width: =20
+                            Height: =20
+                            RadiusTopLeft: =10
+                            RadiusTopRight: =10
+                            RadiusBottomLeft: =10
+                            RadiusBottomRight: =10
+                      - lblHiResp:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =Coalesce(ThisItem.Responsable, "Sin asignar")
+                            Font: =Font.'Segoe UI'
+                            Size: =9
+                            Color: =If(IsBlank(ThisItem.Responsable), RGBA(150, 100, 0, 1), RGBA(33, 37, 41, 1))
+                            X: =598
+                            Y: =(conFilaH.Height - lblHiResp.Height) / 2
+                            Width: =100
+                            Height: =16
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                      - lblHiIni:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =If(IsBlank(ThisItem.FechaInicio), "—", Text(DateValue(ThisItem.FechaInicio), "dd-mm-yyyy"))
+                            Font: =Font.'Segoe UI'
+                            Size: =9
+                            Color: =RGBA(73, 80, 87, 1)
+                            X: =702
+                            Y: =(conFilaH.Height - lblHiIni.Height) / 2
+                            Width: =90
+                            Height: =16
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                      - lblHiFin:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =If(IsBlank(ThisItem.FechaTermino), "—", Text(DateValue(ThisItem.FechaTermino), "dd-mm-yyyy"))
+                            Font: =Font.'Segoe UI'
+                            Size: =9
+                            Color: =RGBA(46, 125, 50, 1)
+                            X: =802
+                            Y: =(conFilaH.Height - lblHiFin.Height) / 2
+                            Width: =90
+                            Height: =16
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                      - lblHiSub:
+                          Control: Label@2.5.1
+                          Properties:
+                            Text: =Coalesce(ThisItem.StatusActual, ThisItem.Bloqueo, "")
+                            Font: =Font.'Segoe UI'
+                            Size: =8.5
+                            Color: =RGBA(108, 117, 125, 1)
+                            X: =902
+                            Y: =(conFilaH.Height - lblHiSub.Height) / 2
+                            Width: =370
+                            Height: =16
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PaddingBottom: =0
+                            AutoHeight: =true
+                      - btnHiHit:
+                          Control: Classic/Button@2.2.0
+                          Properties:
+                            Text: =""
+                            Fill: =RGBA(0, 0, 0, 0)
+                            HoverFill: =RGBA(27, 42, 65, 0.05)
+                            PressedFill: =RGBA(27, 42, 65, 0.10)
+                            BorderThickness: =0
+                            FocusedBorderThickness: =1
+                            FocusedBorderColor: =RGBA(36, 100, 170, 1)
+                            OnSelect: =Select(Parent)
+                            X: =0
+                            Y: =0
+                            Width: =(Parent.TemplateWidth - 30)
+                            Height: =conFilaH.Height
+                            RadiusTopLeft: =6
+                            RadiusTopRight: =6
+                            RadiusBottomLeft: =6
+                            RadiusBottomRight: =6
+                      - recSepH:
+                          Control: Rectangle@2.3.0
+                          Properties:
+                            Fill: =RGBA(0, 0, 0, 0)
+                            X: =0
+                            Y: =conFilaH.Height
+                            Width: =10
+                            Height: =6
+                            OnSelect: =false
+- lblHistVacio:
+    Control: Label@2.5.1
+    Properties:
+      Text: ="Aún no hay actividades terminadas. Cuando una pase a «Terminada» aparecerá aquí con su fecha de término."
+      Font: =Font.'Segoe UI'
+      Size: =11
+      Color: =RGBA(108, 117, 125, 1)
+      X: =32
+      Y: =200
+      Width: =1302
+      Height: =40
+      PaddingLeft: =0
+      PaddingRight: =0
+      PaddingTop: =0
+      PaddingBottom: =0
+      Visible: =Coalesce(varVista, "area") = "historial" && CountRows(galHist.AllItems) = 0
+      Align: =Align.Center

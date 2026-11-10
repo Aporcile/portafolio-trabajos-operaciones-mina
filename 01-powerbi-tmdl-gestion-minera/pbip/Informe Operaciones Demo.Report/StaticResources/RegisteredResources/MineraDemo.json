@@ -1,0 +1,32 @@
+{
+  "name": "MineraDemo",
+  "dataColors": [
+    "#4F9DDE",
+    "#7B61C9",
+    "#C26B8E",
+    "#A3B18A",
+    "#2F6FB5",
+    "#8EC3EE",
+    "#5A4A9C",
+    "#1B2A41"
+  ],
+  "background": "#1B2A41",
+  "foreground": "#FFFFFF",
+  "tableAccent": "#4F9DDE",
+  "good": "#2ECC71",
+  "neutral": "#F1C40F",
+  "bad": "#E74C3C",
+  "maximum": "#4F9DDE",
+  "center": "#F1C40F",
+  "minimum": "#C26B8E",
+  "textClasses": {
+    "title": {
+      "fontFace": "Segoe UI Semibold",
+      "color": "#FFFFFF"
+    },
+    "label": {
+      "fontFace": "Segoe UI",
+      "color": "#9AA5B1"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+/// Balance hídrico diario (m³) por concepto y área: captación, pérdida, agua fresca, agua recuperada, consumo y variación de almacenamiento.
+table BalanceDiario
+	lineageTag: 749d62c2-7807-41f9-9cc9-e759803e31b8
+
+	column Fecha
+		dataType: dateTime
+		formatString: dd-mm-yyyy
+		lineageTag: 55cdb2af-22f9-4d00-92e6-c31502922aa4
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Concepto
+		dataType: string
+		lineageTag: b8366004-b918-479a-beee-7581e40e4d53
+		summarizeBy: none
+		sourceColumn: Concepto
+
+		annotation SummarizationSetBy = Automatic
+
+	column Area
+		dataType: string
+		lineageTag: 265f7704-b893-42cb-86fe-05ff83a36edc
+		summarizeBy: none
+		sourceColumn: Area
+
+		annotation SummarizationSetBy = Automatic
+
+	column Volumen_m3
+		dataType: double
+		formatString: #,0
+		lineageTag: 67bad032-adf9-4943-9e6b-ab34642b4543
+		summarizeBy: none
+		sourceColumn: Volumen_m3
+
+		annotation SummarizationSetBy = Automatic
+
+	partition BalanceDiario = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "balance_diario.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Fecha", type date}, {"Concepto", type text}, {"Area", type text}, {"Volumen_m3", type number}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

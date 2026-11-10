@@ -1,0 +1,109 @@
+// =====================================================================================
+// VALIDACIÓN FINAL — Gobernanza_uso_reportes
+// Dónde: Power BI Desktop → Vista de consultas DAX → pegar TODO → Ejecutar.
+// Salen 4 resultados:
+//   1) Chequeos ........ la columna "Resultado" debe decir OK en las 49 filas.
+//   2) Uso por área .... comparar con los valores esperados anotados abajo.
+//   3) Relaciones y 4) Medidas: listados para revisar a ojo.
+// Los esperados se calcularon con datos_sinteticos/generar_datos.py (semilla fija; ver esperados.json).
+// Si cambias los CSV: los grupos "Estructura" e "Integridad" siguen valiendo tal cual (sus esperados
+// no dependen de los datos); los de "Datos" y "Medidas" hay que recalcularlos (el 26 pasa a 0 con
+// datos reales, y los 38 a 41 nombran reportes concretos del conjunto sintético).
+// =====================================================================================
+
+// ---------- 1) Chequeos ----------
+EVALUATE
+VAR Tablas = INFO.TABLES ()
+VAR Relaciones = INFO.RELATIONSHIPS ()
+VAR Medidas = INFO.MEASURES ()
+VAR Chequeos =
+    UNION (
+        // Estructura
+        ROW ( "N", 1, "Grupo", "Estructura", "Chequeo", "Tablas (si hay más de 7, quedaron tablas automáticas de fecha)", "Esperado", "7", "Obtenido", FORMAT ( COUNTROWS ( Tablas ), "0" ) ),
+        ROW ( "N", 2, "Grupo", "Estructura", "Chequeo", "Relaciones", "Esperado", "4", "Obtenido", FORMAT ( COUNTROWS ( Relaciones ), "0" ) ),
+        ROW ( "N", 3, "Grupo", "Estructura", "Chequeo", "Relaciones activas", "Esperado", "4", "Obtenido", FORMAT ( COUNTROWS ( FILTER ( Relaciones, [IsActive] ) ) + 0, "0" ) ),
+        ROW ( "N", 4, "Grupo", "Estructura", "Chequeo", "Relaciones varios a uno", "Esperado", "4", "Obtenido", FORMAT ( COUNTROWS ( FILTER ( Relaciones, ( [FromCardinality] = 2 && [ToCardinality] = 1 ) || ( [FromCardinality] = 1 && [ToCardinality] = 2 ) ) ) + 0, "0" ) ),
+        ROW ( "N", 5, "Grupo", "Estructura", "Chequeo", "Relaciones con filtro en ambos sentidos", "Esperado", "0", "Obtenido", FORMAT ( COUNTROWS ( FILTER ( Relaciones, [CrossFilteringBehavior] = 2 ) ) + 0, "0" ) ),
+        ROW ( "N", 6, "Grupo", "Estructura", "Chequeo", "Medidas", "Esperado", "22", "Obtenido", FORMAT ( COUNTROWS ( Medidas ) + 0, "0" ) ),
+        ROW ( "N", 7, "Grupo", "Estructura", "Chequeo", "Medidas sin carpeta", "Esperado", "0", "Obtenido", FORMAT ( COUNTROWS ( FILTER ( Medidas, LEN ( [DisplayFolder] ) = 0 ) ) + 0, "0" ) ),
+        ROW ( "N", 8, "Grupo", "Estructura", "Chequeo", "Dim_Fecha marcada como tabla de fechas", "Esperado", "Time", "Obtenido", CONCATENATEX ( FILTER ( Tablas, [Name] = "Dim_Fecha" ), [DataCategory] ) ),
+        // Una fila por reporte: sin la guarda NOT ISEMPTY de las medidas saldrían combinaciones Área × Reporte inexistentes
+        ROW ( "N", 9, "Grupo", "Estructura", "Chequeo", "Filas Área × Reporte en una tabla = reportes (sin combinaciones fantasma)", "Esperado", FORMAT ( COUNTROWS ( Dim_Reporte ), "0" ), "Obtenido", FORMAT ( COUNTROWS ( SUMMARIZECOLUMNS ( Dim_Area[Area], Dim_Reporte[Reporte], "a", [Aperturas] ) ) + 0, "0" ) ),
+        ROW ( "N", 10, "Grupo", "Estructura", "Chequeo", "Etiquetas de Reporte repetidas (dos reportes no pueden verse igual)", "Esperado", "0", "Obtenido", FORMAT ( COUNTROWS ( Dim_Reporte ) - DISTINCTCOUNT ( Dim_Reporte[Reporte] ), "0" ) ),
+        ROW ( "N", 11, "Grupo", "Estructura", "Chequeo", "Nombres cortos de Área repetidos", "Esperado", "0", "Obtenido", FORMAT ( COUNTROWS ( Dim_Area ) - DISTINCTCOUNT ( Dim_Area[Area] ), "0" ) ),
+        // Integridad (también detecta relaciones faltantes y cargas repetidas)
+        ROW ( "N", 12, "Grupo", "Integridad", "Chequeo", "Filas de Fact_Uso sin reporte en Dim_Reporte", "Esperado", "0", "Obtenido", FORMAT ( CALCULATE ( COUNTROWS ( Fact_Uso ), ISBLANK ( Dim_Reporte[report_id] ) ) + 0, "0" ) ),
+        ROW ( "N", 13, "Grupo", "Integridad", "Chequeo", "Filas de Fact_Uso sin fecha en Dim_Fecha", "Esperado", "0", "Obtenido", FORMAT ( CALCULATE ( COUNTROWS ( Fact_Uso ), ISBLANK ( Dim_Fecha[Fecha] ) ) + 0, "0" ) ),
+        ROW ( "N", 14, "Grupo", "Integridad", "Chequeo", "Filas de Fact_Uso sin usuario en Dim_Usuario", "Esperado", "0", "Obtenido", FORMAT ( CALCULATE ( COUNTROWS ( Fact_Uso ), ISBLANK ( Dim_Usuario[usuario] ) ) + 0, "0" ) ),
+        ROW ( "N", 15, "Grupo", "Integridad", "Chequeo", "Reportes sin área en Dim_Area", "Esperado", "0", "Obtenido", FORMAT ( CALCULATE ( COUNTROWS ( Dim_Reporte ), ISBLANK ( Dim_Area[workspace_id] ) ) + 0, "0" ) ),
+        ROW ( "N", 16, "Grupo", "Integridad", "Chequeo", "Filas repetidas en el grano día × reporte × usuario", "Esperado", "0", "Obtenido", FORMAT ( COUNTROWS ( Fact_Uso ) - COUNTROWS ( SUMMARIZE ( Fact_Uso, Fact_Uso[fecha], Fact_Uso[report_id], Fact_Uso[usuario] ) ), "0" ) ),
+        ROW ( "N", 17, "Grupo", "Integridad", "Chequeo", "Filas con fecha futura", "Esperado", "0", "Obtenido", FORMAT ( COUNTROWS ( FILTER ( Fact_Uso, Fact_Uso[fecha] > TODAY () ) ) + 0, "0" ) ),
+        // Datos cargados
+        ROW ( "N", 18, "Grupo", "Datos", "Chequeo", "Filas en Fact_Uso (sin las cuentas excluidas)", "Esperado", "3790", "Obtenido", FORMAT ( COUNTROWS ( Fact_Uso ), "0" ) ),
+        ROW ( "N", 19, "Grupo", "Datos", "Chequeo", "Reportes en Dim_Reporte", "Esperado", "24", "Obtenido", FORMAT ( COUNTROWS ( Dim_Reporte ), "0" ) ),
+        ROW ( "N", 20, "Grupo", "Datos", "Chequeo", "Días en Dim_Fecha (03-03 al 31-05-2025)", "Esperado", "90", "Obtenido", FORMAT ( COUNTROWS ( Dim_Fecha ), "0" ) ),
+        ROW ( "N", 21, "Grupo", "Datos", "Chequeo", "Usuarios en Dim_Usuario", "Esperado", "20", "Obtenido", FORMAT ( COUNTROWS ( Dim_Usuario ), "0" ) ),
+        ROW ( "N", 22, "Grupo", "Datos", "Chequeo", "Usuarios externos (prefijo ext.)", "Esperado", "4", "Obtenido", FORMAT ( COUNTROWS ( FILTER ( Dim_Usuario, Dim_Usuario[tipo_usuario] = "Externo" ) ) + 0, "0" ) ),
+        ROW ( "N", 23, "Grupo", "Datos", "Chequeo", "Áreas en Dim_Area", "Esperado", "4", "Obtenido", FORMAT ( COUNTROWS ( Dim_Area ), "0" ) ),
+        ROW ( "N", 24, "Grupo", "Datos", "Chequeo", "NombreMes del 01-04-2025", "Esperado", "abril", "Obtenido", LOOKUPVALUE ( Dim_Fecha[NombreMes], Dim_Fecha[Fecha], DATE ( 2025, 4, 1 ) ) & "" ),
+        ROW ( "N", 25, "Grupo", "Datos", "Chequeo", "DiaSemana del 01-04-2025", "Esperado", "martes", "Obtenido", LOOKUPVALUE ( Dim_Fecha[DiaSemana], Dim_Fecha[Fecha], DATE ( 2025, 4, 1 ) ) & "" ),
+        ROW ( "N", 26, "Grupo", "Datos", "Chequeo", "Filas marcadas como sintéticas (es_sintetico); con datos reales debe ser 0", "Esperado", "3790", "Obtenido", FORMAT ( CALCULATE ( COUNTROWS ( Fact_Uso ), Fact_Uso[es_sintetico] = TRUE () ) + 0, "0" ) ),
+        // Medidas (total del modelo, sin filtros, salvo donde se indica)
+        ROW ( "N", 27, "Grupo", "Medidas", "Chequeo", "Aperturas", "Esperado", "5924", "Obtenido", FORMAT ( [Aperturas], "0" ) ),
+        ROW ( "N", 28, "Grupo", "Medidas", "Chequeo", "Vistas de pagina", "Esperado", "10053", "Obtenido", FORMAT ( [Vistas de pagina], "0" ) ),
+        ROW ( "N", 29, "Grupo", "Medidas", "Chequeo", "Usuarios unicos", "Esperado", "20", "Obtenido", FORMAT ( [Usuarios unicos], "0" ) ),
+        ROW ( "N", 30, "Grupo", "Medidas", "Chequeo", "Dias con actividad", "Esperado", "90", "Obtenido", FORMAT ( [Dias con actividad], "0" ) ),
+        ROW ( "N", 31, "Grupo", "Medidas", "Chequeo", "Pags por apertura (10053 / 5924)", "Esperado", "1.70", "Obtenido", FORMAT ( [Pags por apertura], "0.00", "en-US" ) ),
+        ROW ( "N", 32, "Grupo", "Medidas", "Chequeo", "Aperturas sin vistas", "Esperado", "1266", "Obtenido", FORMAT ( [Aperturas sin vistas], "0" ) ),
+        ROW ( "N", 33, "Grupo", "Medidas", "Chequeo", "Datos desde", "Esperado", "03-03-2025", "Obtenido", FORMAT ( [Datos desde], "dd-MM-yyyy" ) ),
+        ROW ( "N", 34, "Grupo", "Medidas", "Chequeo", "Ultima actividad", "Esperado", "31-05-2025", "Obtenido", FORMAT ( [Ultima actividad], "dd-MM-yyyy" ) ),
+        ROW ( "N", 35, "Grupo", "Medidas", "Chequeo", "Profundidad historico dias", "Esperado", "90", "Obtenido", FORMAT ( [Profundidad historico dias], "0" ) ),
+        ROW ( "N", 36, "Grupo", "Medidas", "Chequeo", "Dias desde ultima actividad (total)", "Esperado", "0", "Obtenido", FORMAT ( [Dias desde ultima actividad], "0" ) ),
+        // El estado es de UN reporte: en el total queda en blanco
+        ROW ( "N", 37, "Grupo", "Medidas", "Chequeo", "Estado del reporte (total)", "Esperado", "(blanco)", "Obtenido", IF ( ISBLANK ( [Estado del reporte] ), "(blanco)", [Estado del reporte] ) ),
+        ROW ( "N", 38, "Grupo", "Medidas", "Chequeo", "Estado de 'Tablero Movimiento Mina'", "Esperado", "En uso", "Obtenido", CALCULATE ( [Estado del reporte], Dim_Reporte[Reporte] = "Tablero Movimiento Mina" ) & "" ),
+        ROW ( "N", 39, "Grupo", "Medidas", "Chequeo", "Estado de 'Seguimiento de Reconciliacion'", "Esperado", "Solo aperturas", "Obtenido", CALCULATE ( [Estado del reporte], Dim_Reporte[Reporte] = "Seguimiento de Reconciliacion" ) & "" ),
+        ROW ( "N", 40, "Grupo", "Medidas", "Chequeo", "Estado de 'Paradas No Programadas'", "Esperado", "Sin uso", "Obtenido", CALCULATE ( [Estado del reporte], Dim_Reporte[Reporte] = "Paradas No Programadas" ) & "" ),
+        // Sin aperturas, la proporción es 0 (no blanco): la tarjeta de Detalle muestra 0,0 junto a Aperturas 0
+        ROW ( "N", 41, "Grupo", "Medidas", "Chequeo", "Pags por apertura de 'Paradas No Programadas' (sin aperturas)", "Esperado", "0.00", "Obtenido",
+            VAR P = CALCULATE ( [Pags por apertura], Dim_Reporte[Reporte] = "Paradas No Programadas" )
+            RETURN IF ( ISBLANK ( P ), "(blanco)", FORMAT ( P, "0.00", "en-US" ) ) ),
+        ROW ( "N", 42, "Grupo", "Medidas", "Chequeo", "Aperturas interno", "Esperado", "4329", "Obtenido", FORMAT ( [Aperturas interno], "0" ) ),
+        ROW ( "N", 43, "Grupo", "Medidas", "Chequeo", "Aperturas externo", "Esperado", "1595", "Obtenido", FORMAT ( [Aperturas externo], "0" ) ),
+        ROW ( "N", 44, "Grupo", "Medidas", "Chequeo", "Vistas pagina interno", "Esperado", "8637", "Obtenido", FORMAT ( [Vistas pagina interno], "0" ) ),
+        ROW ( "N", 45, "Grupo", "Medidas", "Chequeo", "Vistas pagina externo", "Esperado", "1416", "Obtenido", FORMAT ( [Vistas pagina externo], "0" ) ),
+        ROW ( "N", 46, "Grupo", "Medidas", "Chequeo", "Total reportes", "Esperado", "24", "Obtenido", FORMAT ( [Total reportes], "0" ) ),
+        ROW ( "N", 47, "Grupo", "Medidas", "Chequeo", "Reportes en uso", "Esperado", "18", "Obtenido", FORMAT ( [Reportes en uso], "0" ) ),
+        ROW ( "N", 48, "Grupo", "Medidas", "Chequeo", "Reportes solo aperturas", "Esperado", "3", "Obtenido", FORMAT ( [Reportes solo aperturas], "0" ) ),
+        ROW ( "N", 49, "Grupo", "Medidas", "Chequeo", "Reportes sin uso", "Esperado", "3", "Obtenido", FORMAT ( [Reportes sin uso], "0" ) )
+    )
+RETURN
+    ADDCOLUMNS ( Chequeos, "Resultado", IF ( [Esperado] = [Obtenido], "OK", "REVISAR" ) )
+ORDER BY [N]
+
+// ---------- 2) Uso por área ----------
+// Esperado (el área de planta queda con la última lectura atrasada a propósito: su extracción se detuvo antes del final):
+//   Centro Control       Total  5 | En uso  3 | Solo aperturas 1 | Sin uso 1 | Aperturas 1082 | Vistas 1633 | Última lectura 01-06-2025
+//   Mantenimiento Mina   Total  6 | En uso  5 | Solo aperturas 0 | Sin uso 1 | Aperturas 1127 | Vistas 2263 | Última lectura 01-06-2025
+//   Operaciones Mina     Total  7 | En uso  6 | Solo aperturas 1 | Sin uso 0 | Aperturas 2678 | Vistas 4450 | Última lectura 01-06-2025
+//   Planta Chancado      Total  6 | En uso  4 | Solo aperturas 1 | Sin uso 1 | Aperturas 1037 | Vistas 1707 | Última lectura 19-05-2025
+EVALUATE
+SUMMARIZECOLUMNS (
+    Dim_Area[Area],
+    "Total", [Total reportes],
+    "En uso", [Reportes en uso],
+    "Solo aperturas", [Reportes solo aperturas],
+    "Sin uso", [Reportes sin uso],
+    "Aperturas", [Aperturas],
+    "Vistas", [Vistas de pagina],
+    "Última lectura", [Ultima lectura]
+)
+ORDER BY Dim_Area[Area]
+
+// ---------- 3) Relaciones (revisar: 4 filas, todas activas, varios a uno, un solo sentido) ----------
+EVALUATE
+INFO.VIEW.RELATIONSHIPS ()
+
+// ---------- 4) Medidas (revisar: 22 filas con carpeta y formato) ----------
+EVALUATE
+INFO.VIEW.MEASURES ()

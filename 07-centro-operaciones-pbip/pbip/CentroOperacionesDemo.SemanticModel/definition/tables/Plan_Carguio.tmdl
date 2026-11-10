@@ -1,0 +1,152 @@
+table Plan_Carguio
+	lineageTag: bbddfdb8-fb9b-4f15-b14a-6a743a375c28
+
+	measure 'Rendimiento Carguio Plan' = ```
+			
+			VAR EquiposVisibles = VALUES(Fact_HorasEquipo[Equipo])
+			RETURN
+			    CALCULATE(
+			        DIVIDE(SUM(Plan_Carguio[Toneladas Plan]), SUM(Plan_Carguio[Horas Efectivas Plan]), 0),
+			        TREATAS(EquiposVisibles, Plan_Carguio[Equipo])
+			    )
+			
+			```
+		lineageTag: 18028d5c-62cf-476f-92fd-f863702a5d98
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Utilizacion Carguio Plan' = ```
+			
+			VAR EquiposVisibles = VALUES(Fact_HorasEquipo[Equipo])
+			RETURN
+			    CALCULATE(
+			        DIVIDE(SUM(Plan_Carguio[Horas Operativas Plan]), SUM(Plan_Carguio[Horas Disponibles Plan]), 0),
+			        TREATAS(EquiposVisibles, Plan_Carguio[Equipo])
+			    )
+			
+			```
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: c6cea28d-a6a3-4e99-9b64-fb9b764e7642
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Disponibilidad Carguio Plan' =
+			VAR EquiposVisibles = VALUES(Fact_HorasEquipo[Equipo])
+			RETURN
+			    CALCULATE(
+			        DIVIDE(SUM(Plan_Carguio[Horas Disponibles Plan]), SUM(Plan_Carguio[Horas Nominales Plan]), 0),
+			        TREATAS(EquiposVisibles, Plan_Carguio[Equipo])
+			    )
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: 9dcb6b77-1356-47b6-8218-c6a4da92c49f
+
+	measure 'UEBD Carguio Plan' =
+			VAR EquiposVisibles = VALUES(Fact_HorasEquipo[Equipo])
+			RETURN
+			    CALCULATE(
+			        DIVIDE(SUM(Plan_Carguio[Horas Efectivas Plan]), SUM(Plan_Carguio[Horas Disponibles Plan]), 0),
+			        TREATAS(EquiposVisibles, Plan_Carguio[Equipo])
+			    )
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: b662438c-6d81-48be-aa50-cc59ff325ac8
+
+	measure 'Disponibilidad Pala Plan' =
+			CALCULATE(
+			    DIVIDE(SUM(Plan_Carguio[Horas Disponibles Plan]), SUM(Plan_Carguio[Horas Nominales Plan]), 0),
+			    FILTER(Plan_Carguio, LEFT(Plan_Carguio[Equipo], 1) = "P")
+			)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: 8a3d8a86-3253-4b97-a96d-1435eca1bfd7
+
+	measure 'UEBD Pala Plan' =
+			CALCULATE(
+			    DIVIDE(SUM(Plan_Carguio[Horas Efectivas Plan]), SUM(Plan_Carguio[Horas Disponibles Plan]), 0),
+			    FILTER(Plan_Carguio, LEFT(Plan_Carguio[Equipo], 1) = "P")
+			)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: b8d65985-5be0-42a0-ac66-ab2c32e9adcf
+
+	measure 'Rendimiento Pala Plan' =
+			CALCULATE(
+			    DIVIDE(SUM(Plan_Carguio[Toneladas Plan]), SUM(Plan_Carguio[Horas Efectivas Plan]), 0),
+			    FILTER(Plan_Carguio, LEFT(Plan_Carguio[Equipo], 1) = "P")
+			)
+		formatString: #,0.0
+		lineageTag: 4837e991-57a3-4620-ad10-27e5443eb9cf
+
+	column Fecha
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 24616cec-6d84-4fba-9c88-0bc9a2db9cf4
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+	column Equipo
+		dataType: string
+		lineageTag: d06b3945-f620-430f-91c5-5416c302141e
+		summarizeBy: none
+		sourceColumn: Equipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Horas Disponibles Plan'
+		dataType: double
+		lineageTag: f27eaba0-16c4-4bf3-8da2-8ad463d325a9
+		summarizeBy: sum
+		sourceColumn: Horas Disponibles Plan
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Horas Efectivas Plan'
+		dataType: double
+		lineageTag: 8de335bf-eba9-41fb-bded-095c7f599f4e
+		summarizeBy: sum
+		sourceColumn: Horas Efectivas Plan
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Horas Operativas Plan'
+		dataType: double
+		lineageTag: 2153aa7b-533c-4c66-8c4a-448b9c4a1b0b
+		summarizeBy: sum
+		sourceColumn: Horas Operativas Plan
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Toneladas Plan'
+		dataType: double
+		lineageTag: 75b9fedb-134c-4606-bc33-117acde99dc6
+		summarizeBy: sum
+		sourceColumn: Toneladas Plan
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Horas Nominales Plan'
+		dataType: double
+		lineageTag: f63d32a3-aa7a-43ab-9e56-7777b896529b
+		sourceColumn: Horas Nominales Plan
+
+	partition Plan_Carguio = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "plan_carguio.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Fecha", type datetime}, {"Equipo", type text}, {"Horas Disponibles Plan", type number}, {"Horas Efectivas Plan", type number}, {"Horas Operativas Plan", type number}, {"Toneladas Plan", type number}, {"Horas Nominales Plan", type number}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

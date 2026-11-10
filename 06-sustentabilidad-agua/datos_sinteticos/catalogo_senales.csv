@@ -1,0 +1,212 @@
+Tag,Descripcion,Modulo,Familia,Medicion,Unidad,ActivoID,Fuente,Origen,Principal,Confianza
+TAG_AGUA_001,Caudal instantáneo del pozo CAP-01,Captación,Caudal por pozo,Caudal,m³/h,CAP-01,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_002,Nivel dinámico del pozo CAP-01,Captación,Nivel en pozo,Nivel pozo,m,CAP-01,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_003,Cupo mensual de ejemplo del pozo CAP-01,Captación,Cupo de extracción,Cupo mes,m³/mes,CAP-01,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_004,Volumen acumulado del mes del pozo CAP-01,Captación,Volumen mensual,Volumen mes,m³,CAP-01,Pozos de captación (área C1),Calculada,Si,Alta
+TAG_AGUA_005,Caudal instantáneo del pozo CAP-02,Captación,Caudal por pozo,Caudal,m³/h,CAP-02,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_006,Nivel dinámico del pozo CAP-02,Captación,Nivel en pozo,Nivel pozo,m,CAP-02,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_007,Cupo mensual de ejemplo del pozo CAP-02,Captación,Cupo de extracción,Cupo mes,m³/mes,CAP-02,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_008,Volumen acumulado del mes del pozo CAP-02,Captación,Volumen mensual,Volumen mes,m³,CAP-02,Pozos de captación (área C1),Calculada,Si,Alta
+TAG_AGUA_009,Caudal instantáneo del pozo CAP-03,Captación,Caudal por pozo,Caudal,m³/h,CAP-03,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_010,Nivel dinámico del pozo CAP-03,Captación,Nivel en pozo,Nivel pozo,m,CAP-03,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_011,Cupo mensual de ejemplo del pozo CAP-03,Captación,Cupo de extracción,Cupo mes,m³/mes,CAP-03,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_012,Volumen acumulado del mes del pozo CAP-03,Captación,Volumen mensual,Volumen mes,m³,CAP-03,Pozos de captación (área C1),Calculada,Si,Alta
+TAG_AGUA_013,Totalizador del pozo CAP-04,Captación,Totalizador pozo,Totalizador,m³,CAP-04,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_014,Nivel dinámico del pozo CAP-04,Captación,Nivel en pozo,Nivel pozo,m,CAP-04,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_015,Cupo mensual de ejemplo del pozo CAP-04,Captación,Cupo de extracción,Cupo mes,m³/mes,CAP-04,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_016,Volumen acumulado del mes del pozo CAP-04,Captación,Volumen mensual,Volumen mes,m³,CAP-04,Pozos de captación (área C1),Calculada,Si,Alta
+TAG_AGUA_017,Totalizador del pozo CAP-05,Captación,Totalizador pozo,Totalizador,m³,CAP-05,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_018,Nivel dinámico del pozo CAP-05,Captación,Nivel en pozo,Nivel pozo,m,CAP-05,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_019,Cupo mensual de ejemplo del pozo CAP-05,Captación,Cupo de extracción,Cupo mes,m³/mes,CAP-05,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_020,Volumen acumulado del mes del pozo CAP-05,Captación,Volumen mensual,Volumen mes,m³,CAP-05,Pozos de captación (área C1),Calculada,Si,Alta
+TAG_AGUA_021,Caudal instantáneo del pozo CAP-06,Captación,Caudal por pozo,Caudal,m³/h,CAP-06,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_022,Nivel dinámico del pozo CAP-06,Captación,Nivel en pozo,Nivel pozo,m,CAP-06,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_023,Cupo mensual de ejemplo del pozo CAP-06,Captación,Cupo de extracción,Cupo mes,m³/mes,CAP-06,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_024,Volumen acumulado del mes del pozo CAP-06,Captación,Volumen mensual,Volumen mes,m³,CAP-06,Pozos de captación (área C1),Calculada,Si,Alta
+TAG_AGUA_025,Caudal instantáneo del pozo CAP-07,Captación,Caudal por pozo,Caudal,m³/h,CAP-07,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_026,Nivel dinámico del pozo CAP-07,Captación,Nivel en pozo,Nivel pozo,m,CAP-07,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_027,Cupo mensual de ejemplo del pozo CAP-07,Captación,Cupo de extracción,Cupo mes,m³/mes,CAP-07,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_028,Volumen acumulado del mes del pozo CAP-07,Captación,Volumen mensual,Volumen mes,m³,CAP-07,Pozos de captación (área C1),Calculada,Si,Alta
+TAG_AGUA_029,Caudal instantáneo del pozo CAP-08,Captación,Caudal por pozo,Caudal,m³/h,CAP-08,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_030,Nivel dinámico del pozo CAP-08,Captación,Nivel en pozo,Nivel pozo,m,CAP-08,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_031,Cupo mensual de ejemplo del pozo CAP-08,Captación,Cupo de extracción,Cupo mes,m³/mes,CAP-08,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_032,Volumen acumulado del mes del pozo CAP-08,Captación,Volumen mensual,Volumen mes,m³,CAP-08,Pozos de captación (área C1),Calculada,Si,Alta
+TAG_AGUA_033,Totalizador del pozo CAP-09,Captación,Totalizador pozo,Totalizador,m³,CAP-09,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_034,Nivel dinámico del pozo CAP-09,Captación,Nivel en pozo,Nivel pozo,m,CAP-09,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_035,Cupo mensual de ejemplo del pozo CAP-09,Captación,Cupo de extracción,Cupo mes,m³/mes,CAP-09,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_036,Volumen acumulado del mes del pozo CAP-09,Captación,Volumen mensual,Volumen mes,m³,CAP-09,Pozos de captación (área C1),Calculada,Si,Alta
+TAG_AGUA_037,Caudal instantáneo del pozo CAP-10,Captación,Caudal por pozo,Caudal,m³/h,CAP-10,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_038,Nivel dinámico del pozo CAP-10,Captación,Nivel en pozo,Nivel pozo,m,CAP-10,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_039,Cupo mensual de ejemplo del pozo CAP-10,Captación,Cupo de extracción,Cupo mes,m³/mes,CAP-10,Pozos de captación (área C1),Sensor,Si,Alta
+TAG_AGUA_040,Volumen acumulado del mes del pozo CAP-10,Captación,Volumen mensual,Volumen mes,m³,CAP-10,Pozos de captación (área C1),Calculada,Si,Alta
+TAG_AGUA_041,Caudal total captado por el campo de pozos,Captación,Total campo de pozos,Caudal total,m³/h,CAP-TOTAL,Pozos de captación (área C1),Calculada,Si,Alta
+TAG_AGUA_042,Pozos de captación con falla de comunicación según el sistema de control,Energía,Estado comunicación,Pozos sin comunicacion,n°,CAP-TOTAL,"Energía y comunicaciones (UPS, baterías, enlaces)",Sensor,Si,Alta
+TAG_AGUA_043,Falla del enlace satelital del Campo Sur,Energía,Enlace satelital,Falla comunicacion,0/1,CAP-ENLACE,"Energía y comunicaciones (UPS, baterías, enlaces)",Sensor,Si,Alta
+TAG_AGUA_044,Estado del enlace satelital del Campo Sur (1 = operativo),Energía,Enlace satelital,Estado enlace,0/1,CAP-ENLACE,"Energía y comunicaciones (UPS, baterías, enlaces)",Sensor,Si,Alta
+TAG_AGUA_045,Profundidad al agua del piezómetro PZ-01,Captación,Acuífero profundidad,Profundidad,m,PZ-01,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_046,Profundidad al agua del piezómetro PZ-02,Captación,Acuífero profundidad,Profundidad,m,PZ-02,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_047,Profundidad al agua del piezómetro PZ-03,Captación,Acuífero profundidad,Profundidad,m,PZ-03,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_048,Profundidad al agua del piezómetro PZ-04,Captación,Acuífero profundidad,Profundidad,m,PZ-04,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_049,Profundidad al agua del piezómetro PZ-05,Captación,Acuífero profundidad,Profundidad,m,PZ-05,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_050,Profundidad al agua del piezómetro PZ-06,Captación,Acuífero profundidad,Profundidad,m,PZ-06,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_051,Profundidad al agua del piezómetro PZ-07,Captación,Acuífero profundidad,Profundidad,m,PZ-07,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_052,Profundidad al agua del piezómetro PZ-08,Captación,Acuífero profundidad,Profundidad,m,PZ-08,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_053,Estado en marcha del pozo REC-01,Recuperación,Estado bomba,RUN,on/off,REC-01,Recuperación Norte (área R1),Sensor,Si,Alta
+TAG_AGUA_054,Caudal del pozo de recuperación REC-01,Recuperación,Caudal por pozo,Caudal,m³/h,REC-01,Recuperación Norte (área R1),Sensor,Si,Alta
+TAG_AGUA_055,Corriente de la bomba del pozo REC-01,Recuperación,Corriente bomba,Corriente,A,REC-01,Recuperación Norte (área R1),Sensor,Si,Alta
+TAG_AGUA_056,Horas detenido del pozo REC-01 (cálculo del historiador),Recuperación,Detención,Horas detenido,h,REC-01,Recuperación Norte (área R1),Calculada,Si,Alta
+TAG_AGUA_057,Estado en marcha del pozo REC-02,Recuperación,Estado bomba,RUN,on/off,REC-02,Recuperación Norte (área R1),Sensor,Si,Alta
+TAG_AGUA_058,Caudal del pozo de recuperación REC-02,Recuperación,Caudal por pozo,Caudal,m³/h,REC-02,Recuperación Norte (área R1),Sensor,Si,Alta
+TAG_AGUA_059,Corriente de la bomba del pozo REC-02,Recuperación,Corriente bomba,Corriente,A,REC-02,Recuperación Norte (área R1),Sensor,Si,Alta
+TAG_AGUA_060,Horas detenido del pozo REC-02 (cálculo del historiador),Recuperación,Detención,Horas detenido,h,REC-02,Recuperación Norte (área R1),Calculada,Si,Alta
+TAG_AGUA_061,Estado en marcha del pozo REC-03,Recuperación,Estado bomba,RUN,on/off,REC-03,Recuperación Norte (área R1),Sensor,Si,Alta
+TAG_AGUA_062,Caudal del pozo de recuperación REC-03,Recuperación,Caudal por pozo,Caudal,m³/h,REC-03,Recuperación Norte (área R1),Sensor,Si,Alta
+TAG_AGUA_063,Corriente de la bomba del pozo REC-03,Recuperación,Corriente bomba,Corriente,A,REC-03,Recuperación Norte (área R1),Sensor,Si,Alta
+TAG_AGUA_064,Horas detenido del pozo REC-03 (cálculo del historiador),Recuperación,Detención,Horas detenido,h,REC-03,Recuperación Norte (área R1),Calculada,Si,Alta
+TAG_AGUA_065,Estado en marcha del pozo REC-04,Recuperación,Estado bomba,RUN,on/off,REC-04,Recuperación Norte (área R1),Sensor,Si,Alta
+TAG_AGUA_066,Caudal del pozo de recuperación REC-04,Recuperación,Caudal por pozo,Caudal,m³/h,REC-04,Recuperación Norte (área R1),Sensor,Si,Alta
+TAG_AGUA_067,Corriente de la bomba del pozo REC-04,Recuperación,Corriente bomba,Corriente,A,REC-04,Recuperación Norte (área R1),Sensor,Si,Alta
+TAG_AGUA_068,Horas detenido del pozo REC-04 (cálculo del historiador),Recuperación,Detención,Horas detenido,h,REC-04,Recuperación Norte (área R1),Calculada,Si,Alta
+TAG_AGUA_069,Estado en marcha del pozo REC-05,Recuperación,Estado bomba,RUN,on/off,REC-05,Recuperación Norte (área R1),Sensor,Si,Alta
+TAG_AGUA_070,Caudal del pozo de recuperación REC-05,Recuperación,Caudal por pozo,Caudal,m³/h,REC-05,Recuperación Norte (área R1),Sensor,Si,Alta
+TAG_AGUA_071,Corriente de la bomba del pozo REC-05,Recuperación,Corriente bomba,Corriente,A,REC-05,Recuperación Norte (área R1),Sensor,Si,Alta
+TAG_AGUA_072,Horas detenido del pozo REC-05 (cálculo del historiador),Recuperación,Detención,Horas detenido,h,REC-05,Recuperación Norte (área R1),Calculada,Si,Alta
+TAG_AGUA_073,Estado en marcha del pozo REC-06,Recuperación,Estado bomba,RUN,on/off,REC-06,Recuperación Sur (área R2),Sensor,Si,Alta
+TAG_AGUA_074,Caudal del pozo de recuperación REC-06,Recuperación,Caudal por pozo,Caudal,m³/h,REC-06,Recuperación Sur (área R2),Sensor,Si,Alta
+TAG_AGUA_075,Corriente de la bomba del pozo REC-06,Recuperación,Corriente bomba,Corriente,A,REC-06,Recuperación Sur (área R2),Sensor,Si,Alta
+TAG_AGUA_076,Horas detenido del pozo REC-06 (cálculo del historiador),Recuperación,Detención,Horas detenido,h,REC-06,Recuperación Sur (área R2),Calculada,Si,Alta
+TAG_AGUA_077,Estado en marcha del pozo REC-07,Recuperación,Estado bomba,RUN,on/off,REC-07,Recuperación Sur (área R2),Sensor,Si,Alta
+TAG_AGUA_078,Caudal del pozo de recuperación REC-07,Recuperación,Caudal por pozo,Caudal,m³/h,REC-07,Recuperación Sur (área R2),Sensor,Si,Alta
+TAG_AGUA_079,Corriente de la bomba del pozo REC-07,Recuperación,Corriente bomba,Corriente,A,REC-07,Recuperación Sur (área R2),Sensor,Si,Alta
+TAG_AGUA_080,Horas detenido del pozo REC-07 (cálculo del historiador),Recuperación,Detención,Horas detenido,h,REC-07,Recuperación Sur (área R2),Calculada,Si,Alta
+TAG_AGUA_081,Estado en marcha del pozo REC-08,Recuperación,Estado bomba,RUN,on/off,REC-08,Recuperación Sur (área R2),Sensor,Si,Alta
+TAG_AGUA_082,Caudal del pozo de recuperación REC-08,Recuperación,Caudal por pozo,Caudal,m³/h,REC-08,Recuperación Sur (área R2),Sensor,Si,Alta
+TAG_AGUA_083,Corriente de la bomba del pozo REC-08,Recuperación,Corriente bomba,Corriente,A,REC-08,Recuperación Sur (área R2),Sensor,Si,Alta
+TAG_AGUA_084,Horas detenido del pozo REC-08 (cálculo del historiador),Recuperación,Detención,Horas detenido,h,REC-08,Recuperación Sur (área R2),Calculada,Si,Alta
+TAG_AGUA_085,Estado en marcha de la bomba BR-01,Recuperación,Estado bomba,RUN,on/off,BR-01,Recuperación Sur (área R2),Sensor,Si,Alta
+TAG_AGUA_086,Corriente de la bomba BR-01,Recuperación,Corriente bomba,Corriente,A,BR-01,Recuperación Sur (área R2),Sensor,Si,Alta
+TAG_AGUA_087,Estado en marcha de la bomba BR-02,Recuperación,Estado bomba,RUN,on/off,BR-02,Recuperación Sur (área R2),Sensor,Si,Alta
+TAG_AGUA_088,Corriente de la bomba BR-02,Recuperación,Corriente bomba,Corriente,A,BR-02,Recuperación Sur (área R2),Sensor,Si,Alta
+TAG_AGUA_089,Estado en marcha de la bomba BR-03,Recuperación,Estado bomba,RUN,on/off,BR-03,Recuperación Sur (área R2),Sensor,Si,Alta
+TAG_AGUA_090,Corriente de la bomba BR-03,Recuperación,Corriente bomba,Corriente,A,BR-03,Recuperación Sur (área R2),Sensor,Si,Alta
+TAG_AGUA_091,Caudal de retorno desde el Tranque Demo (línea 1),Balance,Caudal recuperación,Caudal,m³/h,QR-01,Balance y consumo por área (área B1),Sensor,Si,Alta
+TAG_AGUA_092,Caudal de retorno desde el Tranque Demo (línea 2),Balance,Caudal recuperación,Caudal,m³/h,QR-02,Balance y consumo por área (área B1),Sensor,Si,Alta
+TAG_AGUA_093,Caudal medido en AFO-01,Recuperación,Aforo,Caudal aforador,L/s,AFO-01,Recuperación Norte (área R1),Sensor,Si,Alta
+TAG_AGUA_094,Caudal medido en AFO-02,Recuperación,Aforo,Caudal aforador,L/s,AFO-02,Recuperación Norte (área R1),Sensor,Si,Alta
+TAG_AGUA_095,Caudal medido en AFO-03,Recuperación,Aforo,Caudal aforador,L/s,AFO-03,Recuperación Sur (área R2),Sensor,Si,Alta
+TAG_AGUA_096,Caudal medido en CC-N,Recuperación,Aforo,Caudal aforador,L/s,CC-N,Recuperación Norte (área R1),Sensor,Si,Alta
+TAG_AGUA_097,Caudal medido en CC-S,Recuperación,Aforo,Caudal aforador,L/s,CC-S,Recuperación Sur (área R2),Sensor,Si,Alta
+TAG_AGUA_098,Caudal total de agua recuperada y recirculada,Balance,Total agua recuperada,Caudal recuperada total,m³/h,REC-TOTAL,Balance y consumo por área (área B1),Calculada,Si,Alta
+TAG_AGUA_099,Nivel del estanque EST-01,Estanques,Nivel estanque,Nivel estanque,%,EST-01,Estanques (áreas R1 / R2),Sensor,Si,Alta
+TAG_AGUA_100,Límite HI del estanque EST-01,Estanques,Límites de nivel,Limite HI,%,EST-01,Estanques (áreas R1 / R2),Calculada,Si,Alta
+TAG_AGUA_101,Límite HH del estanque EST-01,Estanques,Límites de nivel,Limite HH,%,EST-01,Estanques (áreas R1 / R2),Calculada,Si,Alta
+TAG_AGUA_102,Nivel del estanque EST-02,Estanques,Nivel estanque,Nivel estanque,%,EST-02,Estanques (áreas R1 / R2),Sensor,Si,Alta
+TAG_AGUA_103,Límite HI del estanque EST-02,Estanques,Límites de nivel,Limite HI,%,EST-02,Estanques (áreas R1 / R2),Calculada,Si,Alta
+TAG_AGUA_104,Límite HH del estanque EST-02,Estanques,Límites de nivel,Limite HH,%,EST-02,Estanques (áreas R1 / R2),Calculada,Si,Alta
+TAG_AGUA_105,Nivel del estanque EST-03,Estanques,Nivel estanque,Nivel estanque,%,EST-03,Estanques (áreas R1 / R2),Sensor,Si,Alta
+TAG_AGUA_106,Límite HI del estanque EST-03,Estanques,Límites de nivel,Limite HI,%,EST-03,Estanques (áreas R1 / R2),Calculada,Si,Alta
+TAG_AGUA_107,Límite HH del estanque EST-03,Estanques,Límites de nivel,Limite HH,%,EST-03,Estanques (áreas R1 / R2),Calculada,Si,Alta
+TAG_AGUA_108,Nivel del estanque EST-04,Estanques,Nivel estanque,Nivel estanque,%,EST-04,Estanques (áreas R1 / R2),Sensor,Si,Alta
+TAG_AGUA_109,Nivel redundante del estanque EST-02,Estanques,Nivel estanque,Nivel estanque,%,EST-02,Estanques (áreas R1 / R2),Sensor,No,Alta
+TAG_AGUA_110,Estado de la bomba A del estanque EST-01,Estanques,Estado bomba,RUN,on/off,EST-01,Estanques (áreas R1 / R2),Sensor,Si,Alta
+TAG_AGUA_111,Estado de la bomba B del estanque EST-01,Estanques,Estado bomba,RUN,on/off,EST-01,Estanques (áreas R1 / R2),Sensor,Si,Alta
+TAG_AGUA_112,Estado de la bomba A del estanque EST-02,Estanques,Estado bomba,RUN,on/off,EST-02,Estanques (áreas R1 / R2),Sensor,Si,Alta
+TAG_AGUA_113,Estado de la bomba B del estanque EST-03,Estanques,Estado bomba,RUN,on/off,EST-03,Estanques (áreas R1 / R2),Sensor,Si,Alta
+TAG_AGUA_114,Estado de la bomba A del estanque EST-03,Estanques,Estado bomba,RUN,on/off,EST-03,Estanques (áreas R1 / R2),Sensor,Si,Alta
+TAG_AGUA_115,Estado de la bomba B del estanque EST-04,Estanques,Estado bomba,RUN,on/off,EST-04,Estanques (áreas R1 / R2),Sensor,Si,Alta
+TAG_AGUA_116,Nivel de tranque demo,Tranques,Nivel tranque,Nivel tranque,%,TRQ-DEMO,Tranques y pozas (áreas T1 / T2),Sensor,Si,Alta
+TAG_AGUA_117,Alarma de nivel alto de tranque demo,Tranques,Alarma nivel,Alarma alto nivel,0/1,TRQ-DEMO,Tranques y pozas (áreas T1 / T2),Sensor,Si,Alta
+TAG_AGUA_118,Nivel de poza de emergencia,Tranques,Nivel tranque,Nivel tranque,%,TRQ-EMER,Tranques y pozas (áreas T1 / T2),Sensor,Si,Alta
+TAG_AGUA_119,Alarma de nivel alto de poza de emergencia,Tranques,Alarma nivel,Alarma alto nivel,0/1,TRQ-EMER,Tranques y pozas (áreas T1 / T2),Sensor,Si,Alta
+TAG_AGUA_120,Nivel de poza de proceso 1,Tranques,Nivel tranque,Nivel tranque,%,TRQ-P1,Tranques y pozas (áreas T1 / T2),Sensor,Si,Alta
+TAG_AGUA_121,Nivel de poza de proceso 2,Tranques,Nivel tranque,Nivel tranque,%,TRQ-P2,Tranques y pozas (áreas T1 / T2),Sensor,Si,Alta
+TAG_AGUA_122,Alarma de nivel alto de poza de proceso 2,Tranques,Alarma nivel,Alarma alto nivel,0/1,TRQ-P2,Tranques y pozas (áreas T1 / T2),Sensor,Si,Alta
+TAG_AGUA_123,Nivel de poza de refino,Tranques,Nivel tranque,Nivel tranque,%,TRQ-REF,Tranques y pozas (áreas T1 / T2),Sensor,Si,Alta
+TAG_AGUA_124,Alarma de nivel alto de poza de refino,Tranques,Alarma nivel,Alarma alto nivel,0/1,TRQ-REF,Tranques y pozas (áreas T1 / T2),Sensor,Si,Alta
+TAG_AGUA_125,Nivel de poza clarificada,Tranques,Nivel tranque,Nivel tranque,%,TRQ-CLA,Tranques y pozas (áreas T1 / T2),Sensor,Si,Alta
+TAG_AGUA_126,Alarma de nivel alto de poza clarificada,Tranques,Alarma nivel,Alarma alto nivel,0/1,TRQ-CLA,Tranques y pozas (áreas T1 / T2),Sensor,Si,Alta
+TAG_AGUA_127,Nivel de poza de contingencia,Tranques,Nivel tranque,Nivel tranque,%,TRQ-CONT,Tranques y pozas (áreas T1 / T2),Sensor,Si,Alta
+TAG_AGUA_128,Nivel de poza de rebose,Tranques,Nivel tranque,Nivel tranque,%,TRQ-REB,Tranques y pozas (áreas T1 / T2),Sensor,Si,Alta
+TAG_AGUA_129,Detector de fuga de la poza de emergencia,Tranques,Detector de fuga,Detector fuga,0/1,TRQ-EMER,Tranques y pozas (áreas T1 / T2),Sensor,Si,Alta
+TAG_AGUA_130,Detector de fuga del Tranque Demo,Tranques,Detector de fuga,Detector fuga,0/1,TRQ-DEMO,Tranques y pozas (áreas T1 / T2),Sensor,Si,Alta
+TAG_AGUA_131,Bomba A de la poza de emergencia en marcha,Tranques,Estado bomba,RUN,on/off,TRQ-EMER,Tranques y pozas (áreas T1 / T2),Sensor,Si,Alta
+TAG_AGUA_132,Bomba B de la poza de emergencia en automático,Tranques,Estado bomba,Modo auto,0/1,TRQ-EMER,Tranques y pozas (áreas T1 / T2),Sensor,Si,Alta
+TAG_AGUA_133,pH del Tranque Demo,Tranques,Calidad en tranque,pH tranque,pH,TRQ-DEMO,Tranques y pozas (áreas T1 / T2),Sensor,No,Alta
+TAG_AGUA_134,pH de la poza de proceso 1,Tranques,Calidad en tranque,pH tranque,pH,TRQ-P1,Tranques y pozas (áreas T1 / T2),Sensor,No,Alta
+TAG_AGUA_135,Profundidad al nivel freático del pozo MON-01,Monitoreo,Acuífero nivel freático,Profundidad,m,MON-01,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_136,Batería de la estación del pozo MON-01,Energía,Batería estación,Bateria,V,MON-01,"Energía y comunicaciones (UPS, baterías, enlaces)",Sensor,Si,Alta
+TAG_AGUA_137,Profundidad al nivel freático del pozo MON-02,Monitoreo,Acuífero nivel freático,Profundidad,m,MON-02,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_138,Batería de la estación del pozo MON-02,Energía,Batería estación,Bateria,V,MON-02,"Energía y comunicaciones (UPS, baterías, enlaces)",Sensor,Si,Alta
+TAG_AGUA_139,Profundidad al nivel freático del pozo MON-03,Monitoreo,Acuífero nivel freático,Profundidad,m,MON-03,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_140,Batería de la estación del pozo MON-03,Energía,Batería estación,Bateria,V,MON-03,"Energía y comunicaciones (UPS, baterías, enlaces)",Sensor,Si,Alta
+TAG_AGUA_141,Profundidad al nivel freático del pozo MON-04,Monitoreo,Acuífero nivel freático,Profundidad,m,MON-04,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_142,Batería de la estación del pozo MON-04,Energía,Batería estación,Bateria,V,MON-04,"Energía y comunicaciones (UPS, baterías, enlaces)",Sensor,Si,Alta
+TAG_AGUA_143,Profundidad al nivel freático del pozo MON-05,Monitoreo,Acuífero nivel freático,Profundidad,m,MON-05,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_144,Batería de la estación del pozo MON-05,Energía,Batería estación,Bateria,V,MON-05,"Energía y comunicaciones (UPS, baterías, enlaces)",Sensor,Si,Alta
+TAG_AGUA_145,Profundidad al nivel freático del pozo MON-06,Monitoreo,Acuífero nivel freático,Profundidad,m,MON-06,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_146,Batería de la estación del pozo MON-06,Energía,Batería estación,Bateria,V,MON-06,"Energía y comunicaciones (UPS, baterías, enlaces)",Sensor,Si,Alta
+TAG_AGUA_147,Profundidad al nivel freático del pozo MON-07,Monitoreo,Acuífero nivel freático,Profundidad,m,MON-07,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_148,Batería de la estación del pozo MON-07,Energía,Batería estación,Bateria,V,MON-07,"Energía y comunicaciones (UPS, baterías, enlaces)",Sensor,Si,Alta
+TAG_AGUA_149,Profundidad al nivel freático del pozo MON-08,Monitoreo,Acuífero nivel freático,Profundidad,m,MON-08,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_150,Batería de la estación del pozo MON-08,Energía,Batería estación,Bateria,V,MON-08,"Energía y comunicaciones (UPS, baterías, enlaces)",Sensor,Si,Alta
+TAG_AGUA_151,Profundidad al nivel freático del pozo MON-09,Monitoreo,Acuífero nivel freático,Profundidad,m,MON-09,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_152,Batería de la estación del pozo MON-09,Energía,Batería estación,Bateria,V,MON-09,"Energía y comunicaciones (UPS, baterías, enlaces)",Sensor,Si,Alta
+TAG_AGUA_153,Profundidad al nivel freático del pozo MON-10,Monitoreo,Acuífero nivel freático,Profundidad,m,MON-10,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_154,Batería de la estación del pozo MON-10,Energía,Batería estación,Bateria,V,MON-10,"Energía y comunicaciones (UPS, baterías, enlaces)",Sensor,Si,Alta
+TAG_AGUA_155,Profundidad al nivel freático del pozo MON-11,Monitoreo,Acuífero nivel freático,Profundidad,m,MON-11,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_156,Batería de la estación del pozo MON-11,Energía,Batería estación,Bateria,V,MON-11,"Energía y comunicaciones (UPS, baterías, enlaces)",Sensor,Si,Alta
+TAG_AGUA_157,Profundidad al nivel freático del pozo MON-12,Monitoreo,Acuífero nivel freático,Profundidad,m,MON-12,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_158,Batería de la estación del pozo MON-12,Energía,Batería estación,Bateria,V,MON-12,"Energía y comunicaciones (UPS, baterías, enlaces)",Sensor,Si,Alta
+TAG_AGUA_159,pH en línea de la estación EC-01,Calidad,Calidad en línea,pH,pH,EC-01,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_160,Conductividad en línea de la estación EC-01,Calidad,Calidad en línea,CE,µS/cm,EC-01,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_161,Turbidez en línea de la estación EC-01,Calidad,Calidad en línea,Turbidez,NTU,EC-01,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_162,pH en línea de la estación EC-02,Calidad,Calidad en línea,pH,pH,EC-02,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_163,Conductividad en línea de la estación EC-02,Calidad,Calidad en línea,CE,µS/cm,EC-02,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_164,Turbidez en línea de la estación EC-02,Calidad,Calidad en línea,Turbidez,NTU,EC-02,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_165,pH en línea de la estación EC-03,Calidad,Calidad en línea,pH,pH,EC-03,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_166,Conductividad en línea de la estación EC-03,Calidad,Calidad en línea,CE,µS/cm,EC-03,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_167,Turbidez en línea de la estación EC-03,Calidad,Calidad en línea,Turbidez,NTU,EC-03,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_168,pH en línea de la estación EC-04,Calidad,Calidad en línea,pH,pH,EC-04,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_169,Conductividad en línea de la estación EC-04,Calidad,Calidad en línea,CE,µS/cm,EC-04,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_170,Turbidez en línea de la estación EC-04,Calidad,Calidad en línea,Turbidez,NTU,EC-04,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_171,pH en línea de la estación EC-05,Calidad,Calidad en línea,pH,pH,EC-05,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_172,Conductividad en línea de la estación EC-05,Calidad,Calidad en línea,CE,µS/cm,EC-05,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_173,Turbidez en línea de la estación EC-05,Calidad,Calidad en línea,Turbidez,NTU,EC-05,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_174,pH en línea de la estación EC-06,Calidad,Calidad en línea,pH,pH,EC-06,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_175,Conductividad en línea de la estación EC-06,Calidad,Calidad en línea,CE,µS/cm,EC-06,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_176,Turbidez en línea de la estación EC-06,Calidad,Calidad en línea,Turbidez,NTU,EC-06,Estaciones de monitoreo (área M1),Sensor,Si,Alta
+TAG_AGUA_177,Estado de la UPS de la sala eléctrica 01,Energía,Estado UPS,UPS estado,código,SE-01,"Energía y comunicaciones (UPS, baterías, enlaces)",Calculada,Si,Alta
+TAG_AGUA_178,Estado de la UPS de la sala eléctrica 02,Energía,Estado UPS,UPS estado,código,SE-02,"Energía y comunicaciones (UPS, baterías, enlaces)",Calculada,Si,Alta
+TAG_AGUA_179,Estado de la UPS de la sala eléctrica 03,Energía,Estado UPS,UPS estado,código,SE-03,"Energía y comunicaciones (UPS, baterías, enlaces)",Calculada,Si,Alta
+TAG_AGUA_180,Estado de la UPS de la sala eléctrica 04,Energía,Estado UPS,UPS estado,código,SE-04,"Energía y comunicaciones (UPS, baterías, enlaces)",Calculada,Si,Alta
+TAG_AGUA_181,Estado de la UPS de la sala eléctrica 05,Energía,Estado UPS,UPS estado,código,SE-05,"Energía y comunicaciones (UPS, baterías, enlaces)",Calculada,Si,Alta
+TAG_AGUA_182,Estado de la UPS de la sala eléctrica 06,Energía,Estado UPS,UPS estado,código,SE-06,"Energía y comunicaciones (UPS, baterías, enlaces)",Calculada,Si,Alta
+TAG_AGUA_183,Estado de la UPS de la sala eléctrica 07,Energía,Estado UPS,UPS estado,código,SE-07,"Energía y comunicaciones (UPS, baterías, enlaces)",Calculada,Si,Alta
+TAG_AGUA_184,Estado de la UPS de la sala eléctrica 08,Energía,Estado UPS,UPS estado,código,SE-08,"Energía y comunicaciones (UPS, baterías, enlaces)",Calculada,Si,Alta
+TAG_AGUA_185,Estado de la UPS de la sala eléctrica 09,Energía,Estado UPS,UPS estado,código,SE-09,"Energía y comunicaciones (UPS, baterías, enlaces)",Calculada,Si,Alta
+TAG_AGUA_186,Estado de la UPS de la sala eléctrica 10,Energía,Estado UPS,UPS estado,código,SE-10,"Energía y comunicaciones (UPS, baterías, enlaces)",Calculada,Si,Alta
+TAG_AGUA_187,Estado de la UPS de la sala eléctrica 11,Energía,Estado UPS,UPS estado,código,SE-11,"Energía y comunicaciones (UPS, baterías, enlaces)",Calculada,Si,Alta
+TAG_AGUA_188,Estado de la UPS de la sala eléctrica 12,Energía,Estado UPS,UPS estado,código,SE-12,"Energía y comunicaciones (UPS, baterías, enlaces)",Calculada,Si,Alta
+TAG_AGUA_189,Horas sin envio A · CAP-01,Energía,Envío reporte A,Horas sin envio A,h,REP-A,Reporte externo (portales A y B),Calculada,Si,Media
+TAG_AGUA_190,Horas sin envio A · CAP-02,Energía,Envío reporte A,Horas sin envio A,h,REP-A,Reporte externo (portales A y B),Calculada,Si,Media
+TAG_AGUA_191,Horas sin envio A · CAP-03,Energía,Envío reporte A,Horas sin envio A,h,REP-A,Reporte externo (portales A y B),Calculada,Si,Media
+TAG_AGUA_192,Horas sin envio A · CAP-04,Energía,Envío reporte A,Horas sin envio A,h,REP-A,Reporte externo (portales A y B),Calculada,Si,Media
+TAG_AGUA_193,Horas sin envio A · CAP-05,Energía,Envío reporte A,Horas sin envio A,h,REP-A,Reporte externo (portales A y B),Calculada,Si,Media
+TAG_AGUA_194,Horas sin envio A · CAP-06,Energía,Envío reporte A,Horas sin envio A,h,REP-A,Reporte externo (portales A y B),Calculada,Si,Media
+TAG_AGUA_195,Horas sin envio A · CAP-07,Energía,Envío reporte A,Horas sin envio A,h,REP-A,Reporte externo (portales A y B),Calculada,Si,Media
+TAG_AGUA_196,Horas sin envio A · CAP-08,Energía,Envío reporte A,Horas sin envio A,h,REP-A,Reporte externo (portales A y B),Calculada,Si,Media
+TAG_AGUA_197,Horas sin envio A · CAP-09,Energía,Envío reporte A,Horas sin envio A,h,REP-A,Reporte externo (portales A y B),Calculada,Si,Media
+TAG_AGUA_198,Horas sin envio A · CAP-10,Energía,Envío reporte A,Horas sin envio A,h,REP-A,Reporte externo (portales A y B),Calculada,Si,Media
+TAG_AGUA_199,Errores envio B 12 h · LOG-01,Energía,Envío reporte B,Errores envio B 12 h,n°,REP-B,Reporte externo (portales A y B),Calculada,Si,Media
+TAG_AGUA_200,Errores envio B 12 h · LOG-02,Energía,Envío reporte B,Errores envio B 12 h,n°,REP-B,Reporte externo (portales A y B),Calculada,Si,Media
+TAG_AGUA_201,Errores envio B 12 h · LOG-03,Energía,Envío reporte B,Errores envio B 12 h,n°,REP-B,Reporte externo (portales A y B),Calculada,Si,Media
+TAG_AGUA_202,Errores envio B 12 h · LOG-04,Energía,Envío reporte B,Errores envio B 12 h,n°,REP-B,Reporte externo (portales A y B),Calculada,Si,Media
+TAG_AGUA_203,Errores envio B 12 h · LOG-05,Energía,Envío reporte B,Errores envio B 12 h,n°,REP-B,Reporte externo (portales A y B),Calculada,Si,Media
+TAG_AGUA_204,Errores envio B 12 h · LOG-06,Energía,Envío reporte B,Errores envio B 12 h,n°,REP-B,Reporte externo (portales A y B),Calculada,Si,Media
+TAG_AGUA_205,Errores envio B 12 h · LOG-07,Energía,Envío reporte B,Errores envio B 12 h,n°,REP-B,Reporte externo (portales A y B),Calculada,Si,Media
+TAG_AGUA_206,Errores envio B 12 h · LOG-08,Energía,Envío reporte B,Errores envio B 12 h,n°,REP-B,Reporte externo (portales A y B),Calculada,Si,Media
+TAG_AGUA_207,Consumo horario de agua en chancado,Balance,Consumo por área,Consumo,m³/h,CON-01,Balance y consumo por área (área B1),Sensor,Si,Alta
+TAG_AGUA_208,Consumo horario de agua en molienda y clasificación,Balance,Consumo por área,Consumo,m³/h,CON-02,Balance y consumo por área (área B1),Sensor,Si,Alta
+TAG_AGUA_209,Consumo horario de agua en flotación,Balance,Consumo por área,Consumo,m³/h,CON-03,Balance y consumo por área (área B1),Sensor,Si,Alta
+TAG_AGUA_210,Consumo horario de agua en mina (riego y control de polvo),Balance,Consumo por área,Consumo,m³/h,CON-04,Balance y consumo por área (área B1),Sensor,Si,Alta
+TAG_AGUA_211,Consumo horario de agua en servicios generales,Balance,Consumo por área,Consumo,m³/h,CON-05,Balance y consumo por área (área B1),Sensor,Si,Alta

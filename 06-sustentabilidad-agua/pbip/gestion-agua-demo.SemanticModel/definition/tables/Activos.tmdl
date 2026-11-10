@@ -1,0 +1,137 @@
+/// Pozos, estanques, tranques, estaciones, salas y áreas de consumo a los que pertenece cada señal.
+table Activos
+	lineageTag: 840b19e7-d33b-4f05-ab39-ea4eda125217
+
+	column ActivoID
+		dataType: string
+		lineageTag: a372a940-8696-441b-a31a-1e28c8d11811
+		summarizeBy: none
+		sourceColumn: ActivoID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Activo
+		dataType: string
+		lineageTag: ac2e91b1-66ae-4120-b5af-ba09325c0e37
+		summarizeBy: none
+		sourceColumn: Activo
+		sortByColumn: Orden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tipo
+		dataType: string
+		lineageTag: 09981da8-1dec-4630-8fb0-bcc6f3ed831a
+		summarizeBy: none
+		sourceColumn: Tipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Grupo
+		dataType: string
+		lineageTag: 65a3479a-67d8-4d20-b47a-b1d260612d67
+		summarizeBy: none
+		sourceColumn: Grupo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Circuito
+		dataType: string
+		lineageTag: 6ff68a4c-922c-45a3-9c9f-e9d707969d72
+		summarizeBy: none
+		sourceColumn: Circuito
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sector
+		dataType: string
+		lineageTag: 53d09c45-7d0a-4ad4-a671-28c5d8c308f2
+		summarizeBy: none
+		sourceColumn: Sector
+
+		annotation SummarizationSetBy = Automatic
+
+	column Pagina
+		dataType: string
+		lineageTag: b39fa9a3-0786-4413-bee1-dd5c74aca200
+		summarizeBy: none
+		sourceColumn: Pagina
+
+		annotation SummarizationSetBy = Automatic
+
+	column Orden
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ed92af69-b3e7-4e50-92e0-8e9a9c5908ec
+		summarizeBy: none
+		sourceColumn: Orden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Confianza
+		dataType: string
+		lineageTag: c4682694-513f-4e6a-a661-f7dcad88c742
+		summarizeBy: none
+		sourceColumn: Confianza
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nota
+		dataType: string
+		lineageTag: 37190dbc-7a8c-498d-b2bc-aac423fe32ea
+		summarizeBy: none
+		sourceColumn: Nota
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Grupo de comunicación y energía (estación, sala o enlace) al que pertenece el activo.
+	column Estacion
+		dataType: string
+		lineageTag: 82de84a1-12ab-4205-841a-f7da99dab47d
+		summarizeBy: none
+		sourceColumn: Estacion
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Circuito de recuperación aguas arriba del pozo de monitoreo.
+	column CircuitoAsociado
+		dataType: string
+		lineageTag: aaa969ec-e343-4f9f-a40f-cf3a4071fe65
+		summarizeBy: none
+		sourceColumn: CircuitoAsociado
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Umbral de nivel alto (%) del tranque (límite de ejemplo).
+	column HI
+		dataType: double
+		formatString: 0
+		lineageTag: 89e8b155-8af9-485e-8384-b4a4ad3c0bee
+		summarizeBy: none
+		sourceColumn: HI
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Umbral de nivel muy alto (%) del tranque (límite de ejemplo).
+	column HH
+		dataType: double
+		formatString: 0
+		lineageTag: 48828ff4-76c7-4e27-8431-788880622f93
+		summarizeBy: none
+		sourceColumn: HH
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Activos = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "catalogo_activos.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"ActivoID", type text}, {"Activo", type text}, {"Tipo", type text}, {"Grupo", type text}, {"Circuito", type text}, {"Sector", type text}, {"Pagina", type text}, {"Orden", Int64.Type}, {"Confianza", type text}, {"Nota", type text}, {"Estacion", type text}, {"CircuitoAsociado", type text}, {"HI", type number}, {"HH", type number}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

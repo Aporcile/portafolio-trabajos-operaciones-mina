@@ -1,0 +1,8 @@
+cultureInfo es-ES
+
+	linguisticMetadata =
+			{
+			  "Version": "1.0.0",
+			  "Language": "es-ES"
+			}
+		contentType: json

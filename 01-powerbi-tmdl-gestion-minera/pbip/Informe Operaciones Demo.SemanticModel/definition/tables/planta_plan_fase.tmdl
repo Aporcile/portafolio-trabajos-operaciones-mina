@@ -1,0 +1,43 @@
+table planta_plan_fase
+	lineageTag: ef6dfdee-3f0f-4a8c-be27-601ecdafb405
+
+	column Fecha
+		dataType: dateTime
+		formatString: dd-mm-yyyy
+		lineageTag: a439fe61-d656-4ea3-9fb5-5fbc8b8ac195
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Clave
+		dataType: string
+		lineageTag: d9db9b89-1bee-4ca2-bc42-b8f3565fbc88
+		summarizeBy: none
+		sourceColumn: Clave
+
+		annotation SummarizationSetBy = Automatic
+
+	column Toneladas
+		dataType: double
+		lineageTag: ecd62507-4173-4b51-99bd-e7a74dad8356
+		summarizeBy: none
+		sourceColumn: Toneladas
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition planta_plan_fase = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "planta_plan_fase.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Fecha", type date}, {"Clave", type text}, {"Toneladas", type number}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table

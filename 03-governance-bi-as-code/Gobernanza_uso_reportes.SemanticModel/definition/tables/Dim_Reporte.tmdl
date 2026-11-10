@@ -1,0 +1,111 @@
+table Dim_Reporte
+	lineageTag: 48b96483-8783-cca3-e631-dfeba642b076
+
+	column report_id
+		dataType: string
+		isHidden
+		isKey
+		lineageTag: 93c62e9d-be26-6111-5c8f-85b71a98591d
+		sourceColumn: report_id
+
+	column report_nombre
+		dataType: string
+		isHidden
+		lineageTag: e345263f-8672-c4b6-90f2-a477ad9895a7
+		sourceColumn: report_nombre
+
+	column workspace_id
+		dataType: string
+		isHidden
+		lineageTag: c172e5f1-31b7-8c6a-29e5-1331ce5f88f2
+		sourceColumn: workspace_id
+
+	column workspace_nombre
+		dataType: string
+		isHidden
+		lineageTag: 0b49655b-230c-e198-1d5d-643f77f9a4a3
+		sourceColumn: workspace_nombre
+
+	column url
+		dataType: string
+		isHidden
+		lineageTag: b4532faa-f83b-c015-f928-9a19ff38f4eb
+		sourceColumn: url
+
+	column Area
+		dataType: string
+		isHidden
+		lineageTag: 5359e30f-3f0a-81b6-c14c-44bea98846b6
+		sourceColumn: Area
+
+	column Reporte
+		dataType: string
+		lineageTag: 5d22638c-9964-a85f-f5a3-cca4335c00b4
+		sourceColumn: Reporte
+
+	partition Dim_Reporte = m
+		mode: import
+		source =
+				// Consulta: Dim_Reporte (una fila por reporte; report_id es la clave)
+				// Lee dim_reporte.csv y agrega dos columnas para los visuales:
+				//   Area     nombre corto del workspace ("WS-DEMO-Operaciones_Mina-PROD" -> "Operaciones Mina").
+				//   Reporte  nombre único para segmentaciones, tablas y matrices: si un nombre se repite, lleva el área y, si aun así
+				//            se repite, el inicio del report_id.
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "dim_reporte.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Nombres = Table.TransformColumnNames(Encabezados, each Text.Lower(Text.Trim(_))),
+				    Inventario = Table.SelectColumns(Nombres, {"report_id", "report_nombre", "workspace_id", "workspace_nombre", "url"}),
+				    // Mismas claves normalizadas que en Fact_Uso
+				    Base = Table.TransformColumns(Inventario, {
+				        {"report_id", each if _ = null then null else Text.Lower(Text.Trim(_)), type text},
+				        {"workspace_id", each if _ = null then null else Text.Lower(Text.Trim(_)), type text},
+				        {"report_nombre", each if _ = null then null else Text.Trim(_), type text},
+				        {"workspace_nombre", each if _ = null then null else Text.Trim(_), type text},
+				        {"url", each _, type text}
+				    }),
+				    // La clave del lado "uno" de una relación no admite vacíos ni repetidos
+				    ConClave = Table.SelectRows(Base, each [report_id] <> null and [report_id] <> ""),
+				    SinDuplicados = Table.Distinct(ConClave, {"report_id"}),
+				    ConNombreCorto = Table.AddColumn(SinDuplicados, "AreaFila", each
+				        let
+				            n = if [workspace_nombre] = null then "" else [workspace_nombre],
+				            sinPrefijo = if Text.StartsWith(n, "WS-DEMO-", Comparer.OrdinalIgnoreCase) then Text.Range(n, 8) else n,
+				            sinSufijo = if Text.EndsWith(sinPrefijo, "-PROD", Comparer.OrdinalIgnoreCase) then Text.Start(sinPrefijo, Text.Length(sinPrefijo) - 5) else sinPrefijo
+				        in
+				            Text.Trim(Text.Replace(sinSufijo, "_", " ")), type text),
+				    // Un solo nombre de área por workspace: el de su última fila (un workspace renombrado no muestra dos nombres)
+				    PorWorkspace = Table.Group(Table.SelectRows(ConNombreCorto, each [workspace_id] <> null and [workspace_id] <> ""),
+				        {"workspace_id"}, {{"Area", each List.Last([AreaFila]), type text}}),
+				    AreaDe = Record.FromList(PorWorkspace[Area], PorWorkspace[workspace_id]),
+				    ConArea = Table.RemoveColumns(Table.AddColumn(ConNombreCorto, "Area", each
+				        if [workspace_id] = null or [workspace_id] = "" then [AreaFila] else Record.Field(AreaDe, [workspace_id]), type text), {"AreaFila"}),
+				    // Reporte: las comparaciones no distinguen mayúsculas, igual que el motor del modelo
+				    NombresRepetidos = List.Buffer(Table.SelectRows(
+				        Table.Group(ConArea, {"report_nombre"}, {{"n", each Table.RowCount(_), Int64.Type}}, GroupKind.Global, Comparer.OrdinalIgnoreCase),
+				        each [n] > 1)[report_nombre]),
+				    ConEtiqueta = Table.AddColumn(ConArea, "Etiqueta", each
+				        let nombre = if [report_nombre] = null or [report_nombre] = "" then "(sin nombre)" else [report_nombre]
+				        in if [report_nombre] <> null and List.Contains(NombresRepetidos, [report_nombre], Comparer.OrdinalIgnoreCase)
+				            then nombre & " · " & [Area] else nombre, type text),
+				    EtiquetasRepetidas = List.Buffer(Table.SelectRows(
+				        Table.Group(ConEtiqueta, {"Etiqueta"}, {{"n", each Table.RowCount(_), Int64.Type}}, GroupKind.Global, Comparer.OrdinalIgnoreCase),
+				        each [n] > 1)[Etiqueta]),
+				    ConReporte = Table.AddColumn(ConEtiqueta, "Reporte", each
+				        if List.Contains(EtiquetasRepetidas, [Etiqueta], Comparer.OrdinalIgnoreCase)
+				        then [Etiqueta] & " (" & Text.Start([report_id], 8) & ")" else [Etiqueta], type text),
+				    Tipos = Table.TransformColumnTypes(
+				        Table.RemoveColumns(ConReporte, {"Etiqueta"}),
+				        {
+				            {"report_id", type text},
+				            {"report_nombre", type text},
+				            {"workspace_id", type text},
+				            {"workspace_nombre", type text},
+				            {"url", type text},
+				            {"Area", type text},
+				            {"Reporte", type text}
+				        }
+				    )
+				in
+				    Tipos
+

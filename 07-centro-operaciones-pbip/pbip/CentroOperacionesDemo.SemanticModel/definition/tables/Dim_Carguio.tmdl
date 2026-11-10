@@ -1,0 +1,57 @@
+table Dim_Carguio
+	lineageTag: 7d1b33b0-38bb-4eb6-bfbd-a8864cfac03e
+
+	column Equipo
+		dataType: string
+		lineageTag: 90d25f6e-bc34-4139-aa17-fba46718d0bd
+		summarizeBy: none
+		sourceColumn: Equipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column TipoEquipo
+		dataType: string
+		lineageTag: 3e56ab8d-b5be-4958-9e0d-b030d578df97
+		summarizeBy: none
+		sourceColumn: TipoEquipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Flota
+		dataType: string
+		lineageTag: 2fbd7984-0a8d-44e2-8f04-fd29dc67fee6
+		summarizeBy: none
+		sourceColumn: Flota
+
+		annotation SummarizationSetBy = Automatic
+
+	column Activo_KPI
+		dataType: int64
+		formatString: 0
+		lineageTag: 42e67023-08ca-4798-b42f-ca7f3c9c35d2
+		summarizeBy: sum
+		sourceColumn: Activo_KPI
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Es Carguio' =
+			
+			IF(Dim_Carguio[TipoEquipo] IN {"Shovel", "Loader"}, 1, 0)
+		formatString: 0
+		lineageTag: 9c00b5ad-8474-4d9d-b2e6-f2b8ee2aa147
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Carguio = m
+		mode: import
+		source =
+				let
+				    Origen = Dim_Equipo
+				in
+				    Origen
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

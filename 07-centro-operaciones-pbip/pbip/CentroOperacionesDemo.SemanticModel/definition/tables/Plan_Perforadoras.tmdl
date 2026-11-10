@@ -1,0 +1,81 @@
+table Plan_Perforadoras
+	lineageTag: 2f9eea5f-df0a-48bc-9bcf-5ed53d85cf75
+
+	measure 'Disponibilidad Perforadoras Plan' =
+			VAR EquiposVisibles = VALUES(Fact_HorasEquipo[Equipo])
+			RETURN
+			    CALCULATE(
+			        DIVIDE(SUM(Plan_Perforadoras[Horas Disponibles Plan]), SUM(Plan_Perforadoras[Horas Nominales Plan]), 0),
+			        TREATAS(EquiposVisibles, Plan_Perforadoras[Equipo])
+			    )
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: ee82ef5d-ec27-449c-9a82-1804c573c092
+
+	measure 'UEBD Perforadoras Plan' =
+			VAR EquiposVisibles = VALUES(Fact_HorasEquipo[Equipo])
+			RETURN
+			    CALCULATE(
+			        DIVIDE(SUM(Plan_Perforadoras[Horas Efectivas Plan]), SUM(Plan_Perforadoras[Horas Disponibles Plan]), 0),
+			        TREATAS(EquiposVisibles, Plan_Perforadoras[Equipo])
+			    )
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: 36eec37e-2be9-475a-afb6-0d30c8dd9d47
+
+	measure 'Rendimiento Perforadoras Plan' =
+			VAR EquiposVisibles = VALUES(Fact_HorasEquipo[Equipo])
+			RETURN
+			    CALCULATE(
+			        DIVIDE(SUM(Plan_Perforadoras[Metros Plan]), SUM(Plan_Perforadoras[Horas Efectivas Plan]), 0),
+			        TREATAS(EquiposVisibles, Plan_Perforadoras[Equipo])
+			    )
+		formatString: #,0.0
+		lineageTag: 6e50588a-5b5b-409b-aec8-3125f5c16d32
+
+	column Fecha
+		dataType: dateTime
+		lineageTag: ce3aa5fa-864c-4be4-a052-439de5588e9a
+		sourceColumn: Fecha
+
+	column Equipo
+		dataType: string
+		lineageTag: 830a877d-9517-4b35-b66a-9661153dbbbf
+		sourceColumn: Equipo
+
+	column 'Horas Disponibles Plan'
+		dataType: double
+		lineageTag: 401ec9eb-a176-44cf-9366-53ef44d5c229
+		sourceColumn: Horas Disponibles Plan
+
+	column 'Horas Efectivas Plan'
+		dataType: double
+		lineageTag: 4e46b0ac-b181-4182-8bf0-6fc243c90761
+		sourceColumn: Horas Efectivas Plan
+
+	column 'Horas Nominales Plan'
+		dataType: double
+		lineageTag: b3f5c951-0280-4198-801b-387fc19a5630
+		sourceColumn: Horas Nominales Plan
+
+	column 'Horas Operativas Plan'
+		dataType: double
+		lineageTag: 89b3ee40-6eb2-4c5f-b818-35fd6c75272e
+		sourceColumn: Horas Operativas Plan
+
+	column 'Metros Plan'
+		dataType: double
+		lineageTag: 3c7d3ae8-42e8-4387-9e5f-c949fab117dc
+		sourceColumn: Metros Plan
+
+	partition Plan_Perforadoras = m
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "plan_perforadoras.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Fecha", type datetime}, {"Equipo", type text}, {"Horas Disponibles Plan", type number}, {"Horas Efectivas Plan", type number}, {"Horas Nominales Plan", type number}, {"Horas Operativas Plan", type number}, {"Metros Plan", type number}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

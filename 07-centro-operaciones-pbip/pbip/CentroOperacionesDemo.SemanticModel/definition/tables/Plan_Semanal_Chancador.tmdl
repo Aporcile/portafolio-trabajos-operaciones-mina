@@ -1,0 +1,49 @@
+/// Plan semanal del chancador por dia: tonelaje y ley CuT.
+table Plan_Semanal_Chancador
+	lineageTag: d6b8d470-1be8-466c-8617-067136fb9185
+
+	column Fecha
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 02f22aba-0d69-4f32-aadd-aca924f21182
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Plan Semanal'
+		dataType: double
+		lineageTag: 1b703d8c-0e1e-494c-8fa3-351bef4dffcc
+		summarizeBy: sum
+		sourceColumn: Plan Semanal
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Ley CuT (%) planificada para la alimentacion a chancado.
+	column 'Plan Ley CuT'
+		dataType: double
+		lineageTag: 16eace0c-4eb4-4a3f-92b0-0bc0336f5051
+		summarizeBy: none
+		sourceColumn: Plan Ley CuT
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Plan_Semanal_Chancador = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "plan_semanal_chancador.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Fecha", type datetime}, {"Plan_Semanal_Chancado", type number}, {"Plan_Ley_CuT", type number}}, "en-US"),
+				    #"Columnas renombradas" = Table.RenameColumns(Tipos, {{"Plan_Semanal_Chancado", "Plan Semanal"}, {"Plan_Ley_CuT", "Plan Ley CuT"}})
+				in
+				    #"Columnas renombradas"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

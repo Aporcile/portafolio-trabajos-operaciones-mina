@@ -1,0 +1,13 @@
+Fuente,FuenteCorta,Tipo,Orden,Nota
+Historiador de proceso,Historiador,Servidor,1,Origen común de todas las señales
+Recuperación Norte (área R1),Recuperación Norte,Area,2,
+Recuperación Sur (área R2),Recuperación Sur,Area,3,
+Estanques (áreas R1 / R2),Estanques,Area,4,
+Pozos de captación (área C1),Captación,Area,5,
+Estaciones de monitoreo (área M1),Estaciones de monitoreo,Area,6,
+Tranques y pozas (áreas T1 / T2),Tranques y pozas,Area,7,
+"Energía y comunicaciones (UPS, baterías, enlaces)",Energía y comunicaciones,Area,8,
+Reporte externo (portales A y B),Reporte externo,Area,9,
+Balance y consumo por área (área B1),Balance y consumo,Area,10,
+Meteorología (sin señales),Meteorología,Sin tag,11,Sin señales en el historiador (pendiente)
+Evaporación estimada (sin señales),Evaporación,Sin tag,12,Sin señales en el historiador (pendiente)

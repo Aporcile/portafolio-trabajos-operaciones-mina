@@ -1,0 +1,57 @@
+/// Umbrales y parámetros editables del tablero (valores de ejemplo).
+table Config
+	lineageTag: ebe26be2-77e4-4a8e-86e2-84da39740ec8
+
+	column Parametro
+		dataType: string
+		lineageTag: 9f2ded86-0d04-429b-b6c4-65c780480bd5
+		summarizeBy: none
+		sourceColumn: Parametro
+
+		annotation SummarizationSetBy = Automatic
+
+	column Valor
+		dataType: double
+		formatString: #,0.0##
+		lineageTag: ebecef53-6276-439a-8b9f-5311d9447036
+		summarizeBy: none
+		sourceColumn: Valor
+
+		annotation SummarizationSetBy = Automatic
+
+	column Unidad
+		dataType: string
+		lineageTag: ccc16987-61cb-4a24-bf0a-3c4a8bba03ba
+		summarizeBy: none
+		sourceColumn: Unidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nota
+		dataType: string
+		lineageTag: 87e233d2-08ff-4b8d-b75c-1db268005f62
+		summarizeBy: none
+		sourceColumn: Nota
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Config = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "config.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Parametro", type text}, {"Valor", type number}, {"Unidad", type text}, {"Nota", type text}}, "en-US"),
+				    Dinamicos = #table(
+				        type table [Parametro = text, Valor = number, Unidad = text, Nota = text],
+				        {
+				            {"Desfase UTC (h)", ZonaHorariaUTC, "h", "Desfase horario del sitio respecto de UTC"},
+				            {"Modo historiador", if Text.StartsWith(Text.Trim(ModoDatos), "Historiador", Comparer.OrdinalIgnoreCase) then 1 else 0, "1 = historiador", "Lo fija el parámetro ModoDatos"}
+				        }
+				    ),
+				    Final = Table.Combine({Dinamicos, Tipos})
+				in
+				    Final
+
+	annotation PBI_ResultType = Table
+

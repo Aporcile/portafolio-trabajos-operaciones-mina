@@ -1,0 +1,156 @@
+table Fact_GPS
+	lineageTag: 7292bbe9-f183-439b-a37a-3c33a0b4b037
+
+	/// Filtro del mapa: 1 si el punto debe dibujarse. Con una hora seleccionada muestra esa hora; sin hora, la ultima hora con datos del dia elegido.
+	measure 'Mostrar Punto GPS' =
+			VAR HayHoraElegida = ISCROSSFILTERED(Dim_Hora_Operacional[Orden_Hora_Dia])
+			-- Fechas que el usuario dejo elegidas (ALL(Fact_GPS) las borra, por eso se guardan antes)
+			VAR FechasElegidas = VALUES(Dim_Tiempo[Fecha])
+			-- Sin hora elegida: ultima hora con datos del ultimo dia elegido (hoy = la hora en curso)
+			VAR UltimaFechaConDatos =
+			    CALCULATE(
+			        MAX(Fact_GPS[Fecha]),
+			        ALL(Fact_GPS),
+			        ALL(Dim_Hora_Operacional),
+			        FechasElegidas
+			    )
+			VAR UltimaHoraConDatos =
+			    CALCULATE(
+			        MAX(Fact_GPS[Orden_Hora_Dia]),
+			        ALL(Fact_GPS),
+			        ALL(Dim_Hora_Operacional),
+			        FechasElegidas,
+			        Fact_GPS[Fecha] = UltimaFechaConDatos
+			    )
+			VAR FilasVisibles = COUNTROWS(Fact_GPS)
+			VAR FilasEnUltimaHora =
+			    CALCULATE(
+			        COUNTROWS(Fact_GPS),
+			        Fact_GPS[Fecha] = UltimaFechaConDatos,
+			        Fact_GPS[Orden_Hora_Dia] = UltimaHoraConDatos
+			    )
+			RETURN
+			    IF(
+			        HayHoraElegida,
+			        IF(FilasVisibles > 0, 1),
+			        IF(FilasEnUltimaHora > 0, 1)
+			    )
+		isHidden
+		lineageTag: 148b5726-b424-420c-9ffd-e8a5dcf3a3b3
+
+	column Turno
+		dataType: string
+		lineageTag: 7f3c9c09-9324-4eb0-a37a-ff8084f4770a
+		summarizeBy: none
+		sourceColumn: Turno
+
+		annotation SummarizationSetBy = Automatic
+
+	column Equipo
+		dataType: string
+		lineageTag: 2130036c-52eb-4f61-9116-d0519da93f64
+		summarizeBy: none
+		sourceColumn: Equipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column FechaHora
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f5f60b98-ecd1-4e79-b3cf-ccf5316d0b79
+		summarizeBy: none
+		sourceColumn: FechaHora
+
+		annotation SummarizationSetBy = Automatic
+
+	column Latitud
+		dataType: double
+		lineageTag: 0fa00a9c-efc6-4272-9de7-1928f4e7b365
+		summarizeBy: sum
+		sourceColumn: Latitud
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Longitud
+		dataType: double
+		lineageTag: 1fa741da-fdae-4881-93b9-dbf0b08a9a84
+		summarizeBy: sum
+		sourceColumn: Longitud
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Velocidad km/h'
+		dataType: double
+		lineageTag: 6e968fb0-7665-46c4-b46c-692b66494c4e
+		summarizeBy: sum
+		sourceColumn: Velocidad km/h
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Rango_Velocidad
+		dataType: string
+		lineageTag: c4a36567-2dc8-4f19-bd75-877c31ca400a
+		summarizeBy: none
+		sourceColumn: Rango_Velocidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column Lat_Grados
+		dataType: double
+		lineageTag: 9986318f-3ffa-48ea-b18e-c4e8cbdfab22
+		summarizeBy: sum
+		sourceColumn: Lat_Grados
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Long_Grados
+		dataType: double
+		lineageTag: 86081933-7080-43ae-ab43-69a0b98b4779
+		summarizeBy: sum
+		sourceColumn: Long_Grados
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Fecha
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 436f44c1-705e-4e2e-ad4b-3032a0e28f0b
+		summarizeBy: none
+		sourceColumn: Fecha
+
+	column Orden_Hora_Dia
+		dataType: int64
+		formatString: 0
+		lineageTag: 2b7c2715-c00e-4004-8299-6078dd68e683
+		summarizeBy: none
+		sourceColumn: Orden_Hora_Dia
+
+	partition Fact_GPS = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "fact_gps.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Turno", type text}, {"Equipo", type text}, {"FechaHora", type datetime}, {"Latitud", type number}, {"Longitud", type number}, {"Velocidad km/h", type number}, {"Fecha", type datetime}, {"Orden_Hora_Dia", Int64.Type}}, "en-US"),
+				    // Ventana de historia: solo las filas de los ultimos DiasHistoriaGPS dias respecto de FechaReferencia.
+				    Ventana = Table.SelectRows(Tipos, each Date.From([Fecha]) >= Date.AddDays(FechaReferencia, -DiasHistoriaGPS)),
+				    #"Rango agregado" = Table.AddColumn(Ventana, "Rango_Velocidad", each if [#"Velocidad km/h"] <= 5 then "Bajo (0-5)" else "Normal (>5)", type text),
+				    #"Latitud en grados" = Table.AddColumn(#"Rango agregado", "Lat_Grados", each [Latitud] / 3600000, type number),
+				    #"Longitud en grados" = Table.AddColumn(#"Latitud en grados", "Long_Grados", each [Longitud] / 3600000, type number)
+				in
+				    #"Longitud en grados"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

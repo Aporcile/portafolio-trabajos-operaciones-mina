@@ -1,0 +1,188 @@
+/// Horas y movimiento de cada CAEX por día y turno (12 h nominales por turno). Fuente: Fact_HorasEquipo.csv.
+table Fact_HorasEquipo
+	lineageTag: d115acc9-a780-5516-9d1f-a1a00ad5b8cb
+
+	column Fecha
+		dataType: dateTime
+		formatString: General Number
+		lineageTag: 93a7b5b1-e8d1-59d3-8e9f-4d190fac9c3d
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation SummarizationSetBy = User
+
+	column Turno
+		dataType: string
+		lineageTag: e2efcddb-af1f-5c9a-852c-ba22878b9910
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Turno
+
+		annotation SummarizationSetBy = User
+
+	column 'Tipo Equipo'
+		dataType: string
+		lineageTag: ebbe7cb7-f5bf-52f8-9aaa-1b790beb83f0
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Tipo Equipo
+
+		annotation SummarizationSetBy = User
+
+	column Equipo
+		dataType: string
+		lineageTag: 055f37b2-01e3-5e31-8e93-85f15fc51740
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Equipo
+
+		annotation SummarizationSetBy = User
+
+	column Flota
+		dataType: string
+		lineageTag: 5760be9a-f2d8-57ef-a1f1-c84aeda8c90b
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Flota
+
+		annotation SummarizationSetBy = User
+
+	column 'Horas Nominales'
+		dataType: double
+		lineageTag: 41c3073a-8e3c-53a1-925c-c8945aa93f57
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Horas Nominales
+
+		annotation SummarizationSetBy = User
+
+	column 'Horas Efectivas'
+		dataType: double
+		lineageTag: 60381e51-ddf0-5a30-9825-fbf05336648f
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Horas Efectivas
+
+		annotation SummarizationSetBy = User
+
+	column 'Horas PO Espera'
+		dataType: double
+		lineageTag: 76b2e191-c453-5f22-aca8-3fab5d06d27a
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Horas PO Espera
+
+		annotation SummarizationSetBy = User
+
+	column 'Horas PO Cola'
+		dataType: double
+		lineageTag: 3364ab63-9ec9-56ac-ace5-49b30732aeda
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Horas PO Cola
+
+		annotation SummarizationSetBy = User
+
+	column 'Horas PO Totales'
+		dataType: double
+		lineageTag: 554583ec-ddc2-5cc8-8319-a33a3306c55c
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Horas PO Totales
+
+		annotation SummarizationSetBy = User
+
+	column 'Horas Demora No Programada'
+		dataType: double
+		lineageTag: 83618a9f-6f1e-5305-94a1-f0e3fc025879
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Horas Demora No Programada
+
+		annotation SummarizationSetBy = User
+
+	column 'Horas Demora Programada'
+		dataType: double
+		lineageTag: 68686c33-105c-50cf-a644-aef068be1c26
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Horas Demora Programada
+
+		annotation SummarizationSetBy = User
+
+	column 'Horas Reserva'
+		dataType: double
+		lineageTag: 66f7c113-64e5-5844-a4d3-1c0d7d9aca78
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Horas Reserva
+
+		annotation SummarizationSetBy = User
+
+	column 'Horas Disponibles'
+		dataType: double
+		lineageTag: 4e83b3f3-0b87-5d92-8620-c0d2d2430602
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Horas Disponibles
+
+		annotation SummarizationSetBy = User
+
+	column 'Horas Mantencion Programada'
+		dataType: double
+		lineageTag: 7c235827-16ff-5879-afdb-9d2d6031ab32
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Horas Mantencion Programada
+
+		annotation SummarizationSetBy = User
+
+	column 'Horas Mantencion No Programada'
+		dataType: double
+		lineageTag: 975ea974-43b9-5f27-8c6f-f03fc888c701
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Horas Mantencion No Programada
+
+		annotation SummarizationSetBy = User
+
+	column 'Movimiento Total'
+		dataType: double
+		lineageTag: 0abda181-2504-5a1e-b406-302375da3f4a
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Movimiento Total
+
+		annotation SummarizationSetBy = User
+
+	column 'Material Extraido'
+		dataType: double
+		lineageTag: 6d302299-9304-5585-8dc0-2ceed54f3380
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Material Extraido
+
+		annotation SummarizationSetBy = User
+
+	column 'Material Remanejo'
+		dataType: double
+		lineageTag: 30c5f21c-ec47-575d-bccd-0a4a77e63bb4
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Material Remanejo
+
+		annotation SummarizationSetBy = User
+
+	partition Fact_HorasEquipo = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "Fact_HorasEquipo.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Fecha", type datetime}, {"Turno", type text}, {"Tipo Equipo", type text}, {"Equipo", type text}, {"Flota", type text}, {"Horas Nominales", type number}, {"Horas Efectivas", type number}, {"Horas PO Espera", type number}, {"Horas PO Cola", type number}, {"Horas PO Totales", type number}, {"Horas Demora No Programada", type number}, {"Horas Demora Programada", type number}, {"Horas Reserva", type number}, {"Horas Disponibles", type number}, {"Horas Mantencion Programada", type number}, {"Horas Mantencion No Programada", type number}, {"Movimiento Total", type number}, {"Material Extraido", type number}, {"Material Remanejo", type number}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

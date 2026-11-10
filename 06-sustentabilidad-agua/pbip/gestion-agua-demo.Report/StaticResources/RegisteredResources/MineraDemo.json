@@ -1,0 +1,77 @@
+{
+  "name": "Minera Demo",
+  "dataColors": [
+    "#1B2A41",
+    "#4F9DDE",
+    "#7B61C9",
+    "#D64550",
+    "#F2A03D",
+    "#2F6FB5",
+    "#3A4A60",
+    "#8FA3B8",
+    "#9CC7EC",
+    "#C9BDEB",
+    "#A9B6C4",
+    "#4A5D75"
+  ],
+  "foreground": "#1B2A41",
+  "foregroundNeutralSecondary": "#3A4A60",
+  "foregroundNeutralTertiary": "#8FA3B8",
+  "background": "#FFFFFF",
+  "backgroundLight": "#E6ECF2",
+  "backgroundNeutral": "#C5D0DC",
+  "tableAccent": "#4F9DDE",
+  "good": "#2E9E6B",
+  "neutral": "#F2A03D",
+  "bad": "#D64550",
+  "maximum": "#1B2A41",
+  "center": "#9CC7EC",
+  "minimum": "#E6ECF2",
+  "null": "#A9B6C4",
+  "hyperlink": "#2F6FB5",
+  "visitedHyperlink": "#1B2A41",
+  "textClasses": {
+    "callout": {
+      "fontSize": 11,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#1B2A41"
+    },
+    "title": {
+      "fontSize": 11,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#1B2A41"
+    },
+    "header": {
+      "fontSize": 11,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#1B2A41"
+    },
+    "label": {
+      "fontSize": 11,
+      "fontFace": "Segoe UI",
+      "color": "#3A4A60"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "border": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#C5D0DC"
+              }
+            },
+            "radius": 6
+          }
+        ],
+        "dropShadow": [
+          {
+            "show": false
+          }
+        ]
+      }
+    }
+  }
+}

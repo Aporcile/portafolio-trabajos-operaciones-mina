@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sinóptico de agua · Minera Demo (mockup)</title>
+<style>
+  :root{--fondo:#1B2A41;--panel:#223652;--linea:#34507A;--texto:#E6ECF2;--tenue:#8FA3B8;--agua:#4F9DDE;--acento:#7B61C9;
+        --ok:#2E9E6B;--aviso:#F2A03D;--crit:#D64550;--nd:#A9B6C4}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fondo);color:var(--texto);font-family:"Segoe UI",system-ui,sans-serif}
+  header{display:flex;align-items:center;gap:16px;padding:12px 20px;border-bottom:1px solid var(--linea)}
+  header h1{font-size:18px;margin:0;font-weight:600}
+  header .sub{color:var(--tenue);font-size:13px}
+  .chip{margin-left:auto;font-size:12px;padding:4px 10px;border:1px solid var(--acento);border-radius:12px;color:var(--texto)}
+  .reloj{font-size:13px;color:var(--tenue)}
+  main{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;padding:16px 20px}
+  .lienzo{background:var(--panel);border:1px solid var(--linea);border-radius:8px;padding:8px}
+  svg{width:100%;height:auto;display:block}
+  .nodo{fill:#2A4468;stroke:var(--linea);stroke-width:1.2}
+  .nodo.crit{stroke:var(--crit);stroke-width:2.4}
+  .nodo.aviso{stroke:var(--aviso);stroke-width:2.4}
+  .t{fill:var(--texto);font-size:13px}.t.g{font-size:15px;font-weight:600}.t.m{fill:var(--tenue);font-size:11px}
+  .flujo{stroke:var(--agua);stroke-width:3;fill:none;marker-end:url(#fl)}
+  .flujo.rec{stroke:var(--acento)}
+  .flujo.nulo{stroke:var(--nd);stroke-dasharray:5 5}
+  .nivel{fill:var(--agua);opacity:.85}
+  .aside{display:flex;flex-direction:column;gap:12px}
+  .card{background:var(--panel);border:1px solid var(--linea);border-radius:8px;padding:12px}
+  .card h2{font-size:13px;margin:0 0 8px;color:var(--tenue);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+  .kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .kpi b{display:block;font-size:22px;font-weight:600}.kpi span{font-size:11px;color:var(--tenue)}
+  ul{list-style:none;margin:0;padding:0}
+  li{display:grid;grid-template-columns:18px 1fr;gap:8px;padding:7px 0;border-top:1px solid var(--linea);font-size:12.5px}
+  li:first-child{border-top:0}
+  li i{font-style:normal;font-size:14px;line-height:1.1}
+  li small{display:block;color:var(--tenue);margin-top:2px}
+  .c3 i{color:var(--crit)}.c2 i{color:var(--aviso)}.c1 i{color:var(--agua)}
+  footer{padding:8px 20px 16px;color:var(--tenue);font-size:12px}
+  @media (max-width:900px){main{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Minera Demo · Gestión del agua</h1><span class="sub">Sinóptico de proceso</span>
+  <span class="chip">Datos de ejemplo</span><span class="reloj" id="reloj"></span>
+</header>
+<main>
+  <section class="lienzo" aria-label="Diagrama de flujo de agua">
+    <svg viewBox="0 0 900 560" role="img" aria-label="Captación, planta, tranque y recuperación">
+      <defs><marker id="fl" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#8FA3B8"/></marker></defs>
+      <!-- captación -->
+      <rect class="nodo" x="20" y="40" width="190" height="150" rx="8"/>
+      <text class="t g" x="34" y="66">Captación Demo</text>
+      <text class="t" x="34" y="94">Campo Norte · 5 pozos</text><text class="t m" x="34" y="110">55 L/s</text>
+      <text class="t" x="34" y="138">Campo Sur · 5 pozos</text><text class="t m" x="34" y="154">54 L/s</text>
+      <text class="t m" x="34" y="178">Cupo de ejemplo 120 L/s · 91 %</text>
+      <path class="flujo" d="M210 115H290"/><text class="t m" x="214" y="105">109 L/s</text>
+      <!-- agua fresca -->
+      <rect class="nodo" x="290" y="75" width="150" height="80" rx="8"/>
+      <text class="t g" x="304" y="102">Agua fresca</text><text class="t m" x="304" y="122">Reposición 106 L/s</text><text class="t m" x="304" y="138">Pérdida de conducción 3 %</text>
+      <path class="flujo" d="M440 115H520"/>
+      <!-- planta -->
+      <rect class="nodo" x="520" y="40" width="190" height="200" rx="8"/>
+      <text class="t g" x="534" y="66">Planta</text>
+      <text class="t" x="534" y="94">Chancado</text><text class="t m" x="534" y="110">27 L/s</text>
+      <text class="t" x="534" y="130">Molienda y clasificación</text><text class="t m" x="534" y="146">113 L/s</text>
+      <text class="t" x="534" y="166">Flotación</text><text class="t m" x="534" y="182">160 L/s</text>
+      <text class="t" x="534" y="202">Servicios generales</text><text class="t m" x="534" y="218">31 L/s</text>
+      <!-- mina -->
+      <rect class="nodo" x="750" y="40" width="130" height="80" rx="8"/>
+      <text class="t g" x="764" y="66">Mina</text><text class="t m" x="764" y="86">Riego y polvo</text><text class="t m" x="764" y="102">59 L/s</text>
+      <path class="flujo" d="M710 80H750"/>
+      <!-- tranque -->
+      <path class="flujo" d="M615 240V300"/>
+      <rect class="nodo" x="520" y="300" width="190" height="130" rx="8"/>
+      <text class="t g" x="534" y="326">Tranque Demo</text>
+      <rect x="534" y="338" width="162" height="22" rx="4" fill="#1B2A41"/><rect class="nivel" x="534" y="338" width="120" height="22" rx="4"/>
+      <text class="t m" x="534" y="378">Nivel 74 % · HI 90 · HH 95</text>
+      <text class="t m" x="534" y="396">Poza de emergencia 12 %</text>
+      <text class="t m" x="534" y="414">Poza de proceso 2 · 91 % ▲</text>
+      <!-- recuperación -->
+      <path class="flujo rec" d="M520 365H430"/><text class="t m" x="436" y="355">Retorno 284 L/s</text>
+      <rect class="nodo crit" x="200" y="300" width="230" height="130" rx="8"/>
+      <text class="t g" x="214" y="326">Recuperación de agua</text>
+      <text class="t" x="214" y="352">Norte · 4 de 5 pozos en marcha</text>
+      <text class="t" x="214" y="374" style="fill:#F4A6AD">Sur · 0 de 3 · corte de energía</text>
+      <text class="t m" x="214" y="402">Meta de ejemplo 60 + 35 L/s</text>
+      <path class="flujo rec" d="M315 300V200H520"/><text class="t m" x="323" y="262">Recuperada</text>
+      <!-- estanques -->
+      <rect class="nodo aviso" x="20" y="300" width="100" height="130" rx="8"/>
+      <text class="t g" x="32" y="326">Estanques</text>
+      <text class="t m" x="32" y="350">EST-01 85 % ▲</text><text class="t m" x="32" y="368">EST-02 41 % ◇</text><text class="t m" x="32" y="386">EST-03 38 %</text><text class="t m" x="32" y="404">EST-04 27 %</text>
+      <!-- monitoreo -->
+      <rect class="nodo crit" x="20" y="470" width="420" height="70" rx="8"/>
+      <text class="t g" x="34" y="496">Monitoreo aguas abajo</text>
+      <text class="t m" x="34" y="516">12 pozos · 2 con nivel subiendo · 2 sin comunicación desde las 14:00</text>
+      <!-- calidad -->
+      <rect class="nodo aviso" x="480" y="470" width="400" height="70" rx="8"/>
+      <text class="t g" x="494" y="496">Calidad en línea</text>
+      <text class="t m" x="494" y="516">6 estaciones · EC-04 pH 6,1 y turbidez 62 NTU fuera de banda (límites de ejemplo)</text>
+    </svg>
+  </section>
+  <aside class="aside">
+    <div class="card"><h2>Balance · 7 días</h2>
+      <div class="kpis">
+        <div class="kpi"><b>9,0 k</b><span>Agua fresca m³/día</span></div>
+        <div class="kpi"><b>75 %</b><span>Recirculación</span></div>
+        <div class="kpi"><b>27 k</b><span>Agua recuperada m³/día</span></div>
+        <div class="kpi"><b>99,9 %</b><span>Cierre del balance</span></div>
+      </div></div>
+    <div class="card"><h2>Alarmas activas</h2><ul id="alarmas"></ul></div>
+  </aside>
+</main>
+<footer>Mockup estático de la opción «sinóptico de proceso». Color solo para lo anormal: azul = flujo normal, violeta = agua recuperada, naranjo = aviso, rojo = crítico. Todos los valores son inventados.</footer>
+<script>
+  const alarmas = [
+    [3, "Recuperación Sur", "Posible corte de energía: 6 equipos detenidos desde las 18:00"],
+    [3, "Estación Monitoreo Sur", "Sin comunicación: 2 activos sin dato desde las 14:00"],
+    [2, "Poza de proceso 2", "Nivel 91 % sobre HI 85 % · llega a HH en ~1 d"],
+    [2, "Estanque Norte 1", "Nivel 85 % sobre HI 80 % · tendencia +0,2 %/h"],
+    [2, "EC-04", "pH 6,1 y turbidez 62 NTU fuera de la banda de ejemplo"],
+    [1, "CAP-02", "Proyección al cierre del mes: 107 % del cupo mensual"]
+  ];
+  const simbolo = {3: "✖", 2: "▲", 1: "◆"};
+  document.getElementById("alarmas").innerHTML = alarmas
+    .map(([s, a, c]) => `<li class="c${s}"><i>${simbolo[s]}</i><div><b>${a}</b><small>${c}</small></div></li>`).join("");
+  document.getElementById("reloj").textContent = "DATOS AL 31-05 23:00";
+</script>
+</body>
+</html>

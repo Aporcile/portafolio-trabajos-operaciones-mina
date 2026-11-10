@@ -1,0 +1,35 @@
+model Model
+	culture: es-ES
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-ES
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_ProTooling = ["DevMode"]
+
+annotation PBI_QueryOrder = ["RutaDatos","Planes_Mina","Plan_FactorCarga","Horas_Codigo_CAEX","Fact_HorasEquipo","Fact_Ciclos","Plan_CAEX","Dim_Tiempo","Dim_Turno","Dim_Equipo","Dim_Actualizacion"]
+
+ref table Planes_Mina
+ref table Plan_FactorCarga
+ref table Horas_Codigo_CAEX
+ref table Fact_HorasEquipo
+ref table Fact_Ciclos
+ref table Plan_CAEX
+ref table Dim_Tiempo
+ref table Dim_Turno
+ref table Dim_Equipo
+ref table Dim_Actualizacion
+ref table 'Periodo RD'
+ref table 'Cascada OEE'
+ref table 'Datos OEE'
+ref table 'Tipos UEBD'
+ref table 'Componentes ciclo'
+ref table 'Medidas RD'
+
+ref expression RutaDatos
+
+ref cultureInfo es-ES

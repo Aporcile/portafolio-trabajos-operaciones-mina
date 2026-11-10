@@ -1,0 +1,66 @@
+/// Horas por código de los CAEX por día (inicio del turno) y turno. Las categorías de mantención explican la disponibilidad y las de demora y reserva, la UEBD. Fuente: Horas_Codigo_CAEX.csv.
+table Horas_Codigo_CAEX
+	lineageTag: bca49604-91bf-5d51-9822-183655a17cee
+
+	column Fecha
+		dataType: dateTime
+		formatString: dd-mm-yyyy
+		lineageTag: 676302c4-a6a5-5cd5-bf97-0d36f190d094
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+	column Turno
+		dataType: string
+		lineageTag: fc9b4614-c8db-5ed2-a59a-36cb629fdd7c
+		summarizeBy: none
+		sourceColumn: Turno
+
+		annotation SummarizationSetBy = Automatic
+
+	column Equipo
+		dataType: string
+		lineageTag: 713f9a09-5400-54d6-9f24-5073f50b86c1
+		summarizeBy: none
+		sourceColumn: Equipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Categoria
+		dataType: string
+		lineageTag: 3c86f150-185b-5e87-b3c2-c10123adeeb9
+		summarizeBy: none
+		sourceColumn: Categoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column Codigo
+		dataType: string
+		lineageTag: 004aaf58-4722-5706-855d-cc8ae92790d9
+		summarizeBy: none
+		sourceColumn: Codigo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Horas
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 41162806-e3a1-5947-a261-34fc5b86ff22
+		summarizeBy: sum
+		sourceColumn: Horas
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Horas_Codigo_CAEX = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "Horas_Codigo_CAEX.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Fecha", type datetime}, {"Turno", type text}, {"Equipo", type text}, {"Categoria", type text}, {"Codigo", type text}, {"Horas", type number}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

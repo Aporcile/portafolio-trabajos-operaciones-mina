@@ -1,0 +1,89 @@
+table 'Horas CAEX'
+	lineageTag: 7fda0a52-c770-4627-b7ce-32c98e755244
+
+	/// Rendimiento de la flota CAEX: toneladas movidas por hora efectiva.
+	measure 'TPH efectivo CAEX REV' = DIVIDE ( [Movimiento PM], SUM ( 'Horas CAEX'[Efectivo] ) )
+		lineageTag: 79fc43c1-2f70-4049-8156-c8860a25595c
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Utilización efectiva sobre base disponible de CAEX: horas efectivas sobre horas disponibles.
+	measure 'UEBD CAEX' = (SUM('Horas CAEX'[Efectivo])/ SUM('Horas CAEX'[HD]))
+		formatString: 0.000\ %;-0.000\ %;0.000\ %
+		lineageTag: 31795fc2-8a18-4d89-b3f8-a333e9584d66
+
+		changedProperty = IsHidden
+
+	/// Disponibilidad física de CAEX: horas disponibles sobre horas nominales.
+	measure 'Disponibilidad CAEX' = SUM('Horas CAEX'[HD]) / SUM('Horas CAEX'[Nominal])
+		formatString: 0.000\ %;-0.000\ %;0.000\ %
+		lineageTag: 9d2a68fc-7050-4566-80ca-e13989548559
+
+		changedProperty = IsHidden
+
+	/// Horas nominales de la flota CAEX.
+	measure 'Hr nominales' = sum ( 'Horas CAEX'[Nominal])
+		lineageTag: 2fca9df2-e4fd-4aa0-8f30-158e5ab46bac
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column time
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 68506fec-d947-4950-b5d1-1a85e3d074e8
+		summarizeBy: none
+		sourceColumn: time
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nominal
+		dataType: double
+		lineageTag: db960c53-4aae-478f-82eb-1d5a998d0052
+		summarizeBy: sum
+		sourceColumn: Nominal
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column HD
+		dataType: double
+		lineageTag: 3b71839a-7966-48ec-b8b0-f5dc2e6090fe
+		summarizeBy: sum
+		sourceColumn: HD
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Efectivo
+		dataType: double
+		lineageTag: 7db59088-fae0-4ee4-a91e-4ad21a0294bc
+		summarizeBy: sum
+		sourceColumn: Efectivo
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'Horas CAEX' = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "horas_caex.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"time", type datetime}, {"Nominal", type number}, {"HD", type number}, {"Efectivo", type number}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table

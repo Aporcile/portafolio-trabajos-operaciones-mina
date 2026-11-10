@@ -1,0 +1,64 @@
+{
+  "filas_csv": 4457,
+  "filas_excluidas": 667,
+  "filas_modelo": 3790,
+  "reportes": 24,
+  "areas": 4,
+  "dias": 90,
+  "datos_desde": "2025-03-03",
+  "ultima_actividad": "2025-05-31",
+  "usuarios": 20,
+  "usuarios_externos": 4,
+  "aperturas": 5924,
+  "vistas_pagina": 10053,
+  "paginas_por_apertura": 1.7,
+  "aperturas_sin_vistas": 1266,
+  "aperturas_internos": 4329,
+  "aperturas_externos": 1595,
+  "vistas_internos": 8637,
+  "vistas_externos": 1416,
+  "reportes_en_uso": 18,
+  "reportes_solo_aperturas": 3,
+  "reportes_sin_uso": 3,
+  "reporte_en_uso": "Tablero Movimiento Mina",
+  "reporte_solo_aperturas": "Seguimiento de Reconciliacion",
+  "reporte_sin_uso": "Paradas No Programadas",
+  "nombres_repetidos": [
+    "Resumen Operativo"
+  ],
+  "por_area": {
+    "Centro Control": {
+      "ap": 1082,
+      "vi": 1633,
+      "total": 5,
+      "En uso": 3,
+      "Solo aperturas": 1,
+      "Sin uso": 1
+    },
+    "Mantenimiento Mina": {
+      "ap": 1127,
+      "vi": 2263,
+      "total": 6,
+      "En uso": 5,
+      "Sin uso": 1
+    },
+    "Operaciones Mina": {
+      "ap": 2678,
+      "vi": 4450,
+      "total": 7,
+      "En uso": 6,
+      "Solo aperturas": 1
+    },
+    "Planta Chancado": {
+      "ap": 1037,
+      "vi": 1707,
+      "total": 6,
+      "En uso": 4,
+      "Solo aperturas": 1,
+      "Sin uso": 1
+    }
+  },
+  "usuarios_excluidos": [
+    "admin.demo01@minera-demo.example"
+  ]
+}

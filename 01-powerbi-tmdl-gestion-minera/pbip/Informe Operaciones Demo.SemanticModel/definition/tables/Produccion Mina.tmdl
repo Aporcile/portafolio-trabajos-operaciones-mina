@@ -1,0 +1,153 @@
+table 'Produccion Mina'
+	lineageTag: 291f81e6-d340-4710-92d2-715248182a61
+
+	/// Toneladas con origen en tronadura de mina (clase Mina).
+	measure 'Extraccion Mina (Ex- Pit)' =
+			if(
+			CALCULATE(
+			    SUM('Produccion Mina'[material_tonnage]) ,
+			    'Produccion Mina'[BlastClass] = "Mina"
+			) = BLANK(),0,CALCULATE(
+			    SUM('Produccion Mina'[material_tonnage]) ,
+			    'Produccion Mina'[BlastClass] = "Mina"
+			))
+		lineageTag: 7b3a01e2-2b53-4ad7-859c-807f66ab6644
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Toneladas con origen en stock (clase Stock).
+	measure Remanejo =
+			IF(
+			ISBLANK(CALCULATE(
+			    SUM('Produccion Mina'[material_tonnage]) ,
+			    'Produccion Mina'[BlastClass] = "Stock")
+			),0,
+			CALCULATE(
+			    SUM('Produccion Mina'[material_tonnage]) ,
+			    'Produccion Mina'[BlastClass] = "Stock")
+			)
+		formatString: 0
+		lineageTag: 27a9f42b-5014-4135-990a-ebc143a0f5dc
+
+		changedProperty = IsHidden
+
+	/// Movimiento total de mina (extracción mina + remanejo), en t.
+	measure Movimiento = [Extraccion Mina (Ex- Pit)]+ [Remanejo]
+		lineageTag: 33246fff-21ab-4857-aea1-a69658cac4b5
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Suma de toneladas descargadas, sin separar clase de material.
+	measure 'Movimiento PM' = sum( 'Produccion Mina'[material_tonnage])
+		lineageTag: c993786b-e641-4712-8c32-36a3f623d961
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column time
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: eab206c7-3208-4826-9b61-08797eb32d7a
+		summarizeBy: none
+		sourceColumn: time
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column truck
+		dataType: string
+		lineageTag: 5e31b5c2-838f-4586-ad75-e5f5a730157e
+		summarizeBy: none
+		sourceColumn: truck
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column blast
+		dataType: string
+		lineageTag: 2703f0e0-6130-49ed-a705-c749686fce6f
+		summarizeBy: none
+		sourceColumn: blast
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column material_tonnage
+		dataType: double
+		lineageTag: a19b082b-949c-4a8f-84f8-8e5b41de1033
+		summarizeBy: sum
+		sourceColumn: material_tonnage
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column BlastPrefix
+		dataType: string
+		lineageTag: 1fea7071-270c-45bd-81f9-5aab81ae7ba8
+		summarizeBy: none
+		sourceColumn: BlastPrefix
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column BlastClass
+		dataType: string
+		lineageTag: 8b53068b-8354-4c89-bcd4-4fe252252b15
+		summarizeBy: none
+		sourceColumn: BlastClass
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column DumpPrefix
+		dataType: string
+		lineageTag: 47069697-7d35-40b0-a8fe-e0407c40d6d1
+		summarizeBy: none
+		sourceColumn: DumpPrefix
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Rd Fase Clave' = LEFT ( 'Produccion Mina'[blast], 3 )
+		isHidden
+		lineageTag: aeba3904-76ab-42ca-a201-cac3278f2207
+		summarizeBy: none
+
+	column 'Rd Hora Op'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5049a9fc-2d31-4aa0-804b-6f0e3bbee8e3
+		summarizeBy: none
+		sourceColumn: HoraOp
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Produccion Mina' = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "produccion_mina.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"time", type datetime}, {"shift", type text}, {"hour", Int64.Type}, {"truck", type text}, {"blast", type text}, {"dump", type text}, {"material_tonnage", type number}}, "en-US"),
+				    HoraOp = Table.AddColumn(Tipos, "HoraOp", each if [shift] = "A" then [hour] + 1 else [hour] + 13, Int64.Type),
+				    PrefijoTronadura = Table.AddColumn(HoraOp, "BlastPrefix", each if Text.Start([blast], 3) = "STK" then "STO" else Text.Start([blast], 3), type text),
+				    Clase = Table.AddColumn(PrefijoTronadura, "BlastClass", each if List.Contains({"STO", "STK"}, Text.Start([blast], 3)) then "Stock" else "Mina", type text),
+				    PrefijoDestino = Table.AddColumn(Clase, "DumpPrefix", each if Text.Start([dump], 3) = "STK" then "STO" else Text.Start([dump], 3), type text),
+				    Columnas = Table.SelectColumns(PrefijoDestino, {"time", "HoraOp", "truck", "blast", "material_tonnage", "BlastPrefix", "BlastClass", "DumpPrefix"})
+				in
+				    Columnas
+
+	annotation PBI_ResultType = Table

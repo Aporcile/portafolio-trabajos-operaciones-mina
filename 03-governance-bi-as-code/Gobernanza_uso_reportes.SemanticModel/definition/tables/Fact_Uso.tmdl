@@ -1,0 +1,101 @@
+table Fact_Uso
+	lineageTag: 27c1690a-7a50-390f-4f8b-b379ded08f62
+
+	column fecha
+		dataType: dateTime
+		isHidden
+		formatString: dd-MM-yyyy
+		lineageTag: 93ec4792-5535-c297-147d-862fea76530c
+		sourceColumn: fecha
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column workspace_id
+		dataType: string
+		isHidden
+		lineageTag: cc97ffa4-167e-054c-1698-603e521dc506
+		sourceColumn: workspace_id
+
+	column workspace_nombre
+		dataType: string
+		isHidden
+		lineageTag: b662c60d-db45-463c-1785-c2e6f6302b49
+		sourceColumn: workspace_nombre
+
+	column report_id
+		dataType: string
+		isHidden
+		lineageTag: 9899c6f5-2451-a6cf-2411-4f9162956f74
+		sourceColumn: report_id
+
+	column report_nombre
+		dataType: string
+		isHidden
+		lineageTag: 10bb6ae5-90d0-aa45-01cf-a272dac59751
+		sourceColumn: report_nombre
+
+	column usuario
+		dataType: string
+		isHidden
+		lineageTag: 5c37cdd6-9433-338f-fef1-aeeff6aba591
+		sourceColumn: usuario
+
+	column aperturas
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: 5dc1dc7f-8640-c7fe-4e4a-14ab8439b9a6
+		sourceColumn: aperturas
+
+	column vistas_pagina
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: e50e1838-2c7d-de30-3ea3-2cdb16f22ba7
+		sourceColumn: vistas_pagina
+
+	column es_sintetico
+		dataType: boolean
+		isHidden
+		lineageTag: 8e000c9e-be25-c467-f1ff-f70632a7028a
+		sourceColumn: es_sintetico
+
+	partition Fact_Uso = m
+		mode: import
+		source =
+				// Consulta: Fact_Uso (una fila por día x reporte x usuario)
+				// Lee fact_uso.csv de la carpeta RutaDatos y descarta las cuentas de usuarios_excluidos (config_datos.json):
+				// el uso de quienes mantienen el informe no cuenta ni aparece como usuario.
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "fact_uso.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Columnas = {"fecha", "workspace_id", "workspace_nombre", "report_id", "report_nombre", "usuario", "aperturas", "vistas_pagina", "es_sintetico"},
+				    // Esquema fijo: una columna extra del CSV no llega al modelo y una obligatoria que falte da error con su nombre
+				    Nombres = Table.TransformColumnNames(Encabezados, each Text.Lower(Text.Trim(_))),
+				    Seleccion = Table.SelectColumns(Nombres, Columnas),
+				    // fecha: SOLO aaaa-mm-dd (se acepta una hora detrás, que se descarta). Otro formato detiene la actualización con
+				    // un mensaje claro: no se adivina, así no quedan día y mes invertidos sin aviso.
+				    LeerFecha = (t) => if t = null or Text.Trim(t) = "" then null
+				        else Date.FromText(Text.Start(Text.Trim(t), 10), [Format = "yyyy-MM-dd", Culture = "en-US"]),
+				    Ilegibles = List.Count(List.Select(Seleccion[fecha], each (try LeerFecha(_))[HasError])),
+				    Fechas = if Ilegibles > 0
+				        then error Error.Record("DataFormat.Error",
+				            Text.From(Ilegibles) & " fila(s) de fact_uso.csv con la fecha ilegible: se espera aaaa-mm-dd (por ejemplo 2025-03-03)")
+				        else Table.TransformColumns(Seleccion, {{"fecha", LeerFecha, type date}}),
+				    // Claves sin espacios y en minúsculas: el motor del modelo compara texto sin distinguir mayúsculas y Power Query sí.
+				    // Sin usuario ("" o "?") queda como "(sin usuario)".
+				    Claves = Table.TransformColumns(Fechas, {
+				        {"workspace_id", each if _ = null then null else Text.Lower(Text.Trim(_)), type text},
+				        {"report_id", each if _ = null then null else Text.Lower(Text.Trim(_)), type text},
+				        {"usuario", each let u = Text.Lower(Text.Trim(_ ?? "")) in if u = "" or u = "?" then "(sin usuario)" else u, type text}
+				    }),
+				    Excluidos = List.Buffer({"admin.demo01@minera-demo.example"}),
+				    SinExcluidos = Table.SelectRows(Claves, each not List.Contains(Excluidos, [usuario])),
+				    // "en-US" fija el formato de lectura (True/False, punto decimal) sin depender de la configuración regional
+				    Tipos = Table.TransformColumnTypes(SinExcluidos, {
+				        {"workspace_nombre", type text}, {"report_nombre", type text}, {"aperturas", Int64.Type},
+				        {"vistas_pagina", Int64.Type}, {"es_sintetico", type logical}}, "en-US"),
+				    ConUso = Table.SelectRows(Tipos, each [aperturas] <> 0 or [vistas_pagina] <> 0)
+				in
+				    ConUso
+

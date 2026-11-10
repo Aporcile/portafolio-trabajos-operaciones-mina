@@ -1,0 +1,55 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.3.0/schema.json",
+  "themeCollection": {
+    "customTheme": {
+      "name": "Gobernanza_uso_reportes.json",
+      "reportVersionAtImport": {
+        "visual": "2.14.0",
+        "page": "2.1.0",
+        "report": "3.3.0"
+      },
+      "type": "RegisteredResources"
+    }
+  },
+  "resourcePackages": [
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "Gobernanza_uso_reportes.json",
+          "path": "Gobernanza_uso_reportes.json",
+          "type": "CustomTheme"
+        },
+        {
+          "name": "logo_minera_demo_blanco.png",
+          "path": "logo_minera_demo_blanco.png",
+          "type": "Image"
+        }
+      ]
+    }
+  ],
+  "objects": {
+    "outspacePane": [
+      {
+        "properties": {
+          "expanded": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "defaultDrillFilterOtherVisuals": true,
+    "allowChangeFilterTypes": true,
+    "useEnhancedTooltips": true,
+    "useDefaultAggregateDisplayName": true,
+    "exportDataMode": "AllowSummarized"
+  }
+}

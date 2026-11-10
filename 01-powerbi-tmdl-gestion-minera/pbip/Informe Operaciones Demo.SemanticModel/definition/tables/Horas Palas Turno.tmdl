@@ -1,0 +1,114 @@
+table 'Horas Palas Turno'
+	lineageTag: 92ecbf5b-e239-4432-bfaa-c693892f45f8
+
+	/// DF de la flota de carguío: (nominal - mantención programada - mantención no programada) sobre nominal.
+	measure 'Disponibilidad Palas turno' = (SUM('Horas Palas Turno'[Nominal]) - SUM('Horas Palas Turno'[MNP]) -SUM('Horas Palas Turno'[MP]))/ sum ( 'Horas Palas Turno'[Nominal])
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 5647fb29-8354-4b08-ba77-d110752d81c9
+
+	/// Horas efectivas de la flota de carguío.
+	measure 'Hr_efectivo Turno Palas' = sum( 'Horas Palas Turno'[Efectivo])
+		lineageTag: 6d62cb7e-4a9f-4569-b6f7-599e68edea30
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Horas disponibles de la flota de carguío: nominal menos mantención programada y no programada.
+	measure 'Hr_HD Turno Palas' = (SUM('Horas Palas Turno'[Nominal]) - SUM('Horas Palas Turno'[MNP]) -SUM('Horas Palas Turno'[MP]))
+		lineageTag: 7a40d514-443c-4801-ad95-81913e54858d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Rendimiento de carguío: toneladas cargadas por hora efectiva.
+	measure 'TPH efectivo Palas Por Turno Palas' = DIVIDE ( [Movimiento Palas], [Hr_efectivo Turno Palas] )
+		formatString: 0
+		lineageTag: b750a5a2-9eac-4be9-8f7b-c4bf7f3faa37
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	/// UEBD de carguío: horas efectivas sobre horas disponibles (0 si no hay datos).
+	measure 'UEBD Palas turno' = if( (SUM('Horas Palas Turno'[Efectivo]) / [Hr_HD Turno Palas])=BLANK(), 0, (SUM('Horas Palas Turno'[Efectivo]) / [Hr_HD Turno Palas]))
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 1145329c-cd75-4e47-ad38-1ccc782b68a3
+
+	column time
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 38773d75-3b4d-44a8-88c1-1c8c6acdc346
+		summarizeBy: none
+		sourceColumn: time
+
+		annotation SummarizationSetBy = Automatic
+
+	column Shift
+		dataType: string
+		lineageTag: 43dd04b7-129e-4cd7-b0c7-3d750926d8e9
+		summarizeBy: none
+		sourceColumn: Shift
+
+		annotation SummarizationSetBy = Automatic
+
+	column equipment
+		dataType: string
+		lineageTag: 7a584fbf-92ec-4d8d-8e9e-9ad5b69cc68b
+		summarizeBy: none
+		sourceColumn: equipment
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nominal
+		dataType: double
+		lineageTag: 082b78f6-0c85-489e-93b3-d499d529c744
+		summarizeBy: sum
+		sourceColumn: Nominal
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column MP
+		dataType: double
+		lineageTag: 3bbb6bf9-2301-478b-a8aa-b38364308dc9
+		summarizeBy: sum
+		sourceColumn: MP
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column MNP
+		dataType: double
+		lineageTag: 4fb7911f-78d6-4f05-b28c-8ee8441a880d
+		summarizeBy: sum
+		sourceColumn: MNP
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Efectivo
+		dataType: double
+		lineageTag: 802914af-6ddd-40b0-a548-543c17452f01
+		summarizeBy: sum
+		sourceColumn: Efectivo
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column shiftID = CONCATENATE( 'Horas Palas Turno'[time],'Horas Palas Turno'[Shift])
+		lineageTag: 54354ac3-2ac7-4783-a81f-26df6e8e98d5
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Horas Palas Turno' = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "horas_palas_turno.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"time", type datetime}, {"Shift", type text}, {"equipment", type text}, {"Nominal", type number}, {"MP", type number}, {"MNP", type number}, {"Efectivo", type number}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table

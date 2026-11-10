@@ -1,0 +1,153 @@
+relationship AutoDetected_69cb9b67-77e4-4985-9579-4bf7fc8bd49f
+	fromColumn: Fact_GPS.Equipo
+	toColumn: Dim_Equipo.Equipo
+
+relationship AutoDetected_5d80bbe4-9c32-42a8-91a6-5496d5e4422a
+	fromColumn: Fact_HorasEquipo.Equipo
+	toColumn: Dim_Equipo.Equipo
+
+relationship cb2007ea-5fef-40f2-8940-8d55d99aade8
+	fromColumn: Fact_Chancado.CAEX
+	toColumn: Dim_Equipo.Equipo
+
+relationship 073a9a0a-cffa-41b4-8859-2cc894ca4875
+	fromColumn: Fact_Chancado.Equipo_Carguio
+	toColumn: Dim_Carguio.Equipo
+
+relationship 9de133a1-b15c-44bb-b04d-fb90075a7e44
+	fromColumn: Fact_Ciclos.TruckName
+	toColumn: Dim_Equipo.Equipo
+
+relationship 158fb1e4-292c-4905-bc00-7a410353cb8c
+	fromColumn: Fact_Ciclos.ShovelName
+	toColumn: Dim_Carguio.Equipo
+
+relationship AutoDetected_978c2380-12ad-4e65-b004-14cfd36808eb
+	fromColumn: Fact_Chancado.Turno
+	toColumn: Dim_Turno.Turno
+
+relationship AutoDetected_268b3f31-de8d-4846-9f7b-0a0944b8e3af
+	fromColumn: Fact_GPS.Turno
+	toColumn: Dim_Turno.Turno
+
+relationship AutoDetected_320911b3-93a6-45f7-959e-e3c4652b5195
+	fromColumn: Fact_HorasEquipo.Turno
+	toColumn: Dim_Turno.Turno
+
+relationship 79ce3913-8369-4cfd-9b53-b0419bd373f2
+	fromColumn: Fact_Ciclos.shift
+	toColumn: Dim_Turno.Turno
+
+relationship e485cd17-3d98-468d-afd3-264db7b4dd7e
+	fromColumn: Fact_HorasEquipo.Fecha
+	toColumn: Dim_Tiempo.Fecha
+
+relationship a38454ae-6e25-4655-9cde-cd62f1eb6cc8
+	fromColumn: Fact_Chancado.Fecha
+	toColumn: Dim_Tiempo.Fecha
+
+relationship 846defc9-ef09-4f86-ae4c-6d3b6e21f465
+	fromColumn: Fact_Ciclos.DiaOperativo
+	toColumn: Dim_Tiempo.Fecha
+
+relationship 4cae2082-3e86-4687-b162-3d06739a0023
+	fromColumn: Plan_Semanal_Chancador.Fecha
+	toColumn: Dim_Tiempo.Fecha
+
+relationship AutoDetected_ef3c20ef-a55c-42e3-8fca-7636f7f9e371
+	fromColumn: Fact_ChancadoOrigen_Hora.Turno
+	toColumn: Dim_Turno.Turno
+
+relationship d79b05b5-75f8-4d5d-bd6b-8b09d9120b1d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Fact_ChancadoOrigen_Hora.Fecha
+	toColumn: Dim_Tiempo.Fecha
+
+relationship AutoDetected_df322ff6-f049-4252-820d-53a9e260c08d
+	fromColumn: Plan_Carguio.Equipo
+	toColumn: Dim_Equipo.Equipo
+
+relationship AutoDetected_20c24f4d-a36c-4f52-98f2-bff75d922b85
+	fromColumn: Plan_Carguio.Equipo
+	toColumn: Dim_Carguio.Equipo
+
+relationship 2928918e-6091-4413-9feb-275b653fa100
+	fromColumn: Plan_Carguio.Fecha
+	toColumn: Dim_Tiempo.Fecha
+
+relationship 8330d563-8a46-4ec7-b137-243274af7cad
+	fromColumn: Fact_HorasEquipo.Orden_Hora_Dia
+	toColumn: Dim_Hora_Operacional.Orden_Hora_Dia
+
+relationship 60a8ada5-07e5-48c3-a802-d46db8bd6ac7
+	fromColumn: Fact_ChancadoOrigen_Hora.Orden_Hora_Dia
+	toColumn: Dim_Hora_Operacional.Orden_Hora_Dia
+
+relationship Relationship
+	fromColumn: Fact_LeyAlimentacion_Hora.Turno
+	toColumn: Dim_Turno.Turno
+
+relationship 'Relationship 1'
+	fromColumn: Fact_LeyAlimentacion_Hora.Fecha
+	toColumn: Dim_Tiempo.Fecha
+
+relationship 'Relationship 2'
+	fromColumn: Fact_LeyAlimentacion_Hora.Orden_Hora_Dia
+	toColumn: Dim_Hora_Operacional.Orden_Hora_Dia
+
+relationship 'Relationship 3'
+	fromColumn: Plan_CAEX.Fecha
+	toColumn: Dim_Tiempo.Fecha
+
+relationship 'Relationship 4'
+	fromColumn: Plan_Perforadoras.Fecha
+	toColumn: Dim_Tiempo.Fecha
+
+relationship 'Relationship 5'
+	fromColumn: Plan_Perforadoras.Equipo
+	toColumn: Dim_Equipo.Equipo
+
+relationship 'Relationship 6'
+	fromColumn: Fact_HorasEquipo_Muro.Equipo
+	toColumn: Dim_Equipo.Equipo
+
+relationship 'Relationship 7'
+	fromColumn: Fact_HorasEquipo_Muro.Fecha
+	toColumn: Dim_Tiempo.Fecha
+
+relationship 'Relationship 8'
+	fromColumn: Fact_HorasEquipo_Muro.Turno
+	toColumn: Dim_Turno.Turno
+
+relationship 38308f0a-2d4f-4082-a467-035b07f062cd
+	fromColumn: Fact_HorasEquipo_Muro.Orden_Hora_Dia
+	toColumn: Dim_Hora_Operacional.Orden_Hora_Dia
+
+relationship bd1ef904-6325-4511-b292-d86d1be8a066
+	fromColumn: Fact_GPS.Fecha
+	toColumn: Dim_Tiempo.Fecha
+
+relationship cda6bb94-5dc6-4ba4-8573-86bceffc7628
+	fromColumn: Fact_GPS.Orden_Hora_Dia
+	toColumn: Dim_Hora_Operacional.Orden_Hora_Dia
+
+relationship dac0c9ff-3753-440d-9456-e8c5d8b438fa
+	fromColumn: Plan_Muro.Fecha
+	toColumn: Dim_Tiempo.Fecha
+
+relationship 64467779-1819-4f97-80de-50d164a6019e
+	fromColumn: Fact_VelocidadCAEX_Hora.Fecha
+	toColumn: Dim_Tiempo.Fecha
+
+relationship 993ff158-d95d-44e9-b74f-254e16ebc665
+	fromColumn: Fact_VelocidadCAEX_Hora.Turno
+	toColumn: Dim_Turno.Turno
+
+relationship cdfe1424-2fab-4ed0-a25c-dc8a8c39b4bf
+	fromColumn: Fact_VelocidadCAEX_Hora.Equipo
+	toColumn: Dim_Equipo.Equipo
+
+relationship e02b6949-5fd7-408d-bdf6-944631e782aa
+	fromColumn: Fact_VelocidadCAEX_Hora.Orden_Hora_Dia
+	toColumn: Dim_Hora_Operacional.Orden_Hora_Dia
+

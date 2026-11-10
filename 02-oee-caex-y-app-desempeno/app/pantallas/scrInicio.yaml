@@ -1,0 +1,595 @@
+Screens:
+  scrInicio:
+    Properties:
+      Fill: =colFondo
+      OnVisible: |-
+        =If(
+            Connection.Connected,
+            If(nPendientes > 0, Select(btnSincronizar), Select(btnCargar)),
+            Select(btnCargar)
+        )
+    Children:
+      - conHeaderInicio:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =colPrimario
+            Height: =72
+            Width: =Parent.Width
+          Children:
+            - imgLogoInicio:
+                Control: Image@2.2.3
+                Properties:
+                  Height: =56
+                  Image: ='logo_minera_demo_blanco'
+                  Width: =170
+                  X: =16
+                  Y: =8
+            - imgLogoAreaInicio:
+                Control: Image@2.2.3
+                Properties:
+                  Height: =44
+                  Image: ="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAE90lEQVR42u3azVEjMRSFUUlFFiYC2JKAiYBciAdCwVHgLRsch1mxowr/dLdbuudEMAP1vvfUM7V0YvOwPRboxGG/qz38Oathh9woVAMPuUGoBh9yQ1ANPeTGoBp8yA1BNfiQG4Jm+KHE/vN3NfiQew00ww+510Az/JAbgWrwIfdJ0Aw/5F4DzfBDbgSa4YfcCDTDD7kRaIYfciPQDD/kRqD5kUGuZvtD7hXQDD/kRqAZfsiNgG8A4BuA7Q+JV0Az/JAbAU8A8ASw/SHxCnABgAvA9ofEK8AFAC4AID4Azn/Iega4AMAFYPtD4hXgAgAXACAAQF4AvP8h8zuACwA8AQABAAQAyFB9AAQXACAAgAAAAgAIACAAgAAAAgAIACAAgAAAAgAIACAALOX788MPAQEABCBy+7sCEABAALz9QQAAAcjZ/i4CBAAQAEAA4j7+eQYgAIAA+Kc/EACRAAEABMBmBwEAAWDY7e9aQAAAAfD2BwEQDhAAQABscQQAAUEAMLwIACAAgAAwyvnvKYEAAALg4x8IgKggABhUBAAQAFwXCAAGFAEABADbHwFAaBAAQACwlREABAcBwDAiAIAA0Mf2d3kIACAAgADgBEcAECEEAIOHAAACwLDb3zUiAIAAAAJA3LntGSAAgABgyy7v6fXND0EAAAEg6kL53f6uAAEwXCAApL79XQECYPv7syIApH75dwUIgO0PAsCo0bLlBQAEQgBsUsONAIBQCIDtP/af31ALAAiGAGCYEQDnv78HAoDt73IQAFsTBICRgjbFBncFCIDtDwKAL/8IAGKCADj/1/t3M7ACAK4AAbD9DSoCgMiJiwBg+yMANiMIAGLnyhAAA+H8RwBAbATA9jeQCADCJzoCgO2PANiCIACsLIC33v6uDwGw/UEASN2+rgABsP39LBAAUreuK0AAAAFw8s7t5f3LD0EAwLNEAGx/2x8BAFeAAGD7IwDOf1wBAoDtjwDY/iAA2P6eAQJg+4MAYPu7AgQAEADnPwgAzn/PAAGw/UEAsP1dAQIACIDz3/Z3BQgAIAC2v+2PAIBngADY/rY/AgCuAAHA9kcAnP+4AgQA2x8BsP1BALD9PQPCA2D74wLA9g9/+ydfAQIALgDnv+1fXAECAAiA7W/7IwDgGSAA2P4IgPMfV4AAYPsjALY/rgABAATA9nf+IwDgGSAA2P4IgPMfV4AAYPsjALY/rgABwPZHAAABcP7b/p4BAgAIgO1v+7sCBAAQANvf9kcAwDNAALD9EQDnP64AAcD2RwBsf1wBAoDtjwAAqQFIP/9tf88AFwCQFwDb3/Z3BVwYgMN+V/0qIc9hv6vN9rf9yb0CfAOAYHe9/wXuH5/9FsEFAFwUAB8CocR9AHQBgAsAEAAgNwC+A0DW+98FAC6Av8sAjL39XQDgAgAEwDMAos5/FwC4AE4rBTDW9ncBgAvgvGIAY2z/fy8AEYBxh98TADwBrisI0Of2P/kCEAEYb/jPegKIAIw1/L4BgG8A85QFWPf2v+gCEAEYY/gvfgKIAPQ//Fd9AxAB6Hv4r/4IKALQ7/BP8q8AIgB9Dn8ppUw6vJuH7dGvBdY/+LP8PwDXAPQz/LP8RyARgD6Gf/IngCcB9DH4i/xXYNcArHuGFhtQ1wCsb3kuvqGFANZzNd/0RBcDuO1TeRVvdCHA4AcHQBAw8AIgChj2hf0AXzRdlxacKo0AAAAASUVORK5CYII="
+                  Width: =44
+                  X: =172
+                  Y: =14
+            - lblTituloInicio:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  Color: =RGBA(255, 255, 255, 1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =72
+                  Size: =20
+                  Text: ="RD Minera Demo"
+                  Width: =Parent.Width - 420
+                  X: =210
+            - lblConexionInicio:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Right
+                  Color: =If(Connection.Connected, RGBA(165, 214, 167, 1), RGBA(255, 204, 128, 1))
+                  FontWeight: =FontWeight.Semibold
+                  Height: =72
+                  Size: =14
+                  Text: =If(Connection.Connected, "● En línea", "● Sin señal")
+                  Width: =180
+                  X: =Parent.Width - 196
+      - lblSubtituloInicio:
+          Control: Label@2.5.1
+          Properties:
+            Color: =colTexto
+            FontWeight: =FontWeight.Semibold
+            Height: =56
+            Size: =16
+            Text: |-
+              ="Reunión semanal de supervisores · " & txtDiaReunion &
+              If(Weekday(Today(), StartOfWeek.Monday) <> nDiaReunion, "   (próxima: " & Text(DateAdd(Today(), Mod(nDiaReunion - Weekday(Today(), StartOfWeek.Monday) + 7, 7), TimeUnit.Days), "ddd dd-mm", "es-ES") & ")", "")
+            Width: =Parent.Width - 48
+            X: =24
+            Y: =92
+      - conReunionHoy:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            DropShadow: =DropShadow.Light
+            Fill: =RGBA(255, 255, 255, 1)
+            Height: =Parent.Height - 196
+            RadiusBottomLeft: =12
+            RadiusBottomRight: =12
+            RadiusTopLeft: =12
+            RadiusTopRight: =12
+            Width: =Parent.Width * 0.58
+            X: =24
+            Y: =172
+          Children:
+            - lblFechaHoy:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colTexto
+                  FontWeight: =FontWeight.Bold
+                  Height: =48
+                  Size: =22
+                  Text: ="Reunión de hoy · " & Text(Today(), "ddd dd-mm-yyyy", "es-ES")
+                  Width: =Parent.Width - 48
+                  X: =24
+                  Y: =20
+            - lblEstadoHoy:
+                Control: Label@2.5.1
+                Properties:
+                  Color: |-
+                    =If(
+                        !IsBlank(LookUp(colSesionesHoy, Grupo = gblGrupo)) ||
+                        !IsBlank(LookUp(colOutSesiones, Grupo = gblGrupo && Fecha = Text(Today(), "yyyy-mm-dd"))),
+                        colVerde,
+                        colAmbar
+                    )
+                  FontWeight: =FontWeight.Semibold
+                  Height: =40
+                  Size: =16
+                  Text: |-
+                    =If(
+                        varReunionEnCurso,
+                        "Reunión en curso",
+                        !IsBlank(LookUp(colSesionesHoy, Grupo = gblGrupo)) ||
+                        !IsBlank(LookUp(colOutSesiones, Grupo = gblGrupo && Fecha = Text(Today(), "yyyy-mm-dd"))),
+                        "✔ Ya se realizó la reunión de hoy",
+                        "Pendiente"
+                    )
+                  Width: =Parent.Width - 48
+                  X: =24
+                  Y: =72
+            - btnPreparar:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderColor: =colPrimario
+                  BorderThickness: =2
+                  Color: =colPrimario
+                  DisplayMode: =If(Connection.Connected && IsEmpty(colMeta), DisplayMode.Disabled, DisplayMode.Edit)
+                  Fill: =RGBA(255, 255, 255, 1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =110
+                  HoverFill: =colPrimarioClaro
+                  OnSelect: =Navigate(scrEditor, ScreenTransition.Fade)
+                  RadiusBottomLeft: =12
+                  RadiusBottomRight: =12
+                  RadiusTopLeft: =12
+                  RadiusTopRight: =12
+                  Size: =18
+                  Text: ="Preparar reunión (editor)"
+                  Width: =(Parent.Width - 64) / 2
+                  X: =24
+                  Y: =132
+            - btnIniciar:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  DisplayMode: =If(Connection.Connected && IsEmpty(colMeta), DisplayMode.Disabled, DisplayMode.Edit)
+                  Fill: =colPrimario
+                  FontWeight: =FontWeight.Bold
+                  Height: =110
+                  HoverFill: =RGBA(44, 62, 92, 1)
+                  OnSelect: =Navigate(scrVisor, ScreenTransition.Fade)
+                  RadiusBottomLeft: =12
+                  RadiusBottomRight: =12
+                  RadiusTopLeft: =12
+                  RadiusTopRight: =12
+                  Size: =18
+                  Text: =If(varReunionEnCurso, "Continuar reunión", "Presentar reunión (visor) · " & nMinutosMeta & " min")
+                  Width: =(Parent.Width - 64) / 2
+                  X: =24 + (Parent.Width - 64) / 2 + 16
+                  Y: =132
+            - lblPrepEstado:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =If(IsBlank(fxPrepFila) || varPrepSucia, colAmbar, colVerde)
+                  FontWeight: =FontWeight.Semibold
+                  Height: =64
+                  Size: =13
+                  Text: |-
+                    =With(
+                        {f: fxPrepFila},
+                        "Preparación de la reunión del " & Text(fecReunion, "ddd dd-mm", "es-ES") & ": " &
+                        If(IsBlank(f), "sin preparar", "guardada el " & IfError(Text(DateTimeValue(f.Actualizado), "dd-mm hh:mm"), f.Actualizado) & " por " & f.Autor) &
+                        If(varPrepSucia, " · hay cambios sin guardar en este equipo", "")
+                    )
+                  VerticalAlign: =VerticalAlign.Top
+                  Width: =Parent.Width - 48
+                  X: =24
+                  Y: =250
+            - lblAgendaHoy:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =48
+                  Size: =13
+                  Text: =Concat(tblBloques, Bloque & " " & Min & "'", "  →  ")
+                  Width: =Parent.Width - 48
+                  X: =24
+                  Y: =320
+            - lblNotaOffline:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(90, 98, 104, 1)
+                  Height: =60
+                  Size: =12
+                  Text: |-
+                    ="Funciona sin señal: lo que registres queda guardado en este equipo y se sube solo al volver la conexión."
+                  VerticalAlign: =VerticalAlign.Top
+                  Width: =Parent.Width - 48
+                  X: =24
+                  Y: =Parent.Height - 72
+      - conResumen:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            DropShadow: =DropShadow.Light
+            Fill: =RGBA(255, 255, 255, 1)
+            Height: =Parent.Height - 196
+            RadiusBottomLeft: =12
+            RadiusBottomRight: =12
+            RadiusTopLeft: =12
+            RadiusTopRight: =12
+            Width: =Parent.Width - conReunionHoy.Width - 72
+            X: =conReunionHoy.X + conReunionHoy.Width + 24
+            Y: =172
+          Children:
+            - lblResumenTitulo:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colTexto
+                  FontWeight: =FontWeight.Bold
+                  Height: =40
+                  Size: =16
+                  Text: ="Situación de los compromisos"
+                  Width: =Parent.Width - 40
+                  X: =20
+                  Y: =16
+            - lblCompAbiertos:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =colTexto
+                  Height: =36
+                  Size: =14
+                  Text: |-
+                    ="Compromisos abiertos: " & CountRows(colCompromisos)
+                  Width: =Parent.Width - 40
+                  X: =20
+                  Y: =64
+            - lblCompVencidos:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =If(CountRows(Filter(colCompromisos, FechaLimite < Today())) > 0, colRojo, colTexto)
+                  Height: =36
+                  Size: =14
+                  Text: |-
+                    ="Compromisos vencidos: " & CountRows(Filter(colCompromisos, FechaLimite < Today()))
+                  Width: =Parent.Width - 40
+                  X: =20
+                  Y: =100
+            - lblPendientesSync:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =If(nPendientes > 0, colAmbar, colTexto)
+                  Height: =36
+                  Size: =14
+                  Text: |-
+                    ="Registros por sincronizar: " & nPendientes
+                  Width: =Parent.Width - 40
+                  X: =20
+                  Y: =136
+            - lblUltimaCarga:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =If(First(colMeta).Grupo <> gblGrupo, colRojo, RGBA(90, 98, 104, 1))
+                  Height: =52
+                  Size: =12
+                  Text: |-
+                    =If(
+                        IsBlank(First(colMeta).UltimaCarga),
+                        "Sin datos descargados todavía. Actualiza con señal antes de subir a mina.",
+                        First(colMeta).Grupo <> gblGrupo,
+                        "Datos de otra configuración. Actualiza con señal.",
+                        "Datos actualizados: " & Text(First(colMeta).UltimaCarga, "dd-mm hh:mm")
+                    )
+                  VerticalAlign: =VerticalAlign.Top
+                  Width: =Parent.Width - 40
+                  X: =20
+                  Y: =176
+            - btnCargar:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderColor: =colPrimario
+                  BorderThickness: =2
+                  Color: =colPrimario
+                  DisplayMode: =If(varCargando, DisplayMode.Disabled, DisplayMode.Edit)
+                  Fill: =RGBA(255, 255, 255, 1)
+                  Height: =52
+                  OnSelect: |-
+                    =If(
+                        Connection.Connected,
+                        Set(varCargando, true);
+                        // Los registros viven en Excel (carpeta RD/Datos de la biblioteca de documentos del sitio), con fechas como texto aaaa-mm-dd.
+                        // Aquí se pasan a fechas reales para que el resto de la app trabaje igual.
+                        // Refresh: sin él, Power Apps puede devolver la lectura anterior (la de antes de sincronizar).
+                        Refresh(RD_Compromisos);
+                        Refresh(RD_Sesiones);
+                        ClearCollect(
+                            colCompromisos,
+                            ForAll(
+                                // Un solo «=» para que Excel filtre la tabla completa. Con «&&» el conector no filtra:
+                                // Power Apps solo miraba las primeras 500 filas y, pasadas esas, los compromisos nuevos no llegaban.
+                                Filter(RD_Compromisos, Abierto = "Sí") As c,
+                                {
+                                    ID: Value(c.ID),
+                                    Titulo: c.Titulo,
+                                    ResponsableNombre: c.ResponsableNombre,
+                                    FechaLimite: DateValue(c.FechaLimite),
+                                    FechaCreacion: DateValue(c.FechaCreacion),
+                                    Estado: c.Estado,
+                                    Comentario: c.Comentario,
+                                    EvidenciaUrl: c.EvidenciaUrl,
+                                    IdLocal: c.IdLocal
+                                }
+                            )
+                        );
+                        // "No cumplido" cierra el compromiso: queda en el Excel pero no vuelve a aparecer en la reunión.
+                        RemoveIf(colCompromisos, Estado = "No cumplido");
+                        ClearCollect(colPlan, FirstN(Sort(RD_PlanSemanal, SemanaInicio, SortOrder.Descending), 8));
+                        // Convocados a la reunión (RD_Participantes). La minuta se envía a todos los activos.
+                        ClearCollect(
+                            colParticipantes,
+                            ForAll(
+                                Filter(RD_Participantes, Lower(Trim(Activo)) in ["sí", "si"] && !IsBlank(Correo)) As p,
+                                {Nombre: Trim(p.Nombre), Correo: Lower(Trim(p.Correo)), Cargo: p.Cargo, Area: Trim(p.Area)}
+                            )
+                        );
+                        // Reunión de hoy: un solo «=» (lo filtra Excel); el grupo se filtra después en el equipo.
+                        ClearCollect(colSesionesHoy, Filter(RD_Sesiones, Fecha = Text(Today(), "yyyy-mm-dd")));
+                        RemoveIf(colSesionesHoy, Grupo <> gblGrupo);
+                        // Preparación de la reunión (la escribe el editor). Si este equipo tiene una sin subir, no se pisa.
+                        // Sin Refresh, Power Apps devolvería la lectura guardada en memoria (la de antes de Guardar) y el visor mostraría la preparación
+                        // anterior. Además, nunca se reemplaza la copia del equipo por una más antigua.
+                        If(
+                            IsEmpty(colOutPrep),
+                            Refresh(RD_Preparacion);
+                            With(
+                                {nube: Filter(RD_Preparacion, Clave = claveReunion)},
+                                If(
+                                    IsBlank(fxPrepFila) || IsEmpty(nube) ||
+                                    IfError(DateTimeValue(First(nube).Actualizado) >= DateTimeValue(fxPrepFila.Actualizado), true),
+                                    ClearCollect(colPrepFila, nube);
+                                    SaveData(colPrepFila, "rd_prepfila")
+                                )
+                            )
+                        );
+                        // colMeta se llena cuando ya llegó todo lo que el editor y el visor usan al abrirse. Mientras esté vacía (primera carga con señal),
+                        // «Preparar reunión» y «Presentar reunión» esperan, para no entrar al editor sin convocados ni preparación, ni empezar la
+                        // reunión con la asistencia vacía.
+                        ClearCollect(colMeta, {Grupo: gblGrupo, UltimaCarga: Now()});
+                        // OEE de transporte: las cifras del informe OEE que se ve en el visor, para la minuta (que detalla solo lo bajo plan).
+                        // Las trae el flujo RD-OEE-Minuta del modelo del informe (consulta dax/OEE_minuta.dax), una fila por periodo.
+                        // Si el flujo falla, queda lo que se cargó antes. Va al final: es lo que más tarda y solo lo usa la minuta, al cerrar la reunión.
+                        IfError(
+                            With(
+                                {j: 'RD-OEE-Minuta'.Run().json},
+                                ClearCollect(
+                                    colOEE,
+                                    ForAll(
+                                        Table(ParseJSON(j)) As o,
+                                        {
+                                            Orden: Value(o.Value.Orden),
+                                            Periodo: Text(o.Value.Periodo),
+                                            Ini: DateValue(Text(o.Value.Inicio)),
+                                            Fin: DateValue(Text(o.Value.Fin)),
+                                            Datos: Text(o.Value.Datos),
+                                            PlanT: Value(o.Value.PlanT),
+                                            RealT: Value(o.Value.RealT),
+                                            OEEPlan: Value(o.Value.OEEPlan),
+                                            OEEReal: Value(o.Value.OEEReal),
+                                            DFPlan: Value(o.Value.DFPlan),
+                                            DFReal: Value(o.Value.DFReal),
+                                            UEBDPlan: Value(o.Value.UEBDPlan),
+                                            UEBDReal: Value(o.Value.UEBDReal),
+                                            RendPlan: Value(o.Value.RendPlan),
+                                            RendReal: Value(o.Value.RendReal),
+                                            HNPlan: Value(o.Value.HNPlan),
+                                            HNReal: Value(o.Value.HNReal),
+                                            PerdDF: Value(o.Value.PerdDF),
+                                            PerdUEBD: Value(o.Value.PerdUEBD),
+                                            PerdRend: Value(o.Value.PerdRend),
+                                            PerdHN: Value(o.Value.PerdHN)
+                                        }
+                                    )
+                                )
+                            );
+                            true,
+                            false
+                        );
+                        SaveData(colCompromisos, "rd_comp");
+                        SaveData(colOEE, "rd_oee");
+                        SaveData(colPlan, "rd_plan");
+                        SaveData(colSesionesHoy, "rd_seshoy");
+                        SaveData(colMeta, "rd_meta");
+                        SaveData(colParticipantes, "rd_part");
+                        Set(varCargando, false),
+                        LoadData(colCompromisos, "rd_comp", true);
+                        LoadData(colOEE, "rd_oee", true);
+                        LoadData(colPlan, "rd_plan", true);
+                        LoadData(colSesionesHoy, "rd_seshoy", true);
+                        LoadData(colMeta, "rd_meta", true);
+                        LoadData(colParticipantes, "rd_part", true)
+                    )
+                  Size: =13
+                  Text: =If(varCargando, "Actualizando…", "Actualizar datos")
+                  Width: =(Parent.Width - 52) / 2
+                  X: =20
+                  Y: =Parent.Height - 72
+            - btnSincronizar:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  DisplayMode: =If(nPendientes = 0 || varSincronizando, DisplayMode.Disabled, DisplayMode.Edit)
+                  Fill: =colAmbar
+                  Height: =52
+                  OnSelect: |-
+                    =If(
+                        !Connection.Connected,
+                        Notify("Sin señal: los registros siguen guardados en este equipo.", NotificationType.Warning),
+                        Set(varSincronizando, true);
+                        Clear(colSyncErr);
+                        // Minuta de la reunión: va primero para que el correo salga apenas haya señal. Sale del Outlook de quien sincroniza.
+                        // Las que se envían se quitan de la bandeja aunque falle otra cosa, para no mandarlas dos veces.
+                        Clear(colMinutaOk);
+                        ForAll(
+                            colOutMinuta As m,
+                            IfError(
+                                Office365Outlook.SendEmailV2(m.Para, m.Asunto, m.Html);
+                                Collect(colMinutaOk, {Id: m.Id});
+                                true,
+                                Collect(colSyncErr, {Lista: "Minuta", Detalle: FirstError.Message}); false
+                            )
+                        );
+                        RemoveIf(colOutMinuta, Id in colMinutaOk.Id);
+                        SaveData(colOutMinuta, "rd_out_min");
+                        ForAll(
+                            colOutSesiones As s,
+                            If(
+                                IsBlank(LookUp(RD_Sesiones, IdLocal = s.IdLocal)),
+                                IfError(
+                                    Patch(RD_Sesiones, Defaults(RD_Sesiones), s); true,
+                                    Collect(colSyncErr, {Lista: "Sesiones", Detalle: FirstError.Message}); false
+                                )
+                            )
+                        );
+                        // Excel no numera solo: cada compromiso nuevo recibe ID = el más alto del Excel + 1, 2, …
+                        // Se calcula una vez antes de subir para no repetir números si ForAll corre en paralelo.
+                        // El más alto se pide ordenado por ID: Excel ordena la tabla completa y compara los ID como números.
+                        // Max(RD_Compromisos, Value(ID)) solo vería las primeras 500 filas. Refresh para no usar una lectura vieja.
+                        If(
+                            !IsEmpty(colOutCompromisos),
+                            Refresh(RD_Compromisos);
+                            With(
+                                {
+                                    base: Coalesce(Value(First(Sort(RD_Compromisos, ID, SortOrder.Descending)).ID), 0),
+                                    nuevos: Filter(colOutCompromisos As c, IsBlank(LookUp(RD_Compromisos, IdLocal = c.IdLocal)))
+                                },
+                                // El ID se pasa a texto antes de buscar (With): con Text() dentro de la condición, Power Apps no le pide la búsqueda
+                                // a Excel y solo mira las primeras 500 filas. Igual abajo.
+                                With(
+                                    {siguiente: Text(base + 1)},
+                                    If(
+                                        // Resguardo: el número siguiente no puede existir. Si existe, hay un ID raro en el Excel (por
+                                        // ejemplo, escrito como texto a mano): no se sube nada y los compromisos esperan en el equipo.
+                                        !IsBlank(LookUp(RD_Compromisos, ID = siguiente)),
+                                        Collect(colSyncErr, {Lista: "Compromisos", Detalle: "el ID " & siguiente & " ya existe en el Excel; hay que revisar la columna ID"}),
+                                        ForAll(
+                                            Sequence(CountRows(nuevos)) As i,
+                                            IfError(
+                                                Patch(RD_Compromisos, Defaults(RD_Compromisos), Patch(Index(nuevos, i.Value), {ID: base + i.Value})); true,
+                                                Collect(colSyncErr, {Lista: "Compromisos", Detalle: FirstError.Message}); false
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        );
+                        ForAll(
+                            colOutRevisiones As r,
+                            With(
+                                {idTxt: Text(r.CompromisoId)},
+                                With(
+                                    {fila: LookUp(RD_Compromisos, ID = idTxt)},
+                                    IfError(
+                                        Patch(
+                                            RD_Compromisos,
+                                            fila,
+                                            {
+                                                Estado: r.EstadoNuevo,
+                                                // Cumplido y No cumplido cierran el compromiso (queda en el Excel y no vuelve a aparecer);
+                                                // En progreso y Atrasado siguen abiertos y reaparecen la semana siguiente.
+                                                Abierto: If(r.EstadoNuevo in ["Cumplido", "No cumplido"], "No", "Sí"),
+                                                FechaCierre: If(r.EstadoNuevo in ["Cumplido", "No cumplido"], r.FechaRevision, ""),
+                                                Comentario: Coalesce(r.Comentario, fila.Comentario)
+                                            }
+                                        );
+                                        If(
+                                            IsBlank(LookUp(RD_RevisionCompromisos, Clave = r.Clave)),
+                                            Patch(RD_RevisionCompromisos, Defaults(RD_RevisionCompromisos), r)
+                                        );
+                                        true,
+                                        Collect(colSyncErr, {Lista: "Revisiones", Detalle: FirstError.Message}); false
+                                    )
+                                )
+                            )
+                        );
+                        // Fotos de evidencia: el flujo las deja en Documentos compartidos/RD/Evidencias.
+                        // Idempotente: si el compromiso ya tiene el link con ese nombre de archivo, no se vuelve a subir.
+                        ForAll(
+                            colOutEvidencias As e,
+                            With(
+                                {idTxt: Text(e.CompromisoId)},
+                                With(
+                                    {fila: LookUp(RD_Compromisos, ID = idTxt)},
+                                    If(
+                                        !IsBlank(e.Url),
+                                        // Ya se subió al preparar: solo se deja el link en el compromiso.
+                                        IfError(
+                                            Patch(RD_Compromisos, fila, {EvidenciaUrl: e.Url});
+                                            true,
+                                            Collect(colSyncErr, {Lista: "Evidencias", Detalle: FirstError.Message}); false
+                                        ),
+                                        !(e.NombreArchivo in fila.EvidenciaUrl),
+                                        IfError(
+                                            With(
+                                                {u: RDSubirEvidencia.Run(e.NombreArchivo, JSON(e.Foto, JSONFormat.IncludeBinaryData)).url},
+                                                Patch(RD_Compromisos, fila, {EvidenciaUrl: u})
+                                            );
+                                            true,
+                                            Collect(colSyncErr, {Lista: "Evidencias", Detalle: FirstError.Message}); false
+                                        )
+                                    )
+                                )
+                            )
+                        );
+                        ForAll(
+                            colOutDestacados As d,
+                            If(
+                                IsBlank(LookUp(RD_Destacados, IdLocal = d.IdLocal)),
+                                IfError(
+                                    Patch(RD_Destacados, Defaults(RD_Destacados), d); true,
+                                    Collect(colSyncErr, {Lista: "Destacados", Detalle: FirstError.Message}); false
+                                )
+                            )
+                        );
+                        // Preparación de la reunión (editor): una fila por fecha de reunión. Refresh para no crear una fila
+                        // repetida si otro equipo la creó después de la última lectura.
+                        If(!IsEmpty(colOutPrep), Refresh(RD_Preparacion));
+                        ForAll(
+                            colOutPrep As p,
+                            IfError(
+                                If(
+                                    IsBlank(LookUp(RD_Preparacion, Clave = p.Clave)),
+                                    Patch(RD_Preparacion, Defaults(RD_Preparacion), p),
+                                    Patch(RD_Preparacion, LookUp(RD_Preparacion, Clave = p.Clave), {Json: p.Json, Actualizado: p.Actualizado, Autor: p.Autor})
+                                );
+                                true,
+                                Collect(colSyncErr, {Lista: "Preparación", Detalle: FirstError.Message}); false
+                            )
+                        );
+                        // Asistencia: una fila por reunión.
+                        ForAll(
+                            colOutAsistencia As a,
+                            If(
+                                IsBlank(LookUp(RD_Asistencia, SesionIdLocal = a.SesionIdLocal)),
+                                IfError(
+                                    Patch(RD_Asistencia, Defaults(RD_Asistencia), a); true,
+                                    Collect(colSyncErr, {Lista: "Asistencia", Detalle: FirstError.Message}); false
+                                )
+                            )
+                        );
+                        If(
+                            IsEmpty(colSyncErr),
+                            Clear(colOutSesiones);
+                            Clear(colOutCompromisos);
+                            Clear(colOutRevisiones);
+                            Clear(colOutEvidencias);
+                            Clear(colOutDestacados);
+                            Clear(colOutPrep);
+                            Clear(colOutAsistencia);
+                            SaveData(colOutSesiones, "rd_out_ses");
+                            SaveData(colOutCompromisos, "rd_out_comp");
+                            SaveData(colOutRevisiones, "rd_out_rev");
+                            SaveData(colOutEvidencias, "rd_out_evid");
+                            SaveData(colOutDestacados, "rd_out_dest");
+                            SaveData(colOutPrep, "rd_out_prep");
+                            SaveData(colOutAsistencia, "rd_out_asis");
+                            Notify("Registros sincronizados.", NotificationType.Success),
+                            Notify("No se pudo subir todo (" & First(colSyncErr).Lista & "): " & First(colSyncErr).Detalle & ". Se reintentará.", NotificationType.Error)
+                        );
+                        Set(varSincronizando, false);
+                        Select(btnCargar)
+                    )
+                  Size: =13
+                  Text: =If(varSincronizando, "Sincronizando…", "Sincronizar (" & nPendientes & ")")
+                  Width: =(Parent.Width - 52) / 2
+                  X: =32 + (Parent.Width - 52) / 2
+                  Y: =Parent.Height - 72

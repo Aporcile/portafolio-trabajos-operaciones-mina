@@ -1,0 +1,134 @@
+- tabTablero:
+    Control: Classic/Button@2.2.0
+    Properties:
+      Text: ="Tablero"
+      OnSelect: =Set(varVista, "tablero")
+      Font: =Font.'Segoe UI'
+      Size: =10.5
+      FontWeight: =FontWeight.Semibold
+      Fill: =RGBA(0, 0, 0, 0)
+      Color: =If(Coalesce(varVista, "area") = "tablero", RGBA(27, 42, 65, 1), RGBA(73, 80, 87, 1))
+      HoverFill: =RGBA(27, 42, 65, 0.06)
+      HoverColor: =If(Coalesce(varVista, "area") = "tablero", RGBA(27, 42, 65, 1), RGBA(33, 37, 41, 1))
+      PressedFill: =RGBA(27, 42, 65, 0.12)
+      BorderThickness: =0
+      X: =32
+      Y: =72
+      Width: =84
+      Height: =40
+- tabArea:
+    Control: Classic/Button@2.2.0
+    Properties:
+      Text: ="Por área"
+      OnSelect: =Set(varVista, "area")
+      Font: =Font.'Segoe UI'
+      Size: =10.5
+      FontWeight: =FontWeight.Semibold
+      Fill: =RGBA(0, 0, 0, 0)
+      Color: =If(Coalesce(varVista, "area") = "area", RGBA(27, 42, 65, 1), RGBA(73, 80, 87, 1))
+      HoverFill: =RGBA(27, 42, 65, 0.06)
+      HoverColor: =If(Coalesce(varVista, "area") = "area", RGBA(27, 42, 65, 1), RGBA(33, 37, 41, 1))
+      PressedFill: =RGBA(27, 42, 65, 0.12)
+      BorderThickness: =0
+      X: =120
+      Y: =72
+      Width: =88
+      Height: =40
+- tabLista:
+    Control: Classic/Button@2.2.0
+    Properties:
+      Text: ="Lista"
+      OnSelect: =Set(varVista, "lista")
+      Font: =Font.'Segoe UI'
+      Size: =10.5
+      FontWeight: =FontWeight.Semibold
+      Fill: =RGBA(0, 0, 0, 0)
+      Color: =If(Coalesce(varVista, "area") = "lista", RGBA(27, 42, 65, 1), RGBA(73, 80, 87, 1))
+      HoverFill: =RGBA(27, 42, 65, 0.06)
+      HoverColor: =If(Coalesce(varVista, "area") = "lista", RGBA(27, 42, 65, 1), RGBA(33, 37, 41, 1))
+      PressedFill: =RGBA(27, 42, 65, 0.12)
+      BorderThickness: =0
+      X: =212
+      Y: =72
+      Width: =64
+      Height: =40
+- tabPersona:
+    Control: Classic/Button@2.2.0
+    Properties:
+      Text: ="Por persona"
+      OnSelect: =Set(varVista, "persona")
+      Font: =Font.'Segoe UI'
+      Size: =10.5
+      FontWeight: =FontWeight.Semibold
+      Fill: =RGBA(0, 0, 0, 0)
+      Color: =If(Coalesce(varVista, "area") = "persona", RGBA(27, 42, 65, 1), RGBA(73, 80, 87, 1))
+      HoverFill: =RGBA(27, 42, 65, 0.06)
+      HoverColor: =If(Coalesce(varVista, "area") = "persona", RGBA(27, 42, 65, 1), RGBA(33, 37, 41, 1))
+      PressedFill: =RGBA(27, 42, 65, 0.12)
+      BorderThickness: =0
+      X: =280
+      Y: =72
+      Width: =108
+      Height: =40
+- tabHL:
+    Control: Classic/Button@2.2.0
+    Properties:
+      Text: ="Highlights y Lowlights"
+      OnSelect: =Set(varVista, "hl")
+      Font: =Font.'Segoe UI'
+      Size: =10.5
+      FontWeight: =FontWeight.Semibold
+      Fill: =RGBA(0, 0, 0, 0)
+      Color: =If(Coalesce(varVista, "area") = "hl", RGBA(27, 42, 65, 1), RGBA(73, 80, 87, 1))
+      HoverFill: =RGBA(27, 42, 65, 0.06)
+      HoverColor: =If(Coalesce(varVista, "area") = "hl", RGBA(27, 42, 65, 1), RGBA(33, 37, 41, 1))
+      PressedFill: =RGBA(27, 42, 65, 0.12)
+      BorderThickness: =0
+      X: =392
+      Y: =72
+      Width: =180
+      Height: =40
+- tabRevisar:
+    Control: Classic/Button@2.2.0
+    Properties:
+      Text: ="Por revisar"
+      OnSelect: =Set(varVista, "revisar")
+      Font: =Font.'Segoe UI'
+      Size: =10.5
+      FontWeight: =FontWeight.Semibold
+      Fill: =RGBA(0, 0, 0, 0)
+      Color: =If(Coalesce(varVista, "area") = "revisar", RGBA(27, 42, 65, 1), RGBA(73, 80, 87, 1))
+      HoverFill: =RGBA(27, 42, 65, 0.06)
+      HoverColor: =If(Coalesce(varVista, "area") = "revisar", RGBA(27, 42, 65, 1), RGBA(33, 37, 41, 1))
+      PressedFill: =RGBA(27, 42, 65, 0.12)
+      BorderThickness: =0
+      X: =576
+      Y: =72
+      Width: =108
+      Height: =40
+- tabHistorial:
+    Control: Classic/Button@2.2.0
+    Properties:
+      Text: ="Historial"
+      OnSelect: =Set(varVista, "historial")
+      Font: =Font.'Segoe UI'
+      Size: =10.5
+      FontWeight: =FontWeight.Semibold
+      Fill: =RGBA(0, 0, 0, 0)
+      Color: =If(Coalesce(varVista, "area") = "historial", RGBA(27, 42, 65, 1), RGBA(73, 80, 87, 1))
+      HoverFill: =RGBA(27, 42, 65, 0.06)
+      HoverColor: =If(Coalesce(varVista, "area") = "historial", RGBA(27, 42, 65, 1), RGBA(33, 37, 41, 1))
+      PressedFill: =RGBA(27, 42, 65, 0.12)
+      BorderThickness: =0
+      X: =688
+      Y: =72
+      Width: =96
+      Height: =40
+- recTabActiva:
+    Control: Rectangle@2.3.0
+    Properties:
+      Fill: =RGBA(79, 157, 222, 1)
+      X: =Switch(Coalesce(varVista, "area"), "tablero", 32, "lista", 212, "persona", 280, "hl", 392, "revisar", 576, "historial", 688, 120)
+      Y: =110
+      Width: =Switch(Coalesce(varVista, "area"), "tablero", 84, "lista", 64, "persona", 108, "hl", 180, "revisar", 108, "historial", 96, 88)
+      Height: =2

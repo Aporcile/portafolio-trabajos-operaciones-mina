@@ -1,0 +1,190 @@
+createOrReplace
+
+	ref table _Medidas
+
+		/// Veces que se abrió un reporte (Report opens). Devuelve 0, no blanco, para que los reportes y días sin uso aparezcan.
+		measure Aperturas =
+				// +0: 0 en vez de blanco, así los reportes y días sin uso aparecen en tablas y matrices.
+				// NOT ISEMPTY ( Dim_Reporte ): si un visual combina Área y Reporte, sin esta guarda el +0
+				// mostraría cada reporte repetido en todas las áreas (combinaciones que no existen).
+				IF ( NOT ISEMPTY ( Dim_Reporte ), SUM ( Fact_Uso[aperturas] ) + 0 )
+			formatString: #,0
+			displayFolder: Uso
+
+		/// Páginas vistas dentro de los reportes (Report page views).
+		measure 'Vistas de pagina' =
+				// Misma guarda y +0 que [Aperturas].
+				IF ( NOT ISEMPTY ( Dim_Reporte ), SUM ( Fact_Uso[vistas_pagina] ) + 0 )
+			formatString: #,0
+			displayFolder: Uso
+
+		/// Usuarios distintos. No es sumable: el total de un período es el conteo distinto del período, no la suma de los días.
+		measure 'Usuarios unicos' =
+				IF ( NOT ISEMPTY ( Dim_Reporte ), DISTINCTCOUNT ( Fact_Uso[usuario] ) + 0 )
+			formatString: #,0
+			displayFolder: Uso
+
+		/// Días distintos con al menos un registro de uso.
+		measure 'Dias con actividad' =
+				// NOBLANK: una fila con fecha vacía no cuenta como un día más
+				IF ( NOT ISEMPTY ( Dim_Reporte ), DISTINCTCOUNTNOBLANK ( Fact_Uso[fecha] ) + 0 )
+			formatString: #,0
+			displayFolder: Uso
+
+		/// Vistas de página por apertura (0 si no hubo aperturas). Muchas aperturas con pocas páginas puede indicar acceso automatizado o incrustado (hipótesis a verificar).
+		measure 'Pags por apertura' =
+				// 0 sin aperturas (no blanco), igual que las tarjetas de Aperturas y Vistas que la acompañan.
+				// Las tablas por usuario filtran a quien tuvo uso, así que esos ceros no encabezan un orden ascendente.
+				IF ( NOT ISEMPTY ( Dim_Reporte ), DIVIDE ( [Vistas de pagina], [Aperturas], 0 ) )
+			formatString: 0.0
+			displayFolder: Uso
+
+		/// Aperturas registradas en filas sin ninguna vista de página.
+		measure 'Aperturas sin vistas' =
+				CALCULATE ( [Aperturas], Fact_Uso[vistas_pagina] = 0 )
+			formatString: #,0
+			displayFolder: Uso
+
+		/// Fecha más reciente con uso. Blanco si nunca hubo uso.
+		measure 'Ultima actividad' =
+				MAX ( Fact_Uso[fecha] )
+			formatString: dd-MM-yyyy
+			displayFolder: Fechas
+
+		/// Fecha más antigua con datos.
+		measure 'Datos desde' =
+				MIN ( Fact_Uso[fecha] )
+			formatString: dd-MM-yyyy
+			displayFolder: Fechas
+
+		/// Días entre la última actividad y la última fecha con datos del histórico (no contra hoy). Blanco si nunca hubo uso.
+		measure 'Dias desde ultima actividad' =
+				// Se compara contra la última fecha del histórico y no contra HOY:
+				// si la carga de datos se atrasa, los días no se inflan.
+				VAR UltimaFechaHistorico = MAXX ( ALL ( Fact_Uso ), Fact_Uso[fecha] )
+				VAR UltimaActividad = [Ultima actividad]
+				RETURN
+				    IF (
+				        NOT ISBLANK ( UltimaActividad ),
+				        DATEDIFF ( UltimaActividad, UltimaFechaHistorico, DAY )
+				    )
+			formatString: #,0
+			displayFolder: Fechas
+
+		/// Fecha de la última lectura de la extracción en el área (lecturas_area.csv). Si un área se queda atrás, la extracción dejó de leerla. Blanco si el área no figura en el registro.
+		measure 'Ultima lectura' =
+				MAX ( Dim_Area[ultima_lectura] )
+			formatString: dd-MM-yyyy
+			displayFolder: Fechas
+
+		/// Días cubiertos por el histórico completo (primera a última fecha), sin filtros.
+		measure 'Profundidad historico dias' =
+				// MIN/MAX no aceptan ALL(...) como argumento: se usa CALCULATE + REMOVEFILTERS.
+				VAR FechaMin = CALCULATE ( MIN ( Fact_Uso[fecha] ), REMOVEFILTERS () )
+				VAR FechaMax = CALCULATE ( MAX ( Fact_Uso[fecha] ), REMOVEFILTERS () )
+				RETURN
+				    DATEDIFF ( FechaMin, FechaMax, DAY ) + 1
+			formatString: #,0
+			displayFolder: Fechas
+
+		/// En uso: 1 o más vistas de página. Solo aperturas: aperturas sin vistas. Sin uso: ni aperturas ni vistas. Es el estado de UN reporte: en totales o con varios reportes queda en blanco.
+		measure 'Estado del reporte' =
+				VAR VistasPagina = [Vistas de pagina]
+				VAR TotalAperturas = [Aperturas]
+				RETURN
+				    SWITCH (
+				        TRUE (),
+				        NOT HASONEVALUE ( Dim_Reporte[report_id] ), BLANK (), // fila de total o varios reportes
+				        ISBLANK ( TotalAperturas ), BLANK (), // combinación Área/Reporte inexistente
+				        VistasPagina >= 1, "En uso",
+				        TotalAperturas > 0, "Solo aperturas",
+				        "Sin uso"
+				    )
+			displayFolder: Estado
+
+		/// Aperturas de cuentas internas (sin prefijo ext.).
+		measure 'Aperturas interno' =
+				CALCULATE ( [Aperturas], Dim_Usuario[tipo_usuario] = "Interno" )
+			formatString: #,0
+			displayFolder: Tipo usuario
+
+		/// Aperturas de cuentas externas (prefijo ext.).
+		measure 'Aperturas externo' =
+				CALCULATE ( [Aperturas], Dim_Usuario[tipo_usuario] = "Externo" )
+			formatString: #,0
+			displayFolder: Tipo usuario
+
+		/// Vistas de página de cuentas internas (sin prefijo ext.).
+		measure 'Vistas pagina interno' =
+				CALCULATE ( [Vistas de pagina], Dim_Usuario[tipo_usuario] = "Interno" )
+			formatString: #,0
+			displayFolder: Tipo usuario
+
+		/// Vistas de página de cuentas externas (prefijo ext.).
+		measure 'Vistas pagina externo' =
+				CALCULATE ( [Vistas de pagina], Dim_Usuario[tipo_usuario] = "Externo" )
+			formatString: #,0
+			displayFolder: Tipo usuario
+
+		/// Reportes del inventario (Dim_Reporte).
+		measure 'Total reportes' =
+				// Sin +0 a propósito: solo queda en blanco cuando no hay reportes en el filtro,
+				// y así no genera combinaciones Área/Reporte inexistentes.
+				COUNTROWS ( Dim_Reporte )
+			formatString: #,0
+			displayFolder: Conteos
+
+		/// Reportes con 1 o más vistas de página.
+		measure 'Reportes en uso' =
+				IF (
+				    NOT ISEMPTY ( Dim_Reporte ),
+				    COUNTROWS ( FILTER ( Dim_Reporte, [Vistas de pagina] >= 1 ) ) + 0
+				)
+			formatString: #,0
+			displayFolder: Conteos
+
+		/// Reportes con aperturas pero sin vistas de página.
+		measure 'Reportes solo aperturas' =
+				IF (
+				    NOT ISEMPTY ( Dim_Reporte ),
+				    COUNTROWS ( FILTER ( Dim_Reporte, [Aperturas] > 0 && [Vistas de pagina] < 1 ) ) + 0
+				)
+			formatString: #,0
+			displayFolder: Conteos
+
+		/// Reportes sin aperturas ni vistas de página.
+		measure 'Reportes sin uso' =
+				IF (
+				    NOT ISEMPTY ( Dim_Reporte ),
+				    COUNTROWS ( FILTER ( Dim_Reporte, [Aperturas] = 0 && [Vistas de pagina] = 0 ) ) + 0
+				)
+			formatString: #,0
+			displayFolder: Conteos
+
+		/// Barras del gráfico de la página Detalle (eje Eje_Detalle[Etiqueta]): con un área elegida en la segmentación, las aperturas de cada reporte de esa área; si no, las de cada área. En blanco sin aperturas, así esa barra no aparece.
+		measure 'Aperturas por area o reporte' =
+				// Eje_Detalle no tiene relaciones: cada fila trae su área o su reporte, que se aplica con TREATAS.
+				// Con UN área elegida, las barras son los reportes de esa área; con todas o varias, las áreas.
+				// KEEPFILTERS respeta lo elegido en las segmentaciones: un área no elegida queda en blanco.
+				// SUM sin +0: sin aperturas queda en blanco y esa barra no aparece.
+				VAR Nivel = IF ( HASONEVALUE ( Dim_Area[Area] ), "Reporte", "Area" )
+				RETURN
+				    SUMX (
+				        FILTER ( Eje_Detalle, Eje_Detalle[Nivel] = Nivel ),
+				        IF (
+				            Eje_Detalle[Nivel] = "Area",
+				            CALCULATE ( SUM ( Fact_Uso[aperturas] ), KEEPFILTERS ( TREATAS ( { Eje_Detalle[AreaEje] }, Dim_Area[Area] ) ) ),
+				            CALCULATE ( SUM ( Fact_Uso[aperturas] ), KEEPFILTERS ( TREATAS ( { Eje_Detalle[ClaveReporte] }, Dim_Reporte[report_id] ) ) )
+				        )
+				    )
+			formatString: #,0
+			displayFolder: Gráficos
+
+		/// Título del gráfico de la página Detalle: dice si las barras son las áreas o los reportes del área elegida.
+		measure 'Titulo grafico detalle' =
+				IF (
+				    HASONEVALUE ( Dim_Area[Area] ),
+				    "APERTURAS POR REPORTE EN " & UPPER ( VALUES ( Dim_Area[Area] ) ) & " (DE MÁS A MENOS)",
+				    "APERTURAS POR ÁREA (DE MÁS A MENOS) · ELIJA UN ÁREA PARA VER SUS REPORTES"
+				)
+			displayFolder: Gráficos

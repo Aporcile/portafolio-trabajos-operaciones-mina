@@ -1,0 +1,159 @@
+table Dim_Flota_Tipo
+	lineageTag: e5cfb8c6-661e-454b-9fa3-57c6bc3afdfd
+
+	measure 'Valor Flota' =
+			VAR M = SELECTEDVALUE(Dim_Metrica_Flota[Metrica])
+			VAR F = SELECTEDVALUE(Dim_Flota_Tipo[Flota])
+			VAR T = SELECTEDVALUE(Dim_Flota_Tipo[Tipo])
+			VAR RealVal =
+			    SWITCH(TRUE(),
+			        F = "CAEX" && M = "DF", [Disponibilidad CAEX],
+			        F = "CAEX" && M = "UEBD", [UEBD CAEX],
+			        F = "CAEX" && M = "Rendimiento", [Rendimiento CAEX],
+			        F = "PALA" && M = "DF", [Disponibilidad Pala],
+			        F = "PALA" && M = "UEBD", [UEBD Pala],
+			        F = "PALA" && M = "Rendimiento", [Rendimiento Pala],
+			        F = "PERFO" && M = "DF", [Disponibilidad Perforadoras],
+			        F = "PERFO" && M = "UEBD", [UEBD Perforadoras],
+			        F = "PERFO" && M = "Rendimiento", [Rendimiento Perforadoras]
+			    )
+			VAR PlanVal =
+			    SWITCH(TRUE(),
+			        F = "CAEX" && M = "DF", [Disponibilidad CAEX Plan],
+			        F = "CAEX" && M = "UEBD", [UEBD CAEX Plan],
+			        F = "CAEX" && M = "Rendimiento", [Rendimiento CAEX Plan],
+			        F = "PALA" && M = "DF", [Disponibilidad Pala Plan],
+			        F = "PALA" && M = "UEBD", [UEBD Pala Plan],
+			        F = "PALA" && M = "Rendimiento", [Rendimiento Pala Plan],
+			        F = "PERFO" && M = "DF", [Disponibilidad Perforadoras Plan],
+			        F = "PERFO" && M = "UEBD", [UEBD Perforadoras Plan],
+			        F = "PERFO" && M = "Rendimiento", [Rendimiento Perforadoras Plan]
+			    )
+			RETURN IF(T = "Real", RealVal, PlanVal)
+		lineageTag: 9a66cd04-1fe9-4ca7-ae2a-60b97d32dd23
+
+		formatStringDefinition = SWITCH(SELECTEDVALUE(Dim_Metrica_Flota[Metrica]), "Rendimiento", IF(SELECTEDVALUE(Dim_Flota_Tipo[Tipo]) = "Plan", "#,0", "#,0.0"), "0.0\ %;-0.0\ %;0.0\ %")
+
+	measure 'Color Valor Flota' =
+			VAR M = SELECTEDVALUE(Dim_Metrica_Flota[Metrica])
+			VAR F = SELECTEDVALUE(Dim_Flota_Tipo[Flota])
+			VAR T = SELECTEDVALUE(Dim_Flota_Tipo[Tipo])
+			VAR RealVal =
+			    SWITCH(TRUE(),
+			        F = "CAEX" && M = "DF", [Disponibilidad CAEX],
+			        F = "CAEX" && M = "UEBD", [UEBD CAEX],
+			        F = "CAEX" && M = "Rendimiento", [Rendimiento CAEX],
+			        F = "PALA" && M = "DF", [Disponibilidad Pala],
+			        F = "PALA" && M = "UEBD", [UEBD Pala],
+			        F = "PALA" && M = "Rendimiento", [Rendimiento Pala],
+			        F = "PERFO" && M = "DF", [Disponibilidad Perforadoras],
+			        F = "PERFO" && M = "UEBD", [UEBD Perforadoras],
+			        F = "PERFO" && M = "Rendimiento", [Rendimiento Perforadoras]
+			    )
+			VAR PlanVal =
+			    SWITCH(TRUE(),
+			        F = "CAEX" && M = "DF", [Disponibilidad CAEX Plan],
+			        F = "CAEX" && M = "UEBD", [UEBD CAEX Plan],
+			        F = "CAEX" && M = "Rendimiento", [Rendimiento CAEX Plan],
+			        F = "PALA" && M = "DF", [Disponibilidad Pala Plan],
+			        F = "PALA" && M = "UEBD", [UEBD Pala Plan],
+			        F = "PALA" && M = "Rendimiento", [Rendimiento Pala Plan],
+			        F = "PERFO" && M = "DF", [Disponibilidad Perforadoras Plan],
+			        F = "PERFO" && M = "UEBD", [UEBD Perforadoras Plan],
+			        F = "PERFO" && M = "Rendimiento", [Rendimiento Perforadoras Plan]
+			    )
+			RETURN
+			IF(T = "Plan", "#8FA3B8", IF(RealVal >= PlanVal, "#00C853", "#FF5C5C"))
+		lineageTag: e8251819-7acb-47c4-b5e3-47b2b041a283
+
+	measure 'Valor Flota Muro' =
+			VAR M = SELECTEDVALUE(Dim_Metrica_Flota[Metrica])
+			VAR F = SELECTEDVALUE(Dim_Flota_Tipo[Flota])
+			VAR T = SELECTEDVALUE(Dim_Flota_Tipo[Tipo])
+			RETURN
+			    IF(T = "Real",
+			        SWITCH(TRUE(),
+			            F = "CAEX" && M = "DF", [Disponibilidad CAEX Muro],
+			            F = "CAEX" && M = "UEBD", [UEBD CAEX Muro],
+			            F = "CAEX" && M = "Rendimiento", [Rendimiento CAEX Muro],
+			            F = "PALA" && M = "DF", [Disponibilidad Pala Muro],
+			            F = "PALA" && M = "UEBD", [UEBD Pala Muro],
+			            F = "PALA" && M = "Rendimiento", [Rendimiento Pala Muro]
+			        ),
+			        -- Plan mensual de Muro (Plan_Muro): CAEX y pala de Muro
+			        SWITCH(TRUE(),
+			            F = "CAEX" && M = "DF", [Plan Disponibilidad CAEX Muro],
+			            F = "CAEX" && M = "UEBD", [Plan UEBD CAEX Muro],
+			            F = "CAEX" && M = "Rendimiento", [Plan Rendimiento CAEX Muro],
+			            F = "PALA" && M = "DF", [Plan Disponibilidad Pala Muro],
+			            F = "PALA" && M = "UEBD", [Plan UEBD Pala Muro],
+			            F = "PALA" && M = "Rendimiento", [Plan Rendimiento Pala Muro]
+			        )
+			    )
+		lineageTag: eb7fc9da-7f8d-4874-b807-ef1456bd9407
+
+		formatStringDefinition = SWITCH(SELECTEDVALUE(Dim_Metrica_Flota[Metrica]), "Rendimiento", IF(SELECTEDVALUE(Dim_Flota_Tipo[Tipo]) = "Plan", "#,0", "#,0.0"), "0.0\ %;-0.0\ %;0.0\ %")
+
+	measure 'Color Valor Flota Muro' =
+			VAR M = SELECTEDVALUE(Dim_Metrica_Flota[Metrica])
+			VAR F = SELECTEDVALUE(Dim_Flota_Tipo[Flota])
+			VAR T = SELECTEDVALUE(Dim_Flota_Tipo[Tipo])
+			VAR RealVal =
+			    SWITCH(TRUE(),
+			        F = "CAEX" && M = "DF", [Disponibilidad CAEX Muro],
+			        F = "CAEX" && M = "UEBD", [UEBD CAEX Muro],
+			        F = "CAEX" && M = "Rendimiento", [Rendimiento CAEX Muro],
+			        F = "PALA" && M = "DF", [Disponibilidad Pala Muro],
+			        F = "PALA" && M = "UEBD", [UEBD Pala Muro],
+			        F = "PALA" && M = "Rendimiento", [Rendimiento Pala Muro]
+			    )
+			VAR PlanVal =
+			    SWITCH(TRUE(),
+			        F = "CAEX" && M = "DF", [Plan Disponibilidad CAEX Muro],
+			        F = "CAEX" && M = "UEBD", [Plan UEBD CAEX Muro],
+			        F = "CAEX" && M = "Rendimiento", [Plan Rendimiento CAEX Muro],
+			        F = "PALA" && M = "DF", [Plan Disponibilidad Pala Muro],
+			        F = "PALA" && M = "UEBD", [Plan UEBD Pala Muro],
+			        F = "PALA" && M = "Rendimiento", [Plan Rendimiento Pala Muro]
+			    )
+			RETURN
+			    IF(T = "Plan", "#8FA3B8",
+			        IF(ISBLANK(PlanVal) || ISBLANK(RealVal), "#E6ECF2",
+			            IF(RealVal >= PlanVal, "#00C853", "#FF5C5C")))
+		lineageTag: b966ca07-f8a2-459d-b529-e38ddfa32204
+
+	column Flota
+		lineageTag: 2c390569-9128-4ce8-97ed-422ba5a5d9b8
+		isNameInferred
+		sourceColumn: [Flota]
+		sortByColumn: Orden_Flota
+
+	column Orden_Flota
+		isHidden
+		lineageTag: 00d4347d-b9b3-49b9-8aca-627fb01645c2
+		isNameInferred
+		sourceColumn: [Orden_Flota]
+
+	column Tipo
+		lineageTag: 3a451f12-b993-4dbc-a040-aca6a56d2013
+		isNameInferred
+		sourceColumn: [Tipo]
+		sortByColumn: Orden_Tipo
+
+	column Orden_Tipo
+		isHidden
+		lineageTag: 74adcbc4-c463-455f-8149-e6c62598229a
+		isNameInferred
+		sourceColumn: [Orden_Tipo]
+
+	partition Dim_Flota_Tipo = calculated
+		source =
+				VAR Fila1 = ROW("Flota", "CAEX", "Orden_Flota", 1, "Tipo", "Real", "Orden_Tipo", 1)
+				VAR Fila2 = ROW("Flota", "CAEX", "Orden_Flota", 1, "Tipo", "Plan", "Orden_Tipo", 2)
+				VAR Fila3 = ROW("Flota", "PALA", "Orden_Flota", 2, "Tipo", "Real", "Orden_Tipo", 1)
+				VAR Fila4 = ROW("Flota", "PALA", "Orden_Flota", 2, "Tipo", "Plan", "Orden_Tipo", 2)
+				VAR Fila5 = ROW("Flota", "PERFO", "Orden_Flota", 3, "Tipo", "Real", "Orden_Tipo", 1)
+				VAR Fila6 = ROW("Flota", "PERFO", "Orden_Flota", 3, "Tipo", "Plan", "Orden_Tipo", 2)
+				RETURN UNION(Fila1, Fila2, Fila3, Fila4, Fila5, Fila6)
+
+

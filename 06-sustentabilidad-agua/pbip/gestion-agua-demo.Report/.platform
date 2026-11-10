@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Gestión del agua Demo"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "1aa6dee0-c0ca-4681-a03f-b0eaf21f11a3"
+  }
+}

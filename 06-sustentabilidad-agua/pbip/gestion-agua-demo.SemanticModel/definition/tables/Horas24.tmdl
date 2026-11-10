@@ -1,0 +1,45 @@
+/// Horas de las últimas 24 h para la matriz de bombeo.
+table Horas24
+	lineageTag: 57a939ca-5618-477d-bd4e-9729e316dff6
+
+	column HorasAtras
+		dataType: int64
+		formatString: 0
+		lineageTag: 08919118-5cee-4437-995d-0c723dc7119e
+		summarizeBy: none
+		sourceColumn: HorasAtras
+
+		annotation SummarizationSetBy = Automatic
+
+	column Orden
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: fafe37f3-0be9-4a1a-90d4-8306fed620ef
+		summarizeBy: none
+		sourceColumn: Orden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Hora
+		dataType: string
+		lineageTag: 93cc40b4-92e8-4893-b810-f1692ea1b325
+		summarizeBy: none
+		sourceColumn: Hora
+		sortByColumn: Orden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Horas24 = m
+		mode: import
+		source =
+				let
+				    Lista = Table.FromList({0 .. 23}, Splitter.SplitByNothing(), {"HorasAtras"}),
+				    ConOrden = Table.AddColumn(Lista, "Orden", each 23 - [HorasAtras], Int64.Type),
+				    ConHora = Table.AddColumn(ConOrden, "Hora", each Text.PadStart(Text.From(Time.Hour(HoraReferencia - #duration(0, [HorasAtras], 0, 0))), 2, "0"), type text),
+				    Tipos = Table.TransformColumnTypes(ConHora, {{"HorasAtras", Int64.Type}})
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

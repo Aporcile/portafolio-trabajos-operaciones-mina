@@ -1,0 +1,73 @@
+/// Muestras de las señales (formato largo: Tag, FechaHora, Valor).
+table Mediciones
+	lineageTag: 78abd813-f029-449f-bd5d-e2971de0083b
+
+	column Tag
+		dataType: string
+		lineageTag: dff5c9ce-7fd7-47d6-8b96-3e898b852857
+		summarizeBy: none
+		sourceColumn: Tag
+
+		annotation SummarizationSetBy = Automatic
+
+	column FechaHora
+		dataType: dateTime
+		formatString: dd-mm-yyyy HH:mm
+		lineageTag: bf71a955-903f-4fb0-bcb7-8a164881cc58
+		summarizeBy: none
+		sourceColumn: FechaHora
+
+		annotation SummarizationSetBy = Automatic
+
+	column Valor
+		dataType: double
+		formatString: #,0.00
+		lineageTag: c7cddf04-8fa9-407d-a07f-4888fa65c85b
+		summarizeBy: none
+		sourceColumn: Valor
+
+		annotation SummarizationSetBy = Automatic
+
+	column Hora
+		dataType: dateTime
+		formatString: dd-mm HH:mm
+		lineageTag: 4b43649f-a361-44a7-a670-7c6b6f69a263
+		summarizeBy: none
+		sourceColumn: Hora
+
+		annotation SummarizationSetBy = Automatic
+
+	column HorasAtras
+		dataType: double
+		formatString: 0.0
+		lineageTag: ada5cf48-5aae-4998-a6ad-a72ac50363aa
+		summarizeBy: none
+		sourceColumn: HorasAtras
+
+		annotation SummarizationSetBy = Automatic
+
+	column Fecha
+		dataType: dateTime
+		formatString: dd-mm-yyyy
+		lineageTag: 9e6f76db-1f85-4763-adda-d0f59570e993
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition Mediciones = m
+		mode: import
+		source =
+				let
+				    // ModoDatos = "CSV sintético" lee mediciones_horarias.csv; "Historiador" lee el OData del historiador (ver expresión MedicionesHistoriador).
+				    Origen = if Text.StartsWith(Text.Trim(ModoDatos), "Historiador", Comparer.OrdinalIgnoreCase) then MedicionesHistoriador else MedicionesCsv,
+				    ConHora = Table.AddColumn(Origen, "Hora", each Time.StartOfHour([FechaHora]), type datetime),
+				    ConAtras = Table.AddColumn(ConHora, "HorasAtras", each Duration.TotalHours(HoraReferencia - [FechaHora]), type number),
+				    ConFecha = Table.AddColumn(ConAtras, "Fecha", each Date.From([FechaHora]), type date)
+				in
+				    ConFecha
+
+	annotation PBI_ResultType = Table
+

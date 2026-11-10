@@ -1,0 +1,38 @@
+table 'Rd Planta Parámetros'
+	isHidden
+	lineageTag: 9a027f59-bbec-41df-918b-c0c734511d96
+
+	column 'Hora Reset'
+		isHidden
+		formatString: 0.0
+		lineageTag: ac3351fd-a5f4-4dbf-b574-a3aa94f032a0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Hora Reset]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Rd Planta Parámetros' = calculated
+		mode: import
+		source =
+				ROW (
+				    "Hora Reset",
+				        VAR _fin = CALCULATE ( MAX ( hist_kpi[timestamp] ), hist_kpi[nombre_tag] = "SAG.ALIM.TPH", NOT ISBLANK ( hist_kpi[numeric_value] ) )
+				        VAR _s =
+				            CALCULATETABLE (
+				                ADDCOLUMNS ( VALUES ( hist_kpi[timestamp] ), "@v", CALCULATE ( MAX ( hist_kpi[numeric_value] ) ) ),
+				                hist_kpi[nombre_tag] = "SAG.ALIM.ACUM_DIA",
+				                hist_kpi[timestamp] > IF ( ISBLANK ( _fin ), DATE ( 2100, 1, 1 ), _fin - 3 )
+				            )
+				        VAR _caida =
+				            MAXX (
+				                FILTER (
+				                    _s,
+				                    VAR _t = hist_kpi[timestamp]
+				                    VAR _p = MAXX ( FILTER ( _s, hist_kpi[timestamp] > _t - 0.03 && hist_kpi[timestamp] < _t - 0.01 ), [@v] )
+				                    RETURN NOT ISBLANK ( [@v] ) && _p > 500 && [@v] < 0.5 * _p
+				                ),
+				                hist_kpi[timestamp]
+				            )
+				        RETURN IF ( ISBLANK ( _caida ), 6, MOD ( ROUND ( ( _caida - 1 / 48 ) * 48, 0 ), 48 ) / 2 )
+				)

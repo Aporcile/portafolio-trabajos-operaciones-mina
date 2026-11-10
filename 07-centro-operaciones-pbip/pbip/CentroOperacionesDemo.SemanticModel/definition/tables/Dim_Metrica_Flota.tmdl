@@ -1,0 +1,23 @@
+table Dim_Metrica_Flota
+	lineageTag: 6ba9471e-f792-4abe-84e4-48781af2bab8
+
+	column Metrica
+		lineageTag: 08b4ee9f-bef7-4fdd-a33f-f595ee4c083f
+		isNameInferred
+		sourceColumn: [Metrica]
+		sortByColumn: Orden_Metrica
+
+	column Orden_Metrica
+		isHidden
+		lineageTag: 95efc4e4-b808-4bee-ba71-f8a687b2b838
+		isNameInferred
+		sourceColumn: [Orden_Metrica]
+
+	partition Dim_Metrica_Flota = calculated
+		source =
+				VAR Fila1 = ROW("Metrica", "DF", "Orden_Metrica", 1)
+				VAR Fila2 = ROW("Metrica", "UEBD", "Orden_Metrica", 2)
+				VAR Fila3 = ROW("Metrica", "Rendimiento", "Orden_Metrica", 3)
+				RETURN UNION(Fila1, Fila2, Fila3)
+
+

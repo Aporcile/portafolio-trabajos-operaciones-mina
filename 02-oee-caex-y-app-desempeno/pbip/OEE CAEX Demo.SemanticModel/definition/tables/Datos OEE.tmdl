@@ -1,0 +1,40 @@
+/// Filas de la tabla «Datos Transporte» bajo la cascada.
+table 'Datos OEE'
+	lineageTag: 244163b8-c3e3-5617-bddb-b65296de19b4
+
+	column Orden
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 916a241f-80cf-58d1-99ef-17c6c6921a38
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Orden]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Medicion
+		dataType: string
+		lineageTag: 5e53c97f-3e4d-57bb-b723-f2ce260d1c88
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Medicion]
+		sortByColumn: Orden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Datos OEE' = calculated
+		mode: import
+		source =
+				DATATABLE(
+				    "Orden", INTEGER, "Medicion", STRING,
+				    {
+				        { 1, "Producción" },
+				        { 2, "Disponibilidad" },
+				        { 3, "UEBD" },
+				        { 4, "Rendimiento" },
+				        { 5, "Horas nominales" },
+				        { 6, "OEE" }
+				    }
+				)
+

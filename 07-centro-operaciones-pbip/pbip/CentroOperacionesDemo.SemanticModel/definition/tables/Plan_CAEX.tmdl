@@ -1,0 +1,70 @@
+table Plan_CAEX
+	lineageTag: b47b9eeb-d4ec-4a40-9321-523b495bb6a5
+
+	measure 'Disponibilidad CAEX Plan' = DIVIDE(SUM(Plan_CAEX[Horas Disponibles Plan]), SUM(Plan_CAEX[Horas Nominales Plan]), 0)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: 22d2d3d2-7e1e-441e-b9b6-f1059b535f52
+
+	measure 'UEBD CAEX Plan' = DIVIDE(SUM(Plan_CAEX[Horas Efectivas Plan]), SUM(Plan_CAEX[Horas Disponibles Plan]), 0)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: 7e4578c0-5c0e-4102-9a13-e4fa073a9866
+
+	measure 'Rendimiento CAEX Plan' = DIVIDE(SUM(Plan_CAEX[Toneladas Plan]), SUM(Plan_CAEX[Horas Efectivas Plan]), 0)
+		formatString: #,0.0
+		lineageTag: 3a14ac5e-492e-400c-82e9-5d96408569c4
+
+	/// Plan de movimiento CAEX (t) del dia operacional seleccionado. Referencia de la tarjeta MOV. TOTAL DIA.
+	measure 'Plan Mov Total Dia' =
+			VAR FechaSel = [Fecha_Efectiva]
+			RETURN
+			    CALCULATE(
+			        SUM(Plan_CAEX[Toneladas Plan]),
+			        Plan_CAEX[Fecha] = FechaSel
+			    )
+		lineageTag: 42bdf6aa-f299-4131-859a-3a33c96a962c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Fecha
+		dataType: dateTime
+		lineageTag: 3a7ab652-a8af-40e3-a0fd-a8b6b09568b9
+		sourceColumn: Fecha
+
+	column 'Horas Disponibles Plan'
+		dataType: double
+		lineageTag: 9e52452c-4017-4daa-a4eb-435b1dc1343a
+		sourceColumn: Horas Disponibles Plan
+
+	column 'Horas Efectivas Plan'
+		dataType: double
+		lineageTag: b2a44658-8962-4ecf-bc7d-e9bfe96281d1
+		sourceColumn: Horas Efectivas Plan
+
+	column 'Horas Nominales Plan'
+		dataType: double
+		lineageTag: 689396e1-fb55-4a6a-be20-0829ccb52275
+		sourceColumn: Horas Nominales Plan
+
+	column 'Horas Operativas Plan'
+		dataType: double
+		lineageTag: c081eb28-e9da-404b-a4e8-da5911e90d99
+		sourceColumn: Horas Operativas Plan
+
+	column 'Toneladas Plan'
+		dataType: double
+		lineageTag: 88866b55-9c46-4989-b834-fc007c034546
+		sourceColumn: Toneladas Plan
+
+	partition Plan_CAEX = m
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "plan_caex.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Fecha", type datetime}, {"Horas Disponibles Plan", type number}, {"Horas Efectivas Plan", type number}, {"Horas Nominales Plan", type number}, {"Horas Operativas Plan", type number}, {"Toneladas Plan", type number}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

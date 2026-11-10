@@ -1,0 +1,4 @@
+expression RutaDatos = "datos_sinteticos\" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]
+	lineageTag: 3a7cd6b9-b975-4823-a0aa-d6868a992bf2
+
+	annotation PBI_ResultType = Text

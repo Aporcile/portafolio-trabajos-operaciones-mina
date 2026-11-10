@@ -1,0 +1,111 @@
+table Dim_Metrica_Carguio
+	lineageTag: 0e29042d-4a6f-4806-b5f3-7a3a0e297f1d
+
+	measure 'Valor Carguio' =
+			VAR M = SELECTEDVALUE(Dim_Metrica_Carguio[Metrica])
+			VAR T = SELECTEDVALUE(Dim_Metrica_Carguio[Tipo])
+			RETURN
+			SWITCH(T,
+			    "Real", SWITCH(M, "DF", [Disponibilidad Carguio], "UEBD", [UEBD Carguio], "Rendimiento", [Rendimiento Carguio t/h]),
+			    "Plan", SWITCH(M, "DF", [Disponibilidad Carguio Plan], "UEBD", [UEBD Carguio Plan], "Rendimiento", [Rendimiento Carguio Plan])
+			)
+		lineageTag: 2a13198d-0551-4788-8e6a-869a4a13d837
+
+		formatStringDefinition = SWITCH(SELECTEDVALUE(Dim_Metrica_Carguio[Metrica]), "Rendimiento", IF(SELECTEDVALUE(Dim_Metrica_Carguio[Tipo]) = "Plan", "#,0", "#,0.0"), "0.0\ %;-0.0\ %;0.0\ %")
+
+	measure 'Color Valor Carguio' =
+			VAR M = SELECTEDVALUE(Dim_Metrica_Carguio[Metrica])
+			VAR T = SELECTEDVALUE(Dim_Metrica_Carguio[Tipo])
+			VAR RealVal = SWITCH(M, "DF", [Disponibilidad Carguio], "UEBD", [UEBD Carguio], "Rendimiento", [Rendimiento Carguio t/h])
+			VAR PlanVal = SWITCH(M, "DF", [Disponibilidad Carguio Plan], "UEBD", [UEBD Carguio Plan], "Rendimiento", [Rendimiento Carguio Plan])
+			RETURN
+			IF(T = "Plan", "#8FA3B8", IF(RealVal >= PlanVal, "#00C853", "#FF5C5C"))
+		lineageTag: 0ca6225a-ebcc-4213-89cb-dd0404a49ae6
+
+	measure 'Valor Carguio Muro' =
+			VAR M = SELECTEDVALUE(Dim_Metrica_Carguio[Metrica])
+			VAR T = SELECTEDVALUE(Dim_Metrica_Carguio[Tipo])
+			VAR Eq = SELECTEDVALUE(Fact_HorasEquipo_Muro[Equipo])
+			VAR HorasNominalesMuro = SUM(Fact_HorasEquipo_Muro[Horas Nominales])
+			RETURN
+			    -- Sin horas nominales el equipo no estuvo asignado a Muro ese dia: en blanco para que la fila no aparezca.
+			    IF(HorasNominalesMuro > 0,
+			        IF(T = "Real",
+			            SWITCH(M,
+			                "DF", [Disponibilidad Carguio Muro],
+			                "UEBD", [UEBD Carguio Muro],
+			                "Rendimiento", [Rendimiento Carguio Muro t/h]
+			            ),
+			            -- El plan existe solo para la pala de Muro; no hay plan del cargador.
+			            IF(Eq = "PALA-05_M",
+			                SWITCH(M,
+			                    "DF", [Plan Disponibilidad Pala Muro],
+			                    "UEBD", [Plan UEBD Pala Muro],
+			                    "Rendimiento", [Plan Rendimiento Pala Muro]
+			                )
+			            )
+			        )
+			    )
+		lineageTag: b5875a86-e2d2-48d5-9d86-7a978ff047e3
+
+		formatStringDefinition = SWITCH(SELECTEDVALUE(Dim_Metrica_Carguio[Metrica]), "Rendimiento", IF(SELECTEDVALUE(Dim_Metrica_Carguio[Tipo]) = "Plan", "#,0", "#,0.0"), "0.0\ %;-0.0\ %;0.0\ %")
+
+	measure 'Color Valor Carguio Muro' =
+			VAR M = SELECTEDVALUE(Dim_Metrica_Carguio[Metrica])
+			VAR T = SELECTEDVALUE(Dim_Metrica_Carguio[Tipo])
+			VAR Eq = SELECTEDVALUE(Fact_HorasEquipo_Muro[Equipo])
+			VAR RealVal =
+			    SWITCH(M,
+			        "DF", [Disponibilidad Carguio Muro],
+			        "UEBD", [UEBD Carguio Muro],
+			        "Rendimiento", [Rendimiento Carguio Muro t/h]
+			    )
+			VAR PlanVal =
+			    IF(Eq = "PALA-05_M",
+			        SWITCH(M,
+			            "DF", [Plan Disponibilidad Pala Muro],
+			            "UEBD", [Plan UEBD Pala Muro],
+			            "Rendimiento", [Plan Rendimiento Pala Muro]
+			        )
+			    )
+			RETURN
+			    IF(T = "Plan", "#8FA3B8",
+			        IF(ISBLANK(PlanVal), "#E6ECF2",
+			            IF(RealVal >= PlanVal, "#00C853", "#FF5C5C")))
+		lineageTag: 67da445d-6bf1-4539-a6a6-fe5476a9b8b3
+
+	column Metrica
+		lineageTag: aa8de990-43f6-41ab-bd6c-70541a8471a9
+		isNameInferred
+		sourceColumn: [Metrica]
+		sortByColumn: Orden_Metrica
+
+	column Orden_Metrica
+		isHidden
+		lineageTag: 6fc133b9-3711-454f-9a8d-ca95ca1b337a
+		isNameInferred
+		sourceColumn: [Orden_Metrica]
+
+	column Tipo
+		lineageTag: 269da2a1-909f-4427-8e98-f1c9c890ac41
+		isNameInferred
+		sourceColumn: [Tipo]
+		sortByColumn: Orden_Tipo
+
+	column Orden_Tipo
+		isHidden
+		lineageTag: b84a6f54-da14-49e2-884e-b478486e7af7
+		isNameInferred
+		sourceColumn: [Orden_Tipo]
+
+	partition Dim_Metrica_Carguio = calculated
+		source =
+				VAR Fila1 = ROW("Metrica", "DF", "Orden_Metrica", 1, "Tipo", "Real", "Orden_Tipo", 1)
+				VAR Fila2 = ROW("Metrica", "DF", "Orden_Metrica", 1, "Tipo", "Plan", "Orden_Tipo", 2)
+				VAR Fila3 = ROW("Metrica", "UEBD", "Orden_Metrica", 2, "Tipo", "Real", "Orden_Tipo", 1)
+				VAR Fila4 = ROW("Metrica", "UEBD", "Orden_Metrica", 2, "Tipo", "Plan", "Orden_Tipo", 2)
+				VAR Fila5 = ROW("Metrica", "Rendimiento", "Orden_Metrica", 3, "Tipo", "Real", "Orden_Tipo", 1)
+				VAR Fila6 = ROW("Metrica", "Rendimiento", "Orden_Metrica", 3, "Tipo", "Plan", "Orden_Tipo", 2)
+				RETURN UNION(Fila1, Fila2, Fila3, Fila4, Fila5, Fila6)
+
+

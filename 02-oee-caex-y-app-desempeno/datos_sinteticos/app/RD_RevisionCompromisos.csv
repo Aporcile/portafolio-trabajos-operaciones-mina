@@ -1,0 +1,73 @@
+FechaRevision,CompromisoId,Compromiso,EstadoAnterior,EstadoNuevo,Comentario,Grupo,SesionIdLocal,Clave
+2025-03-10 09:06,1,Coordinar la tronadura con la ventana de cambio de turno,En progreso,Cumplido,Avance según lo planificado.,Supervisores,ses-20250310,REV-20250310-1
+2025-03-10 09:06,2,Implementar un checklist de inicio de turno en CAEX,En progreso,Cumplido,Pendiente de repuestos.,Supervisores,ses-20250310,REV-20250310-2
+2025-03-10 09:06,3,Ajustar el ciclo de acarreo hacia el stockpile,En progreso,Cumplido,Pendiente de repuestos.,Supervisores,ses-20250310,REV-20250310-3
+2025-03-17 09:07,4,Medir la disponibilidad física por flota y turno,En progreso,Cumplido,"Listo, queda registrada la evidencia.",Supervisores,ses-20250317,REV-20250317-4
+2025-03-17 09:07,5,Confirmar la disponibilidad de repuestos críticos de frenos,En progreso,En progreso,Falta confirmar fecha.,Supervisores,ses-20250317,REV-20250317-5
+2025-03-17 09:07,6,Definir el criterio de reserva operacional por turno,En progreso,Cumplido,Pendiente de repuestos.,Supervisores,ses-20250317,REV-20250317-6
+2025-03-17 09:07,7,Cerrar los hallazgos de la inspección de seguridad del taller,En progreso,Cumplido,Avance según lo planificado.,Supervisores,ses-20250317,REV-20250317-7
+2025-03-24 09:08,5,Confirmar la disponibilidad de repuestos críticos de frenos,En progreso,Atrasado,Se coordinó con mantención.,Supervisores,ses-20250324,REV-20250324-5
+2025-03-24 09:08,8,Revisar el mantenimiento del camino de acarreo,En progreso,Cumplido,"Listo, queda registrada la evidencia.",Supervisores,ses-20250324,REV-20250324-8
+2025-03-24 09:08,9,Ajustar el plan de mantención de neumáticos de la flota,En progreso,Cumplido,"Listo, queda registrada la evidencia.",Supervisores,ses-20250324,REV-20250324-9
+2025-03-24 09:08,10,Levantar las causas de colas en la descarga del chancador,En progreso,Cumplido,Pendiente de repuestos.,Supervisores,ses-20250324,REV-20250324-10
+2025-03-24 09:08,11,Analizar las demoras no programadas por clima,En progreso,En progreso,"Listo, queda registrada la evidencia.",Supervisores,ses-20250324,REV-20250324-11
+2025-03-31 09:09,5,Confirmar la disponibilidad de repuestos críticos de frenos,Atrasado,Atrasado,Se revisa de nuevo la próxima semana.,Supervisores,ses-20250331,REV-20250331-5
+2025-03-31 09:09,11,Analizar las demoras no programadas por clima,En progreso,Cumplido,Pendiente de repuestos.,Supervisores,ses-20250331,REV-20250331-11
+2025-03-31 09:09,12,Coordinar el relevo de operadores en la colación,En progreso,En progreso,Falta confirmar fecha.,Supervisores,ses-20250331,REV-20250331-12
+2025-03-31 09:09,13,Actualizar el estándar de cambio de turno en terreno,En progreso,Cumplido,Avance según lo planificado.,Supervisores,ses-20250331,REV-20250331-13
+2025-03-31 09:09,14,Validar la calibración de las balanzas de payload,En progreso,En progreso,Se revisa de nuevo la próxima semana.,Supervisores,ses-20250331,REV-20250331-14
+2025-03-31 09:09,15,Evaluar rutas alternativas durante la mantención del camino,En progreso,Atrasado,Se coordinó con mantención.,Supervisores,ses-20250331,REV-20250331-15
+2025-04-07 09:10,5,Confirmar la disponibilidad de repuestos críticos de frenos,Atrasado,Atrasado,Se revisa de nuevo la próxima semana.,Supervisores,ses-20250407,REV-20250407-5
+2025-04-07 09:10,12,Coordinar el relevo de operadores en la colación,En progreso,Atrasado,,Supervisores,ses-20250407,REV-20250407-12
+2025-04-07 09:10,14,Validar la calibración de las balanzas de payload,En progreso,En progreso,Sin novedades.,Supervisores,ses-20250407,REV-20250407-14
+2025-04-07 09:10,15,Evaluar rutas alternativas durante la mantención del camino,Atrasado,En progreso,Avance según lo planificado.,Supervisores,ses-20250407,REV-20250407-15
+2025-04-07 09:10,16,Reducir la espera de camiones en la pala PALA-03,En progreso,En progreso,Se coordinó con mantención.,Supervisores,ses-20250407,REV-20250407-16
+2025-04-07 09:10,17,Definir las metas de UEBD por turno para el próximo mes,En progreso,Cumplido,Avance según lo planificado.,Supervisores,ses-20250407,REV-20250407-17
+2025-04-07 09:10,18,Medir tiempos de espera en carguío durante tres turnos,En progreso,Cumplido,Avance según lo planificado.,Supervisores,ses-20250407,REV-20250407-18
+2025-04-14 09:11,5,Confirmar la disponibilidad de repuestos críticos de frenos,Atrasado,Cumplido,Avance según lo planificado.,Supervisores,ses-20250414,REV-20250414-5
+2025-04-14 09:11,12,Coordinar el relevo de operadores en la colación,Atrasado,Cumplido,Avance según lo planificado.,Supervisores,ses-20250414,REV-20250414-12
+2025-04-14 09:11,14,Validar la calibración de las balanzas de payload,En progreso,Atrasado,Se revisa de nuevo la próxima semana.,Supervisores,ses-20250414,REV-20250414-14
+2025-04-14 09:11,15,Evaluar rutas alternativas durante la mantención del camino,En progreso,Cumplido,Avance según lo planificado.,Supervisores,ses-20250414,REV-20250414-15
+2025-04-14 09:11,16,Reducir la espera de camiones en la pala PALA-03,En progreso,Cumplido,Pendiente de repuestos.,Supervisores,ses-20250414,REV-20250414-16
+2025-04-14 09:11,19,Verificar la señalética de los accesos a la fase 2,En progreso,Cumplido,Pendiente de repuestos.,Supervisores,ses-20250414,REV-20250414-19
+2025-04-14 09:11,20,Revisar el factor de carga de la flota en la fase 1,En progreso,Cumplido,Pendiente de repuestos.,Supervisores,ses-20250414,REV-20250414-20
+2025-04-14 09:11,21,Alinear el plan semanal con el programa de tronaduras,En progreso,Atrasado,"Listo, queda registrada la evidencia.",Supervisores,ses-20250414,REV-20250414-21
+2025-04-14 09:11,22,Programar la limpieza del camino en el sector de descarga,En progreso,Cumplido,Pendiente de repuestos.,Supervisores,ses-20250414,REV-20250414-22
+2025-04-21 09:12,14,Validar la calibración de las balanzas de payload,Atrasado,Atrasado,Se coordinó con mantención.,Supervisores,ses-20250421,REV-20250421-14
+2025-04-21 09:12,21,Alinear el plan semanal con el programa de tronaduras,Atrasado,En progreso,,Supervisores,ses-20250421,REV-20250421-21
+2025-04-21 09:12,23,Revisar el programa de lubricación de la flota,En progreso,Cumplido,Pendiente de repuestos.,Supervisores,ses-20250421,REV-20250421-23
+2025-04-21 09:12,24,Consolidar el reporte de incidentes de la semana,En progreso,Cumplido,Avance según lo planificado.,Supervisores,ses-20250421,REV-20250421-24
+2025-04-21 09:12,25,Priorizar la mantención de los CAEX con más horas caídas,En progreso,Cumplido,Avance según lo planificado.,Supervisores,ses-20250421,REV-20250421-25
+2025-04-21 09:12,26,Reforzar el control de velocidad en la rampa de la fase 3,En progreso,Cumplido,Avance según lo planificado.,Supervisores,ses-20250421,REV-20250421-26
+2025-04-28 09:13,14,Validar la calibración de las balanzas de payload,Atrasado,Atrasado,,Supervisores,ses-20250428,REV-20250428-14
+2025-04-28 09:13,21,Alinear el plan semanal con el programa de tronaduras,En progreso,Cumplido,Avance según lo planificado.,Supervisores,ses-20250428,REV-20250428-21
+2025-04-28 09:13,27,Capacitar a operadores en aculatamiento seguro,En progreso,Cumplido,"Listo, queda registrada la evidencia.",Supervisores,ses-20250428,REV-20250428-27
+2025-04-28 09:13,28,Actualizar el plan de abastecimiento de combustible,En progreso,Cumplido,Avance según lo planificado.,Supervisores,ses-20250428,REV-20250428-28
+2025-04-28 09:13,29,Documentar el procedimiento de reserva de equipos,En progreso,Cumplido,Pendiente de repuestos.,Supervisores,ses-20250428,REV-20250428-29
+2025-05-05 09:14,14,Validar la calibración de las balanzas de payload,Atrasado,Atrasado,Falta confirmar fecha.,Supervisores,ses-20250505,REV-20250505-14
+2025-05-05 09:14,30,Revisar la asignación de CAEX a la pala PALA-02 en el turno B,En progreso,En progreso,Se revisa de nuevo la próxima semana.,Supervisores,ses-20250505,REV-20250505-30
+2025-05-05 09:14,31,Coordinar la tronadura con la ventana de cambio de turno,En progreso,Cumplido,Pendiente de repuestos.,Supervisores,ses-20250505,REV-20250505-31
+2025-05-05 09:14,32,Implementar un checklist de inicio de turno en CAEX,En progreso,Atrasado,Falta confirmar fecha.,Supervisores,ses-20250505,REV-20250505-32
+2025-05-12 09:05,14,Validar la calibración de las balanzas de payload,Atrasado,Cumplido,Pendiente de repuestos.,Supervisores,ses-20250512,REV-20250512-14
+2025-05-12 09:05,30,Revisar la asignación de CAEX a la pala PALA-02 en el turno B,En progreso,Cumplido,Pendiente de repuestos.,Supervisores,ses-20250512,REV-20250512-30
+2025-05-12 09:05,32,Implementar un checklist de inicio de turno en CAEX,Atrasado,Atrasado,Pendiente de repuestos.,Supervisores,ses-20250512,REV-20250512-32
+2025-05-12 09:05,33,Ajustar el ciclo de acarreo hacia el stockpile,En progreso,En progreso,Falta confirmar fecha.,Supervisores,ses-20250512,REV-20250512-33
+2025-05-12 09:05,34,Medir la disponibilidad física por flota y turno,En progreso,En progreso,Se revisa de nuevo la próxima semana.,Supervisores,ses-20250512,REV-20250512-34
+2025-05-12 09:05,35,Confirmar la disponibilidad de repuestos críticos de frenos,En progreso,Cumplido,"Listo, queda registrada la evidencia.",Supervisores,ses-20250512,REV-20250512-35
+2025-05-12 09:05,36,Definir el criterio de reserva operacional por turno,En progreso,Cumplido,Avance según lo planificado.,Supervisores,ses-20250512,REV-20250512-36
+2025-05-19 09:06,32,Implementar un checklist de inicio de turno en CAEX,Atrasado,Atrasado,Se revisa de nuevo la próxima semana.,Supervisores,ses-20250519,REV-20250519-32
+2025-05-19 09:06,33,Ajustar el ciclo de acarreo hacia el stockpile,En progreso,Cumplido,"Listo, queda registrada la evidencia.",Supervisores,ses-20250519,REV-20250519-33
+2025-05-19 09:06,34,Medir la disponibilidad física por flota y turno,En progreso,Cumplido,Pendiente de repuestos.,Supervisores,ses-20250519,REV-20250519-34
+2025-05-19 09:06,37,Cerrar los hallazgos de la inspección de seguridad del taller,En progreso,En progreso,"Listo, queda registrada la evidencia.",Supervisores,ses-20250519,REV-20250519-37
+2025-05-19 09:06,38,Revisar el mantenimiento del camino de acarreo,En progreso,En progreso,Se revisa de nuevo la próxima semana.,Supervisores,ses-20250519,REV-20250519-38
+2025-05-19 09:06,39,Ajustar el plan de mantención de neumáticos de la flota,En progreso,Atrasado,"Listo, queda registrada la evidencia.",Supervisores,ses-20250519,REV-20250519-39
+2025-05-19 09:06,40,Levantar las causas de colas en la descarga del chancador,En progreso,Atrasado,Avance según lo planificado.,Supervisores,ses-20250519,REV-20250519-40
+2025-05-26 09:07,32,Implementar un checklist de inicio de turno en CAEX,Atrasado,Atrasado,,Supervisores,ses-20250526,REV-20250526-32
+2025-05-26 09:07,37,Cerrar los hallazgos de la inspección de seguridad del taller,En progreso,Cumplido,"Listo, queda registrada la evidencia.",Supervisores,ses-20250526,REV-20250526-37
+2025-05-26 09:07,38,Revisar el mantenimiento del camino de acarreo,En progreso,Cumplido,"Listo, queda registrada la evidencia.",Supervisores,ses-20250526,REV-20250526-38
+2025-05-26 09:07,39,Ajustar el plan de mantención de neumáticos de la flota,Atrasado,Cumplido,Pendiente de repuestos.,Supervisores,ses-20250526,REV-20250526-39
+2025-05-26 09:07,40,Levantar las causas de colas en la descarga del chancador,Atrasado,En progreso,Pendiente de repuestos.,Supervisores,ses-20250526,REV-20250526-40
+2025-05-26 09:07,41,Analizar las demoras no programadas por clima,En progreso,En progreso,Sin novedades.,Supervisores,ses-20250526,REV-20250526-41
+2025-05-26 09:07,42,Coordinar el relevo de operadores en la colación,En progreso,Atrasado,Sin novedades.,Supervisores,ses-20250526,REV-20250526-42
+2025-05-26 09:07,43,Actualizar el estándar de cambio de turno en terreno,En progreso,Cumplido,Pendiente de repuestos.,Supervisores,ses-20250526,REV-20250526-43
+2025-05-26 09:07,44,Validar la calibración de las balanzas de payload,En progreso,Cumplido,"Listo, queda registrada la evidencia.",Supervisores,ses-20250526,REV-20250526-44

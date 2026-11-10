@@ -1,0 +1,242 @@
+table Fact_Chancado
+	lineageTag: 0e64c9ec-2a57-462e-963f-373a4551eddf
+
+	measure 'Tonelaje Chancado' =
+			
+			SUM(Fact_Chancado[Tonelaje])
+		lineageTag: c9f639f1-d286-411e-bf05-2c6fc929c89c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Ley Alimentacion' = ```
+			
+			DIVIDE(
+			    SUMX(Fact_Chancado, Fact_Chancado[CuT] * Fact_Chancado[Tonelaje]),
+			    SUM(Fact_Chancado[Tonelaje])
+			)
+			
+			```
+		lineageTag: b90eef06-76ed-413f-9f91-5288fa1322cd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Color_Ley_Alimentacion = ```
+			
+			VAR Real = [Ley Alimentacion]
+			VAR Plan = [Plan Ley Alimentacion]
+			RETURN
+			    IF(ISBLANK(Real) || ISBLANK(Plan), "#E6ECF2",
+			        IF(Real >= Plan, "#00C853", "#FF5C5C"))
+			
+			```
+		lineageTag: 0f739397-218d-412c-92b3-bf84297e1ff7
+
+	/// Plan de ley de alimentacion (% CuT) del dia operacional, tomada del plan semanal (Plan_Semanal_Chancador).
+	measure 'Plan Ley Alimentacion' =
+			VAR FechaSel = [Fecha_Efectiva]
+			RETURN
+			    CALCULATE(
+			        AVERAGE(Plan_Semanal_Chancador[Plan Ley CuT]),
+			        Plan_Semanal_Chancador[Fecha] = FechaSel
+			    )
+		formatString: 0.00"%"
+		lineageTag: b800ff2c-5cda-43e4-ad79-f84463984b6f
+
+	column Fecha
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f59eeec5-14f0-4735-88a6-96a16623cc8b
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+	column Turno
+		dataType: string
+		lineageTag: 454eb2fd-5bf4-4544-a352-8c0b8d57eda9
+		summarizeBy: none
+		sourceColumn: Turno
+
+		annotation SummarizationSetBy = Automatic
+
+	column Equipo_Carguio
+		dataType: string
+		lineageTag: 04141491-9db2-45a8-ace1-b062f4c42c1e
+		summarizeBy: none
+		sourceColumn: Equipo_Carguio
+
+		annotation SummarizationSetBy = Automatic
+
+	column CAEX
+		dataType: string
+		lineageTag: c71af8db-5e54-4d36-a419-3bb8c0b1e8ae
+		summarizeBy: none
+		sourceColumn: CAEX
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ley
+		dataType: string
+		lineageTag: fe76df89-6001-43d0-980d-e74f029481f2
+		summarizeBy: none
+		sourceColumn: Ley
+
+		annotation SummarizationSetBy = Automatic
+
+	column Origen
+		dataType: string
+		lineageTag: b07d99a6-feb9-4d8e-8647-248f1485d505
+		summarizeBy: none
+		sourceColumn: Origen
+
+		annotation SummarizationSetBy = Automatic
+
+	column Destino
+		dataType: string
+		lineageTag: cda98eab-6d86-47f5-8aa9-696117b89f92
+		summarizeBy: none
+		sourceColumn: Destino
+
+		annotation SummarizationSetBy = Automatic
+
+	column Material
+		dataType: string
+		lineageTag: 151738da-9ec3-4aea-b44a-7cb8fee2ccde
+		summarizeBy: none
+		sourceColumn: Material
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tonelaje
+		dataType: double
+		lineageTag: 6e038162-8f2b-4e0f-abeb-372f43f30991
+		summarizeBy: sum
+		sourceColumn: Tonelaje
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Viajes
+		dataType: int64
+		formatString: 0
+		lineageTag: 265b8819-1b1c-403b-8a9f-b0de849274f9
+		summarizeBy: sum
+		sourceColumn: Viajes
+
+		annotation SummarizationSetBy = Automatic
+
+	column CuT
+		dataType: double
+		lineageTag: b8354128-b16b-4aa9-b1ad-3270509055c1
+		summarizeBy: sum
+		sourceColumn: CuT
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Cusc
+		dataType: string
+		lineageTag: b9137275-cd53-4c52-af12-f9ac2c8e07f3
+		summarizeBy: none
+		sourceColumn: Cusc
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cuas
+		dataType: string
+		lineageTag: e465245b-ffd3-4598-b695-fb4c7a86ca63
+		summarizeBy: none
+		sourceColumn: Cuas
+
+		annotation SummarizationSetBy = Automatic
+
+	column CuS
+		dataType: string
+		lineageTag: 5dc7acfb-0f16-4a57-9db3-3cde95b39fa3
+		summarizeBy: none
+		sourceColumn: CuS
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cuins
+		dataType: string
+		lineageTag: 68745aed-2ba6-4f18-a807-8535f74f605c
+		summarizeBy: none
+		sourceColumn: Cuins
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mo
+		dataType: string
+		lineageTag: bc911c40-67fb-408b-930f-25c375691154
+		summarizeBy: none
+		sourceColumn: Mo
+
+		annotation SummarizationSetBy = Automatic
+
+	column rec_cu_1
+		dataType: string
+		lineageTag: 7363d63d-df36-4d82-84c7-f79fa7fa7925
+		summarizeBy: none
+		sourceColumn: rec_cu_1
+
+		annotation SummarizationSetBy = Automatic
+
+	column rec_cu_2
+		dataType: string
+		lineageTag: 227f53c4-eded-4cb9-b4a0-d6af0c1a2d8f
+		summarizeBy: none
+		sourceColumn: rec_cu_2
+
+		annotation SummarizationSetBy = Automatic
+
+	column zona_1
+		dataType: string
+		lineageTag: 01c5d645-1f3d-4ac7-a987-a2411ba38522
+		summarizeBy: none
+		sourceColumn: zona_1
+
+		annotation SummarizationSetBy = Automatic
+
+	column zona_2
+		dataType: string
+		lineageTag: 275081eb-7cc5-4fce-9da6-4d16ce24b578
+		summarizeBy: none
+		sourceColumn: zona_2
+
+		annotation SummarizationSetBy = Automatic
+
+	column dens
+		dataType: string
+		lineageTag: 61b515e5-3a8b-435b-b441-eb65aebb001d
+		summarizeBy: none
+		sourceColumn: dens
+
+		annotation SummarizationSetBy = Automatic
+
+	column cucns
+		dataType: string
+		lineageTag: 9ea7ffa8-039b-478a-a65e-02937f2c9940
+		summarizeBy: none
+		sourceColumn: cucns
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Chancado = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(RutaDatos & "fact_chancado.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"Fecha", type datetime}, {"Turno", type text}, {"Equipo_Carguio", type text}, {"CAEX", type text}, {"Ley", type text}, {"Origen", type text}, {"Destino", type text}, {"Material", type text}, {"Tonelaje", type number}, {"Viajes", Int64.Type}, {"CuT", type number}, {"Cusc", type text}, {"Cuas", type text}, {"CuS", type text}, {"Cuins", type text}, {"Mo", type text}, {"rec_cu_1", type text}, {"rec_cu_2", type text}, {"zona_1", type text}, {"zona_2", type text}, {"dens", type text}, {"cucns", type text}}, "en-US"),
+				    // Ventana de historia: solo las filas de los ultimos DiasHistoria dias respecto de FechaReferencia.
+				    Ventana = Table.SelectRows(Tipos, each Date.From([Fecha]) >= Date.AddDays(FechaReferencia, -DiasHistoria))
+				in
+				    Ventana
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

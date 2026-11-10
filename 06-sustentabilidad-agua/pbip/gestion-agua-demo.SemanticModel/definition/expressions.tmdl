@@ -1,0 +1,127 @@
+/// Origen de las mediciones: CSV sintético (carpeta datos_sinteticos) u OData de un historiador de proceso.
+expression ModoDatos = "CSV sintético" meta [IsParameterQuery=true, List={"CSV sintético", "Historiador"}, DefaultValue="CSV sintético", Type="Text", IsParameterQueryRequired=true]
+	lineageTag: b6be3044-9270-4508-9402-7f6112e477ef
+
+	annotation PBI_ResultType = Text
+
+/// URL del OData de procesos del historiador (marcador de ejemplo; solo se usa en modo Historiador).
+expression HistoriadorODataUrl = "https://historiador.example/odata/procesos" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 4d515908-d6e3-4f7c-ae4a-a64b5354173a
+
+	annotation PBI_ResultType = Text
+
+/// URL del OData de estado (UPS, baterías, envíos, horas detenido, volumen del mes); opcional en modo Historiador.
+expression HistoriadorODataUrlEstado = "https://historiador.example/odata/estado" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 4b945780-a606-4a31-ae6e-2d517586a27a
+
+	annotation PBI_ResultType = Text
+
+/// Desfase horario del sitio respecto de UTC (horas).
+expression ZonaHorariaUTC = -4 meta [IsParameterQuery=true, Type="Number", IsParameterQueryRequired=true]
+	lineageTag: c898fba6-8f5b-429c-a696-1053fbbf7fe2
+
+	annotation PBI_ResultType = Number
+
+/// Días de historia que se cargan en modo Historiador (el CSV sintético trae 8 días horarios).
+expression VentanaDias = 8 meta [IsParameterQuery=true, Type="Number", IsParameterQueryRequired=true]
+	lineageTag: 21ad68c8-242d-4424-b43c-39ed2dc0fefe
+
+	annotation PBI_ResultType = Number
+
+/// Carpeta con los CSV sintéticos, con barra final. Se ajusta con pbip/configurar_ruta.py o a mano en Transformar datos > Parámetros.
+expression RutaDatos = "<RUTA_DEL_REPO>\06-sustentabilidad-agua\datos_sinteticos\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 8d2d9a94-11ae-42ff-81f1-b7ad2e5dc3ac
+
+	annotation PBI_ResultType = Text
+
+/// Muestras horarias sintéticas (Tag, FechaHora, Valor) leídas del CSV.
+expression MedicionesCsv =
+		let
+		    Origen = Csv.Document(File.Contents(RutaDatos & "mediciones_horarias.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+		    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+		    Tipos = Table.TransformColumnTypes(Encabezados, {{"Tag", type text}, {"FechaHora", type datetime}, {"Valor", type number}}, "en-US")
+		in
+		    Tipos
+	lineageTag: 57150aec-6af6-4023-8653-453a98964894
+
+	annotation PBI_ResultType = Table
+
+/// Reloj del modelo: hora actual con el historiador; última muestra del CSV más 20 min con los datos sintéticos.
+expression HoraReferencia =
+		let
+		    Historiador = Text.StartsWith(Text.Trim(ModoDatos), "Historiador", Comparer.OrdinalIgnoreCase),
+		    Reloj = DateTimeZone.RemoveZone(DateTimeZone.SwitchZone(DateTimeZone.UtcNow(), ZonaHorariaUTC)),
+		    UltimaMuestra = List.Max(MedicionesCsv[FechaHora])
+		in
+		    if Historiador then Reloj else UltimaMuestra + #duration(0, 0, 20, 0)
+	lineageTag: f2f023f3-0948-4167-822d-893a591b86e6
+
+	annotation PBI_ResultType = Table
+
+/// Lectura del OData del historiador: tabla Samples (formato largo) + Items (nombre de cada señal).
+expression MedicionesHistoriadorRaw =
+		let
+		    // Samples trae (item_id, timestamp, numeric_value) e Items trae (item_id, name).
+		    // Las señales ON/Off ya vienen como 1/0 en numeric_value; la última muestra de la grilla puede venir sin número.
+		    // Solo accede a la fuente; la relación nombre -> señal del catálogo se hace en MedicionesHistoriador.
+		    Leer = (url as text) as table =>
+		        let
+		            Origen = OData.Feed(url),
+		            Items = Table.Buffer(Table.SelectColumns(Origen{[Name = "Items"]}[Data], {"item_id", "name"})),
+		            // Table.Buffer evita que los filtros siguientes se envíen al servicio.
+		            Muestras = Table.Buffer(Table.SelectColumns(Origen{[Name = "Samples"]}[Data], {"item_id", "timestamp", "numeric_value"})),
+		            Validas = Table.SelectRows(Muestras, each [timestamp] <> null and [numeric_value] <> null),
+		            ConNombre = Table.NestedJoin(Validas, {"item_id"}, Items, {"item_id"}, "I", JoinKind.Inner)
+		        in
+		            Table.ExpandTableColumn(ConNombre, "I", {"name"}, {"Columna"}),
+		    Procesos = Leer(HistoriadorODataUrl),
+		    // OData de estado: si la URL está vacía o falla, el tablero sigue con el de procesos y esos indicadores quedan sin dato.
+		    Vacia = #table(type table [item_id = any, timestamp = any, numeric_value = number, Columna = text], {}),
+		    Estado = if Text.Length(Text.Trim(HistoriadorODataUrlEstado)) = 0 then Vacia else try Leer(HistoriadorODataUrlEstado) otherwise Vacia,
+		    Expandida = Table.Combine({Procesos, Estado}),
+		    ConHora = Table.AddColumn(Expandida, "FechaHora", each
+		        let t = [timestamp] in
+		            if t is datetimezone then DateTimeZone.RemoveZone(DateTimeZone.SwitchZone(t, ZonaHorariaUTC))
+		            else if t is datetime then t + #duration(0, ZonaHorariaUTC, 0, 0)
+		            else try DateTime.From(t) otherwise null, type datetime),
+		    Limite = DateTimeZone.RemoveZone(DateTimeZone.SwitchZone(DateTimeZone.UtcNow(), ZonaHorariaUTC)) - #duration(VentanaDias, 0, 0, 0),
+		    Recientes = Table.SelectRows(ConHora, each [FechaHora] <> null and [FechaHora] >= Limite),
+		    Final = Table.TransformColumnTypes(
+		        Table.RenameColumns(Table.SelectColumns(Recientes, {"FechaHora", "Columna", "numeric_value"}), {{"numeric_value", "Valor"}}),
+		        {{"FechaHora", type datetime}, {"Columna", type text}, {"Valor", type number}})
+		in
+		    Final
+	lineageTag: dd226f35-8845-45ae-bdbd-7420245d0d85
+
+	annotation PBI_ResultType = Table
+
+/// Muestras del historiador asociadas a las señales del catálogo (modo Historiador).
+expression MedicionesHistoriador =
+		let
+		    // Relaciona cada columna del OData con una señal del catálogo (comparación sin ':', '.', espacios ni unidades).
+		    Normalizar = (t as text) as text => Text.Upper(Text.Select(t, {"0".."9", "A".."Z", "a".."z"})),
+		    Catalogo = Table.Buffer(Table.AddColumn(Table.SelectColumns(Tags, {"Tag"}), "Clave", each Normalizar([Tag]), type text)),
+		    // Se lee una sola vez el OData (buffer) para no pedirlo dos veces al servicio.
+		    Datos = Table.Buffer(MedicionesHistoriadorRaw),
+		    Columnas = Table.Distinct(Table.SelectColumns(Datos, {"Columna"})),
+		    Mapeo = Table.AddColumn(Columnas, "Tag", (r) =>
+		        let
+		            c = Normalizar(r[Columna]),
+		            exactos = Table.SelectRows(Catalogo, each [Clave] = c),
+		            prefijos = Table.Sort(Table.SelectRows(Catalogo, each Text.StartsWith(c, [Clave])), {{each Text.Length([Clave]), Order.Descending}}),
+		            contenidos = Table.Sort(Table.SelectRows(Catalogo, each Text.Contains(c, [Clave])), {{each Text.Length([Clave]), Order.Descending}})
+		        in
+		            if Table.RowCount(exactos) > 0 then exactos{0}[Tag]
+		            else if Table.RowCount(prefijos) > 0 then prefijos{0}[Tag]
+		            else if Table.RowCount(contenidos) > 0 then contenidos{0}[Tag]
+		            else null, type text),
+		    ConTag = Table.NestedJoin(Datos, {"Columna"}, Mapeo, {"Columna"}, "M", JoinKind.Inner),
+		    Expandida = Table.ExpandTableColumn(ConTag, "M", {"Tag"}),
+		    SoloCatalogo = Table.SelectRows(Expandida, each [Tag] <> null),
+		    Final = Table.TransformColumnTypes(Table.SelectColumns(SoloCatalogo, {"Tag", "FechaHora", "Valor"}), {{"Tag", type text}, {"FechaHora", type datetime}, {"Valor", type number}})
+		in
+		    Final
+	lineageTag: 2feca809-fee9-44be-9b33-48ab6f13d854
+
+	annotation PBI_ResultType = Table
+

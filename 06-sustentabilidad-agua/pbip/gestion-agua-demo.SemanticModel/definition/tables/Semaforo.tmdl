@@ -1,0 +1,20 @@
+/// Sistemas de la página Semáforos (tabla desconectada; cada tarjeta filtra un sistema).
+table Semaforo
+	lineageTag: 83296059-0635-4074-b2df-ab7ba82ba00b
+
+	column Sistema
+		lineageTag: 1af01610-71eb-4b14-8cb3-ff04bf72eb10
+		isNameInferred
+		sourceColumn: [Sistema]
+
+	column Orden
+		lineageTag: 0f55be66-74ba-4f30-9679-f89d8660e822
+		isNameInferred
+		sourceColumn: [Orden]
+
+	partition Semaforo = calculated
+		mode: import
+		source = DATATABLE ( "Sistema", STRING, "Orden", INTEGER, { { "Recuperación Norte", 1 }, { "Recuperación Sur", 2 }, { "Estanques", 3 }, { "Tranques y pozas", 4 }, { "Aguas abajo", 5 }, { "Agua fresca", 6 }, { "Calidad de agua", 7 }, { "Energía y comunicaciones", 8 }, { "Reporte externo", 9 }, { "Actualización de datos", 10 } } )
+
+	annotation PBI_Id = 065ee06cd269591da72debb9dde50a72
+

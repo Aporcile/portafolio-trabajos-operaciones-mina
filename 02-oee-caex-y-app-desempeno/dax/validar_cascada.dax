@@ -1,0 +1,18 @@
+// Comprobación del modelo «OEE CAEX Demo» (solo lectura): en cada periodo el plan más las cuatro pérdidas debe dar el real, es
+// decir, «Control cascada» debe valer 0. Se ejecuta en la vista de consultas DAX de Power BI Desktop o en DAX Studio.
+// Con algún día sin plan semanal, JUE-DOM y SEMANAL quedan sin plan: las columnas de plan salen en blanco y el control no aplica.
+EVALUATE
+SELECTCOLUMNS(
+    'Periodo RD',
+    "Orden", 'Periodo RD'[Orden],
+    "Periodo", 'Periodo RD'[Periodo],
+    "Inicio", FORMAT([Inicio periodo], "yyyy-mm-dd"),
+    "Fin", FORMAT([Fin periodo], "yyyy-mm-dd"),
+    "Días sin plan", [Días sin plan semanal],
+    "Producción plan", [Producción plan],
+    "Producción real", [Producción real],
+    "Control cascada", [Control cascada],
+    "OEE plan", [OEE plan],
+    "OEE real", [OEE real]
+)
+ORDER BY [Orden]

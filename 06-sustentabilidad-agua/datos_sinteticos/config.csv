@@ -1,0 +1,22 @@
+Parametro,Valor,Unidad,Nota
+Horas sin dato,2,h,Sin muestra nueva en este plazo = Sin dato
+Caudal minimo bombeo (L/s),0.14,L/s,Bajo este caudal el pozo se considera detenido (valor de ejemplo)
+Cupo captacion (L/s),120,L/s,Cupo de captación de ejemplo del campo de pozos
+Meta recuperacion Norte (L/s),60,L/s,Meta de ejemplo del Circuito Norte
+Meta recuperacion Sur (L/s),35,L/s,Meta de ejemplo del Circuito Sur
+pH minimo,6.5,pH,Banda aceptable de ejemplo
+pH maximo,8.5,pH,Banda aceptable de ejemplo
+Turbidez maxima (NTU),50,NTU,Límite de ejemplo
+HI por defecto (%),80,%,Se usa si el estanque no tiene señal de límite HI
+HH por defecto (%),90,%,Se usa si el estanque no tiene señal de límite HH
+Descenso piezometro fuerte (m),0.5,m en 7 días,Límite de ejemplo
+Descenso piezometro leve (m),0.1,m en 7 días,Límite de ejemplo
+Horas para congelado,48,h,Una señal analógica que no cambia nada en este plazo se marca Congelada
+Horas datos atrasados,3,h,"Si la última muestra es más antigua, el encabezado avisa que la actualización está detenida"
+Ascenso freatico alerta (m),0.5,m en 7 días,Pozos de monitoreo: subida fuerte del nivel freático (límite de ejemplo)
+Ascenso freatico aviso (m),0.2,m en 7 días,Pozos de monitoreo: el nivel freático sube (límite de ejemplo)
+Bateria baja 12 V (V),11.8,V,Estaciones con batería de 12 V
+"Bateria baja 3,6 V (V)",3.3,V,"Registradores con batería de 3,6 V"
+Horas sin envio A,3,h,El portal A recibe un mensaje por hora; sobre este plazo el envío está atrasado
+Errores envio B 12 h,5,n°,Errores de envío en 12 h desde los que se alerta (ejemplo)
+Minutos simultaneidad corte,30,min,Si todas las bombas de una estación se detienen dentro de este margen se avisa posible corte de energía
