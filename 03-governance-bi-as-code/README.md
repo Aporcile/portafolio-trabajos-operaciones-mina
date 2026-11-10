@@ -11,6 +11,45 @@ acceso automatizado) y las áreas cuya extracción de datos quedó atrasada. El 
 (PBIR) no se dibujan en Desktop: **salen de código**, así que se pueden regenerar, revisar en un diff y verificar
 sin abrir la herramienta.
 
+## Cómo se ve
+
+> Las imágenes son **renders del diseño**, dibujados con los datos sintéticos del propio proyecto. No son capturas de Power BI Desktop.
+
+<p align="center"><a href="capturas/resumen.png"><img src="capturas/resumen.png" alt="Página Resumen del informe de gobernanza"></a></p>
+
+**Resumen.** 24 reportes monitoreados (18 en uso, 3 solo aperturas, 3 sin uso), tendencias diarias de aperturas, vistas y usuarios únicos, estado por área y una
+tabla de detalle por reporte.
+
+<table>
+<tr>
+<td width="50%"><a href="capturas/vistas.png"><img src="capturas/vistas.png" alt="Página Vistas"></a><br><b>Vistas.</b> Tendencia diaria y dos matrices reporte × día (últimos 28 días) con mapa de calor, de vistas y de usuarios únicos.</td>
+<td width="50%"><a href="capturas/vistas_por_semana.png"><img src="capturas/vistas_por_semana.png" alt="Página Vistas por semana"></a><br><b>Vistas por semana.</b> Lo mismo agrupado de lunes a domingo, con la semana en curso marcada como parcial.</td>
+</tr>
+<tr>
+<td width="50%"><a href="capturas/detalle.png"><img src="capturas/detalle.png" alt="Página Detalle"></a><br><b>Detalle.</b> Un reporte a la vez: uso diario, usuarios únicos, comparación interna y externa, y ranking de aperturas del área.</td>
+<td width="50%"><a href="capturas/calidad.png"><img src="capturas/calidad.png" alt="Página Calidad"></a><br><b>Calidad.</b> Profundidad del histórico, cobertura de la extracción por área, nombres repetidos y aperturas sin vistas (posible acceso automatizado).</td>
+</tr>
+<tr>
+<td colspan="2"><a href="capturas/sin_uso.png"><img src="capturas/sin_uso.png" alt="Página Sin uso"></a><br><b>Sin uso.</b> Los reportes sin vistas de página, candidatos a revisar o retirar, con su última actividad y los días transcurridos desde entonces.</td>
+</tr>
+</table>
+
+## Qué hice
+
+**El problema.** Saber qué informes de los workspaces productivos se usan y cuáles no: quién abre qué, cuánto, y qué conviene revisar o retirar.
+
+**Cómo lo abordé**
+
+1. **El informe completo sale de código.** Ni el modelo ni las 6 páginas se dibujaron en Desktop: el modelo lo genera un script con la biblioteca TOM y el
+   informe lo genera Python (posiciones, visuales, tema y logo). Regenerarlo es correr un comando, y los cambios se revisan en un diff.
+2. **Datos con casos de borde a propósito.** Sembré reportes sin uso, reportes que solo registran aperturas, uno abandonado, nombres repetidos entre áreas, una cuenta
+   automatizada y un área cuya extracción se detuvo antes del final, para comprobar que el informe los muestra.
+3. **Tres compuertas de calidad.** Verificación estructural del proyecto, validación de cada JSON contra los esquemas oficiales de Desktop y 49 chequeos de datos en DAX
+   cuyas cifras esperadas calculé por separado a partir de los CSV.
+
+**El resultado.** Un informe de 6 páginas y 59 visuales sobre un modelo en estrella de 7 tablas y 22 medidas. Los 69 JSON del informe validan contra los esquemas de
+Desktop y todos los campos que usan los visuales existen en el modelo.
+
 ## Qué demuestra
 
 - **Power BI como código**: modelo en TMDL generado con la biblioteca TOM de Desktop (`generar_modelo.ps1`) e informe
@@ -67,6 +106,9 @@ página Detalle. Todas las relaciones son varios a uno y filtran en un solo sent
 
 Todas las páginas llevan el aviso visible de datos sintéticos y el logo ficticio de Minera Demo.
 
+<details>
+<summary><b>Detalles técnicos</b>: estructura y cómo abrirlo</summary>
+
 ## Estructura
 
 ```
@@ -115,6 +157,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File desarrollo\verificar_proyect
 
 Para regenerar el informe: `python desarrollo/generar_reporte.py`. Con `python desarrollo/extraer_esquemas.py`
 antes, valida cada JSON contra los esquemas de la instalación local.
+
+</details>
 
 ## Datos sintéticos y casos incluidos
 

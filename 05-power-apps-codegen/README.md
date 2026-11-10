@@ -8,6 +8,46 @@ Aplicación de lienzo (Power Apps) para llevar la agenda de un equipo, con siete
 **Historial**. **Su código YAML no se escribe a mano: lo genera un programa en Python** a partir de un contrato de
 datos, y se pega en Power Apps Studio.
 
+## Cómo se ve
+
+> Las imágenes son **renders del diseño** (1366 × 768, el lienzo de la app), dibujados con las posiciones, colores y textos que declaran los YAML y con los datos
+> sintéticos del proyecto. No son capturas de Power Apps Studio.
+
+<p align="center"><a href="capturas/tablero.png"><img src="capturas/tablero.png" alt="Vista Por área: matriz área por estado"></a></p>
+
+**Por área** (la vista de arranque). Matriz área × estado: cada área con su nombre y sus conteos de actividades y bloqueadas, y una celda por estado con tarjetas
+(ID, prioridad, iniciales, título y status) y «+N más».
+
+<table>
+<tr>
+<td width="50%"><a href="capturas/tablero_estados.png"><img src="capturas/tablero_estados.png" alt="Vista Tablero"></a><br><b>Tablero.</b> Cinco columnas por estado, cada una con su color, y tarjetas ordenadas por prioridad con «área · responsable».</td>
+<td width="50%"><a href="capturas/lista.png"><img src="capturas/lista.png" alt="Vista Lista"></a><br><b>Lista.</b> Las 96 actividades en una tabla ordenable, con avatar, prioridad, chip de estado, fecha de inicio y status o bloqueo.</td>
+</tr>
+<tr>
+<td width="50%"><a href="capturas/persona.png"><img src="capturas/persona.png" alt="Vista Por persona"></a><br><b>Por persona.</b> Una columna por responsable, con conteos de activas, bloqueadas y terminadas y las bloqueadas primero.</td>
+<td width="50%"><a href="capturas/highlights.png"><img src="capturas/highlights.png" alt="Vista Highlights y Lowlights"></a><br><b>Highlights y Lowlights.</b> Lo que salió bien (verde) y lo que salió mal (rojo) de la semana, con impacto, acción y responsable.</td>
+</tr>
+<tr>
+<td width="50%"><a href="capturas/por_revisar.png"><img src="capturas/por_revisar.png" alt="Vista Por revisar"></a><br><b>Por revisar.</b> Temas por decidir, con «Crear actividad», «Descartar» y «Posponer», y los ya resueltos con su decisión.</td>
+<td width="50%"><a href="capturas/historial.png"><img src="capturas/historial.png" alt="Vista Historial"></a><br><b>Historial.</b> Las 34 actividades terminadas, la más reciente primero, con su fecha de término y status final.</td>
+</tr>
+<tr>
+<td width="50%"><a href="capturas/nueva_actividad.png"><img src="capturas/nueva_actividad.png" alt="Diálogo Nueva actividad"></a><br><b>Nueva actividad.</b> Formulario con ID correlativo automático y estado «Por hacer», sobre el fondo atenuado de la vista.</td>
+<td width="50%"><a href="capturas/editar_actividad.png"><img src="capturas/editar_actividad.png" alt="Diálogo Editar actividad"></a><br><b>Editar actividad.</b> Una actividad bloqueada de prioridad alta: el motivo del bloqueo se resalta y aparece el botón Eliminar.</td>
+</tr>
+<tr>
+<td width="50%"><a href="capturas/editar_registro.png"><img src="capturas/editar_registro.png" alt="Diálogo Editar registro"></a><br><b>Editar registro.</b> Formulario de un lowlight: tipo, fecha, tema, detalle, impacto, acción y responsable.</td>
+<td width="50%"><a href="capturas/editar_tema_revisar.png"><img src="capturas/editar_tema_revisar.png" alt="Diálogo Editar tema por revisar"></a><br><b>Editar tema por revisar.</b> Contraparte, responsable propuesto, decisión y fecha de un tema por decidir.</td>
+</tr>
+</table>
+
+## Qué hice
+
+**El problema.** Hacer seguimiento de las actividades de un área con un tablero por área × estado, vistas por persona y un espacio para decidir qué se revisa.
+
+**El resultado.** Una app de lienzo con 7 vistas (pestañas), 10 archivos YAML y 402 controles que **no escribí a mano**: la genera un programa en Python a partir de un
+contrato de datos, y se pega en Power Apps Studio. Los 10 YAML se validan antes de pegarlos, y regenerarlos produce archivos idénticos. Cómo lo hice:
+
 ## La idea: contract-first y generar el YAML con Python
 
 Una app de lienzo con cientos de controles es difícil de mantener haciendo clic: cada cambio de color, de columna o de
@@ -47,6 +87,9 @@ flowchart LR
   coherentes con la bitácora, IDs únicos).
 - **Verificación sin Studio**: comprobaciones estáticas del YAML generado; la salida es determinista (regenerar
   produce archivos idénticos), de modo que un cambio en `yaml/` siempre se explica por un cambio en el generador.
+
+<details>
+<summary><b>Detalles técnicos</b>: estructura, cómo regenerar, cómo pegar el YAML y cargar los datos</summary>
 
 ## Estructura
 
@@ -180,6 +223,8 @@ con una fuente real (no probado).
   como recursos.
 - **Contrato antes que código**: cualquier columna nueva se declara en `contrato.py`, se regenera y se corre
   `verificar_yaml.py` antes de pegar.
+
+</details>
 
 ## Qué funciona y qué no se pudo probar
 

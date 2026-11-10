@@ -7,6 +7,36 @@ Python y verificadores que mantienen todo coherente sin abrir Power BI Desktop.
 > **Aviso: datos 100 % sintéticos de la empresa ficticia Minera Demo.** No hay datos reales, equipos reales, personas, servidores ni marcas de ninguna empresa.
 > Los CSV los genera `datos_sinteticos/generar_datos.py`; los logos son ficticios.
 
+## Cómo se ve
+
+> Las imágenes son **renders del diseño**, dibujados con los datos sintéticos del propio proyecto. No son capturas de Power BI Desktop.
+
+<p align="center"><img src="capturas/mina.png" alt="Página Mina: movimiento del día contra plan, indicadores por fase, cascadas de flota y alimentación por pala"></p>
+
+**Página «Mina».** Movimiento total del día contra plan, con semáforo; destinos (chancado, dump leach, botadero, stock); indicadores por fase
+con barras bullet; cascadas plan → real de la flota CAEX y de carguío; y alimentación a chancado por pala y por hora.
+
+<p align="center"><img src="capturas/molienda.png" alt="Página Molienda: circuito de seis etapas con estado, toneladas contra plan, tendencia, DF y UE"></p>
+
+**Página «Molienda».** El circuito en seis etapas (chancado, stockpile, molienda SAG, pebbles, bolas y ciclones): estado de cada equipo, toneladas contra
+plan, tendencia del día y disponibilidad (DF) y utilización efectiva (UE) con semáforo.
+
+## Qué hice
+
+**El problema.** Dar a la dirección una vista única del movimiento de mina y del rendimiento de planta, con semáforos contra el plan, sin abrir varios informes.
+
+**Cómo lo abordé**
+
+1. **Todo como código.** El modelo semántico está en TMDL y el informe en PBIR: texto que se lee, se compara en un diff y se versiona. Nada de binarios.
+2. **Las tarjetas KPI son medidas DAX que dibujan un SVG** (barras bullet, semáforos, proyección a 24 h), así que cambian con el filtro igual que cualquier número.
+3. **Los cambios repetitivos los hace un programa.** Escribí generadores en Python que editan el modelo y el informe por estructura, que se pueden volver a
+   correr sin duplicar nada (idempotentes), en vez de repetir clics en Power BI Desktop.
+4. **Verifico antes de mostrar.** Un verificador propio cruza modelo, informe y datos: que cada referencia DAX exista, que cada campo de cada visual esté en el
+   modelo y que los datos contengan los valores por los que el DAX filtra.
+
+**El resultado.** Un informe de 2 páginas y 69 visuales sobre un modelo de 29 tablas, 124 medidas y 10 relaciones. El verificador termina en 0 errores y el TMDL se
+deserializa sin errores con el serializador de Power BI Desktop.
+
 ## Qué demuestra
 
 - **Power BI en Git**: modelo en TMDL y informe en PBIR, legibles y revisables línea a línea; ids estables; sin binarios ni cachés.
@@ -45,6 +75,9 @@ flowchart LR
     V -->|revisa| R
     V -->|revisa| C
 ```
+
+<details>
+<summary><b>Detalles técnicos</b>: estructura, cómo abrirlo, verificaciones y generadores</summary>
 
 ## Estructura
 
@@ -108,6 +141,8 @@ campo de cada visual exista en el modelo, con ids de grupo e interacciones coher
 
 Las recetas que editan el PBIP (`tarjetas_svg`, `caex_plan_formato`, `central_monitoreo`, `refresco_pagina`, `tapar_hover_svg`) aceptan `--raiz`, simulan por defecto,
 escriben solo con `--aplicar` y son idempotentes. Sobre este repositorio todas informan «sin cambios», porque el PBIP ya está en el estado que ellas producen.
+
+</details>
 
 ## Qué funciona y qué no se pudo probar
 

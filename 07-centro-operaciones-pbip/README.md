@@ -8,6 +8,35 @@ TMDL y PBIR), con datos sintéticos y un verificador de coherencia propio.
 > **Aviso: datos 100 % sintéticos de la empresa ficticia Minera Demo.** No hay datos reales, equipos reales, personas, servidores ni marcas de ninguna empresa.
 > Los CSV los genera `datos_sinteticos/generar_datos.py`; los logos son ficticios. Las coordenadas del mapa son un punto arbitrario sin relación con ninguna faena.
 
+## Cómo se ve
+
+> La imagen es un **render del diseño** (2740 × 1440, el lienzo real del informe), dibujado con las posiciones y tamaños de los visuales y con los datos sintéticos del
+> proyecto. No es una captura de Power BI Desktop; el plano del mapa es un dibujo esquemático inventado.
+
+<p align="center"><a href="capturas/operacion_diaria.png"><img src="capturas/operacion_diaria.png" alt="Pantalla de sala de control: tarjetas, mapa de CAEX en baja velocidad, gráficos por hora y matrices de flota"></a></p>
+
+**Operación diaria.** De arriba abajo: tarjetas de movimiento y chancado contra plan, equipos en uso de Mina y Muro y velocidad de los camiones por turno; el mapa de
+camiones en baja velocidad y la tabla de ciclos; movimiento por hora y alimentación a chancado por origen; ley de alimentación por fase y hora; y las matrices de
+flota, perforadoras y carguío con DF, UEBD y rendimiento contra plan, en verde y rojo.
+
+## Qué hice
+
+**El problema.** Una pantalla para una sala de control: legible a distancia en una TV, sin filtros ni nada que tocar, que muestre el día operacional en curso.
+
+**Cómo lo abordé**
+
+1. **Diseñé para quien mira desde lejos.** Tipografías grandes, fondo oscuro, contrastes medidos, y el verde y el rojo reservados solo al semáforo. El informe abre en
+   «Dia actual», que avanza solo, y la hora de la última actualización queda siempre visible. Los criterios están en `docs/criterios_pantalla_sala_control.md`.
+2. **Un modelo dimensional de operaciones de mina.** Día operacional de 08:00 a 08:00, turnos A y B, la hora del día como eje compartido y las flotas de Mina y de Muro,
+   con real contra plan en todas las matrices.
+3. **DAX para un día en curso.** Por defecto muestra la última hora con datos, proyecta el cierre a 24 horas y filtra el plan solo por los equipos que están visibles.
+4. **Datos sintéticos coherentes entre sí.** Una sola simulación de estados horarios y ciclos genera todas las tablas: lo que cargan las palas es lo que descargan los
+   camiones y el chancado sale de los mismos ciclos.
+5. **Un verificador propio,** probado con errores inducidos (columna inexistente, relación rota, campo de visual roto, valor no numérico, huérfano, JSON inválido).
+
+**El resultado.** Un informe de una sola página sobre un modelo de 23 tablas, 122 medidas y 38 relaciones. El verificador termina en 0 errores y los CSV se regeneran
+idénticos con la semilla fija.
+
 ## Qué demuestra
 
 - **Diseño para pantalla de sala de control**: lectura a distancia, color con significado (solo el semáforo usa verde y rojo), cero interacción, «Dia actual» que
@@ -44,6 +73,9 @@ flowchart LR
 | Columna izquierda | Resumen de flota Mina (DF, UEBD y rendimiento, real y plan), perforadoras, carguío por equipo y movimiento por hora del turno A y B. |
 | Centro | Mapa de CAEX en baja velocidad, alimentación a chancado por origen y hora contra plan, ley de alimentación por fase y hora, y movimiento por hora de Muro. |
 | Columna derecha | Tiempo de ciclo y destino actual por pala, resumen de flota Muro y carguío Muro. |
+
+<details>
+<summary><b>Detalles técnicos</b>: estructura, cómo abrirlo, parámetros, datos y verificaciones</summary>
 
 ## Estructura
 
@@ -112,6 +144,8 @@ duplicados, con claves únicas del lado «uno» y sin huérfanos en los datos; t
 lea un CSV con las columnas del modelo y valores del tipo declarado; y que cada campo de cada visual, filtro y selector exista en el modelo (como medida o como columna según
 corresponda), con grupos, interacciones y recursos (logos y tema) presentes. Termina con código 1 si encuentra algo. Está probado con errores inducidos (columna inexistente,
 medida inexistente, relación rota, campo de visual roto, valor no numérico, huérfano y JSON inválido).
+
+</details>
 
 ## Qué funciona y qué no se pudo probar
 

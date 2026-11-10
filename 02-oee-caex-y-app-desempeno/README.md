@@ -4,7 +4,56 @@
 > operación real. Los equipos (`CAEX-01`…`CAEX-26`, `PALA-01`…), las personas (`Persona Demo NN`) y todas las cifras se generan con
 > un script reproducible.
 
-## Qué es
+## Cómo se ve
+
+> Las imágenes son **renders del diseño**, dibujados con los datos sintéticos del propio proyecto. No son capturas de Power BI Desktop ni de Power Apps Studio.
+
+### Informe de Power BI
+
+<p align="center"><a href="capturas/oee_transporte.png"><img src="capturas/oee_transporte.png" alt="Página OEE Transporte: cascada del plan al real"></a></p>
+
+**OEE Transporte.** La cascada del plan al real con las cuatro pérdidas por palanca (disponibilidad, UEBD, rendimiento efectivo y horas nominales), que suman exactamente
+el total (control = 0), con botones «Ver detalle» y la tabla de datos.
+
+<table>
+<tr>
+<td width="50%"><a href="capturas/disponibilidad.png"><img src="capturas/disponibilidad.png" alt="Página Disponibilidad CAEX"></a><br><b>Disponibilidad CAEX.</b> Disponibilidad por día contra el plan, ranking de camiones, horas no disponibles por código y mapa de árbol.</td>
+<td width="50%"><a href="capturas/uebd_caex.png"><img src="capturas/uebd_caex.png" alt="Página UEBD CAEX"></a><br><b>UEBD CAEX.</b> UEBD por día y por camión con semáforo, horas de demora y reserva por código y horas no efectivas por tipo.</td>
+</tr>
+<tr>
+<td width="50%"><a href="capturas/rendimiento_efectivo.png"><img src="capturas/rendimiento_efectivo.png" alt="Página Rendimiento efectivo CAEX"></a><br><b>Rendimiento efectivo.</b> Rendimiento (t/h) por día y por camión contra el plan, factor de carga y tiempo de ciclo por componente.</td>
+<td width="50%"><a href="capturas/horas_nominales.png"><img src="capturas/horas_nominales.png" alt="Página Horas nominales CAEX"></a><br><b>Horas nominales.</b> Camiones en flota por día contra el plan, horas nominales por camión y tabla de horas por equipo.</td>
+</tr>
+</table>
+
+### App de Power Apps «RD Terreno»
+
+<table>
+<tr>
+<td width="33%"><a href="capturas/app_inicio.png"><img src="capturas/app_inicio.png" alt="Pantalla de inicio de la app"></a><br><b>Inicio.</b> Preparar o presentar la reunión del lunes, estado de la preparación, situación de los compromisos y sincronización.</td>
+<td width="33%"><a href="capturas/app_editor.png"><img src="capturas/app_editor.png" alt="Pantalla del editor de la app"></a><br><b>Editor.</b> Cifras de seguridad a mano y avisos con nivel (crítico, precaución, recordar) que luego se presentan en la reunión.</td>
+<td width="33%"><a href="capturas/app_visor.png"><img src="capturas/app_visor.png" alt="Pantalla del visor de la app"></a><br><b>Visor.</b> Cronómetro por bloque de la reunión y estado de cada compromiso: semáforo, vencidos, evidencia y filtros.</td>
+</tr>
+</table>
+
+## Qué hice
+
+**El problema.** Preparar y proyectar la reunión semanal de desempeño de operaciones mina con el OEE de la flota de camiones, y explicar de dónde sale cada tonelada que no se cumplió.
+
+**Cómo lo abordé**
+
+1. **Una cascada que cierra.** Modelé el OEE como una cascada del plan al real que reparte la pérdida en cuatro palancas, y comprobé en Python, sobre los CSV, que
+   la suma de las cuatro pérdidas es exactamente la diferencia entre plan y real (control = 0) en los tres periodos.
+2. **Dos piezas enlazadas.** El informe de Power BI muestra el resultado; la app de lienzo de Power Apps sirve para llevar la reunión: un **editor** que se prepara
+   antes y un **visor** que se proyecta en sala, con funcionamiento sin conexión y minuta por correo.
+3. **Ambas se generan con Python.** El proyecto PBIP (TMDL y PBIR) y el código de la app (YAML y Power Fx) salen de generadores; así cambiar una palanca o una
+   pantalla es cambiar el generador y regenerar.
+4. **Verificación.** Un validador cruza los CSV con el modelo, las relaciones, las referencias de las 100 medidas y de los 89 visuales; los YAML de la app se validan
+   sin controles duplicados ni paréntesis desbalanceados.
+
+**El resultado.** Un modelo de 16 tablas y 100 medidas, un informe de 5 páginas y 89 visuales y una app de 3 pantallas, con el validador en 0 problemas.
+
+## Las dos piezas
 Un caso completo de **gestión de desempeño de una mina a rajo abierto**, en dos piezas que se enlazan:
 
 1. **Modelo semántico + informe de Power BI («OEE CAEX Demo»)**: el OEE de la flota de camiones (CAEX) con una **cascada del plan al
@@ -45,6 +94,9 @@ flowchart LR
 | **Generación de YAML/Power Fx con Python** y validación estática de pantallas | `app/herramientas/` |
 | **Datos sintéticos reproducibles** con rangos realistas (DF 82-94 %, UEBD 70-85 %, 150-260 kt/día, 15-30 km/h) | `datos_sinteticos/generar_datos.py` |
 | **Calidad**: validador del modelo (CSV ↔ TMDL, relaciones, referencias DAX y de visuales) | `pbip/generador/validar_oee.py` |
+
+<details>
+<summary><b>Detalles técnicos</b>: estructura, cómo usarlo y cómo abrir el informe y la app</summary>
 
 ## Estructura
 ```
@@ -94,6 +146,8 @@ python app/herramientas/validar_pantallas.py
 Ver `app/LEEME.md`: pegar el YAML de cada pantalla con «Ver código», pegar las fórmulas, crear las tablas de Excel desde
 `python app/herramientas/crear_excel_demo.py` (requiere `openpyxl`) y conectar Excel, Outlook y Office 365 Users. Los identificadores de
 Power BI de la página «Indicadores» (`gen_visor.py`) son marcadores.
+
+</details>
 
 ## Qué se probó y qué no
 - **Probado**: los scripts de Python corren y son reproducibles; los CSV cumplen los rangos pedidos (movimiento diario de la flota 186-210 kt,
