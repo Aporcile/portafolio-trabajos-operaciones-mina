@@ -1,0 +1,22 @@
+name: desempaquetar
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  desempaquetar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Desempaquetar portafolio.zip
+        run: |
+          if [ ! -f portafolio.zip ]; then echo "No hay portafolio.zip: nada que hacer"; exit 0; fi
+          python3 -m zipfile -e portafolio.zip .
+          rm portafolio.zip
+          git config user.name "Alejandro Porcile Henry"
+          git config user.email "206075243+Aporcile@users.noreply.github.com"
+          git add -A
+          git commit -m "Portafolio actualizado: capturas de diseño (renders) y README para reclutadores"
+          git push
