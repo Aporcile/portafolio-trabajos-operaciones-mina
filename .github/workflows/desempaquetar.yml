@@ -1,0 +1,44 @@
+name: desempaquetar
+
+# Se activa solo cuando se sube portafolio.zip a la rama principal.
+# Reemplaza el proyecto 01 completo (sus ids de pagina y visual cambiaron) y deja el resto igual.
+on:
+  push:
+    branches: [main]
+    paths:
+      - portafolio.zip
+
+permissions:
+  contents: write
+
+jobs:
+  desempaquetar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Revisar el zip
+        run: |
+          python3 - <<'PY'
+          import zipfile
+          z = zipfile.ZipFile("portafolio.zip")
+          assert z.testzip() is None, "el zip esta danado"
+          n = z.namelist()
+          assert "README.md" in n and "01-powerbi-tmdl-gestion-minera/README.md" in n, "el zip no parece el portafolio"
+          assert not any(x.startswith((".git/", ".github/")) for x in n), "el zip no debe traer .git ni .github"
+          print(len(n), "archivos en el zip")
+          PY
+
+      - name: Reemplazar el proyecto 01 y desempaquetar
+        run: |
+          rm -rf 01-powerbi-tmdl-gestion-minera
+          python3 -c "import zipfile; zipfile.ZipFile('portafolio.zip').extractall('.')"
+          rm portafolio.zip
+
+      - name: Guardar
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Informe ejecutivo con cinco areas: Mina, Molienda, Flotacion, Hidrometalurgia y Molibdeno"
+          git push
